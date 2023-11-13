@@ -13,6 +13,8 @@ namespace OpenQA.Selenium.BiDi
 
         public long Id { get; set; }
 
+        public string Method { get; set; }
+
         [JsonPropertyName("result")]
         public T ResultData { get; set; }
 
@@ -20,5 +22,7 @@ namespace OpenQA.Selenium.BiDi
 
         [JsonPropertyName("message")]
         public string ErrorMessage { get; set; }
+
+        public object Params { get; set; }
     }
 }

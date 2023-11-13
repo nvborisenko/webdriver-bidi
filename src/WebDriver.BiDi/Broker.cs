@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
@@ -11,7 +12,9 @@ namespace OpenQA.Selenium.BiDi
     {
         private readonly Transport _transport;
 
-        private readonly ConcurrentDictionary<long, TaskCompletionSource<object>> _commands = new();
+        private readonly ConcurrentDictionary<long, TaskCompletionSource<object>> _pendingCommands = new();
+
+        private readonly ConcurrentDictionary<string, List<BiDiEventHandler>> _eventHandlers = new();
 
         private long _currentCommandId;
 
@@ -48,15 +51,30 @@ namespace OpenQA.Selenium.BiDi
 
                 if (result?.Type == "success")
                 {
-                    _commands[result.Id].SetResult(result.ResultData);
+                    _pendingCommands[result.Id].SetResult(result.ResultData);
+
+                    _pendingCommands.TryRemove(result.Id, out _);
                 }
                 else if (result?.Type == "event")
                 {
+                    if (_eventHandlers.TryGetValue(result.Method, out var eventHandlers))
+                    {
+                        if (eventHandlers is not null)
+                        {
+                            foreach(var handler in eventHandlers)
+                            {
+                                var args = JsonSerializer.Deserialize((JsonElement)result.Params, handler.EventArgsType, _jsonSerializerOptions);
 
+                                handler.Invoke(args);
+                            }
+                        }
+                    }
                 }
                 else if (result?.Type == "error")
                 {
-                    _commands[result.Id].SetException(new Exception($"{result.Error}: {result.ErrorMessage}"));
+                    _pendingCommands[result.Id].SetException(new Exception($"{result.Error}: {result.ErrorMessage}"));
+
+                    _pendingCommands.TryRemove(result.Id, out _);
                 }
                 else
                 {
@@ -79,13 +97,33 @@ namespace OpenQA.Selenium.BiDi
 
             var cts = new TaskCompletionSource<object>();
 
-            _commands[command.Id] = cts;
+            _pendingCommands[command.Id] = cts;
 
             await _transport.SendAsync(json, default);
 
             var result = await cts.Task;
 
             return ((JsonElement)result).Deserialize<TResult>(_jsonSerializerOptions);
+        }
+
+        public void RegisterEventHandler<TEventArgs>(string name, Action<TEventArgs> eventHandler)
+            where TEventArgs : EventArgs
+        {
+            if (_eventHandlers.TryGetValue(name, out var handlers))
+            {
+                if (handlers is null)
+                {
+                    handlers = new List<BiDiEventHandler> { new BiDiEventHandler<TEventArgs>(eventHandler)};
+                }
+                else
+                {
+                    handlers.Add(new BiDiEventHandler<TEventArgs>(eventHandler));
+                }
+            }
+            else
+            {
+                _eventHandlers[name] = new List<BiDiEventHandler> { new BiDiEventHandler<TEventArgs>(eventHandler) };
+            }
         }
     }
 }

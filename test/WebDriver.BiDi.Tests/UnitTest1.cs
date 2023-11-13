@@ -1,3 +1,4 @@
+using OpenQA.Selenium.BiDi.BrowsingContext;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
 
@@ -45,7 +46,20 @@ namespace OpenQA.Selenium.BiDi.Tests
         {
             var context = await bidi.CreateBrowsingContextAsync();
 
-            await context.NavigateAsync("https://google.com", Modules.BrowsingContext.NavigateWait.Complete);
+            await context.NavigateAsync("https://google.com", NavigateWait.Complete);
+
+            await context.CloseAsync();
+        }
+
+        [Test]
+        public async Task Subscribe()
+        {
+            //await bidi.SubscribeAsync("network.beforeRequestSent");
+            bidi.Network.OnBeforeRequestSent += args => { Console.WriteLine(args.Request.Url); };
+
+            var context = await bidi.CreateBrowsingContextAsync();
+
+            await context.NavigateAsync("https://selenium.dev", NavigateWait.Complete);
 
             await context.CloseAsync();
         }

@@ -1,6 +1,6 @@
-﻿using OpenQA.Selenium.BiDi.Modules.Browser;
-using OpenQA.Selenium.BiDi.Modules.BrowsingContext;
-using OpenQA.Selenium.BiDi.Modules.Session;
+﻿using OpenQA.Selenium.BiDi.Browser;
+using OpenQA.Selenium.BiDi.BrowsingContext;
+using OpenQA.Selenium.BiDi.Session;
 using System;
 using System.Threading.Tasks;
 
@@ -15,6 +15,7 @@ namespace OpenQA.Selenium.BiDi
             _broker = broker;
 
             Browser = new BrowserModule(_broker);
+            Network = new Network.NetworkModule(this, _broker);
         }
 
         public async Task<StatusResult> StatusAsync()
@@ -29,6 +30,11 @@ namespace OpenQA.Selenium.BiDi
             return new BrowsingContextModule(context.ContextId, _broker);
         }
 
+        public async Task<EmptyResult> SubscribeAsync(params string[] events)
+        {
+            return await _broker.ExecuteCommand<SubscribeCommand, EmptyResult>(new SubscribeCommand() { Params = new SubscriptionCommandParameters { Events = events } });
+        }
+
         public static async Task<BiDiSession> ConnectAsync(string url)
         {
             var transport = new Transport(new Uri(url));
@@ -41,5 +47,7 @@ namespace OpenQA.Selenium.BiDi
         }
 
         public BrowserModule Browser { get; }
+
+        public Network.NetworkModule Network { get; }
     }
 }

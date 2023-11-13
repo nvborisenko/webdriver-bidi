@@ -1,4 +1,4 @@
-﻿namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
+﻿namespace OpenQA.Selenium.BiDi.BrowsingContext;
 
 public class NavigateResult
 {
