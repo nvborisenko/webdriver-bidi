@@ -14,6 +14,13 @@ namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext
 
         public string? Url { get; set; }
 
-        public string Wait { get; set; } = "complete";
+        public NavigateWait Wait { get; set; } = NavigateWait.Complete;
+    }
+
+    public enum NavigateWait
+    {
+        None,
+        Interactive,
+        Complete
     }
 }

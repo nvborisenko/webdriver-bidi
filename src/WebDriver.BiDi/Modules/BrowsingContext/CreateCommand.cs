@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext
+﻿namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext
 {
     internal class CreateCommand : Command<CreateCommandParameters>
     {
@@ -9,6 +7,12 @@ namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext
 
     internal class CreateCommandParameters
     {
-        public string Type { get; } = "tab";
+        public BrowsingContextType Type { get; } = BrowsingContextType.Tab;
+    }
+
+    internal enum BrowsingContextType
+    {
+        Tab,
+        Window
     }
 }

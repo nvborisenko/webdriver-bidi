@@ -14,7 +14,7 @@ public class BrowsingContextModule
 
     public string Id { get; private set; }
 
-    public async Task<NavigateResult> NavigateAsync(string url, string wait = "complete")
+    public async Task<NavigateResult> NavigateAsync(string url, NavigateWait wait = NavigateWait.Complete)
     {
         return await _broker.ExecuteCommand<NavigateCommand, NavigateResult>(new NavigateCommand { Params = new NavigateCommandParameters { BrowsingContextId = Id, Url = url, Wait = wait } });
     }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -35,6 +36,8 @@ namespace OpenQA.Selenium.BiDi
                 PropertyNameCaseInsensitive = true,
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase
             };
+
+            _jsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
         }
 
         private void ProcessMessage()
@@ -71,7 +74,7 @@ namespace OpenQA.Selenium.BiDi
             where TCommand : Command
         {
             command.Id = Interlocked.Increment(ref _currentCommandId);
-            
+
             var json = JsonSerializer.Serialize(command, _jsonSerializerOptions);
 
             var cts = new TaskCompletionSource<object>();
