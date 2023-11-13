@@ -10,16 +10,16 @@ namespace OpenQA.Selenium.BiDi
     {
         private readonly Transport _transport;
 
-        private readonly ConcurrentDictionary<long, TaskCompletionSource<object>> _commands = new ConcurrentDictionary<long, TaskCompletionSource<object>>();
+        private readonly ConcurrentDictionary<long, TaskCompletionSource<object>> _commands = new();
 
         private long _currentCommandId;
 
-        private readonly BlockingCollection<string> _commandQueue = new BlockingCollection<string>();
+        private readonly BlockingCollection<string> _commandQueue = new();
 
         private Task _commandQueueTask;
         private Task _eventReveivingTask;
 
-        private JsonSerializerOptions _jsonSerializerOptions;
+        private readonly JsonSerializerOptions _jsonSerializerOptions;
 
         public Broker(Transport transpot)
         {

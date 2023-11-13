@@ -4,7 +4,6 @@ namespace OpenQA.Selenium.BiDi
 {
     public abstract class Command
     {
-        [JsonPropertyName("id")]
         public long Id { get; set; }
     }
 
@@ -14,7 +13,6 @@ namespace OpenQA.Selenium.BiDi
         [JsonPropertyName("method")]
         public abstract string Name { get; }
 
-        [JsonPropertyName("params")]
-        public TParameters Parameters { get; set; } = new TParameters();
+        public TParameters Params { get; set; } = new TParameters();
     }
 }

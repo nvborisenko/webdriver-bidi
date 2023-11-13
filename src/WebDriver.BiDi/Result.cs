@@ -6,6 +6,7 @@ namespace OpenQA.Selenium.BiDi
     {
 
     }
+
     public class Result<T> : EmptyResult
     {
         public string Type { get; set; }
