@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi
 {
@@ -12,12 +12,12 @@ namespace OpenQA.Selenium.BiDi
 
         public long Id { get; set; }
 
-        [JsonProperty("result")]
+        [JsonPropertyName("result")]
         public T ResultData { get; set; }
 
         public string Error { get; set; }
 
-        [JsonProperty("message")]
+        [JsonPropertyName("message")]
         public string ErrorMessage { get; set; }
     }
 }

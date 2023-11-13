@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext
 {
@@ -9,13 +9,11 @@ namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext
 
     internal class NavigateCommandParameters
     {
-        [JsonProperty("context")]
+        [JsonPropertyName("context")]
         public string? BrowsingContextId { get; set; }
 
-        [JsonProperty("url")]
         public string? Url { get; set; }
 
-        [JsonProperty("wait")]
         public string Wait { get; set; } = "complete";
     }
 }

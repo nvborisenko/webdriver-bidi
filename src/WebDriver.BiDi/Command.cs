@@ -1,20 +1,20 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi
 {
     public abstract class Command
     {
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public long Id { get; set; }
     }
 
     public abstract class Command<TParameters> : Command
         where TParameters : new()
     {
-        [JsonProperty("method")]
+        [JsonPropertyName("method")]
         public abstract string Name { get; }
 
-        [JsonProperty("params")]
+        [JsonPropertyName("params")]
         public TParameters Parameters { get; set; } = new TParameters();
     }
 }

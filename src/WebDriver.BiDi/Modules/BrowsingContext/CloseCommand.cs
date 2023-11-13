@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext
 {
@@ -9,7 +9,6 @@ namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext
 
     internal class CloseCommandParameters
     {
-        [JsonProperty("context")]
         public string? Context { get; set; }
     }
 }

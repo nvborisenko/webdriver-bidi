@@ -1,7 +1,6 @@
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Concurrent;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -20,6 +19,8 @@ namespace OpenQA.Selenium.BiDi
         private Task _commandQueueTask;
         private Task _eventReveivingTask;
 
+        private JsonSerializerOptions _jsonSerializerOptions;
+
         public Broker(Transport transpot)
         {
             _transport = transpot;
@@ -28,13 +29,19 @@ namespace OpenQA.Selenium.BiDi
 
             _eventReveivingTask = Task.Run(async () => await _transport.ReceiveAsync(default));
             _commandQueueTask = Task.Run(ProcessMessage);
+
+            _jsonSerializerOptions = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            };
         }
 
         private void ProcessMessage()
         {
             foreach (var message in _commandQueue.GetConsumingEnumerable())
             {
-                Result<object>? result = JsonConvert.DeserializeObject<Result<object>>(message);
+                Result<object>? result = JsonSerializer.Deserialize<Result<object>>(message, _jsonSerializerOptions);
 
                 if (result?.Type == "success")
                 {
@@ -65,7 +72,7 @@ namespace OpenQA.Selenium.BiDi
         {
             command.Id = Interlocked.Increment(ref _currentCommandId);
             
-            var json = JsonConvert.SerializeObject(command);
+            var json = JsonSerializer.Serialize(command, _jsonSerializerOptions);
 
             var cts = new TaskCompletionSource<object>();
 
@@ -73,7 +80,9 @@ namespace OpenQA.Selenium.BiDi
 
             await _transport.SendAsync(json, default);
 
-            return ((JObject)await cts.Task).ToObject<TResult>();
+            var result = await cts.Task;
+
+            return ((JsonElement)result).Deserialize<TResult>(_jsonSerializerOptions);
         }
     }
 }
