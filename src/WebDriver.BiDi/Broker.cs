@@ -47,52 +47,44 @@ namespace OpenQA.Selenium.BiDi
 
         private void ProcessMessage()
         {
-            try
+            foreach (var message in _commandQueue.GetConsumingEnumerable())
             {
-                foreach (var message in _commandQueue.GetConsumingEnumerable())
+                Debug.WriteLine($"Processing message: {message}");
+
+                Result<object>? result = JsonSerializer.Deserialize<Result<object>>(message, _jsonSerializerOptions);
+
+                if (result?.Type == "success")
                 {
-                    Debug.WriteLine($"Processing message: {message}");
+                    _pendingCommands[result.Id].SetResult(result.ResultData);
 
-                    Result<object>? result = JsonSerializer.Deserialize<Result<object>>(message, _jsonSerializerOptions);
-
-                    if (result?.Type == "success")
+                    _pendingCommands.TryRemove(result.Id, out _);
+                }
+                else if (result?.Type == "event")
+                {
+                    if (_eventHandlers.TryGetValue(result.Method, out var eventHandlers))
                     {
-                        _pendingCommands[result.Id].SetResult(result.ResultData);
-
-                        _pendingCommands.TryRemove(result.Id, out _);
-                    }
-                    else if (result?.Type == "event")
-                    {
-                        if (_eventHandlers.TryGetValue(result.Method, out var eventHandlers))
+                        if (eventHandlers is not null)
                         {
-                            if (eventHandlers is not null)
+                            foreach (var handler in eventHandlers)
                             {
-                                foreach (var handler in eventHandlers)
-                                {
-                                    var args = JsonSerializer.Deserialize((JsonElement)result.Params, handler.EventArgsType, _jsonSerializerOptions);
+                                var args = JsonSerializer.Deserialize((JsonElement)result.Params, handler.EventArgsType, _jsonSerializerOptions);
 
-                                    handler.Invoke(args);
-                                }
+                                handler.Invoke(args);
                             }
                         }
                     }
-                    else if (result?.Type == "error")
-                    {
-                        _pendingCommands[result.Id].SetException(new Exception($"{result.Error}: {result.ErrorMessage}"));
-
-                        _pendingCommands.TryRemove(result.Id, out _);
-                    }
-                    else
-                    {
-                        throw new Exception("Unknown type");
-                    }
-                    Debug.WriteLine($"Processed message successfully");
                 }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-                throw;
+                else if (result?.Type == "error")
+                {
+                    _pendingCommands[result.Id].SetException(new Exception($"{result.Error}: {result.ErrorMessage}"));
+
+                    _pendingCommands.TryRemove(result.Id, out _);
+                }
+                else
+                {
+                    throw new Exception("Unknown type");
+                }
+                Debug.WriteLine($"Processed message successfully");
             }
         }
 
@@ -128,7 +120,7 @@ namespace OpenQA.Selenium.BiDi
             return ((JsonElement)result).Deserialize<TResult>(_jsonSerializerOptions);
         }
 
-        public void RegisterEventHandler<TEventArgs>(string name, Action<TEventArgs> eventHandler)
+        public void RegisterEventHandler<TEventArgs>(string name, Delegate eventHandler)
             where TEventArgs : EventArgs
         {
             if (_eventHandlers.TryGetValue(name, out var handlers))

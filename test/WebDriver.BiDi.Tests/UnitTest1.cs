@@ -59,7 +59,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         public async Task Subscribe()
         {
             await bidi.SubscribeAsync("network.beforeRequestSent");
-            bidi.Network.BeforeRequestSent += args => { Console.WriteLine(args.Request.Url); };
+            bidi.Network.BeforeRequestSent += (sender, args) => { Console.WriteLine(args.Request.Url); };
 
             var context = await bidi.CreateBrowsingContextAsync();
 
@@ -77,8 +77,11 @@ namespace OpenQA.Selenium.BiDi.Tests
                 UrlPatterns = { new Network.UrlPatternString { Pattern = "https://selenium.dev/" } }
             });
 
-            bidi.Network.BeforeRequestSent += async args =>
+            //bidi.Network.BeforeRequestSent += (sender, args) => throw new Exception("Blocked");
+
+            bidi.Network.BeforeRequestSent += async (sender, args) =>
             {
+                throw new Exception("Blocked222");
                 if (args.IsBlocked)
                 {
                     await bidi.Network.ContinueRequestAsync(new Network.ContinueRequestParameters

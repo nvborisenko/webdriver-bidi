@@ -11,18 +11,18 @@ namespace OpenQA.Selenium.BiDi
 
     internal class BiDiEventHandler<TEventArgs> : BiDiEventHandler where TEventArgs : EventArgs
     {
-        public BiDiEventHandler(Action<TEventArgs> action)
+        public BiDiEventHandler(Delegate action)
         {
             Action = action;
 
             EventArgsType = typeof(TEventArgs);
         }
 
-        public Action<TEventArgs> Action { get; }
+        public Delegate Action { get; }
 
-        public override void Invoke(object args)
+        public override void Invoke(object arg)
         {
-            Action((TEventArgs)args);
+            Action.DynamicInvoke(null, arg);
         }
     }
 }
