@@ -20,19 +20,19 @@ namespace OpenQA.Selenium.BiDi
 
         public async Task<StatusResult> StatusAsync()
         {
-            return await _broker.ExecuteCommand<StatusCommand, StatusResult>(new StatusCommand());
+            return await _broker.ExecuteCommandAsync<StatusCommand, StatusResult>(new StatusCommand());
         }
 
         public async Task<BrowsingContextModule> CreateBrowsingContextAsync()
         {
-            var context = await _broker.ExecuteCommand<CreateCommand, CreateResult>(new CreateCommand());
+            var context = await _broker.ExecuteCommandAsync<CreateCommand, CreateResult>(new CreateCommand());
 
             return new BrowsingContextModule(context.ContextId, _broker);
         }
 
         public async Task<EmptyResult> SubscribeAsync(params string[] events)
         {
-            return await _broker.ExecuteCommand<SubscribeCommand, EmptyResult>(new SubscribeCommand() { Params = new SubscriptionCommandParameters { Events = events } });
+            return await _broker.ExecuteCommandAsync<SubscribeCommand, EmptyResult>(new SubscribeCommand() { Params = new SubscriptionCommandParameters { Events = events } });
         }
 
         public static async Task<BiDiSession> ConnectAsync(string url)

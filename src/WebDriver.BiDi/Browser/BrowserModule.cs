@@ -13,6 +13,6 @@ public class BrowserModule
 
     public async Task<EmptyResult> CloseAsync()
     {
-        return await _broker.ExecuteCommand<CloseCommand, EmptyResult>(new CloseCommand());
+        return await _broker.ExecuteCommandAsync<CloseCommand, EmptyResult>(new CloseCommand());
     }
 }

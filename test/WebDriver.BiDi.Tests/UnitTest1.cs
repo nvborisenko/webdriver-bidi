@@ -12,14 +12,18 @@ namespace OpenQA.Selenium.BiDi.Tests
         [SetUp]
         public async Task Setup()
         {
-            //FirefoxOptions firefoxOptions = new FirefoxOptions();
-            //firefoxOptions.UseWebSocketUrl = true;
+            //FirefoxOptions firefoxOptions = new FirefoxOptions
+            //{
+            //    UseWebSocketUrl = true,
+            //    BrowserVersion = "120.0"
+            //};
 
             //driver = new FirefoxDriver(firefoxOptions);
 
             var options = new ChromeOptions
             {
-                UseWebSocketUrl = true
+                UseWebSocketUrl = true,
+                BrowserVersion = "121.0"
             };
 
             driver = new ChromeDriver(options);
@@ -54,8 +58,36 @@ namespace OpenQA.Selenium.BiDi.Tests
         [Test]
         public async Task Subscribe()
         {
-            //await bidi.SubscribeAsync("network.beforeRequestSent");
-            bidi.Network.OnBeforeRequestSent += args => { Console.WriteLine(args.Request.Url); };
+            await bidi.SubscribeAsync("network.beforeRequestSent");
+            bidi.Network.BeforeRequestSent += args => { Console.WriteLine(args.Request.Url); };
+
+            var context = await bidi.CreateBrowsingContextAsync();
+
+            await context.NavigateAsync("https://google.com", NavigateWait.Complete);
+
+            await context.CloseAsync();
+        }
+
+        [Test]
+        public async Task Intercept()
+        {
+            await bidi.Network.AddInterceptAsync(new Network.AddInterceptParameters
+            {
+                Phases = { Network.InterceptPhase.BeforeRequestSent },
+                UrlPatterns = { new Network.UrlPatternString { Pattern = "https://selenium.dev/" } }
+            });
+
+            bidi.Network.BeforeRequestSent += async args =>
+            {
+                if (args.IsBlocked)
+                {
+                    await bidi.Network.ContinueRequestAsync(new Network.ContinueRequestParameters
+                    {
+                        RequestId = args.Request.Id,
+                        Method = "POST"
+                    });
+                }
+            };
 
             var context = await bidi.CreateBrowsingContextAsync();
 

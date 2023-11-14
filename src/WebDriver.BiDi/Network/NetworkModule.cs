@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace OpenQA.Selenium.BiDi.Network;
 
@@ -13,7 +14,17 @@ public class NetworkModule
         _broker = broker;
     }
 
-    public event Action<BeforeRequestSentEventArgs> OnBeforeRequestSent
+    public async Task<EmptyResult> AddInterceptAsync(AddInterceptParameters parameters)
+    {
+        return await _broker.ExecuteCommandAsync<AddInterceptCommand, EmptyResult>(new AddInterceptCommand { Params = parameters });
+    }
+
+    public async Task<EmptyResult> ContinueRequestAsync(ContinueRequestParameters parameters)
+    {
+        return await _broker.ExecuteCommandAsync<ContinueRequestCommand, EmptyResult>(new ContinueRequestCommand { Params = parameters });
+    }
+
+    public event Action<BeforeRequestSentEventArgs> BeforeRequestSent
     {
         add
         {
@@ -23,7 +34,7 @@ public class NetworkModule
         }
         remove
         {
-            
+
         }
     }
 }

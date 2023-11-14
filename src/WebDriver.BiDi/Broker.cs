@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
@@ -37,7 +38,8 @@ namespace OpenQA.Selenium.BiDi
             _jsonSerializerOptions = new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true,
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
             };
 
             _jsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
@@ -45,57 +47,68 @@ namespace OpenQA.Selenium.BiDi
 
         private void ProcessMessage()
         {
-            foreach (var message in _commandQueue.GetConsumingEnumerable())
+            try
             {
-                Result<object>? result = JsonSerializer.Deserialize<Result<object>>(message, _jsonSerializerOptions);
-
-                if (result?.Type == "success")
+                foreach (var message in _commandQueue.GetConsumingEnumerable())
                 {
-                    _pendingCommands[result.Id].SetResult(result.ResultData);
+                    Debug.WriteLine($"Processing message: {message}");
+                    Result<object>? result = JsonSerializer.Deserialize<Result<object>>(message, _jsonSerializerOptions);
 
-                    _pendingCommands.TryRemove(result.Id, out _);
-                }
-                else if (result?.Type == "event")
-                {
-                    if (_eventHandlers.TryGetValue(result.Method, out var eventHandlers))
+                    if (result?.Type == "success")
                     {
-                        if (eventHandlers is not null)
-                        {
-                            foreach(var handler in eventHandlers)
-                            {
-                                var args = JsonSerializer.Deserialize((JsonElement)result.Params, handler.EventArgsType, _jsonSerializerOptions);
+                        _pendingCommands[result.Id].SetResult(result.ResultData);
 
-                                handler.Invoke(args);
+                        _pendingCommands.TryRemove(result.Id, out _);
+                    }
+                    else if (result?.Type == "event")
+                    {
+                        if (_eventHandlers.TryGetValue(result.Method, out var eventHandlers))
+                        {
+                            if (eventHandlers is not null)
+                            {
+                                foreach (var handler in eventHandlers)
+                                {
+                                    var args = JsonSerializer.Deserialize((JsonElement)result.Params, handler.EventArgsType, _jsonSerializerOptions);
+
+                                    handler.Invoke(args);
+                                }
                             }
                         }
                     }
-                }
-                else if (result?.Type == "error")
-                {
-                    _pendingCommands[result.Id].SetException(new Exception($"{result.Error}: {result.ErrorMessage}"));
+                    else if (result?.Type == "error")
+                    {
+                        _pendingCommands[result.Id].SetException(new Exception($"{result.Error}: {result.ErrorMessage}"));
 
-                    _pendingCommands.TryRemove(result.Id, out _);
+                        _pendingCommands.TryRemove(result.Id, out _);
+                    }
+                    else
+                    {
+                        throw new Exception("Unknown type");
+                    }
+                    Debug.WriteLine($"Processed message successfully");
                 }
-                else
-                {
-                    throw new Exception("Unknown type");
-                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
             }
         }
 
         private void Transport_MessageReceived(object sender, MessageReceivedEventArgs e)
         {
             _commandQueue.Add(e.Message);
+
+            Debug.WriteLine($"Added to queue: {e.Message}");
         }
 
-        public async Task<TResult> ExecuteCommand<TCommand, TResult>(TCommand command)
+        public async Task<TResult> ExecuteCommandAsync<TCommand, TResult>(TCommand command)
             where TCommand : Command
         {
             command.Id = Interlocked.Increment(ref _currentCommandId);
 
             var json = JsonSerializer.Serialize(command, _jsonSerializerOptions);
 
-            var cts = new TaskCompletionSource<object>();
+            var cts = new TaskCompletionSource<object>(TaskCreationOptions.RunContinuationsAsynchronously);
 
             _pendingCommands[command.Id] = cts;
 
@@ -111,14 +124,7 @@ namespace OpenQA.Selenium.BiDi
         {
             if (_eventHandlers.TryGetValue(name, out var handlers))
             {
-                if (handlers is null)
-                {
-                    handlers = new List<BiDiEventHandler> { new BiDiEventHandler<TEventArgs>(eventHandler)};
-                }
-                else
-                {
-                    handlers.Add(new BiDiEventHandler<TEventArgs>(eventHandler));
-                }
+                handlers.Add(new BiDiEventHandler<TEventArgs>(eventHandler));
             }
             else
             {

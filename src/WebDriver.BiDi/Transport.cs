@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Net.WebSockets;
 using System.Text;
 using System.Threading;
@@ -58,20 +59,13 @@ namespace OpenQA.Selenium.BiDi
                     }
                 }
 
+                Debug.WriteLine($"RCV: {response}");
+
                 MessageReceived?.Invoke(this, new MessageReceivedEventArgs(response.ToString()));
             }
         }
 
-
         public event EventHandler<MessageReceivedEventArgs> MessageReceived;
-
-        private void OnClose(string closeReason)
-        {
-            if (!IsClosed)
-            {
-                IsClosed = true;
-            }
-        }
 
         public bool IsClosed { get; private set; }
     }

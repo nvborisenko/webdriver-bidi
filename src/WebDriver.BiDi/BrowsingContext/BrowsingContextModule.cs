@@ -16,12 +16,12 @@ public class BrowsingContextModule
 
     public async Task<NavigateResult> NavigateAsync(string url, NavigateWait wait = NavigateWait.Complete)
     {
-        return await _broker.ExecuteCommand<NavigateCommand, NavigateResult>(new NavigateCommand { Params = new NavigateCommandParameters { BrowsingContextId = Id, Url = url, Wait = wait } });
+        return await _broker.ExecuteCommandAsync<NavigateCommand, NavigateResult>(new NavigateCommand { Params = new NavigateCommandParameters { BrowsingContextId = Id, Url = url, Wait = wait } });
     }
 
     public async Task<EmptyResult> CloseAsync()
     {
-        return await _broker.ExecuteCommand<CloseCommand, EmptyResult>(new CloseCommand { Params = new CloseCommandParameters { Context = Id } });
+        return await _broker.ExecuteCommandAsync<CloseCommand, EmptyResult>(new CloseCommand { Params = new CloseCommandParameters { Context = Id } });
     }
 }
 
