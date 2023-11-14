@@ -18,9 +18,9 @@ namespace OpenQA.Selenium.BiDi
             Network = new Network.NetworkModule(this, _broker);
         }
 
-        public async Task<StatusResult> StatusAsync()
+        public Task<StatusResult> StatusAsync()
         {
-            return await _broker.ExecuteCommandAsync<StatusCommand, StatusResult>(new StatusCommand());
+            return _broker.ExecuteCommandAsync<StatusCommand, StatusResult>(new StatusCommand());
         }
 
         public async Task<BrowsingContextModule> CreateBrowsingContextAsync()

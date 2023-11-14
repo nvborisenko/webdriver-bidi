@@ -23,7 +23,7 @@ namespace OpenQA.Selenium.BiDi.Tests
             var options = new ChromeOptions
             {
                 UseWebSocketUrl = true,
-                BrowserVersion = "121.0"
+                BrowserVersion = "120.0"
             };
 
             driver = new ChromeDriver(options);
@@ -50,7 +50,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         {
             var context = await bidi.CreateBrowsingContextAsync();
 
-            await context.NavigateAsync("https://google.com", NavigateWait.Complete);
+            await context.NavigateAsync("https://google.com", ReadinessState.Complete);
 
             await context.CloseAsync();
         }
@@ -63,7 +63,7 @@ namespace OpenQA.Selenium.BiDi.Tests
 
             var context = await bidi.CreateBrowsingContextAsync();
 
-            await context.NavigateAsync("https://google.com", NavigateWait.Complete);
+            await context.NavigateAsync("https://google.com", ReadinessState.Complete);
 
             await context.CloseAsync();
         }
@@ -91,7 +91,7 @@ namespace OpenQA.Selenium.BiDi.Tests
 
             var context = await bidi.CreateBrowsingContextAsync();
 
-            await context.NavigateAsync("https://selenium.dev", NavigateWait.Complete);
+            await context.NavigateAsync("https://selenium.dev", ReadinessState.Complete);
 
             await context.CloseAsync();
         }

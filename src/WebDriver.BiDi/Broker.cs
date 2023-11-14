@@ -52,7 +52,7 @@ namespace OpenQA.Selenium.BiDi
                 foreach (var message in _commandQueue.GetConsumingEnumerable())
                 {
                     Debug.WriteLine($"Processing message: {message}");
-                    
+
                     Result<object>? result = JsonSerializer.Deserialize<Result<object>>(message, _jsonSerializerOptions);
 
                     if (result?.Type == "success")
@@ -92,6 +92,7 @@ namespace OpenQA.Selenium.BiDi
             catch (Exception ex)
             {
                 Debug.WriteLine(ex);
+                throw;
             }
         }
 
@@ -102,20 +103,27 @@ namespace OpenQA.Selenium.BiDi
             Debug.WriteLine($"Added to queue: {e.Message}");
         }
 
-        public async Task<TResult> ExecuteCommandAsync<TCommand, TResult>(TCommand command)
+        public async Task<TResult> ExecuteCommandAsync<TCommand, TResult>(TCommand command, CancellationToken cancellationToken = default)
             where TCommand : Command
         {
             command.Id = Interlocked.Increment(ref _currentCommandId);
 
             var json = JsonSerializer.Serialize(command, _jsonSerializerOptions);
 
-            var cts = new TaskCompletionSource<object>(TaskCreationOptions.RunContinuationsAsynchronously);
+            var tcs = new TaskCompletionSource<object>(TaskCreationOptions.RunContinuationsAsynchronously);
 
-            _pendingCommands[command.Id] = cts;
+            using var cts = new CancellationTokenSource();
+            cts.CancelAfter(TimeSpan.FromSeconds(30));
+            cts.Token.Register(() =>
+            {
+                tcs.TrySetCanceled(cancellationToken);
+            }, false);
 
-            await _transport.SendAsync(json, default);
+            _pendingCommands[command.Id] = tcs;
 
-            var result = await cts.Task;
+            await _transport.SendAsync(json, cancellationToken);
+
+            var result = await tcs.Task;
 
             return ((JsonElement)result).Deserialize<TResult>(_jsonSerializerOptions);
         }

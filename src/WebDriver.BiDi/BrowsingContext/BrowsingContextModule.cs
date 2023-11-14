@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 
 namespace OpenQA.Selenium.BiDi.BrowsingContext;
 
@@ -14,9 +15,9 @@ public class BrowsingContextModule
 
     public string Id { get; private set; }
 
-    public async Task<NavigateResult> NavigateAsync(string url, NavigateWait wait = NavigateWait.Complete)
+    public Task<NavigateResult> NavigateAsync(string url, ReadinessState wait = ReadinessState.Complete, CancellationToken cancellationToken = default)
     {
-        return await _broker.ExecuteCommandAsync<NavigateCommand, NavigateResult>(new NavigateCommand { Params = new NavigateCommandParameters { BrowsingContextId = Id, Url = url, Wait = wait } });
+        return _broker.ExecuteCommandAsync<NavigateCommand, NavigateResult>(new NavigateCommand { Params = new NavigateCommandParameters { BrowsingContextId = Id, Url = url, Wait = wait } }, cancellationToken);
     }
 
     public async Task<EmptyResult> CloseAsync()

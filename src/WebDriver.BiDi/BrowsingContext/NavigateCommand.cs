@@ -14,10 +14,10 @@ internal class NavigateCommandParameters
 
     public string? Url { get; set; }
 
-    public NavigateWait Wait { get; set; } = NavigateWait.Complete;
+    public ReadinessState Wait { get; set; } = ReadinessState.Complete;
 }
 
-public enum NavigateWait
+public enum ReadinessState
 {
     None,
     Interactive,
