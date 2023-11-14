@@ -52,6 +52,7 @@ namespace OpenQA.Selenium.BiDi
                 foreach (var message in _commandQueue.GetConsumingEnumerable())
                 {
                     Debug.WriteLine($"Processing message: {message}");
+                    
                     Result<object>? result = JsonSerializer.Deserialize<Result<object>>(message, _jsonSerializerOptions);
 
                     if (result?.Type == "success")

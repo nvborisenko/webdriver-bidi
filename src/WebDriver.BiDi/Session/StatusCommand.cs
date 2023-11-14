@@ -2,5 +2,5 @@
 
 internal class StatusCommand : Command<EmptyCommandParameters>
 {
-    public override string Name { get; } = "session.status";
+    public override string Method { get; } = "session.status";
 }

@@ -4,7 +4,7 @@ namespace OpenQA.Selenium.BiDi.BrowsingContext;
 
 internal class NavigateCommand : Command<NavigateCommandParameters>
 {
-    public override string Name { get; } = "browsingContext.navigate";
+    public override string Method { get; } = "browsingContext.navigate";
 }
 
 internal class NavigateCommandParameters

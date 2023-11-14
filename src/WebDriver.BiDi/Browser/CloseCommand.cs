@@ -2,5 +2,5 @@
 
 internal class CloseCommand : Command<EmptyCommandParameters>
 {
-    public override string Name { get; } = "browser.close";
+    public override string Method { get; } = "browser.close";
 }

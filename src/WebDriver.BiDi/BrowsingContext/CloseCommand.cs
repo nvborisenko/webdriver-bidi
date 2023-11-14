@@ -2,7 +2,7 @@
 
 internal class CloseCommand : Command<CloseCommandParameters>
 {
-    public override string Name { get; } = "browsingContext.close";
+    public override string Method { get; } = "browsingContext.close";
 }
 
 internal class CloseCommandParameters

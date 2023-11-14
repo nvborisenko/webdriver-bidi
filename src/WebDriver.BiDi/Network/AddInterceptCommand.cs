@@ -5,7 +5,7 @@ namespace OpenQA.Selenium.BiDi.Network
 {
     internal class AddInterceptCommand : Command<AddInterceptParameters>
     {
-        public override string Name { get; } = "network.addIntercept";
+        public override string Method { get; } = "network.addIntercept";
     }
 
     public class AddInterceptParameters

@@ -4,7 +4,7 @@ namespace OpenQA.Selenium.BiDi.Network
 {
     internal class ContinueRequestCommand : Command<ContinueRequestParameters>
     {
-        public override string Name { get; } = "network.continueRequest";
+        public override string Method { get; } = "network.continueRequest";
     }
 
     public class ContinueRequestParameters

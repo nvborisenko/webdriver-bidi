@@ -11,8 +11,7 @@ namespace OpenQA.Selenium.BiDi
     public abstract class Command<TParameters> : Command
         where TParameters : new()
     {
-        [JsonPropertyName("method")]
-        public abstract string Name { get; }
+        public abstract string Method { get; }
 
         public TParameters Params { get; set; } = new TParameters();
     }

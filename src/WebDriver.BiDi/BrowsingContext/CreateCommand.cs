@@ -2,7 +2,7 @@
 
 internal class CreateCommand : Command<CreateCommandParameters>
 {
-    public override string Name { get; } = "browsingContext.create";
+    public override string Method { get; } = "browsingContext.create";
 }
 
 internal class CreateCommandParameters
