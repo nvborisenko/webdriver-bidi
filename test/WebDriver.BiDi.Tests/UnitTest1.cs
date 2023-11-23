@@ -23,7 +23,7 @@ namespace OpenQA.Selenium.BiDi.Tests
             var options = new ChromeOptions
             {
                 UseWebSocketUrl = true,
-                BrowserVersion = "120.0"
+                BrowserVersion = "121.0"
             };
 
             driver = new ChromeDriver(options);
@@ -81,9 +81,10 @@ namespace OpenQA.Selenium.BiDi.Tests
 
             bidi.Network.BeforeRequestSent += async (sender, args) =>
             {
-                throw new Exception("Blocked222");
                 if (args.IsBlocked)
                 {
+                    Console.WriteLine($"Intercepting {args} request...");
+
                     await bidi.Network.ContinueRequestAsync(new Network.ContinueRequestParameters
                     {
                         RequestId = args.Request.Id,
