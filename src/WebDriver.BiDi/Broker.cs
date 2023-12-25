@@ -1,3 +1,4 @@
+using OpenQA.Selenium.BiDi.Internal.Json;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -13,11 +14,11 @@ namespace OpenQA.Selenium.BiDi
     {
         private readonly Transport _transport;
 
-        private readonly ConcurrentDictionary<long, TaskCompletionSource<object>> _pendingCommands = new();
+        private readonly ConcurrentDictionary<int, TaskCompletionSource<object>> _pendingCommands = new();
 
         private readonly ConcurrentDictionary<string, List<BiDiEventHandler>> _eventHandlers = new();
 
-        private long _currentCommandId;
+        private int _currentCommandId;
 
         private readonly BlockingCollection<string> _commandQueue = new();
 
@@ -39,7 +40,8 @@ namespace OpenQA.Selenium.BiDi
             {
                 PropertyNameCaseInsensitive = true,
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+                Converters = { new Int32JsonConverter() }
             };
 
             _jsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));

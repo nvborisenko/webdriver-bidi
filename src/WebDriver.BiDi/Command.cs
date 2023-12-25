@@ -1,11 +1,8 @@
-﻿using System;
-using System.Text.Json.Serialization;
-
-namespace OpenQA.Selenium.BiDi
+﻿namespace OpenQA.Selenium.BiDi
 {
     public abstract class Command
     {
-        public long Id { get; set; }
+        public int Id { get; set; }
     }
 
     public abstract class Command<TParameters> : Command
