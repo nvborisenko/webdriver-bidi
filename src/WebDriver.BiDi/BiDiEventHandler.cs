@@ -22,7 +22,7 @@ namespace OpenQA.Selenium.BiDi
 
         public override void Invoke(object arg)
         {
-            Action.DynamicInvoke(null, arg);
+            Action.DynamicInvoke(arg);
         }
     }
 }

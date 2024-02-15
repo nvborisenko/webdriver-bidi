@@ -90,7 +90,7 @@ namespace OpenQA.Selenium.BiDi
             }
         }
 
-        private void Transport_MessageReceived(object sender, MessageReceivedEventArgs e)
+        private void Transport_MessageReceived(MessageReceivedEventArgs e)
         {
             _commandQueue.Add(e.Message);
 
@@ -119,7 +119,7 @@ namespace OpenQA.Selenium.BiDi
 
             var result = await tcs.Task;
 
-            return ((JsonElement)result).Deserialize<TResult>(_jsonSerializerOptions);
+            return ((JsonElement)result).Deserialize<TResult>(_jsonSerializerOptions)!;
         }
 
         public void RegisterEventHandler<TEventArgs>(string name, Delegate eventHandler)

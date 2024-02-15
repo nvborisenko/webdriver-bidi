@@ -1,5 +1,4 @@
-﻿using OpenQA.Selenium.BiDi.Browser;
-using OpenQA.Selenium.BiDi.BrowsingContext;
+﻿using OpenQA.Selenium.BiDi.BrowsingContext;
 using OpenQA.Selenium.BiDi.Session;
 using System;
 using System.Threading.Tasks;
@@ -10,13 +9,20 @@ namespace OpenQA.Selenium.BiDi
     {
         private readonly Broker _broker;
 
+        private readonly Lazy<Browser.BrowserModule> _browserModule;
+        private readonly Lazy<Network.NetworkModule> _networkModule;
+
         public BiDiSession(Broker broker)
         {
             _broker = broker;
 
-            Browser = new BrowserModule(_broker);
-            Network = new Network.NetworkModule(this, _broker);
+            _browserModule = new Lazy<Browser.BrowserModule>(() => new Browser.BrowserModule(_broker));
+            _networkModule = new Lazy<Network.NetworkModule>(() => new Network.NetworkModule(this, _broker));
         }
+
+        public Browser.BrowserModule Browser => _browserModule.Value;
+
+        public Network.NetworkModule Network => _networkModule.Value;
 
         public Task<StatusResult> StatusAsync()
         {
@@ -45,9 +51,5 @@ namespace OpenQA.Selenium.BiDi
 
             return await Task.FromResult(new BiDiSession(broker));
         }
-
-        public BrowserModule Browser { get; }
-
-        public Network.NetworkModule Network { get; }
     }
 }

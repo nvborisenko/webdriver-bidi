@@ -61,7 +61,7 @@ namespace OpenQA.Selenium.BiDi
 
                 Debug.WriteLine($"RCV: {response}");
 
-                MessageReceived?.Invoke(this, new MessageReceivedEventArgs(response.ToString()));
+                MessageReceived?.Invoke(new MessageReceivedEventArgs(response.ToString()));
             }
         }
 

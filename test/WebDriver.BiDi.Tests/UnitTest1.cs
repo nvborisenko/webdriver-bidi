@@ -59,7 +59,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         public async Task Subscribe()
         {
             await bidi.SubscribeAsync("network.beforeRequestSent");
-            bidi.Network.BeforeRequestSent += (sender, args) => { Console.WriteLine(args.Request.Url); };
+            bidi.Network.BeforeRequestSent += args => { Console.WriteLine(args.Request.Url); };
 
             var context = await bidi.CreateBrowsingContextAsync();
 
@@ -77,10 +77,12 @@ namespace OpenQA.Selenium.BiDi.Tests
                 UrlPatterns = { new Network.UrlPatternString { Pattern = "https://selenium.dev/" } }
             });
 
-            //bidi.Network.BeforeRequestSent += (sender, args) => throw new Exception("Blocked");
+            //bidi.Network.BeforeRequestSent += (args) => throw new Exception("Blocked");
 
-            bidi.Network.BeforeRequestSent += async (sender, args) =>
+            bidi.Network.BeforeRequestSent += async args =>
             {
+                Console.WriteLine($"BeforeRequestSent {args} request...");
+
                 if (args.IsBlocked)
                 {
                     Console.WriteLine($"Intercepting {args} request...");
@@ -88,14 +90,14 @@ namespace OpenQA.Selenium.BiDi.Tests
                     await bidi.Network.ContinueRequestAsync(new Network.ContinueRequestParameters
                     {
                         RequestId = args.Request.Id,
-                        Method = "POST"
+                        //Method = "POST"
                     });
                 }
             };
 
             var context = await bidi.CreateBrowsingContextAsync();
 
-            await context.NavigateAsync("https://selenium.dev", ReadinessState.Complete);
+            await context.NavigateAsync("https://selenium.dev");
 
             await context.CloseAsync();
         }
