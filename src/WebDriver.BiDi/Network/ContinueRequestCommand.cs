@@ -9,8 +9,7 @@ namespace OpenQA.Selenium.BiDi.Network
 
     public class ContinueRequestParameters
     {
-        [JsonPropertyName("request")]
-        public string RequestId { get; set; }
+        public string Request { get; set; }
 
         public string? Url { get; set; }
 

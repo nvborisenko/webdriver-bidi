@@ -1,12 +1,6 @@
-namespace OpenQA.Selenium.BiDi
-{
-    public class MessageReceivedEventArgs
-    {
-        public MessageReceivedEventArgs(string message)
-        {
-            Message = message;
-        }
+namespace OpenQA.Selenium.BiDi;
 
-        public string Message { get; }
-    }
+public class MessageReceivedEventArgs(string message)
+{
+    public string Message { get; } = message;
 }

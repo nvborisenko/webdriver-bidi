@@ -2,11 +2,11 @@
 
 namespace OpenQA.Selenium.BiDi.Browser;
 
-public class BrowserModule
+public sealed class BrowserModule
 {
-    private Broker _broker;
+    private readonly Broker _broker;
 
-    public BrowserModule(Broker broker)
+    internal BrowserModule(Broker broker)
     {
         _broker = broker;
     }

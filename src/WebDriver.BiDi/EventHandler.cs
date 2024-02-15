@@ -1,4 +1,3 @@
-﻿namespace OpenQA.Selenium.BiDi
-{
-    public delegate void EventHandler<TEventArgs>(TEventArgs e);
-}
+﻿namespace OpenQA.Selenium.BiDi;
+
+public delegate void EventHandler<TEventArgs>(TEventArgs e);

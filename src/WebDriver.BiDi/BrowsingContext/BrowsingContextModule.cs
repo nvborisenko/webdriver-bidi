@@ -1,23 +1,22 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace OpenQA.Selenium.BiDi.BrowsingContext;
 
-public class BrowsingContextModule
+public sealed class BrowsingContextModule
 {
     private readonly Broker _broker;
 
-    public BrowsingContextModule(string id, Broker broker)
+    internal BrowsingContextModule(string id, Broker broker)
     {
         Id = id;
         _broker = broker;
     }
 
-    public string Id { get; private set; }
+    public string Id { get; }
 
-    public Task<NavigateResult> NavigateAsync(string url, ReadinessState wait = ReadinessState.Complete, CancellationToken cancellationToken = default)
+    public async Task<NavigateResult> NavigateAsync(string url, ReadinessState wait = ReadinessState.Complete)
     {
-        return _broker.ExecuteCommandAsync<NavigateCommand, NavigateResult>(new NavigateCommand { Params = new NavigateCommandParameters { BrowsingContextId = Id, Url = url, Wait = wait } }, cancellationToken);
+        return await _broker.ExecuteCommandAsync<NavigateCommand, NavigateResult>(new NavigateCommand { Params = new NavigateCommandParameters { Context = Id, Url = url, Wait = wait } });
     }
 
     public async Task<EmptyResult> CloseAsync()

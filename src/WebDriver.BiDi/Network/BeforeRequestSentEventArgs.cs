@@ -7,10 +7,10 @@ public class BeforeRequestSentEventArgs : EventArgs
 {
     public bool IsBlocked { get; set; }
 
-    public Request Request { get; set; }
+    public RequestData Request { get; set; }
 }
 
-public class Request
+public class RequestData
 {
     [JsonPropertyName("request")]
     public string Id { get; set; }

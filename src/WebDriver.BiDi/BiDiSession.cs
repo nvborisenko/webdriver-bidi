@@ -12,7 +12,7 @@ namespace OpenQA.Selenium.BiDi
         private readonly Lazy<Browser.BrowserModule> _browserModule;
         private readonly Lazy<Network.NetworkModule> _networkModule;
 
-        public BiDiSession(Broker broker)
+        internal BiDiSession(Broker broker)
         {
             _broker = broker;
 
@@ -33,7 +33,7 @@ namespace OpenQA.Selenium.BiDi
         {
             var context = await _broker.ExecuteCommandAsync<CreateCommand, CreateResult>(new CreateCommand());
 
-            return new BrowsingContextModule(context.ContextId, _broker);
+            return new BrowsingContextModule(context.Context, _broker);
         }
 
         public async Task<EmptyResult> SubscribeAsync(params string[] events)
@@ -49,7 +49,7 @@ namespace OpenQA.Selenium.BiDi
 
             var broker = new Broker(transport);
 
-            return await Task.FromResult(new BiDiSession(broker));
+            return new BiDiSession(broker);
         }
     }
 }

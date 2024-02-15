@@ -1,14 +1,13 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace OpenQA.Selenium.BiDi.Network;
 
-public class NetworkModule
+public sealed class NetworkModule
 {
-    private BiDiSession _session;
-    private Broker _broker;
+    private readonly BiDiSession _session;
+    private readonly Broker _broker;
 
-    public NetworkModule(BiDiSession session, Broker broker)
+    internal NetworkModule(BiDiSession session, Broker broker)
     {
         _session = session;
         _broker = broker;

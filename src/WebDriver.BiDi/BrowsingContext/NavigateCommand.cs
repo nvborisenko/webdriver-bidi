@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace OpenQA.Selenium.BiDi.BrowsingContext;
+﻿namespace OpenQA.Selenium.BiDi.BrowsingContext;
 
 internal class NavigateCommand : Command<NavigateCommandParameters>
 {
@@ -9,8 +7,7 @@ internal class NavigateCommand : Command<NavigateCommandParameters>
 
 internal class NavigateCommandParameters
 {
-    [JsonPropertyName("context")]
-    public string? BrowsingContextId { get; set; }
+    public string? Context { get; set; }
 
     public string? Url { get; set; }
 
@@ -22,4 +19,12 @@ public enum ReadinessState
     None,
     Interactive,
     Complete
+}
+
+public class NavigateResult
+{
+    public string Navigation { get; set; }
+
+    public string Url { get; set; }
+
 }

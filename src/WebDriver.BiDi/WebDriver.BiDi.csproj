@@ -5,7 +5,7 @@
 
     <RootNamespace>OpenQA.Selenium.BiDi</RootNamespace>
     
-    <LangVersion>11</LangVersion>
+    <LangVersion>12</LangVersion>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 

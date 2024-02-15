@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace OpenQA.Selenium.BiDi.Session;
+﻿namespace OpenQA.Selenium.BiDi.Session;
 
 internal class SubscribeCommand : Command<SubscriptionCommandParameters>
 {

@@ -15,3 +15,8 @@ internal enum BrowsingContextType
     Tab,
     Window
 }
+
+public class CreateResult
+{
+    public string Context { get; set; } = null!;
+}

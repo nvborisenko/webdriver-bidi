@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace OpenQA.Selenium.BiDi
 {
-    public class Broker
+    internal class Broker
     {
         private readonly Transport _transport;
 
@@ -78,7 +78,7 @@ namespace OpenQA.Selenium.BiDi
                 }
                 else if (result?.Type == "error")
                 {
-                    _pendingCommands[result.Id].SetException(new Exception($"{result.Error}: {result.ErrorMessage}"));
+                    _pendingCommands[result.Id].SetException(new Exception($"{result.Error}: {result.Message}"));
 
                     _pendingCommands.TryRemove(result.Id, out _);
                 }

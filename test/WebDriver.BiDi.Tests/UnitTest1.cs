@@ -58,8 +58,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         [Test]
         public async Task Subscribe()
         {
-            await bidi.SubscribeAsync("network.beforeRequestSent");
-            bidi.Network.BeforeRequestSent += args => { Console.WriteLine(args.Request.Url); };
+            bidi.Network.BeforeRequestSent += e => { Console.WriteLine(e.Request.Url); };
 
             var context = await bidi.CreateBrowsingContextAsync();
 
@@ -89,7 +88,7 @@ namespace OpenQA.Selenium.BiDi.Tests
 
                     await bidi.Network.ContinueRequestAsync(new Network.ContinueRequestParameters
                     {
-                        RequestId = args.Request.Id,
+                        Request = args.Request.Id,
                         //Method = "POST"
                     });
                 }
