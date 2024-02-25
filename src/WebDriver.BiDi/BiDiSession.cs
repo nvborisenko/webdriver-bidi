@@ -33,7 +33,7 @@ namespace OpenQA.Selenium.BiDi
         {
             var context = await _broker.ExecuteCommandAsync<CreateCommand, CreateResult>(new CreateCommand());
 
-            return new BrowsingContextModule(context.Context, _broker);
+            return new BrowsingContextModule(context.Context, this, _broker);
         }
 
         public async Task<EmptyResult> SubscribeAsync(params string[] events)

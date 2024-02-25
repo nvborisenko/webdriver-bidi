@@ -4,11 +4,14 @@ namespace OpenQA.Selenium.BiDi.BrowsingContext;
 
 public sealed class BrowsingContextModule
 {
+    private readonly BiDiSession _session;
     private readonly Broker _broker;
 
-    internal BrowsingContextModule(string id, Broker broker)
+    internal BrowsingContextModule(string id, BiDiSession session, Broker broker)
     {
         Id = id;
+
+        _session = session;
         _broker = broker;
     }
 
@@ -22,6 +25,20 @@ public sealed class BrowsingContextModule
     public async Task<EmptyResult> CloseAsync()
     {
         return await _broker.ExecuteCommandAsync<CloseCommand, EmptyResult>(new CloseCommand { Params = new CloseCommandParameters { Context = Id } });
+    }
+
+    public event EventHandler<NavigationStartedEventArgs> NavigationStarted
+    {
+        add
+        {
+            _session.SubscribeAsync("browsingContext.navigationStarted").GetAwaiter().GetResult();
+
+            _broker.RegisterEventHandler("browsingContext.navigationStarted", value);
+        }
+        remove
+        {
+
+        }
     }
 }
 

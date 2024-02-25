@@ -122,7 +122,7 @@ namespace OpenQA.Selenium.BiDi
             return ((JsonElement)result).Deserialize<TResult>(_jsonSerializerOptions)!;
         }
 
-        public void RegisterEventHandler<TEventArgs>(string name, Delegate eventHandler)
+        public void RegisterEventHandler<TEventArgs>(string name, EventHandler<TEventArgs> eventHandler)
             where TEventArgs : EventArgs
         {
             if (_eventHandlers.TryGetValue(name, out var handlers))
