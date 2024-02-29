@@ -50,8 +50,6 @@ namespace OpenQA.Selenium.BiDi.Tests
         {
             var context = await bidi.CreateBrowsingContextAsync();
 
-            await context.NavigateAsync("https://google.com", ReadinessState.Complete);
-
             await context.CloseAsync();
         }
 

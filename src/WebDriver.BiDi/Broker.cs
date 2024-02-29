@@ -3,6 +3,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
@@ -115,7 +116,7 @@ namespace OpenQA.Selenium.BiDi
             cts.Token.Register(() =>
             {
                 tcs.TrySetCanceled(cancellationToken);
-            }, true);
+            });
 
             _pendingCommands[command.Id] = tcs;
 
@@ -129,14 +130,9 @@ namespace OpenQA.Selenium.BiDi
         public void RegisterEventHandler<TEventArgs>(string name, AsyncEventHandler<TEventArgs> eventHandler)
             where TEventArgs : EventArgs
         {
-            if (_eventHandlers.TryGetValue(name, out var handlers))
-            {
-                handlers.Add(new BiDiEventHandler<TEventArgs>(eventHandler));
-            }
-            else
-            {
-                _eventHandlers[name] = new List<BiDiEventHandler> { new BiDiEventHandler<TEventArgs>(eventHandler) };
-            }
+            var handlers = _eventHandlers.GetOrAdd(name, (a) => []);
+
+            handlers.Add(new BiDiEventHandler<TEventArgs>(eventHandler));
         }
 
         public void Dispose()
