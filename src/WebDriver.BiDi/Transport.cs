@@ -1,5 +1,8 @@
 using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Net.WebSockets;
 using System.Text;
 using System.Threading;
@@ -28,9 +31,10 @@ public class Transport
         var encoded = Encoding.UTF8.GetBytes(message);
         var buffer = new ArraySegment<byte>(encoded, 0, encoded.Length);
         await webSocket.SendAsync(buffer, WebSocketMessageType.Text, true, cancellationToken);
+        File.AppendAllText("E:\\\\SeleniumBiDi.Socket.log", $"SND >> {message}{Environment.NewLine}");
     }
 
-    public async Task ReceiveAsync(CancellationToken cancellationToken)
+    public async Task ReceiveMessageAsync(CancellationToken cancellationToken)
     {
         var buffer = new byte[2048];
 
@@ -59,13 +63,14 @@ public class Transport
                 }
             }
 
-            Debug.WriteLine($"RCV: {response}");
+            Debug.WriteLine($"RCV << {response}");
+            File.AppendAllText("E:\\\\SeleniumBiDi.Socket.log", $"RCV << {response}{Environment.NewLine}");
 
-            MessageReceived?.Invoke(new MessageReceivedEventArgs(response.ToString()));
+            Messages.Add(response.ToString());
         }
     }
 
-    public event EventHandler<MessageReceivedEventArgs> MessageReceived;
+    public BlockingCollection<string> Messages { get; } = new BlockingCollection<string>();
 
     public bool IsClosed { get; private set; }
 }

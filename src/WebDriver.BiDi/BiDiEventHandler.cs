@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace OpenQA.Selenium.BiDi
 {
@@ -6,23 +7,25 @@ namespace OpenQA.Selenium.BiDi
     {
         public Type EventArgsType { get; set; }
 
-        public abstract void Invoke(object args);
+        public abstract Task Invoke(object args);
     }
 
     internal class BiDiEventHandler<TEventArgs> : BiDiEventHandler where TEventArgs : EventArgs
     {
-        public BiDiEventHandler(Delegate action)
+        public BiDiEventHandler(AsyncEventHandler<TEventArgs> handler)
         {
-            Action = action;
+            Action = handler;
 
             EventArgsType = typeof(TEventArgs);
         }
 
-        public Delegate Action { get; }
+        public AsyncEventHandler<TEventArgs> Action { get; }
 
-        public override void Invoke(object arg)
+        public override Task Invoke(object arg)
         {
-            Action.DynamicInvoke(arg);
+            return Action((TEventArgs)arg);
+            //Action.Invoke((TEventArgs)arg).GetAwaiter().GetResult();
+            //Action.DynamicInvoke(arg);
         }
     }
 }

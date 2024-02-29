@@ -23,7 +23,7 @@ public sealed class NetworkModule
         return await _broker.ExecuteCommandAsync<ContinueRequestCommand, EmptyResult>(new ContinueRequestCommand { Params = parameters });
     }
 
-    public event EventHandler<BeforeRequestSentEventArgs> BeforeRequestSent
+    public event AsyncEventHandler<BeforeRequestSentEventArgs> BeforeRequestSent
     {
         add
         {

@@ -1,8 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace OpenQA.Selenium.BiDi.BrowsingContext;
 
-public sealed class BrowsingContextModule
+public sealed class BrowsingContextModule : IDisposable
 {
     private readonly BiDiSession _session;
     private readonly Broker _broker;
@@ -27,7 +28,7 @@ public sealed class BrowsingContextModule
         return await _broker.ExecuteCommandAsync<CloseCommand, EmptyResult>(new CloseCommand { Params = new CloseCommandParameters { Context = Id } });
     }
 
-    public event EventHandler<NavigationStartedEventArgs> NavigationStarted
+    public event AsyncEventHandler<NavigationStartedEventArgs> NavigationStarted
     {
         add
         {
@@ -39,6 +40,11 @@ public sealed class BrowsingContextModule
         {
 
         }
+    }
+
+    public void Dispose()
+    {
+        CloseAsync().GetAwaiter().GetResult();
     }
 }
 

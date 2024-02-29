@@ -10,20 +10,21 @@ using System.Threading.Tasks;
 
 namespace OpenQA.Selenium.BiDi
 {
-    internal class Broker
+    internal class Broker : IDisposable
     {
         private readonly Transport _transport;
 
         private readonly ConcurrentDictionary<int, TaskCompletionSource<object>> _pendingCommands = new();
+        private readonly BlockingCollection<Result<object>> _pendingEvents = new();
 
         private readonly ConcurrentDictionary<string, List<BiDiEventHandler>> _eventHandlers = new();
+        //private readonly List<Task> _events = new();
 
         private int _currentCommandId;
 
-        private readonly BlockingCollection<string> _commandQueue = new();
-
         private Task _commandQueueTask;
-        private Task _eventReveivingTask;
+        private Task _reveivingMessageTask;
+        private Task _eventEmitterTask;
 
         private readonly JsonSerializerOptions _jsonSerializerOptions;
 
@@ -31,25 +32,22 @@ namespace OpenQA.Selenium.BiDi
         {
             _transport = transpot;
 
-            _transport.MessageReceived += Transport_MessageReceived;
-
-            _eventReveivingTask = Task.Run(async () => await _transport.ReceiveAsync(default));
-            _commandQueueTask = Task.Run(ProcessMessage);
+            _reveivingMessageTask = Task.Run(async () => await _transport.ReceiveMessageAsync(default));
+            _commandQueueTask = Task.Run(async () => await ProcessMessageAsync());
+            _eventEmitterTask = Task.Run(async () => await ProcessEvents());
 
             _jsonSerializerOptions = new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true,
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
                 DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-                Converters = { new Int32JsonConverter() }
+                Converters = { new Int32JsonConverter(), new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) }
             };
-
-            _jsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
         }
 
-        private void ProcessMessage()
+        private async Task ProcessMessageAsync()
         {
-            foreach (var message in _commandQueue.GetConsumingEnumerable())
+            foreach (var message in _transport.Messages.GetConsumingEnumerable())
             {
                 Debug.WriteLine($"Processing message: {message}");
 
@@ -63,18 +61,7 @@ namespace OpenQA.Selenium.BiDi
                 }
                 else if (result?.Type == "event")
                 {
-                    if (_eventHandlers.TryGetValue(result.Method, out var eventHandlers))
-                    {
-                        if (eventHandlers is not null)
-                        {
-                            foreach (var handler in eventHandlers)
-                            {
-                                var args = JsonSerializer.Deserialize((JsonElement)result.Params, handler.EventArgsType, _jsonSerializerOptions);
-
-                                handler.Invoke(args);
-                            }
-                        }
-                    }
+                    _pendingEvents.Add(result);
                 }
                 else if (result?.Type == "error")
                 {
@@ -90,11 +77,28 @@ namespace OpenQA.Selenium.BiDi
             }
         }
 
-        private void Transport_MessageReceived(MessageReceivedEventArgs e)
+        private async Task ProcessEvents()
         {
-            _commandQueue.Add(e.Message);
+            foreach (var result in _pendingEvents.GetConsumingEnumerable())
+            {
+                if (_eventHandlers.TryGetValue(result.Method, out var eventHandlers))
+                {
+                    if (eventHandlers is not null)
+                    {
+                        foreach (var handler in eventHandlers)
+                        {
+                            var args = JsonSerializer.Deserialize((JsonElement)result.Params, handler.EventArgsType, _jsonSerializerOptions);
 
-            Debug.WriteLine($"Added to queue: {e.Message}");
+                            var res = handler.Invoke(args);
+
+                            if (!res.IsCompleted)
+                            {
+                                res.Wait();
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         public async Task<TResult> ExecuteCommandAsync<TCommand, TResult>(TCommand command, CancellationToken cancellationToken = default)
@@ -111,7 +115,7 @@ namespace OpenQA.Selenium.BiDi
             cts.Token.Register(() =>
             {
                 tcs.TrySetCanceled(cancellationToken);
-            }, false);
+            }, true);
 
             _pendingCommands[command.Id] = tcs;
 
@@ -122,7 +126,7 @@ namespace OpenQA.Selenium.BiDi
             return ((JsonElement)result).Deserialize<TResult>(_jsonSerializerOptions)!;
         }
 
-        public void RegisterEventHandler<TEventArgs>(string name, EventHandler<TEventArgs> eventHandler)
+        public void RegisterEventHandler<TEventArgs>(string name, AsyncEventHandler<TEventArgs> eventHandler)
             where TEventArgs : EventArgs
         {
             if (_eventHandlers.TryGetValue(name, out var handlers))
@@ -133,6 +137,11 @@ namespace OpenQA.Selenium.BiDi
             {
                 _eventHandlers[name] = new List<BiDiEventHandler> { new BiDiEventHandler<TEventArgs>(eventHandler) };
             }
+        }
+
+        public void Dispose()
+        {
+            Task.WaitAll([_eventEmitterTask]);
         }
     }
 }
