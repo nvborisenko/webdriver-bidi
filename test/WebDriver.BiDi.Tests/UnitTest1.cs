@@ -15,7 +15,7 @@ namespace OpenQA.Selenium.BiDi.Tests
             //FirefoxOptions firefoxOptions = new FirefoxOptions
             //{
             //    UseWebSocketUrl = true,
-            //    BrowserVersion = "120.0"
+            //    BrowserVersion = "123.0"
             //};
 
             //driver = new FirefoxDriver(firefoxOptions);
