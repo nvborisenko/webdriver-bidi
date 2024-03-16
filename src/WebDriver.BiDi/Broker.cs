@@ -54,7 +54,7 @@ namespace OpenQA.Selenium.BiDi
 
                 if (result?.Type == "success")
                 {
-                    _pendingCommands[result.Id].SetResult(result.ResultData);
+                    _pendingCommands[result.Id].TrySetResult(result.ResultData);
 
                     _pendingCommands.TryRemove(result.Id, out _);
                 }
@@ -64,7 +64,7 @@ namespace OpenQA.Selenium.BiDi
                 }
                 else if (result?.Type == "error")
                 {
-                    _pendingCommands[result.Id].SetException(new Exception($"{result.Error}: {result.Message}"));
+                    _pendingCommands[result.Id].TrySetException(new Exception($"{result.Error}: {result.Message}"));
 
                     _pendingCommands.TryRemove(result.Id, out _);
                 }
@@ -137,7 +137,14 @@ namespace OpenQA.Selenium.BiDi
         public void Dispose()
         {
             _pendingEvents.CompleteAdding();
-            Task.WaitAll([_eventEmitterTask]);
+            try
+            {
+                Task.WaitAll([_eventEmitterTask]);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Unhandled error occured while disposing Broker object: {ex}");
+            }
         }
     }
 }
