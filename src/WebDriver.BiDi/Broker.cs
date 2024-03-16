@@ -3,7 +3,6 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
@@ -19,13 +18,12 @@ namespace OpenQA.Selenium.BiDi
         private readonly BlockingCollection<Result<object>> _pendingEvents = new();
 
         private readonly ConcurrentDictionary<string, List<BiDiEventHandler>> _eventHandlers = new();
-        //private readonly List<Task> _events = new();
 
         private int _currentCommandId;
 
-        private Task _commandQueueTask;
-        private Task _reveivingMessageTask;
-        private Task _eventEmitterTask;
+        private readonly Task _commandQueueTask;
+        private readonly Task _reveivingMessageTask;
+        private readonly Task _eventEmitterTask;
 
         private readonly JsonSerializerOptions _jsonSerializerOptions;
 
@@ -34,8 +32,8 @@ namespace OpenQA.Selenium.BiDi
             _transport = transpot;
 
             _reveivingMessageTask = Task.Run(async () => await _transport.ReceiveMessageAsync(default));
-            _commandQueueTask = Task.Run(async () => await ProcessMessageAsync());
-            _eventEmitterTask = Task.Run(async () => await ProcessEvents());
+            _commandQueueTask = Task.Run(ProcessMessage);
+            _eventEmitterTask = Task.Run(ProcessEvents);
 
             _jsonSerializerOptions = new JsonSerializerOptions
             {
@@ -46,7 +44,7 @@ namespace OpenQA.Selenium.BiDi
             };
         }
 
-        private async Task ProcessMessageAsync()
+        private void ProcessMessage()
         {
             foreach (var message in _transport.Messages.GetConsumingEnumerable())
             {
@@ -74,11 +72,12 @@ namespace OpenQA.Selenium.BiDi
                 {
                     throw new Exception("Unknown type");
                 }
+
                 Debug.WriteLine($"Processed message successfully");
             }
         }
 
-        private async Task ProcessEvents()
+        private void ProcessEvents()
         {
             foreach (var result in _pendingEvents.GetConsumingEnumerable())
             {
