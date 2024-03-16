@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace OpenQA.Selenium.BiDi
 {
-    public sealed class BiDiSession
+    public sealed class BiDiSession : IDisposable
     {
         private readonly Broker _broker;
 
@@ -50,6 +50,11 @@ namespace OpenQA.Selenium.BiDi
             var broker = new Broker(transport);
 
             return new BiDiSession(broker);
+        }
+
+        public void Dispose()
+        {
+            _broker?.Dispose();
         }
     }
 }

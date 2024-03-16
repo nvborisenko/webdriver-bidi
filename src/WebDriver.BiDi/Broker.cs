@@ -137,6 +137,7 @@ namespace OpenQA.Selenium.BiDi
 
         public void Dispose()
         {
+            _pendingEvents.CompleteAdding();
             Task.WaitAll([_eventEmitterTask]);
         }
     }

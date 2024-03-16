@@ -34,6 +34,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         [TearDown]
         public void TearDown()
         {
+            bidi?.Dispose();
             driver?.Dispose();
         }
 
@@ -68,8 +69,8 @@ namespace OpenQA.Selenium.BiDi.Tests
         {
             using var context = await bidi.CreateBrowsingContextAsync();
 
-            context.NavigationStarted += async args => { await Task.Delay(1); Console.WriteLine(args); };
-            //context.NavigationStarted += args => { Thread.Sleep(1); Console.WriteLine(args); return Task.CompletedTask; };
+            context.NavigationStarted += async args => { await Task.Delay(1000); Console.WriteLine($"{DateTime.Now} {args}"); };
+            context.NavigationStarted += args => { Thread.Sleep(1000); Console.WriteLine($"{DateTime.Now} {args}"); return Task.CompletedTask; };
 
             await context.NavigateAsync("https://selenium.dev");
         }
