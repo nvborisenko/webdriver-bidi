@@ -26,16 +26,16 @@ namespace WebDriver.BiDi.WpfTest
 
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
+            var options = new ChromeOptions
+            {
+                UseWebSocketUrl = true,
+                //BrowserVersion = "121.0"
+            };
+
+            using var driver = new ChromeDriver(options);
+
             await Task.Run(async () =>
             {
-                var options = new ChromeOptions
-                {
-                    UseWebSocketUrl = true,
-                    //BrowserVersion = "121.0"
-                };
-
-                using var driver = new ChromeDriver(options);
-
                 using var bidi = await BiDiSession.ConnectAsync(((IHasCapabilities)driver).Capabilities.GetCapability("webSocketUrl").ToString()!);
 
                 using var context = await bidi.CreateBrowsingContextAsync();
