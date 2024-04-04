@@ -24,21 +24,21 @@ namespace OpenQA.Selenium.BiDi
 
         public Network.NetworkModule Network => _networkModule.Value;
 
-        public Task<StatusResult> StatusAsync()
+        public async Task<StatusResult> StatusAsync()
         {
-            return _broker.ExecuteCommandAsync<StatusCommand, StatusResult>(new StatusCommand());
+            return await _broker.ExecuteCommandAsync<StatusCommand, StatusResult>(new StatusCommand()).ConfigureAwait(false);
         }
 
         public async Task<BrowsingContextModule> CreateBrowsingContextAsync()
         {
-            var context = await _broker.ExecuteCommandAsync<CreateCommand, CreateResult>(new CreateCommand());
+            var context = await _broker.ExecuteCommandAsync<CreateCommand, CreateResult>(new CreateCommand()).ConfigureAwait(false);
 
             return new BrowsingContextModule(context.Context, this, _broker);
         }
 
         public async Task<EmptyResult> SubscribeAsync(params string[] events)
         {
-            return await _broker.ExecuteCommandAsync<SubscribeCommand, EmptyResult>(new SubscribeCommand() { Params = new SubscriptionCommandParameters { Events = events } });
+            return await _broker.ExecuteCommandAsync<SubscribeCommand, EmptyResult>(new SubscribeCommand() { Params = new SubscriptionCommandParameters { Events = events } }).ConfigureAwait(false);
         }
 
         public static async Task<BiDiSession> ConnectAsync(string url)
