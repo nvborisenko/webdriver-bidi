@@ -81,22 +81,30 @@ namespace OpenQA.Selenium.BiDi
         {
             foreach (var result in _pendingEvents.GetConsumingEnumerable())
             {
-                if (_eventHandlers.TryGetValue(result.Method, out var eventHandlers))
+                try
                 {
-                    if (eventHandlers is not null)
+                    if (_eventHandlers.TryGetValue(result.Method, out var eventHandlers))
                     {
-                        foreach (var handler in eventHandlers)
+                        if (eventHandlers is not null)
                         {
-                            var args = JsonSerializer.Deserialize((JsonElement)result.Params, handler.EventArgsType, _jsonSerializerOptions);
-
-                            var res = handler.Invoke(args);
-
-                            if (!res.IsCompleted)
+                            foreach (var handler in eventHandlers)
                             {
-                                res.Wait();
+                                var args = JsonSerializer.Deserialize((JsonElement)result.Params, handler.EventArgsType, _jsonSerializerOptions);
+
+                                var res = handler.Invoke(args);
+
+                                if (!res.IsCompleted)
+                                {
+                                    res.Wait();
+                                }
                             }
                         }
                     }
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"Unhandled error processing BiDi event: {ex}");
+                    Console.WriteLine($"Unhandled error processing BiDi event: {ex}");
                 }
             }
         }

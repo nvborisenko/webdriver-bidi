@@ -7,18 +7,12 @@ var options = new ChromeOptions
     UseWebSocketUrl = true,
 };
 
-var driver = new ChromeDriver(options);
+using var driver = new ChromeDriver(options);
 
-var bidi = await BiDiSession.ConnectAsync(((IHasCapabilities)driver).Capabilities.GetCapability("webSocketUrl").ToString()!);
+using var bidi = await BiDiSession.ConnectAsync(((IHasCapabilities)driver).Capabilities.GetCapability("webSocketUrl").ToString()!);
 
-//bidi.Network.BeforeRequestSent += args => { Console.WriteLine(args.Request.Url); };
+using var context = await bidi.CreateBrowsingContextAsync();
 
-var context = await bidi.CreateBrowsingContextAsync();
-
-context.NavigationStarted += async e => { await Task.Delay(3000); Console.WriteLine(e); };
+context.NavigationStarted += async e => { await Task.Delay(2000); Console.WriteLine($"Navigation started: {e}"); };
 
 await context.NavigateAsync("https://google.com");
-
-await context.CloseAsync();
-
-driver.Quit();
