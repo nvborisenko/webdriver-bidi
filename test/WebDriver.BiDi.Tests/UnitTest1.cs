@@ -4,6 +4,8 @@ using OpenQA.Selenium.Firefox;
 
 namespace OpenQA.Selenium.BiDi.Tests
 {
+    //[Parallelizable(ParallelScope.Children)]
+    //[FixtureLifeCycle(LifeCycle.InstancePerTestCase)]
     public class Tests
     {
         IWebDriver driver;

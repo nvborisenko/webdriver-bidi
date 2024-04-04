@@ -23,15 +23,15 @@ public class Transport
 
     public async Task ConnectAsync(CancellationToken cancellationToken)
     {
-        await webSocket.ConnectAsync(uri, cancellationToken);
+        await webSocket.ConnectAsync(uri, cancellationToken).ConfigureAwait(false);
     }
 
     public async Task SendAsync(string message, CancellationToken cancellationToken)
     {
         var encoded = Encoding.UTF8.GetBytes(message);
         var buffer = new ArraySegment<byte>(encoded, 0, encoded.Length);
-        await webSocket.SendAsync(buffer, WebSocketMessageType.Text, true, cancellationToken);
-        File.AppendAllText("E:\\\\SeleniumBiDi.Socket.log", $"SND >> {message}{Environment.NewLine}");
+        await webSocket.SendAsync(buffer, WebSocketMessageType.Text, true, cancellationToken).ConfigureAwait(false);
+        //File.AppendAllText("E:\\\\SeleniumBiDi.Socket.log", $"SND >> {message}{Environment.NewLine}");
     }
 
     public async Task ReceiveMessageAsync(CancellationToken cancellationToken)
@@ -64,7 +64,7 @@ public class Transport
             }
 
             Debug.WriteLine($"RCV << {response}");
-            File.AppendAllText("E:\\\\SeleniumBiDi.Socket.log", $"RCV << {response}{Environment.NewLine}");
+            //File.AppendAllText("E:\\\\SeleniumBiDi.Socket.log", $"RCV << {response}{Environment.NewLine}");
 
             Messages.Add(response.ToString());
         }

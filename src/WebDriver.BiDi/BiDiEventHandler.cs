@@ -24,8 +24,6 @@ namespace OpenQA.Selenium.BiDi
         public override Task Invoke(object arg)
         {
             return Action((TEventArgs)arg);
-            //Action.Invoke((TEventArgs)arg).GetAwaiter().GetResult();
-            //Action.DynamicInvoke(arg);
         }
     }
 }

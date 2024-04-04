@@ -27,7 +27,7 @@ public sealed class NetworkModule
     {
         add
         {
-            _session.SubscribeAsync("network.beforeRequestSent").ConfigureAwait(false).GetAwaiter().GetResult();
+            _session.SubscribeAsync("network.beforeRequestSent").GetAwaiter().GetResult();
 
             _broker.RegisterEventHandler<BeforeRequestSentEventArgs>("network.beforeRequestSent", value);
         }

@@ -119,7 +119,7 @@ namespace OpenQA.Selenium.BiDi
 
             _pendingCommands[command.Id] = tcs;
 
-            await _transport.SendAsync(json, cancellationToken);
+            await _transport.SendAsync(json, cancellationToken).ConfigureAwait(false);
 
             var result = await tcs.Task;
 

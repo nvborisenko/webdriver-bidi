@@ -32,7 +32,7 @@ public sealed class BrowsingContextModule : IDisposable
     {
         add
         {
-            _session.SubscribeAsync("browsingContext.navigationStarted").ConfigureAwait(false).GetAwaiter().GetResult();
+            _session.SubscribeAsync("browsingContext.navigationStarted").GetAwaiter().GetResult();
 
             _broker.RegisterEventHandler("browsingContext.navigationStarted", value);
         }
