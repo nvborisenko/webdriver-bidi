@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace OpenQA.Selenium.BiDi.Network;
+namespace OpenQA.Selenium.BiDi.Modules.Network;
 
 public class BeforeRequestSentEventArgs : EventArgs
 {

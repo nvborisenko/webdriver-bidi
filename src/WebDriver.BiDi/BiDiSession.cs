@@ -1,7 +1,6 @@
-﻿using OpenQA.Selenium.BiDi.BrowsingContext;
-using OpenQA.Selenium.BiDi.Session;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using OpenQA.Selenium.BiDi.Internal;
 
 namespace OpenQA.Selenium.BiDi
 {
@@ -10,37 +9,37 @@ namespace OpenQA.Selenium.BiDi
         private readonly Transport _transport;
         private readonly Broker _broker;
 
-        private readonly Lazy<Browser.BrowserModule> _browserModule;
-        private readonly Lazy<Network.NetworkModule> _networkModule;
+        private readonly Lazy<Modules.Browser.BrowserModule> _browserModule;
+        private readonly Lazy<Modules.Network.NetworkModule> _networkModule;
 
         internal BiDiSession(string uri)
         {
             _transport = new Transport(new Uri(uri));
             _broker = new Broker(this, _transport);
 
-            _browserModule = new Lazy<Browser.BrowserModule>(() => new Browser.BrowserModule(_broker));
-            _networkModule = new Lazy<Network.NetworkModule>(() => new Network.NetworkModule(this, _broker));
+            _browserModule = new Lazy<Modules.Browser.BrowserModule>(() => new Modules.Browser.BrowserModule(_broker));
+            _networkModule = new Lazy<Modules.Network.NetworkModule>(() => new Modules.Network.NetworkModule(this, _broker));
         }
 
-        public Browser.BrowserModule Browser => _browserModule.Value;
+        public Modules.Browser.BrowserModule Browser => _browserModule.Value;
 
-        public Network.NetworkModule Network => _networkModule.Value;
+        public Modules.Network.NetworkModule Network => _networkModule.Value;
 
-        public async Task<StatusResult> StatusAsync()
+        public async Task<Modules.Session.StatusResult> StatusAsync()
         {
-            return await _broker.ExecuteCommandAsync<StatusCommand, StatusResult>(new StatusCommand()).ConfigureAwait(false);
+            return await _broker.ExecuteCommandAsync<Modules.Session.StatusCommand, Modules.Session.StatusResult>(new Modules.Session.StatusCommand()).ConfigureAwait(false);
         }
 
-        public async Task<BrowsingContextModule> CreateBrowsingContextAsync()
+        public async Task<Modules.BrowsingContext.BrowsingContextModule> CreateBrowsingContextAsync()
         {
-            var context = await _broker.ExecuteCommandAsync<CreateCommand, CreateResult>(new CreateCommand()).ConfigureAwait(false);
+            var context = await _broker.ExecuteCommandAsync<Modules.BrowsingContext.CreateCommand, Modules.BrowsingContext.CreateResult>(new Modules.BrowsingContext.CreateCommand()).ConfigureAwait(false);
 
-            return new BrowsingContextModule(context.Context, this, _broker);
+            return new Modules.BrowsingContext.BrowsingContextModule(context.Context, this, _broker);
         }
 
         public async Task SubscribeAsync(params string[] events)
         {
-            await _broker.ExecuteCommandAsync(new SubscribeCommand() { Params = new SubscriptionCommandParameters { Events = events } }).ConfigureAwait(false);
+            await _broker.ExecuteCommandAsync(new Modules.Session.SubscribeCommand() { Params = new Modules.Session.SubscriptionCommandParameters { Events = events } }).ConfigureAwait(false);
         }
 
         private async Task ConnectAsync()

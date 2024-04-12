@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace OpenQA.Selenium.BiDi;
+namespace OpenQA.Selenium.BiDi.Internal;
 
 internal class Transport : IDisposable
 {

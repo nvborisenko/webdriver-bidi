@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace OpenQA.Selenium.BiDi.BrowsingContext;
+namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
 public class NavigationInfoEventArgs : EventArgs
 {

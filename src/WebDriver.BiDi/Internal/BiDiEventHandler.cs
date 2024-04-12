@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace OpenQA.Selenium.BiDi
+namespace OpenQA.Selenium.BiDi.Internal
 {
     internal abstract class BiDiEventHandler
     {

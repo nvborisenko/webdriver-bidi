@@ -1,4 +1,4 @@
-namespace OpenQA.Selenium.BiDi;
+namespace OpenQA.Selenium.BiDi.Internal;
 
 internal class MessageReceivedEventArgs(string message)
 {

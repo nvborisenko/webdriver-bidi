@@ -1,4 +1,3 @@
-//using OpenQA.Selenium.BiDi.BrowsingContext;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
 using System;
@@ -83,10 +82,10 @@ namespace OpenQA.Selenium.BiDi.Tests
         [Test]
         public async Task InterceptTest()
         {
-            await session.Network.AddInterceptAsync(new Network.AddInterceptParameters
+            await session.Network.AddInterceptAsync(new Modules.Network.AddInterceptParameters
             {
-                Phases = { Network.InterceptPhase.BeforeRequestSent },
-                UrlPatterns = { new Network.UrlPatternString { Pattern = "https://selenium.dev/" } }
+                Phases = { Modules.Network.InterceptPhase.BeforeRequestSent },
+                UrlPatterns = { new Modules.Network.UrlPatternString { Pattern = "https://selenium.dev/" } }
             });
 
             using var context = await session.CreateBrowsingContextAsync();

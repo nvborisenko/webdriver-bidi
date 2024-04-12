@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using OpenQA.Selenium.BiDi.Internal;
 
-namespace OpenQA.Selenium.BiDi.Network;
+namespace OpenQA.Selenium.BiDi.Modules.Network;
 
 public sealed class NetworkModule
 {
@@ -30,7 +30,7 @@ public sealed class NetworkModule
         {
             AsyncHelper.RunSync(() => _session.SubscribeAsync("network.beforeRequestSent"));
 
-            _broker.RegisterEventHandler<BeforeRequestSentEventArgs>("network.beforeRequestSent", value);
+            _broker.RegisterEventHandler("network.beforeRequestSent", value);
         }
         remove
         {

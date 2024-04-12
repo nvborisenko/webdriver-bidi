@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
+using OpenQA.Selenium.BiDi.Internal;
 
-namespace OpenQA.Selenium.BiDi.Network
+namespace OpenQA.Selenium.BiDi.Modules.Network
 {
     internal class AddInterceptCommand : Command<AddInterceptParameters>
     {

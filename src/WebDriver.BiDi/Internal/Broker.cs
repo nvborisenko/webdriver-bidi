@@ -8,7 +8,7 @@ using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace OpenQA.Selenium.BiDi
+namespace OpenQA.Selenium.BiDi.Internal
 {
     internal class Broker : IDisposable
     {
@@ -106,7 +106,7 @@ namespace OpenQA.Selenium.BiDi
                     {
                         foreach (var handler in eventHandlers)
                         {
-                            var args = (EventArgs)JsonSerializer.Deserialize((JsonElement)result.Params!, handler.EventArgsType, _jsonSerializerOptions)!;
+                            var args = (EventArgs)((JsonElement)result.Params!).Deserialize(handler.EventArgsType, _jsonSerializerOptions)!;
 
                             args.Session = _session;
 

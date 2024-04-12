@@ -1,13 +1,13 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace OpenQA.Selenium.BiDi;
+namespace OpenQA.Selenium.BiDi.Internal;
 
-public class Result
+internal class Result
 {
 
 }
 
-public class Result<T> : Result
+internal class Result<T> : Result
 {
     public string? Type { get; set; }
 

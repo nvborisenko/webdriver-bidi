@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using OpenQA.Selenium.BiDi.Internal;
 
-namespace OpenQA.Selenium.BiDi.BrowsingContext;
+namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
 public sealed class BrowsingContextModule : IDisposable
 {

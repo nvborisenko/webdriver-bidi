@@ -1,4 +1,6 @@
-﻿namespace OpenQA.Selenium.BiDi.Session;
+﻿using OpenQA.Selenium.BiDi.Internal;
+
+namespace OpenQA.Selenium.BiDi.Modules.Session;
 
 internal class SubscribeCommand : Command<SubscriptionCommandParameters>
 {

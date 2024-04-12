@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
+using OpenQA.Selenium.BiDi.Internal;
 
-namespace OpenQA.Selenium.BiDi.Browser;
+namespace OpenQA.Selenium.BiDi.Modules.Browser;
 
 public sealed class BrowserModule
 {
