@@ -1,8 +1,5 @@
 using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Net.WebSockets;
 using System.Text;
 using System.Threading;
@@ -10,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OpenQA.Selenium.BiDi;
 
-public class Transport
+internal class Transport : IDisposable
 {
     private readonly Uri uri;
     private readonly ClientWebSocket webSocket;
@@ -24,6 +21,8 @@ public class Transport
     public async Task ConnectAsync(CancellationToken cancellationToken)
     {
         await webSocket.ConnectAsync(uri, cancellationToken).ConfigureAwait(false);
+
+        IsClosed = false;
     }
 
     public async Task SendAsync(string message, CancellationToken cancellationToken)
@@ -31,8 +30,9 @@ public class Transport
         var encoded = Encoding.UTF8.GetBytes(message);
         var buffer = new ArraySegment<byte>(encoded, 0, encoded.Length);
         await webSocket.SendAsync(buffer, WebSocketMessageType.Text, true, cancellationToken).ConfigureAwait(false);
-        //File.AppendAllText("E:\\\\SeleniumBiDi.Socket.log", $"SND >> {message}{Environment.NewLine}");
     }
+
+    public event EventHandler<MessageReceivedEventArgs>? MessageReceived;
 
     public async Task ReceiveMessageAsync(CancellationToken cancellationToken)
     {
@@ -47,9 +47,7 @@ public class Transport
             {
                 WebSocketReceiveResult result;
 
-                result = await webSocket.ReceiveAsync(
-                    new ArraySegment<byte>(buffer),
-                    cancellationToken).ConfigureAwait(false);
+                result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), cancellationToken).ConfigureAwait(false);
 
                 endOfMessage = result.EndOfMessage;
 
@@ -64,13 +62,17 @@ public class Transport
             }
 
             Debug.WriteLine($"RCV << {response}");
-            //File.AppendAllText("E:\\\\SeleniumBiDi.Socket.log", $"RCV << {response}{Environment.NewLine}");
 
-            Messages.Add(response.ToString());
+            MessageReceived?.Invoke(this, new MessageReceivedEventArgs(response.ToString()));
         }
     }
 
-    public BlockingCollection<string> Messages { get; } = new BlockingCollection<string>();
+    public bool IsClosed { get; private set; } = true;
 
-    public bool IsClosed { get; private set; }
+    public void Dispose()
+    {
+        IsClosed = true;
+
+        webSocket.Dispose();
+    }
 }

@@ -2,7 +2,7 @@
 
 internal abstract class Command
 {
-    public int Id { get; set; }
+    public int? Id { get; set; }
 }
 
 internal abstract class Command<TParameters> : Command

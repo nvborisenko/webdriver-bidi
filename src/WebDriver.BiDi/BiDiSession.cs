@@ -5,16 +5,18 @@ using System.Threading.Tasks;
 
 namespace OpenQA.Selenium.BiDi
 {
-    public sealed class BiDiSession : IDisposable
+    public class BiDiSession : IDisposable
     {
+        private readonly Transport _transport;
         private readonly Broker _broker;
 
         private readonly Lazy<Browser.BrowserModule> _browserModule;
         private readonly Lazy<Network.NetworkModule> _networkModule;
 
-        internal BiDiSession(Broker broker)
+        internal BiDiSession(string uri)
         {
-            _broker = broker;
+            _transport = new Transport(new Uri(uri));
+            _broker = new Broker(this, _transport);
 
             _browserModule = new Lazy<Browser.BrowserModule>(() => new Browser.BrowserModule(_broker));
             _networkModule = new Lazy<Network.NetworkModule>(() => new Network.NetworkModule(this, _broker));
@@ -36,24 +38,28 @@ namespace OpenQA.Selenium.BiDi
             return new BrowsingContextModule(context.Context, this, _broker);
         }
 
-        public async Task<EmptyResult> SubscribeAsync(params string[] events)
+        public async Task SubscribeAsync(params string[] events)
         {
-            return await _broker.ExecuteCommandAsync<SubscribeCommand, EmptyResult>(new SubscribeCommand() { Params = new SubscriptionCommandParameters { Events = events } }).ConfigureAwait(false);
+            await _broker.ExecuteCommandAsync(new SubscribeCommand() { Params = new SubscriptionCommandParameters { Events = events } }).ConfigureAwait(false);
+        }
+
+        private async Task ConnectAsync()
+        {
+            await _broker.ConnectAsync(default).ConfigureAwait(false);
         }
 
         public static async Task<BiDiSession> ConnectAsync(string url)
         {
-            var transport = new Transport(new Uri(url));
+            var bidiSession = new BiDiSession(url);
 
-            await transport.ConnectAsync(default).ConfigureAwait(false);
+            await bidiSession.ConnectAsync().ConfigureAwait(false);
 
-            var broker = new Broker(transport);
-
-            return new BiDiSession(broker);
+            return bidiSession;
         }
 
         public void Dispose()
         {
+            _transport?.Dispose();
             _broker?.Dispose();
         }
     }

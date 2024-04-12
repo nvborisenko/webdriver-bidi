@@ -20,19 +20,28 @@ public sealed class BrowsingContextModule : IDisposable
 
     public async Task<NavigateResult> NavigateAsync(string url, ReadinessState wait = ReadinessState.Complete)
     {
-        return await _broker.ExecuteCommandAsync<NavigateCommand, NavigateResult>(new NavigateCommand { Params = new NavigateCommandParameters { Context = Id, Url = url, Wait = wait } }).ConfigureAwait(false);
+        var parameters = new NavigateCommandParameters { Url = url, Wait = wait };
+
+        return await NavigateAsync(parameters).ConfigureAwait(false);
     }
 
-    public async Task<EmptyResult> CloseAsync()
+    public async Task<NavigateResult> NavigateAsync(NavigateCommandParameters parameters)
     {
-        return await _broker.ExecuteCommandAsync<CloseCommand, EmptyResult>(new CloseCommand { Params = new CloseCommandParameters { Context = Id } }).ConfigureAwait(false);
+        parameters.Context = Id;
+
+        return await _broker.ExecuteCommandAsync<NavigateCommand, NavigateResult>(new NavigateCommand { Params = parameters }).ConfigureAwait(false);
     }
 
-    public event AsyncEventHandler<NavigationStartedEventArgs> NavigationStarted
+    public async Task CloseAsync()
+    {
+        await _broker.ExecuteCommandAsync(new CloseCommand { Params = new CloseCommandParameters { Context = Id } }).ConfigureAwait(false);
+    }
+
+    public event AsyncEventHandler<NavigationInfoEventArgs> NavigationStarted
     {
         add
         {
-            _session.SubscribeAsync("browsingContext.navigationStarted").GetAwaiter().GetResult();
+            AsyncHelper.RunSync(() => _session.SubscribeAsync("browsingContext.navigationStarted"));
 
             _broker.RegisterEventHandler("browsingContext.navigationStarted", value);
         }
@@ -44,7 +53,7 @@ public sealed class BrowsingContextModule : IDisposable
 
     public void Dispose()
     {
-        CloseAsync().ConfigureAwait(false).GetAwaiter().GetResult();
+        AsyncHelper.RunSync(CloseAsync);
     }
 }
 

@@ -34,17 +34,24 @@ namespace WebDriver.BiDi.WpfTest
 
             using var driver = new ChromeDriver(options);
 
-            await Task.Run(async () =>
+            using var bidi = await BiDiSession.ConnectAsync(((IHasCapabilities)driver).Capabilities.GetCapability("webSocketUrl").ToString()!);
+            var count = 0;
+            bidi.Network.BeforeRequestSent += async args => { count++; await Dispatcher.InvokeAsync(() => OutputTextBox.Text = $"{args.Request.Url}\n"); };
+            //bidi.Network.BeforeRequestSent += args => { OutputTextBox.Text = $"{args.Request.Url}\n"; return Task.CompletedTask; };
+
+            using var context = await bidi.CreateBrowsingContextAsync();
+
+            for (int i = 0; i < 5; i++)
             {
-                using var bidi = await BiDiSession.ConnectAsync(((IHasCapabilities)driver).Capabilities.GetCapability("webSocketUrl").ToString()!);
-
-                using var context = await bidi.CreateBrowsingContextAsync();
-
-                context.NavigationStarted += async args => { await Task.Delay(1000); Console.WriteLine($"{DateTime.Now} {args}"); };
-                context.NavigationStarted += args => { Thread.Sleep(1000); Console.WriteLine($"{DateTime.Now} {args}"); return Task.CompletedTask; };
-
                 await context.NavigateAsync("https://selenium.dev");
-            });
+            }
+
+            this.Title = count.ToString();
+        }
+
+        private void OutputTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            //OutputTextBox.ScrollToEnd();
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace OpenQA.Selenium.BiDi.Session;
+﻿using System.Text.Json.Serialization;
+
+namespace OpenQA.Selenium.BiDi.Session;
 
 internal class StatusCommand : Command<EmptyCommandParameters>
 {
@@ -7,7 +9,9 @@ internal class StatusCommand : Command<EmptyCommandParameters>
 
 public class StatusResult
 {
-    public bool Ready { get; set; }
+    [JsonInclude]
+    public bool Ready { get; private set; }
 
-    public string Message { get; set; }
+    [JsonInclude]
+    public string Message { get; private set; }
 }

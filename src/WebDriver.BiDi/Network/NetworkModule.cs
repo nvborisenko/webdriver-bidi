@@ -13,21 +13,21 @@ public sealed class NetworkModule
         _broker = broker;
     }
 
-    public async Task<EmptyResult> AddInterceptAsync(AddInterceptParameters parameters)
+    public async Task AddInterceptAsync(AddInterceptParameters parameters)
     {
-        return await _broker.ExecuteCommandAsync<AddInterceptCommand, EmptyResult>(new AddInterceptCommand { Params = parameters }).ConfigureAwait(false);
+        await _broker.ExecuteCommandAsync(new AddInterceptCommand { Params = parameters }).ConfigureAwait(false);
     }
 
-    public async Task<EmptyResult> ContinueRequestAsync(ContinueRequestParameters parameters)
+    public async Task ContinueRequestAsync(ContinueRequestParameters parameters)
     {
-        return await _broker.ExecuteCommandAsync<ContinueRequestCommand, EmptyResult>(new ContinueRequestCommand { Params = parameters }).ConfigureAwait(false);
+        await _broker.ExecuteCommandAsync(new ContinueRequestCommand { Params = parameters }).ConfigureAwait(false);
     }
 
     public event AsyncEventHandler<BeforeRequestSentEventArgs> BeforeRequestSent
     {
         add
         {
-            _session.SubscribeAsync("network.beforeRequestSent").GetAwaiter().GetResult();
+            AsyncHelper.RunSync(() => _session.SubscribeAsync("network.beforeRequestSent"));
 
             _broker.RegisterEventHandler<BeforeRequestSentEventArgs>("network.beforeRequestSent", value);
         }

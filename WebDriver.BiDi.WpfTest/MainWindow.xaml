@@ -10,10 +10,13 @@
         <Grid.RowDefinitions>
             <RowDefinition />
             <RowDefinition />
+            <RowDefinition />
         </Grid.RowDefinitions>
         
         <Button Content="Start" Click="Button_Click" />
 
         <ProgressBar Grid.Row="1" x:Name="progressBar" IsIndeterminate="True" />
+
+        <TextBox x:Name="OutputTextBox" Grid.Row="2" TextChanged="OutputTextBox_TextChanged" />
     </Grid>
 </Window>

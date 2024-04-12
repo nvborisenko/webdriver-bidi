@@ -12,28 +12,32 @@ namespace OpenQA.Selenium.BiDi
 {
     internal class Broker : IDisposable
     {
+        private readonly BiDiSession _session;
         private readonly Transport _transport;
 
-        private readonly ConcurrentDictionary<int, TaskCompletionSource<object>> _pendingCommands = new();
-        private readonly BlockingCollection<Result<object>> _pendingEvents = new();
+        private readonly ConcurrentDictionary<int?, TaskCompletionSource<object>> _pendingCommands = new();
+        private readonly BlockingCollection<Task> _pendingEvents = new();
 
         private readonly ConcurrentDictionary<string, List<BiDiEventHandler>> _eventHandlers = new();
 
         private int _currentCommandId;
 
-        private readonly Task _commandQueueTask;
-        private readonly Task _reveivingMessageTask;
-        private readonly Task _eventEmitterTask;
+        private readonly TaskFactory _myTaskFactory = new TaskFactory(CancellationToken.None,
+            TaskCreationOptions.None, TaskContinuationOptions.None, TaskScheduler.Default);
+
+        private Task? _commandQueueTask;
+        private Task? _receivingMessageTask;
+        private Task? _eventEmitterTask;
 
         private readonly JsonSerializerOptions _jsonSerializerOptions;
 
-        public Broker(Transport transpot)
-        {
-            _transport = transpot;
+        private readonly BlockingCollection<string> _channel;
 
-            _reveivingMessageTask = Task.Run(async () => await _transport.ReceiveMessageAsync(default));
-            _commandQueueTask = Task.Run(ProcessMessage);
-            _eventEmitterTask = Task.Run(ProcessEvents);
+        public Broker(BiDiSession session, Transport transport)
+        {
+            _session = session;
+            _transport = transport;
+            _channel = new BlockingCollection<string>();
 
             _jsonSerializerOptions = new JsonSerializerOptions
             {
@@ -44,9 +48,23 @@ namespace OpenQA.Selenium.BiDi
             };
         }
 
-        private void ProcessMessage()
+        public async Task ConnectAsync(CancellationToken cancellationToken)
         {
-            foreach (var message in _transport.Messages.GetConsumingEnumerable())
+            await _transport.ConnectAsync(cancellationToken).ConfigureAwait(false);
+
+            _transport.MessageReceived += (s, args) =>
+            {
+                _channel.Add(args.Message);
+            };
+
+            _receivingMessageTask = _myTaskFactory.StartNew(async () => await _transport.ReceiveMessageAsync(default)).Unwrap();
+            _commandQueueTask = _myTaskFactory.StartNew(ProcessMessagesAsync).Unwrap();
+            _eventEmitterTask = _myTaskFactory.StartNew(ProcessEventsAwaiterAsync).Unwrap();
+        }
+
+        private async Task ProcessMessagesAsync()
+        {
+            foreach (var message in _channel.GetConsumingEnumerable())
             {
                 Debug.WriteLine($"Processing message: {message}");
 
@@ -60,11 +78,12 @@ namespace OpenQA.Selenium.BiDi
                 }
                 else if (result?.Type == "event")
                 {
-                    _pendingEvents.Add(result);
+                    var eventTask = ProcessEvent(result);
+                    _pendingEvents.Add(eventTask);
                 }
                 else if (result?.Type == "error")
                 {
-                    _pendingCommands[result.Id].TrySetException(new Exception($"{result.Error}: {result.Message}"));
+                    _pendingCommands[result.Id].TrySetException(new BiDiException($"{result.Error}: {result.Message}"));
 
                     _pendingCommands.TryRemove(result.Id, out _);
                 }
@@ -77,34 +96,44 @@ namespace OpenQA.Selenium.BiDi
             }
         }
 
-        private void ProcessEvents()
+        private async Task ProcessEvent(Result<object> result)
         {
-            foreach (var result in _pendingEvents.GetConsumingEnumerable())
+            try
             {
-                try
+                if (_eventHandlers.TryGetValue(result.Method!, out var eventHandlers))
                 {
-                    if (_eventHandlers.TryGetValue(result.Method, out var eventHandlers))
+                    if (eventHandlers is not null)
                     {
-                        if (eventHandlers is not null)
+                        foreach (var handler in eventHandlers)
                         {
-                            foreach (var handler in eventHandlers)
-                            {
-                                var args = JsonSerializer.Deserialize((JsonElement)result.Params, handler.EventArgsType, _jsonSerializerOptions);
+                            var args = (EventArgs)JsonSerializer.Deserialize((JsonElement)result.Params!, handler.EventArgsType, _jsonSerializerOptions)!;
 
-                                var res = handler.Invoke(args);
+                            args.Session = _session;
 
-                                if (!res.IsCompleted)
-                                {
-                                    res.Wait();
-                                }
-                            }
+                            await handler.InvokeAsync(args).ConfigureAwait(false);
                         }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Unhandled error processing BiDi event: {ex}");
+                Console.WriteLine($"Unhandled error processing BiDi event: {ex}");
+            }
+        }
+
+        private async Task ProcessEventsAwaiterAsync()
+        {
+            foreach (var eventTask in _pendingEvents.GetConsumingEnumerable())
+            {
+                try
+                {
+                    await eventTask.ConfigureAwait(false);
+                }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine($"Unhandled error processing BiDi event: {ex}");
-                    Console.WriteLine($"Unhandled error processing BiDi event: {ex}");
+                    Debug.WriteLine($"Some event failed: {ex}");
+                    Console.WriteLine($"Some event failed: {ex}");
                 }
             }
         }
@@ -129,9 +158,32 @@ namespace OpenQA.Selenium.BiDi
 
             await _transport.SendAsync(json, cancellationToken).ConfigureAwait(false);
 
-            var result = await tcs.Task;
+            var result = await tcs.Task.ConfigureAwait(false);
 
             return ((JsonElement)result).Deserialize<TResult>(_jsonSerializerOptions)!;
+        }
+
+        public async Task ExecuteCommandAsync<TCommand>(TCommand command, CancellationToken cancellationToken = default)
+            where TCommand : Command
+        {
+            command.Id = Interlocked.Increment(ref _currentCommandId);
+
+            var json = JsonSerializer.Serialize(command, _jsonSerializerOptions);
+
+            var tcs = new TaskCompletionSource<object>(TaskCreationOptions.RunContinuationsAsynchronously);
+
+            using var cts = new CancellationTokenSource();
+            cts.CancelAfter(TimeSpan.FromSeconds(30));
+            cts.Token.Register(() =>
+            {
+                tcs.TrySetCanceled(cancellationToken);
+            });
+
+            _pendingCommands[command.Id] = tcs;
+
+            await _transport.SendAsync(json, cancellationToken).ConfigureAwait(false);
+
+            await tcs.Task.ConfigureAwait(false);
         }
 
         public void RegisterEventHandler<TEventArgs>(string name, AsyncEventHandler<TEventArgs> eventHandler)
@@ -145,14 +197,9 @@ namespace OpenQA.Selenium.BiDi
         public void Dispose()
         {
             _pendingEvents.CompleteAdding();
-            try
-            {
-                Task.WaitAll([_eventEmitterTask]);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Unhandled error occured while disposing Broker object: {ex}");
-            }
+            _channel.CompleteAdding();
+
+            _eventEmitterTask?.ConfigureAwait(false).GetAwaiter().GetResult();
         }
     }
 }

@@ -32,6 +32,6 @@ namespace OpenQA.Selenium.BiDi.Network
     {
         public override string Type { get; } = "string";
 
-        public string Pattern { get; set; }
+        public string? Pattern { get; set; }
     }
 }

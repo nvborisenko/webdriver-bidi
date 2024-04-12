@@ -11,8 +11,8 @@ public sealed class BrowserModule
         _broker = broker;
     }
 
-    public async Task<EmptyResult> CloseAsync()
+    public async Task CloseAsync()
     {
-        return await _broker.ExecuteCommandAsync<CloseCommand, EmptyResult>(new CloseCommand()).ConfigureAwait(false);
+        await _broker.ExecuteCommandAsync(new CloseCommand()).ConfigureAwait(false);
     }
 }

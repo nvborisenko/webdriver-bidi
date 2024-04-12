@@ -1,19 +1,23 @@
-﻿using System;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Network;
 
 public class BeforeRequestSentEventArgs : EventArgs
 {
-    public bool IsBlocked { get; set; }
+    [JsonInclude]
+    public bool IsBlocked { get; private set; }
 
-    public RequestData Request { get; set; }
+    [JsonInclude]
+    public RequestData Request { get; private set; }
 }
 
 public class RequestData
 {
-    [JsonPropertyName("request")]
-    public string Id { get; set; }
+    [JsonInclude, JsonPropertyName("request")]
+    public string Id { get; private set; }
 
-    public string Url { get; set; }
+    [JsonInclude]
+    public string Url { get; private set; }
+
+    public int? BodySize { get; set; }
 }

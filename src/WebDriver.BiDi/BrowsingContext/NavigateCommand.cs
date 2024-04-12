@@ -5,13 +5,13 @@ internal class NavigateCommand : Command<NavigateCommandParameters>
     public override string Method { get; } = "browsingContext.navigate";
 }
 
-internal class NavigateCommandParameters
+public class NavigateCommandParameters
 {
     public string? Context { get; set; }
 
     public string? Url { get; set; }
 
-    public ReadinessState Wait { get; set; } = ReadinessState.Complete;
+    public ReadinessState? Wait { get; set; }
 }
 
 public enum ReadinessState

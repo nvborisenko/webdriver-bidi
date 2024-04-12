@@ -1,9 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+    <TargetFrameworks>net8.0;net462</TargetFrameworks>
+    <LangVersion>12</LangVersion>
     
     <RootNamespace>OpenQA.Selenium.BiDi.Tests</RootNamespace>
 
