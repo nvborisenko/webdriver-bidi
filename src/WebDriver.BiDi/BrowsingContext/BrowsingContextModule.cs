@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using OpenQA.Selenium.BiDi.Internal;
 
 namespace OpenQA.Selenium.BiDi.BrowsingContext;
 

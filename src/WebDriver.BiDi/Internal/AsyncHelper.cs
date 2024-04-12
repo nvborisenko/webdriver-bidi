@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using System.Threading;
 
-namespace OpenQA.Selenium.BiDi
+namespace OpenQA.Selenium.BiDi.Internal
 {
     internal class AsyncHelper
     {
