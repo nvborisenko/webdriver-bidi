@@ -58,11 +58,11 @@ namespace OpenQA.Selenium.BiDi
             };
 
             _receivingMessageTask = _myTaskFactory.StartNew(async () => await _transport.ReceiveMessageAsync(default)).Unwrap();
-            _commandQueueTask = _myTaskFactory.StartNew(ProcessMessagesAsync).Unwrap();
+            _commandQueueTask = _myTaskFactory.StartNew(ProcessMessages);
             _eventEmitterTask = _myTaskFactory.StartNew(ProcessEventsAwaiterAsync).Unwrap();
         }
 
-        private async Task ProcessMessagesAsync()
+        private void ProcessMessages()
         {
             foreach (var message in _channel.GetConsumingEnumerable())
             {
