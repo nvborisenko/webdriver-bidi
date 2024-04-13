@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\WebDriver.BiDi\WebDriver.BiDi.csproj" />
+    <ProjectReference Include="..\..\src\WebDriver.BiDi\WebDriver.BiDi.csproj" />
   </ItemGroup>
 
 </Project>
