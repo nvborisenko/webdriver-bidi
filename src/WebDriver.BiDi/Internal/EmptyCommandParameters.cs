@@ -1,5 +1,5 @@
 ﻿namespace OpenQA.Selenium.BiDi.Internal;
 
-internal class EmptyCommandParameters
+public class EmptyCommandParameters
 {
 }

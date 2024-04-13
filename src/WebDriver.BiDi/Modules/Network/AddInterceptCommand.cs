@@ -9,7 +9,7 @@ namespace OpenQA.Selenium.BiDi.Modules.Network
         public override string Method { get; } = "network.addIntercept";
     }
 
-    public class AddInterceptParameters
+    public class AddInterceptParameters : EmptyCommandParameters
     {
         public IList<InterceptPhase> Phases { get; set; } = new List<InterceptPhase>();
 

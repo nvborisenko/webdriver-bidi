@@ -8,7 +8,7 @@ namespace OpenQA.Selenium.BiDi.Modules.Network
         public override string Method { get; } = "network.continueRequest";
     }
 
-    public class ContinueRequestParameters
+    public class ContinueRequestParameters : EmptyCommandParameters
     {
         public string Request { get; set; }
 

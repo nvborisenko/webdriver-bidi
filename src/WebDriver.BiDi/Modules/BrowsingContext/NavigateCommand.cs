@@ -7,7 +7,7 @@ internal class NavigateCommand : Command<NavigateCommandParameters>
     public override string Method { get; } = "browsingContext.navigate";
 }
 
-public class NavigateCommandParameters
+public class NavigateCommandParameters : EmptyCommandParameters
 {
     public string? Context { get; set; }
 

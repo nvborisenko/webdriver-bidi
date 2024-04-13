@@ -6,7 +6,7 @@ internal abstract class Command
 }
 
 internal abstract class Command<TParameters> : Command
-    where TParameters : new()
+    where TParameters : EmptyCommandParameters, new()
 {
     public abstract string Method { get; }
 
