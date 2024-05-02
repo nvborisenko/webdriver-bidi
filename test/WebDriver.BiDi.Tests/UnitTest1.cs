@@ -1,3 +1,5 @@
+using FluentAssertions;
+using OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
 using System;
@@ -11,7 +13,7 @@ namespace OpenQA.Selenium.BiDi.Tests
     public class Tests
     {
         IWebDriver driver;
-        BiDiSession session;
+        Session session;
 
         [SetUp]
         public async Task Setup()
@@ -32,13 +34,13 @@ namespace OpenQA.Selenium.BiDi.Tests
 
             driver = new ChromeDriver(options);
 
-            session = await BiDiSession.ConnectAsync(((IHasCapabilities)driver).Capabilities.GetCapability("webSocketUrl").ToString()!);
+            session = await Session.ConnectAsync(((IHasCapabilities)driver).Capabilities.GetCapability("webSocketUrl").ToString()!);
         }
 
         [TearDown]
-        public void TearDown()
+        public async Task TearDown()
         {
-            session?.Dispose();
+            await session.DisposeAsync();
             driver?.Dispose();
         }
 
@@ -61,20 +63,46 @@ namespace OpenQA.Selenium.BiDi.Tests
         [Test]
         public async Task SubscribeTest()
         {
-            session.Network.BeforeRequestSent += e => { Console.WriteLine(e.Request.Url); return Task.CompletedTask; };
+            await session.Network.OnBeforeRequestSentAsync(e =>
+            {
+                Console.WriteLine(e.Request.Url);
+            });
 
-            using var context = await session.CreateBrowsingContextAsync();
+            var context = await session.CreateBrowsingContextAsync();
 
-            await context.NavigateAsync("https://google.com");
+            await context.NavigateAsync("https://selenium.dev");
+        }
+
+        [Test]
+        public async Task SubscribeInHandlerTest()
+        {
+            var context = await session.CreateBrowsingContextAsync();
+
+            await context.OnNavigationStartedAsync(async args =>
+            {
+                await session.Network.OnBeforeRequestSentAsync(args =>
+                {
+                    Console.WriteLine(args.Request.Url);
+                });
+            });
+
+            await context.NavigateAsync("https://selenium.dev");
         }
 
         [Test]
         public async Task OnNavigationStartedTest()
         {
-            using var context = await session.CreateBrowsingContextAsync();
+            var context = await session.CreateBrowsingContextAsync();
 
-            context.NavigationStarted += async args => { await Task.Delay(200); Console.WriteLine($"{DateTime.Now} {args}"); };
-            context.NavigationStarted += args => { Thread.Sleep(200); Console.WriteLine($"{DateTime.Now} {args}"); return Task.CompletedTask; };
+            await context.OnNavigationStartedAsync(async args =>
+            {
+                await Task.Delay(1000); Console.WriteLine($"{DateTime.Now.ToLongTimeString()} {args} - Async");
+            });
+
+            await context.OnNavigationStartedAsync(args =>
+            {
+                Thread.Sleep(1000); Console.WriteLine($"{DateTime.Now.ToLongTimeString()} {args} - Sync");
+            });
 
             await context.NavigateAsync("https://selenium.dev");
         }
@@ -88,19 +116,44 @@ namespace OpenQA.Selenium.BiDi.Tests
                 UrlPatterns = { new Modules.Network.UrlPatternString { Pattern = "https://selenium.dev/" } }
             });
 
-            using var context = await session.CreateBrowsingContextAsync();
+            var context = await session.CreateBrowsingContextAsync();
 
-            //session.Network.BeforeRequestSent += (args) => throw new Exception("Blocked");
+            //await session.Network.OnBeforeRequestSentAsync(args => throw new Exception("Blocked"));
 
-            session.Network.BeforeRequestSent += async args =>
+            await session.Network.OnBeforeRequestSentAsync(async args =>
             {
                 if (args.IsBlocked)
                 {
                     await args.ContinueRequestAsync(method: "post");
                 }
-            };
+            });
 
             await context.NavigateAsync("https://selenium.dev");
+        }
+
+        [Test]
+        public async Task UseClosedBrowserContext()
+        {
+            var context = await session.CreateBrowsingContextAsync();
+
+            await context.CloseAsync();
+
+            Func<Task> act = async () => await context.NavigateAsync("https://selenium.dev");
+            await act.Should().ThrowExactlyAsync<BiDiException>();
+        }
+
+        [Test]
+        public async Task SubscribeOnBrowserContextCreated()
+        {
+            InfoEventArgs args = null;
+
+            await session.OnBrowserContextCreatedAsync(e => args = e);
+
+            var context = await session.CreateBrowsingContextAsync();
+
+            args.Should().NotBeNull();
+            args.Url.Should().NotBeEmpty();
+            args.Context.Should().NotBeNull();
         }
     }
 }

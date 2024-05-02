@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace OpenQA.Selenium.BiDi.Internal
@@ -18,43 +18,70 @@ namespace OpenQA.Selenium.BiDi.Internal
 
     internal class BiDiEventHandler<TEventArgs> : BiDiEventHandler where TEventArgs : EventArgs
     {
-        public BiDiEventHandler(AsyncEventHandler<TEventArgs> handler)
+        private readonly SynchronizationContext _synchronizationContext;
+
+        private readonly Action<TEventArgs> _action;
+        private readonly Func<TEventArgs, Task> _func;
+
+        public BiDiEventHandler(SynchronizationContext synchronizationContext, Action<TEventArgs> handler)
             : base(typeof(TEventArgs))
         {
-            Action = handler;
+            _synchronizationContext = synchronizationContext;
+            _action = handler;
         }
 
-        public AsyncEventHandler<TEventArgs> Action { get; }
+        public BiDiEventHandler(SynchronizationContext synchronizationContext, Func<TEventArgs, Task> handler)
+            : base(typeof(TEventArgs))
+        {
+            _synchronizationContext = synchronizationContext;
+            _func = handler;
+        }
 
         public override async Task InvokeAsync(object args)
         {
-            //var result = Action((TEventArgs)arg).ConfigureAwait(false);
-            //return AsyncHelper.RunSync(() => Action((TEventArgs)arg));
-            //await result;
+            //SynchronizationContext.SetSynchronizationContext(_synchronizationContext);
 
-
-
-
-            List<Exception> exceptions = null;
-            Delegate[] listenerDelegates = Action.GetInvocationList();
-            for (int index = 0; index < listenerDelegates.Length; ++index)
+            if (_action is not null)
             {
-                var listenerDelegate = (AsyncEventHandler<TEventArgs>)listenerDelegates[index];
-                try
+                if (_synchronizationContext is not null)
                 {
-                    await listenerDelegate((TEventArgs)args).ConfigureAwait(false);
+                    _synchronizationContext.Post(_ => _action((TEventArgs)args), null);
                 }
-                catch (Exception ex)
+                else
                 {
-                    if (exceptions == null)
-                        exceptions = new List<Exception>(2);
-                    exceptions.Add(ex);
+                    _action((TEventArgs)args);
                 }
+                //_action((TEventArgs)args);
             }
+            else
+            {
+                if (_synchronizationContext is not null)
+                {
+                    var tcs = new TaskCompletionSource<object?>(TaskCreationOptions.RunContinuationsAsynchronously);
 
-            // Throw collected exceptions, if any
-            if (exceptions != null)
-                throw new AggregateException(exceptions);
+                    _synchronizationContext.Post(async _ =>
+                    {
+                        try
+                        {
+                            await _func((TEventArgs)args).ConfigureAwait(false);
+                            tcs.SetResult(null);
+                        }
+                        catch (Exception e)
+                        {
+                            tcs.SetException(e);
+                        }
+                    }, null);
+
+                    //await tcs.Task;
+                    await tcs.Task.ConfigureAwait(false);
+
+                }
+                else
+                {
+                    await _func((TEventArgs)args).ConfigureAwait(false);
+                }
+                //await _func((TEventArgs)args).ConfigureAwait(false);
+            }
         }
     }
 }

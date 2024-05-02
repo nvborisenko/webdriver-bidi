@@ -1,15 +1,16 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using OpenQA.Selenium.BiDi.Internal;
 
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
-public sealed class BrowsingContextModule : IDisposable
+public sealed class BrowsingContextModule
 {
-    private readonly BiDiSession _session;
+    private readonly BiDi.Session _session;
     private readonly Broker _broker;
 
-    internal BrowsingContextModule(string id, BiDiSession session, Broker broker)
+    internal BrowsingContextModule(string id, BiDi.Session session, Broker broker)
     {
         Id = id;
 
@@ -38,23 +39,21 @@ public sealed class BrowsingContextModule : IDisposable
         await _broker.ExecuteCommandAsync(new CloseCommand { Params = new CloseCommandParameters { Context = Id } }).ConfigureAwait(false);
     }
 
-    public event AsyncEventHandler<NavigationInfoEventArgs> NavigationStarted
+    public async Task OnNavigationStartedAsync(Func<NavigationInfoEventArgs, Task> callback)
     {
-        add
-        {
-            AsyncHelper.RunSync(() => _session.SubscribeAsync("browsingContext.navigationStarted"));
+        var syncContext = SynchronizationContext.Current;
 
-            _broker.RegisterEventHandler("browsingContext.navigationStarted", value);
-        }
-        remove
-        {
+        await _session.SubscribeAsync("browsingContext.navigationStarted").ConfigureAwait(false);
 
-        }
+        _broker.RegisterEventHandler("browsingContext.navigationStarted", new BiDiEventHandler<NavigationInfoEventArgs>(syncContext, callback));
     }
 
-    public void Dispose()
+    public async Task OnNavigationStartedAsync(Action<NavigationInfoEventArgs> callback)
     {
-        AsyncHelper.RunSync(CloseAsync);
+        var syncContext = SynchronizationContext.Current;
+
+        await _session.SubscribeAsync("browsingContext.navigationStarted").ConfigureAwait(false);
+
+        _broker.RegisterEventHandler("browsingContext.navigationStarted", new BiDiEventHandler<NavigationInfoEventArgs>(syncContext, callback));
     }
 }
-

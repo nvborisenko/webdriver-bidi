@@ -2,6 +2,6 @@
 {
     public abstract class EventArgs : System.EventArgs
     {
-        public BiDiSession Session { get; internal set; }
+        public Session Session { get; internal set; }
     }
 }

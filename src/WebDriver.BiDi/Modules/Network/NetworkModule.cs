@@ -1,14 +1,16 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using OpenQA.Selenium.BiDi.Internal;
 
 namespace OpenQA.Selenium.BiDi.Modules.Network;
 
 public sealed class NetworkModule
 {
-    private readonly BiDiSession _session;
+    private readonly BiDi.Session _session;
     private readonly Broker _broker;
 
-    internal NetworkModule(BiDiSession session, Broker broker)
+    internal NetworkModule(BiDi.Session session, Broker broker)
     {
         _session = session;
         _broker = broker;
@@ -24,17 +26,21 @@ public sealed class NetworkModule
         await _broker.ExecuteCommandAsync(new ContinueRequestCommand { Params = parameters }).ConfigureAwait(false);
     }
 
-    public event AsyncEventHandler<BeforeRequestSentEventArgs> BeforeRequestSent
+    public async Task OnBeforeRequestSentAsync(Func<BeforeRequestSentEventArgs, Task> callback)
     {
-        add
-        {
-            AsyncHelper.RunSync(() => _session.SubscribeAsync("network.beforeRequestSent"));
+        var syncContext = SynchronizationContext.Current;
 
-            _broker.RegisterEventHandler("network.beforeRequestSent", value);
-        }
-        remove
-        {
+        await _session.SubscribeAsync("network.beforeRequestSent").ConfigureAwait(false);
 
-        }
+        _broker.RegisterEventHandler("network.beforeRequestSent", new BiDiEventHandler<BeforeRequestSentEventArgs>(syncContext, callback));
+    }
+
+    public async Task OnBeforeRequestSentAsync(Action<BeforeRequestSentEventArgs> callback)
+    {
+        var syncContext = SynchronizationContext.Current;
+
+        await _session.SubscribeAsync("network.beforeRequestSent").ConfigureAwait(false);
+
+        _broker.RegisterEventHandler("network.beforeRequestSent", new BiDiEventHandler<BeforeRequestSentEventArgs>(syncContext, callback));
     }
 }
