@@ -9,5 +9,5 @@ internal class CloseCommand : Command<CloseCommandParameters>
 
 internal class CloseCommandParameters : EmptyCommandParameters
 {
-    public string? Context { get; set; }
+    public string Context { get; set; }
 }

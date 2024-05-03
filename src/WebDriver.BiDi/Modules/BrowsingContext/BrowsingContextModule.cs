@@ -34,6 +34,11 @@ public sealed class BrowsingContextModule
         return await _broker.ExecuteCommandAsync<NavigateCommand, NavigateResult>(new NavigateCommand { Params = parameters }).ConfigureAwait(false);
     }
 
+    public async Task ActivateAsync()
+    {
+        await _broker.ExecuteCommandAsync(new ActivateCommand { Params = new ActivateParameters { Context = Id } }).ConfigureAwait(false);
+    }
+
     public async Task CloseAsync()
     {
         await _broker.ExecuteCommandAsync(new CloseCommand { Params = new CloseCommandParameters { Context = Id } }).ConfigureAwait(false);

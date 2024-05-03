@@ -58,6 +58,8 @@ namespace OpenQA.Selenium.BiDi.Tests
         {
             var context = await session.CreateBrowsingContextAsync();
 
+            await context.ActivateAsync();
+
             await context.CloseAsync();
         }
 
