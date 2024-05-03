@@ -64,6 +64,23 @@ namespace OpenQA.Selenium.BiDi.Tests
         }
 
         [Test]
+        public async Task Screenshot()
+        {
+            var context = await session.CreateBrowsingContextAsync();
+
+            await context.NavigateAsync("https://selenium.dev");
+
+            var screenshot = await context.CaptureScreenshotAsync();
+
+            screenshot.Data.Should().NotBeNullOrEmpty();
+            screenshot.AsBytes().Should().NotBeNullOrEmpty();
+
+            var screenshot2 = await context.CaptureScreenshotAsync(Origin.Document);
+            screenshot2.Data.Should().NotBeNullOrEmpty();
+            screenshot2.Data.Should().NotBe(screenshot.Data);
+        }
+
+        [Test]
         public async Task SubscribeTest()
         {
             await session.Network.OnBeforeRequestSentAsync(e =>

@@ -39,6 +39,24 @@ public sealed class BrowsingContextModule
         await _broker.ExecuteCommandAsync(new ActivateCommand { Params = new ActivateParameters { Context = Id } }).ConfigureAwait(false);
     }
 
+    public async Task<CaptureScreenshotResult> CaptureScreenshotAsync(Origin? origin = default, ImageFormat? imageFormat = default)
+    {
+        var parameters = new CaptureScreenshotCommandParameters
+        {
+            Origin = origin,
+            Format = imageFormat
+        };
+
+        return await CaptureScreenshotAsync(parameters).ConfigureAwait(false);
+    }
+
+    public async Task<CaptureScreenshotResult> CaptureScreenshotAsync(CaptureScreenshotCommandParameters parameters)
+    {
+        parameters.Context = Id;
+
+        return await _broker.ExecuteCommandAsync<CaptureScreenshotCommand, CaptureScreenshotResult>(new CaptureScreenshotCommand { Params = parameters }).ConfigureAwait(false);
+    }
+
     public async Task CloseAsync()
     {
         await _broker.ExecuteCommandAsync(new CloseCommand { Params = new CloseCommandParameters { Context = Id } }).ConfigureAwait(false);
