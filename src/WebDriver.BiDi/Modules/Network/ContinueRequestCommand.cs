@@ -1,5 +1,4 @@
-﻿using System.Text.Json.Serialization;
-using OpenQA.Selenium.BiDi.Internal;
+﻿using OpenQA.Selenium.BiDi.Internal;
 
 namespace OpenQA.Selenium.BiDi.Modules.Network
 {

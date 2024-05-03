@@ -1,5 +1,6 @@
 using FluentAssertions;
 using OpenQA.Selenium.BiDi.Modules.BrowsingContext;
+using OpenQA.Selenium.BiDi.Modules.Input;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
 using System;
@@ -18,21 +19,21 @@ namespace OpenQA.Selenium.BiDi.Tests
         [SetUp]
         public async Task Setup()
         {
-            FirefoxOptions firefoxOptions = new FirefoxOptions
-            {
-                UseWebSocketUrl = true,
-                BrowserVersion = "125.0"
-            };
-
-            driver = new FirefoxDriver(firefoxOptions);
-
-            //var options = new ChromeOptions
+            //FirefoxOptions firefoxOptions = new FirefoxOptions
             //{
             //    UseWebSocketUrl = true,
-            //    //BrowserVersion = "121.0"
+            //    BrowserVersion = "125.0"
             //};
 
-            //driver = new ChromeDriver(options);
+            //driver = new FirefoxDriver(firefoxOptions);
+
+            var options = new ChromeOptions
+            {
+                UseWebSocketUrl = true,
+                //BrowserVersion = "121.0"
+            };
+
+            driver = new ChromeDriver(options);
 
             session = await Session.ConnectAsync(((IHasCapabilities)driver).Capabilities.GetCapability("webSocketUrl").ToString()!);
         }
@@ -186,6 +187,44 @@ namespace OpenQA.Selenium.BiDi.Tests
             var nodes = await context.LocateNodesAsync(Locator.Css("div"));
 
             Console.WriteLine(nodes[0].SharedId);
+        }
+
+        [Test]
+        public async Task InputActions()
+        {
+            var context = await session.CreateBrowsingContextAsync();
+
+            await context.NavigateAsync("https://nuget.org");
+
+            //var searchInput = (await context.LocateNodesAsync(Locator.Css("#search"))).First();
+
+            await session.Input.PerformActionsAsync(context.Id, new()
+            {
+                Actions =
+                {
+                    SourceActions.Press("abc"),
+                    new KeySourceActions()
+                    {
+                        Actions =
+                        {
+                            new KeyDownAction
+                            {
+                                Value = 'H'
+                            },
+                            new KeyDownAction
+                            {
+                                Value = 'i'
+                            },
+                            new KeyDownAction
+                            {
+                                Value = ','
+                            }
+                        }
+                    }.Press("World")
+                }
+            });
+
+            await context.PerformActionsAsync([SourceActions.Press("qwe")]);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using OpenQA.Selenium.BiDi.Internal;
@@ -57,6 +58,11 @@ public sealed class BrowsingContextModule
         var result = await _broker.ExecuteCommandAsync<LocateNodesCommand, LocateNodesResult>(new LocateNodesCommand { Params = parameters }).ConfigureAwait(false);
 
         return result.Nodes;
+    }
+
+    public async Task PerformActionsAsync(Input.SourceActions[] actions)
+    {
+        await _session.Input.PerformActionsAsync(Id, new Input.PerformActionsParameters { Actions = actions.ToList() }).ConfigureAwait(false);
     }
 
     public async Task<CaptureScreenshotResult> CaptureScreenshotAsync(Origin? origin = default, ImageFormat? imageFormat = default, ClipRectangle? clip = default)

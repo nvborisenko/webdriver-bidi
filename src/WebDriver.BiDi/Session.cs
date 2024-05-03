@@ -15,6 +15,7 @@ namespace OpenQA.Selenium.BiDi
 
         private readonly Lazy<Modules.Browser.BrowserModule> _browserModule;
         private readonly Lazy<Modules.Network.NetworkModule> _networkModule;
+        private readonly Lazy<Modules.Input.InputModule> _inputModule;
 
         internal Session(string uri)
         {
@@ -23,11 +24,14 @@ namespace OpenQA.Selenium.BiDi
 
             _browserModule = new Lazy<Modules.Browser.BrowserModule>(() => new Modules.Browser.BrowserModule(_broker));
             _networkModule = new Lazy<Modules.Network.NetworkModule>(() => new Modules.Network.NetworkModule(this, _broker));
+            _inputModule = new Lazy<Modules.Input.InputModule>(() => new Modules.Input.InputModule(_broker));
         }
 
         public Modules.Browser.BrowserModule Browser => _browserModule.Value;
 
         public Modules.Network.NetworkModule Network => _networkModule.Value;
+
+        public Modules.Input.InputModule Input => _inputModule.Value;
 
         public async Task<Modules.Session.StatusResult> StatusAsync()
         {

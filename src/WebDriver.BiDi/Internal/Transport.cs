@@ -27,6 +27,7 @@ internal class Transport : IDisposable
 
     public async Task SendAsync(string message, CancellationToken cancellationToken)
     {
+        Debug.WriteLine($"SND >> {message}");
         var encoded = Encoding.UTF8.GetBytes(message);
         var buffer = new ArraySegment<byte>(encoded, 0, encoded.Length);
         await webSocket.SendAsync(buffer, WebSocketMessageType.Text, true, cancellationToken).ConfigureAwait(false);
