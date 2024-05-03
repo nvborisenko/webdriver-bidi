@@ -81,10 +81,7 @@ namespace OpenQA.Selenium.BiDi
         {
             await _broker.ExecuteCommandAsync(new Modules.Session.EndCommand()).ConfigureAwait(false);
 
-            if (_broker is not null)
-            {
-                await _broker.DisposeAsync().ConfigureAwait(false);
-            }
+            await _broker.DisposeAsync().ConfigureAwait(false);
 
             _transport?.Dispose();
         }

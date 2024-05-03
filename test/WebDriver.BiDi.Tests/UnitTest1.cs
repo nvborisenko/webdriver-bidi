@@ -117,12 +117,12 @@ namespace OpenQA.Selenium.BiDi.Tests
 
             await context.OnNavigationStartedAsync(async args =>
             {
-                await Task.Delay(1000); Console.WriteLine($"{DateTime.Now.ToLongTimeString()} {args} - Async");
+                await Task.Delay(1000); Console.WriteLine($"{DateTime.Now} {args} - Async");
             });
 
             await context.OnNavigationStartedAsync(args =>
             {
-                Thread.Sleep(1000); Console.WriteLine($"{DateTime.Now.ToLongTimeString()} {args} - Sync");
+                Thread.Sleep(1000); Console.WriteLine($"{DateTime.Now} {args} - Sync");
             });
 
             await context.NavigateAsync("https://selenium.dev");
