@@ -15,6 +15,8 @@ public class CaptureScreenshotCommandParameters : EmptyCommandParameters
     public Origin? Origin { get; set; }
 
     public ImageFormat? Format { get; set; }
+
+    public ClipRectangle? Clip { get; set; }
 }
 
 public enum Origin
@@ -28,6 +30,33 @@ public class ImageFormat
     public string Type { get; set; }
 
     public double? Quality { get; set; }
+}
+
+[JsonDerivedType(typeof(BoxClipRectangle))]
+[JsonDerivedType(typeof(ElementClipRectangle))]
+public abstract class ClipRectangle
+{
+    public abstract string Type { get; }
+}
+
+public class BoxClipRectangle : ClipRectangle
+{
+    public override string Type => "box";
+
+    public double X { get; set; }
+
+    public double Y { get; set; }
+
+    public double Width { get; set; }
+
+    public double Height { get; set; }
+}
+
+public class ElementClipRectangle : ClipRectangle
+{
+    public override string Type => "element";
+
+    public Script.SharedReference Element { get; set; }
 }
 
 public class CaptureScreenshotResult

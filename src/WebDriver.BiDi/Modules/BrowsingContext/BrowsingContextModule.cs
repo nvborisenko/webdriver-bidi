@@ -39,12 +39,13 @@ public sealed class BrowsingContextModule
         await _broker.ExecuteCommandAsync(new ActivateCommand { Params = new ActivateParameters { Context = Id } }).ConfigureAwait(false);
     }
 
-    public async Task<CaptureScreenshotResult> CaptureScreenshotAsync(Origin? origin = default, ImageFormat? imageFormat = default)
+    public async Task<CaptureScreenshotResult> CaptureScreenshotAsync(Origin? origin = default, ImageFormat? imageFormat = default, ClipRectangle? clip = default)
     {
         var parameters = new CaptureScreenshotCommandParameters
         {
             Origin = origin,
-            Format = imageFormat
+            Format = imageFormat,
+            Clip = clip
         };
 
         return await CaptureScreenshotAsync(parameters).ConfigureAwait(false);
