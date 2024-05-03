@@ -5,7 +5,10 @@ using OpenQA.Selenium.BiDi.Internal;
 
 namespace OpenQA.Selenium.BiDi
 {
-    public class Session : IDisposable
+    public class Session
+#if NET8_0_OR_GREATER
+        : IAsyncDisposable
+#endif
     {
         private readonly Transport _transport;
         private readonly Broker _broker;
@@ -38,22 +41,22 @@ namespace OpenQA.Selenium.BiDi
             return new Modules.BrowsingContext.BrowsingContextModule(context.Context, this, _broker);
         }
 
-        public async Task OnBrowserContextCreatedAsync(Action<Modules.BrowsingContext.InfoEventArgs> callback)
+        public async Task OnBrowsingContextCreatedAsync(Action<Modules.BrowsingContext.BrowsingContextInfoEventArgs> callback)
         {
             var syncContext = SynchronizationContext.Current;
 
             await SubscribeAsync("browsingContext.contextCreated").ConfigureAwait(false);
 
-            _broker.RegisterEventHandler("browsingContext.contextCreated", new BiDiEventHandler<Modules.BrowsingContext.InfoEventArgs>(syncContext, callback));
+            _broker.RegisterEventHandler("browsingContext.contextCreated", new BiDiEventHandler<Modules.BrowsingContext.BrowsingContextInfoEventArgs>(syncContext, callback));
         }
 
-        public async Task OnBrowserContextCreatedAsync(Func<Modules.BrowsingContext.InfoEventArgs, Task> callback)
+        public async Task OnBrowsingContextCreatedAsync(Func<Modules.BrowsingContext.BrowsingContextInfoEventArgs, Task> callback)
         {
             var syncContext = SynchronizationContext.Current;
 
             await SubscribeAsync("browsingContext.contextCreated").ConfigureAwait(false);
 
-            _broker.RegisterEventHandler("browsingContext.contextCreated", new BiDiEventHandler<Modules.BrowsingContext.InfoEventArgs>(syncContext, callback));
+            _broker.RegisterEventHandler("browsingContext.contextCreated", new BiDiEventHandler<Modules.BrowsingContext.BrowsingContextInfoEventArgs>(syncContext, callback));
         }
 
         public static async Task<Session> ConnectAsync(string url)
@@ -70,25 +73,28 @@ namespace OpenQA.Selenium.BiDi
             await _broker.ConnectAsync(default).ConfigureAwait(false);
         }
 
-        internal async Task SubscribeAsync(params string[] events)
+        public async Task EndAsync()
         {
-            await _broker.ExecuteCommandAsync(new Modules.Session.SubscribeCommand() { Params = new Modules.Session.SubscriptionCommandParameters { Events = events } }).ConfigureAwait(false);
-        }
-
-        public void Dispose()
-        {
-            _transport?.Dispose();
-            _broker?.Dispose();
-        }
-
-        public async Task DisposeAsync()
-        {
-            _transport?.Dispose();
+            await _broker.ExecuteCommandAsync(new Modules.Session.EndCommand()).ConfigureAwait(false);
 
             if (_broker is not null)
             {
                 await _broker.DisposeAsync().ConfigureAwait(false);
             }
+
+            _transport?.Dispose();
         }
+
+        internal async Task SubscribeAsync(params string[] events)
+        {
+            await _broker.ExecuteCommandAsync(new Modules.Session.SubscribeCommand() { Params = new Modules.Session.SubscriptionCommandParameters { Events = events } }).ConfigureAwait(false);
+        }
+
+#if NET8_0_OR_GREATER
+        public async ValueTask DisposeAsync()
+        {
+            await EndAsync().ConfigureAwait(false);
+        }
+#endif
     }
 }

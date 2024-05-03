@@ -2,7 +2,7 @@
 
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
-public class InfoEventArgs : EventArgs
+public class BrowsingContextInfoEventArgs : EventArgs
 {
     // TODO: Make it as shared reference to BrowserContext
     [JsonInclude]

@@ -21,7 +21,7 @@ namespace OpenQA.Selenium.BiDi.Tests
             //FirefoxOptions firefoxOptions = new FirefoxOptions
             //{
             //    UseWebSocketUrl = true,
-            //    BrowserVersion = "124.0"
+            //    BrowserVersion = "125.0"
             //};
 
             //driver = new FirefoxDriver(firefoxOptions);
@@ -40,7 +40,8 @@ namespace OpenQA.Selenium.BiDi.Tests
         [TearDown]
         public async Task TearDown()
         {
-            await session.DisposeAsync();
+            await session.EndAsync();
+
             driver?.Dispose();
         }
 
@@ -138,16 +139,16 @@ namespace OpenQA.Selenium.BiDi.Tests
 
             await context.CloseAsync();
 
-            Func<Task> act = async () => await context.NavigateAsync("https://selenium.dev");
-            await act.Should().ThrowExactlyAsync<BiDiException>();
+            Func<Task> func = async () => await context.NavigateAsync("https://selenium.dev");
+            await func.Should().ThrowExactlyAsync<BiDiException>();
         }
 
         [Test]
-        public async Task SubscribeOnBrowserContextCreated()
+        public async Task SubscribeOnBrowsingContextCreated()
         {
-            InfoEventArgs args = null;
+            BrowsingContextInfoEventArgs args = null;
 
-            await session.OnBrowserContextCreatedAsync(e => args = e);
+            await session.OnBrowsingContextCreatedAsync(e => args = e);
 
             var context = await session.CreateBrowsingContextAsync();
 

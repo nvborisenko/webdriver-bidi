@@ -9,9 +9,9 @@ var options = new ChromeOptions
 
 using var driver = new ChromeDriver(options);
 
-using var bidi = await Session.ConnectAsync(((IHasCapabilities)driver).Capabilities.GetCapability("webSocketUrl").ToString()!);
+await using var session = await Session.ConnectAsync(((IHasCapabilities)driver).Capabilities.GetCapability("webSocketUrl").ToString()!);
 
-var context = await bidi.CreateBrowsingContextAsync();
+var context = await session.CreateBrowsingContextAsync();
 
 await context.OnNavigationStartedAsync(async e =>
 {

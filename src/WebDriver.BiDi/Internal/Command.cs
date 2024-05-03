@@ -5,10 +5,10 @@ internal abstract class Command
     public int? Id { get; set; }
 }
 
-internal abstract class Command<TParameters> : Command
-    where TParameters : EmptyCommandParameters, new()
+internal abstract class Command<TCommandParameters> : Command
+    where TCommandParameters : EmptyCommandParameters, new()
 {
     public abstract string Method { get; }
 
-    public TParameters Params { get; set; } = new TParameters();
+    public TCommandParameters Params { get; set; } = new TCommandParameters();
 }
