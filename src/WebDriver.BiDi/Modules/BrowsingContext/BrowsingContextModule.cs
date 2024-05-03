@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using OpenQA.Selenium.BiDi.Internal;
@@ -37,6 +38,25 @@ public sealed class BrowsingContextModule
     public async Task ActivateAsync()
     {
         await _broker.ExecuteCommandAsync(new ActivateCommand { Params = new ActivateParameters { Context = Id } }).ConfigureAwait(false);
+    }
+
+    public async Task<IReadOnlyList<Script.NodeRemoteValue>> LocateNodesAsync(Locator locator)
+    {
+        var parameters = new LocateNodesParameters
+        {
+            Locator = locator
+        };
+
+        return await LocateNodesAsync(parameters).ConfigureAwait(false);
+    }
+
+    public async Task<IReadOnlyList<Script.NodeRemoteValue>> LocateNodesAsync(LocateNodesParameters parameters)
+    {
+        parameters.Context = Id;
+
+        var result = await _broker.ExecuteCommandAsync<LocateNodesCommand, LocateNodesResult>(new LocateNodesCommand { Params = parameters }).ConfigureAwait(false);
+
+        return result.Nodes;
     }
 
     public async Task<CaptureScreenshotResult> CaptureScreenshotAsync(Origin? origin = default, ImageFormat? imageFormat = default, ClipRectangle? clip = default)

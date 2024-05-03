@@ -9,3 +9,4 @@ public class SharedReference : RemoteReference
 {
     public string SharedId { get; set; }
 }
+

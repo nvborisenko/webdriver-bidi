@@ -18,21 +18,21 @@ namespace OpenQA.Selenium.BiDi.Tests
         [SetUp]
         public async Task Setup()
         {
-            //FirefoxOptions firefoxOptions = new FirefoxOptions
-            //{
-            //    UseWebSocketUrl = true,
-            //    BrowserVersion = "125.0"
-            //};
-
-            //driver = new FirefoxDriver(firefoxOptions);
-
-            var options = new ChromeOptions
+            FirefoxOptions firefoxOptions = new FirefoxOptions
             {
                 UseWebSocketUrl = true,
-                //BrowserVersion = "121.0"
+                BrowserVersion = "125.0"
             };
 
-            driver = new ChromeDriver(options);
+            driver = new FirefoxDriver(firefoxOptions);
+
+            //var options = new ChromeOptions
+            //{
+            //    UseWebSocketUrl = true,
+            //    //BrowserVersion = "121.0"
+            //};
+
+            //driver = new ChromeDriver(options);
 
             session = await Session.ConnectAsync(((IHasCapabilities)driver).Capabilities.GetCapability("webSocketUrl").ToString()!);
         }
@@ -174,6 +174,18 @@ namespace OpenQA.Selenium.BiDi.Tests
             args.Should().NotBeNull();
             args.Url.Should().NotBeEmpty();
             args.Context.Should().NotBeNull();
+        }
+
+        [Test]
+        public async Task LocateNodes()
+        {
+            var context = await session.CreateBrowsingContextAsync();
+
+            await context.NavigateAsync("https://selenium.dev");
+
+            var nodes = await context.LocateNodesAsync(Locator.Css("div"));
+
+            Console.WriteLine(nodes[0].SharedId);
         }
     }
 }

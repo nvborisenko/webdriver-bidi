@@ -37,6 +37,9 @@ public class ImageFormat
 public abstract class ClipRectangle
 {
     public abstract string Type { get; }
+
+    public static BoxClipRectangle Box(double x, double y, double width, double height)
+        => new() { X = x, Y = y, Width = width, Height = height };
 }
 
 public class BoxClipRectangle : ClipRectangle
