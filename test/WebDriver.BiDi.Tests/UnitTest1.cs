@@ -131,11 +131,9 @@ namespace OpenQA.Selenium.BiDi.Tests
         [Test]
         public async Task InterceptTest()
         {
-            await session.Network.AddInterceptAsync(new Modules.Network.AddInterceptParameters
-            {
-                Phases = { Modules.Network.InterceptPhase.BeforeRequestSent },
-                UrlPatterns = { new Modules.Network.UrlPatternString { Pattern = "https://selenium.dev/" } }
-            });
+            await session.Network.AddInterceptAsync(
+                phases: [Modules.Network.InterceptPhase.BeforeRequestSent],
+                urlPatterns: [Modules.Network.UrlPattern.String("https://selenium.dev/")]);
 
             var context = await session.CreateBrowsingContextAsync();
 
@@ -210,22 +208,22 @@ namespace OpenQA.Selenium.BiDi.Tests
                         {
                             new KeyDownAction
                             {
-                                Value = 'H'
+                                Value = "H"
                             },
                             new KeyDownAction
                             {
-                                Value = 'i'
+                                Value = "i"
                             },
                             new KeyDownAction
                             {
-                                Value = ','
+                                Value = ","
                             }
                         }
-                    }.Press("World")
+                    }.Press("World").Pause(1000).Press("!").Pause(1000)
                 }
             });
 
-            await context.PerformActionsAsync([SourceActions.Press("qwe")]);
+            await context.PerformActionsAsync([SourceActions.Press(" qwe")]);
         }
     }
 }

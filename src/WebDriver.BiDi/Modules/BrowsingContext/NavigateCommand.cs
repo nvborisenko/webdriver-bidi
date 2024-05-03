@@ -9,9 +9,9 @@ internal class NavigateCommand : Command<NavigateCommandParameters>
 
 public class NavigateCommandParameters : EmptyCommandParameters
 {
-    public string? Context { get; set; }
+    public string Context { get; set; }
 
-    public string? Url { get; set; }
+    public string Url { get; set; }
 
     public ReadinessState? Wait { get; set; }
 }

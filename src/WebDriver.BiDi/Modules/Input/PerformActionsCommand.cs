@@ -29,8 +29,8 @@ public abstract class SourceActions
         foreach (var character in text)
         {
             keySourceActions.Actions.AddRange([
-                new KeyDownAction { Value = character},
-                new KeyUpAction { Value = character}
+                new KeyDownAction { Value = character.ToString()},
+                new KeyUpAction { Value = character.ToString()}
                 ]);
         }
 
@@ -52,8 +52,16 @@ public class KeySourceActions : SourceActions
 
         return this;
     }
+
+    public KeySourceActions Pause(uint? duration = default)
+    {
+        Actions.Add(new KeyPauseAction { Duration = duration });
+
+        return this;
+    }
 }
 
+[JsonDerivedType(typeof(KeyPauseAction))]
 [JsonDerivedType(typeof(KeyDownAction))]
 [JsonDerivedType(typeof(KeyUpAction))]
 public abstract class KeySourceAction
@@ -61,16 +69,23 @@ public abstract class KeySourceAction
     public abstract string Type { get; }
 }
 
+public class KeyPauseAction : KeySourceAction
+{
+    public override string Type => "pause";
+
+    public uint? Duration { get; set; }
+}
+
 public class KeyDownAction : KeySourceAction
 {
     public override string Type => "keyDown";
 
-    public char Value { get; set; }
+    public string Value { get; set; }
 }
 
 public class KeyUpAction : KeySourceAction
 {
     public override string Type => "keyUp";
 
-    public char Value { get; set; }
+    public string Value { get; set; }
 }

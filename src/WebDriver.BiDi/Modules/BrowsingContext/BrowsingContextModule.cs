@@ -60,9 +60,9 @@ public sealed class BrowsingContextModule
         return result.Nodes;
     }
 
-    public async Task PerformActionsAsync(Input.SourceActions[] actions)
+    public async Task PerformActionsAsync(List<Input.SourceActions> actions)
     {
-        var parameters = new Input.PerformActionsParameters { Context = Id, Actions = actions.ToList() };
+        var parameters = new Input.PerformActionsParameters { Context = Id, Actions = actions };
 
         await _session.Input.PerformActionsAsync(parameters).ConfigureAwait(false);
     }

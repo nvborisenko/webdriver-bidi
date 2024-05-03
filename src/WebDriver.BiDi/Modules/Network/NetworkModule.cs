@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using OpenQA.Selenium.BiDi.Internal;
@@ -14,6 +15,17 @@ public sealed class NetworkModule
     {
         _session = session;
         _broker = broker;
+    }
+
+    public async Task AddInterceptAsync(List<InterceptPhase> phases, List<UrlPattern> urlPatterns = default)
+    {
+        var parameters = new AddInterceptParameters
+        {
+            Phases = phases,
+            UrlPatterns = urlPatterns
+        };
+
+        await AddInterceptAsync(parameters).ConfigureAwait(false);
     }
 
     public async Task AddInterceptAsync(AddInterceptParameters parameters)

@@ -11,9 +11,9 @@ namespace OpenQA.Selenium.BiDi.Modules.Network
 
     public class AddInterceptParameters : EmptyCommandParameters
     {
-        public IList<InterceptPhase> Phases { get; set; } = new List<InterceptPhase>();
+        public List<InterceptPhase> Phases { get; set; } = [];
 
-        public IList<UrlPattern> UrlPatterns { get; set; } = new List<UrlPattern>();
+        public List<UrlPattern>? UrlPatterns { get; set; } = [];
     }
 
     public enum InterceptPhase
@@ -27,12 +27,17 @@ namespace OpenQA.Selenium.BiDi.Modules.Network
     public abstract class UrlPattern
     {
         public abstract string Type { get; }
+
+        public static UrlPatternString String(string pattern)
+        {
+            return new UrlPatternString { Pattern = pattern };
+        }
     }
 
     public class UrlPatternString : UrlPattern
     {
         public override string Type { get; } = "string";
 
-        public string? Pattern { get; set; }
+        public string Pattern { get; set; }
     }
 }
