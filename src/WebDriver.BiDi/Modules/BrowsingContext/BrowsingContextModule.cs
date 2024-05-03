@@ -62,7 +62,9 @@ public sealed class BrowsingContextModule
 
     public async Task PerformActionsAsync(Input.SourceActions[] actions)
     {
-        await _session.Input.PerformActionsAsync(Id, new Input.PerformActionsParameters { Actions = actions.ToList() }).ConfigureAwait(false);
+        var parameters = new Input.PerformActionsParameters { Context = Id, Actions = actions.ToList() };
+
+        await _session.Input.PerformActionsAsync(parameters).ConfigureAwait(false);
     }
 
     public async Task<CaptureScreenshotResult> CaptureScreenshotAsync(Origin? origin = default, ImageFormat? imageFormat = default, ClipRectangle? clip = default)

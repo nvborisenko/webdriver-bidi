@@ -198,8 +198,9 @@ namespace OpenQA.Selenium.BiDi.Tests
 
             //var searchInput = (await context.LocateNodesAsync(Locator.Css("#search"))).First();
 
-            await session.Input.PerformActionsAsync(context.Id, new()
+            await session.Input.PerformActionsAsync(new()
             {
+                Context = context.Id,
                 Actions =
                 {
                     SourceActions.Press("abc"),

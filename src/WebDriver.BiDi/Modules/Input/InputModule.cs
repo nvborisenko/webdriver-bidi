@@ -12,10 +12,13 @@ public sealed class InputModule
         _broker = broker;
     }
 
-    public async Task PerformActionsAsync(string context, PerformActionsParameters parameters)
+    public async Task PerformActionsAsync(PerformActionsParameters parameters)
     {
-        parameters.Context = context;
-
         await _broker.ExecuteCommandAsync(new PerformActionsCommand() { Params = parameters }).ConfigureAwait(false);
+    }
+
+    public async Task ReleaseActionsAsync(ReleaseActionsParameters parameters)
+    {
+        await _broker.ExecuteCommandAsync(new ReleaseActionsCommand { Params = parameters });
     }
 }
