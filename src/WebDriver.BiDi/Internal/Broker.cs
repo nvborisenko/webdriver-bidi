@@ -132,29 +132,18 @@ namespace OpenQA.Selenium.BiDi.Internal
         public async Task<TResult> ExecuteCommandAsync<TCommand, TResult>(TCommand command, CancellationToken cancellationToken = default)
             where TCommand : Command
         {
-            command.Id = Interlocked.Increment(ref _currentCommandId);
-
-            var json = JsonSerializer.Serialize(command, _jsonSerializerOptions);
-
-            var tcs = new TaskCompletionSource<object>(TaskCreationOptions.RunContinuationsAsynchronously);
-
-            using var cts = new CancellationTokenSource();
-            cts.CancelAfter(TimeSpan.FromSeconds(30));
-            cts.Token.Register(() =>
-            {
-                tcs.TrySetCanceled(cancellationToken);
-            });
-
-            _pendingCommands[command.Id] = tcs;
-
-            await _transport.SendAsync(json, cancellationToken).ConfigureAwait(false);
-
-            var result = await tcs.Task.ConfigureAwait(false);
+            var result = await ExecuteCommandCoreAsync(command, cancellationToken).ConfigureAwait(false);
 
             return ((JsonElement)result).Deserialize<TResult>(_jsonSerializerOptions)!;
         }
 
         public async Task ExecuteCommandAsync<TCommand>(TCommand command, CancellationToken cancellationToken = default)
+            where TCommand : Command
+        {
+            await ExecuteCommandCoreAsync(command, cancellationToken).ConfigureAwait(false);
+        }
+
+        private async Task<object> ExecuteCommandCoreAsync<TCommand>(TCommand command, CancellationToken cancellationToken = default)
             where TCommand : Command
         {
             command.Id = Interlocked.Increment(ref _currentCommandId);
@@ -174,7 +163,7 @@ namespace OpenQA.Selenium.BiDi.Internal
 
             await _transport.SendAsync(json, cancellationToken).ConfigureAwait(false);
 
-            await tcs.Task.ConfigureAwait(false);
+            return await tcs.Task.ConfigureAwait(false);
         }
 
         public void RegisterEventHandler<TEventArgs>(string name, BiDiEventHandler<TEventArgs> eventHandler)

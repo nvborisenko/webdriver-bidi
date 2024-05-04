@@ -6,8 +6,6 @@ namespace WebDriver.BiDi.Mirror
 {
     public partial class MainPage : ContentPage
     {
-        int count = 0;
-
         public MainPage()
         {
             InitializeComponent();
@@ -34,23 +32,23 @@ namespace WebDriver.BiDi.Mirror
 
             using var driver = new ChromeDriver(options);
 
+            await using var session = await Session.ConnectAsync(((IHasCapabilities)driver).Capabilities.GetCapability("webSocketUrl").ToString()!);
+
             for (int i = 0; i < 5; i++)
             {
-                var session = await Session.ConnectAsync(((IHasCapabilities)driver).Capabilities.GetCapability("webSocketUrl").ToString()!);
-
                 var context = await session.CreateBrowsingContextAsync();
 
                 CounterBtn.Text = "Started";
 
                 await session.Network.OnBeforeRequestSentAsync(async arg =>
                 {
-                    //await Task.Delay(100);
-                    //MainThread.BeginInvokeOnMainThread(() => { CounterBtn.Text = arg.Request.Url; }); // вот так работает
+                    await Task.Delay(10);
+                    //MainThread.BeginInvokeOnMainThread(() => { CounterBtn.Text = arg.Request.Url; });
                     //Thread.Sleep(100);
-                    //CounterBtn.Text = arg.Request.Url; // а вот так не работает
+                    //CounterBtn.Text = arg.Request.Url;
                     //await Task.Delay(1000);
 
-                    CounterBtn.Text = (await session.StatusAsync()).Message;
+                    CounterBtn.Text = (await session.StatusAsync()).Message + $" {arg.Request.Url}";
                 });
 
                 await context.NavigateAsync("https://google.com");
@@ -58,8 +56,6 @@ namespace WebDriver.BiDi.Mirror
                 await context.CloseAsync();
 
                 //await Task.Delay(1_000);
-
-                await session.DisposeAsync();
             }
         }
     }
