@@ -82,7 +82,7 @@ namespace OpenQA.Selenium.BiDi.Tests
 
             var screenshotPng = await context.CaptureScreenshotAsync(Origin.Document, new ImageFormat("image/png"));
             var screenshotJpeg = await context.CaptureScreenshotAsync(Origin.Document, new ImageFormat("image/jpeg"));
-            
+
             screenshotPng.Data.Should().NotBe(screenshotJpeg.Data);
         }
 
@@ -228,7 +228,7 @@ namespace OpenQA.Selenium.BiDi.Tests
                 }
             });
 
-            await context.PerformActionsAsync([SourceActions.Press(" qwe")]);
+            await context.PerformActionsAsync([SourceActions.Press("qwe").Pause(1000)]);
         }
     }
 }

@@ -1,13 +1,11 @@
-﻿using System.Text.Json.Serialization;
+﻿namespace OpenQA.Selenium.BiDi.Internal;
 
-namespace OpenQA.Selenium.BiDi.Internal;
-
-internal class Result
+internal class Notification
 {
 
 }
 
-internal class Result<T> : Result
+internal class Notification<T> : Notification
 {
     public string? Type { get; set; }
 
@@ -15,8 +13,7 @@ internal class Result<T> : Result
 
     public string? Method { get; set; }
 
-    [JsonPropertyName("result")]
-    public T? ResultData { get; set; }
+    public T? Result { get; set; }
 
     public string? Error { get; set; }
 

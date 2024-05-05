@@ -16,7 +16,7 @@ namespace OpenQA.Selenium.BiDi.Internal
         private readonly Transport _transport;
 
         private readonly ConcurrentDictionary<int?, TaskCompletionSource<object>> _pendingCommands = new();
-        private readonly BlockingCollection<Result<object>> _pendingEvents = new();
+        private readonly BlockingCollection<Notification<object>> _pendingEvents = new();
 
         private readonly ConcurrentDictionary<string, List<BiDiEventHandler>> _eventHandlers = new();
 
@@ -68,11 +68,11 @@ namespace OpenQA.Selenium.BiDi.Internal
             {
                 Debug.WriteLine($"Processing message: {message}");
 
-                Result<object>? result = JsonSerializer.Deserialize<Result<object>>(message, _jsonSerializerOptions);
+                Notification<object>? result = JsonSerializer.Deserialize<Notification<object>>(message, _jsonSerializerOptions);
 
                 if (result?.Type == "success")
                 {
-                    _pendingCommands[result.Id].TrySetResult(result.ResultData);
+                    _pendingCommands[result.Id].TrySetResult(result.Result);
 
                     _pendingCommands.TryRemove(result.Id, out _);
                 }
@@ -95,7 +95,7 @@ namespace OpenQA.Selenium.BiDi.Internal
             }
         }
 
-        private void ProcessEvent(Result<object> result)
+        private void ProcessEvent(Notification<object> result)
         {
             _pendingEvents.Add(result);
         }
