@@ -79,6 +79,11 @@ namespace OpenQA.Selenium.BiDi.Tests
             var screenshot2 = await context.CaptureScreenshotAsync(Origin.Document);
             screenshot2.Data.Should().NotBeNullOrEmpty();
             screenshot2.Data.Should().NotBe(screenshot.Data);
+
+            var screenshotPng = await context.CaptureScreenshotAsync(Origin.Document, new ImageFormat { Type = "image/png" });
+            var screenshotJpeg = await context.CaptureScreenshotAsync(Origin.Document, new ImageFormat { Type = "image/jpeg" });
+
+            screenshotPng.Data.Should().NotBe(screenshotJpeg.Data);
         }
 
         [Test]
