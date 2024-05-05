@@ -22,7 +22,7 @@ namespace OpenQA.Selenium.BiDi.Tests
             //FirefoxOptions firefoxOptions = new FirefoxOptions
             //{
             //    UseWebSocketUrl = true,
-            //    BrowserVersion = "125.0"
+            //    BrowserVersion = "beta"
             //};
 
             //driver = new FirefoxDriver(firefoxOptions);
@@ -30,7 +30,7 @@ namespace OpenQA.Selenium.BiDi.Tests
             var options = new ChromeOptions
             {
                 UseWebSocketUrl = true,
-                //BrowserVersion = "121.0"
+                BrowserVersion = "beta"
             };
 
             driver = new ChromeDriver(options);
@@ -80,9 +80,9 @@ namespace OpenQA.Selenium.BiDi.Tests
             screenshot2.Data.Should().NotBeNullOrEmpty();
             screenshot2.Data.Should().NotBe(screenshot.Data);
 
-            var screenshotPng = await context.CaptureScreenshotAsync(Origin.Document, new ImageFormat { Type = "image/png" });
-            var screenshotJpeg = await context.CaptureScreenshotAsync(Origin.Document, new ImageFormat { Type = "image/jpeg" });
-
+            var screenshotPng = await context.CaptureScreenshotAsync(Origin.Document, new ImageFormat("image/png"));
+            var screenshotJpeg = await context.CaptureScreenshotAsync(Origin.Document, new ImageFormat("image/jpeg"));
+            
             screenshotPng.Data.Should().NotBe(screenshotJpeg.Data);
         }
 

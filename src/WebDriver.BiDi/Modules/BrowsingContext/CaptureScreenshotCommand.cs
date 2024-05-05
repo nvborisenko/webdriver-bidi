@@ -27,6 +27,11 @@ public enum Origin
 
 public class ImageFormat
 {
+    public ImageFormat(string type)
+    {
+        Type = type;
+    }
+
     public string Type { get; set; }
 
     public double? Quality { get; set; }
