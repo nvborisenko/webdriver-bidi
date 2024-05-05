@@ -2,6 +2,7 @@
 
 namespace OpenQA.Selenium.BiDi.Internal.Json
 {
+    // Can be removed?
     internal class Int32JsonConverter : System.Text.Json.Serialization.JsonConverter<int>
     {
         public override int Read(ref System.Text.Json.Utf8JsonReader reader, Type type, System.Text.Json.JsonSerializerOptions options)
