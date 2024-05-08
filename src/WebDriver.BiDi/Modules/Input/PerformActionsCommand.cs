@@ -10,7 +10,7 @@ internal class PerformActionsCommand : Command<PerformActionsParameters>
     public override string Method => "input.performActions";
 }
 
-public class PerformActionsParameters : EmptyCommandParameters
+public class PerformActionsParameters : CommandParameters
 {
     public string Context { get; set; }
 

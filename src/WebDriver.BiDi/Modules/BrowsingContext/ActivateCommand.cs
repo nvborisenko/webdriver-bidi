@@ -7,7 +7,7 @@ internal class ActivateCommand : Command<ActivateParameters>
     public override string Method { get; } = "browsingContext.activate";
 }
 
-internal class ActivateParameters : EmptyCommandParameters
+internal class ActivateParameters : CommandParameters
 {
     public string Context { get; set; }
 }

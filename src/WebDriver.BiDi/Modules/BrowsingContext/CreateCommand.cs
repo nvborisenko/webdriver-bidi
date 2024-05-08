@@ -7,7 +7,7 @@ internal class CreateCommand : Command<CreateCommandParameters>
     public override string Method { get; } = "browsingContext.create";
 }
 
-internal class CreateCommandParameters : EmptyCommandParameters
+internal class CreateCommandParameters : CommandParameters
 {
     public BrowsingContextType Type { get; } = BrowsingContextType.Tab;
 }

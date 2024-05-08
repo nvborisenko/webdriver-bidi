@@ -2,11 +2,11 @@
 
 internal abstract class Command
 {
-    public int? Id { get; set; }
+    public int Id { get; set; }
 }
 
 internal abstract class Command<TCommandParameters> : Command
-    where TCommandParameters : EmptyCommandParameters, new()
+    where TCommandParameters : CommandParameters, new()
 {
     public abstract string Method { get; }
 

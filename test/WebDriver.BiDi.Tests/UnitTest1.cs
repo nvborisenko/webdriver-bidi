@@ -1,6 +1,7 @@
 using FluentAssertions;
 using OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 using OpenQA.Selenium.BiDi.Modules.Input;
+using OpenQA.Selenium.BiDi.Modules.Script;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
 using System;
@@ -35,7 +36,7 @@ namespace OpenQA.Selenium.BiDi.Tests
 
             driver = new ChromeDriver(options);
 
-            session = await Session.ConnectAsync(((IHasCapabilities)driver).Capabilities.GetCapability("webSocketUrl").ToString()!);
+            session = await driver.AsBiDiAsync();
         }
 
         [TearDown]
@@ -47,7 +48,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         }
 
         [Test]
-        public async Task SessionTest()
+        public async Task SessionStatusTest()
         {
             var status = await session.StatusAsync();
 
@@ -138,7 +139,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         {
             await session.Network.AddInterceptAsync(
                 phases: [Modules.Network.InterceptPhase.BeforeRequestSent],
-                urlPatterns: [Modules.Network.UrlPattern.String("https://selenium.dev/")]);
+                urlPatterns: ["https://selenium.dev/"]);
 
             var context = await session.CreateBrowsingContextAsync();
 
@@ -150,6 +151,21 @@ namespace OpenQA.Selenium.BiDi.Tests
                 {
                     await args.ContinueRequestAsync(method: "post");
                 }
+            });
+
+            await context.NavigateAsync("https://selenium.dev");
+        }
+
+        [Test]
+        public async Task InterceptTestAll()
+        {
+            await session.Network.AddInterceptAsync(Modules.Network.InterceptPhase.BeforeRequestSent);
+
+            var context = await session.CreateBrowsingContextAsync();
+
+            await session.Network.OnBeforeRequestSentAsync(async args =>
+            {
+                await args.ContinueRequestAsync(method: "post");
             });
 
             await context.NavigateAsync("https://selenium.dev");
@@ -229,6 +245,42 @@ namespace OpenQA.Selenium.BiDi.Tests
             });
 
             await context.PerformActionsAsync([SourceActions.Press("qwe").Pause(1000)]);
+        }
+
+        [Test]
+        public async Task EvaluateException()
+        {
+            var context = await session.CreateBrowsingContextAsync();
+
+            var res = await context.EvaluateAsync("return 42;", true);
+
+            res.GetType().Should().Be(typeof(EvaluateResultException));
+        }
+
+        [Test]
+        public async Task EvaluateSuccess()
+        {
+            var context = await session.CreateBrowsingContextAsync();
+
+            var res = await context.EvaluateAsync("2 + 2", true);
+
+            res.GetType().Should().Be(typeof(EvaluateResultSuccess));
+
+            var resSuccess = res as EvaluateResultSuccess;
+            var number = resSuccess.Result as NumberValue;
+            number.Value.Should().Be(4);
+
+            int n2 = await context.EvaluateAsync("2 + 3", true);
+            n2.Should().Be(5);
+
+            var s2 = (string)await context.EvaluateAsync("'qwe' + 'asd'", true);
+            s2.Should().Be("qweasd");
+
+            var nVal = (string)await context.EvaluateAsync("null", true);
+            nVal.Should().BeNull();
+
+            var nVal2 = async () => (string)await context.EvaluateAsync("function A() { return 'a' }", true);
+            await nVal2.Should().ThrowExactlyAsync<Exception>().WithMessage("Cannot convert*");
         }
     }
 }

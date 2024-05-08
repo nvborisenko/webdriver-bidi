@@ -8,7 +8,7 @@ internal class CaptureScreenshotCommand : Command<CaptureScreenshotCommandParame
     public override string Method => "browsingContext.captureScreenshot";
 }
 
-public class CaptureScreenshotCommandParameters : EmptyCommandParameters
+public class CaptureScreenshotCommandParameters : CommandParameters
 {
     public string Context { get; set; }
 

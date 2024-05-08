@@ -7,7 +7,7 @@ internal class CloseCommand : Command<CloseCommandParameters>
     public override string Method { get; } = "browsingContext.close";
 }
 
-internal class CloseCommandParameters : EmptyCommandParameters
+internal class CloseCommandParameters : CommandParameters
 {
     public string Context { get; set; }
 }

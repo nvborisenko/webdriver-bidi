@@ -1,5 +1,4 @@
 ﻿using OpenQA.Selenium.BiDi;
-using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 
 var options = new ChromeOptions
@@ -9,7 +8,7 @@ var options = new ChromeOptions
 
 using var driver = new ChromeDriver(options);
 
-await using var session = await Session.ConnectAsync(((IHasCapabilities)driver).Capabilities.GetCapability("webSocketUrl").ToString()!);
+await using var session = await driver.AsBiDiAsync();
 
 var context = await session.CreateBrowsingContextAsync();
 

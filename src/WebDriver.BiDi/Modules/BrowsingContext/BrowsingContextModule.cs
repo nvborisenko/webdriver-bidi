@@ -85,6 +85,13 @@ public sealed class BrowsingContextModule
         return await _broker.ExecuteCommandAsync<CaptureScreenshotCommand, CaptureScreenshotResult>(new CaptureScreenshotCommand { Params = parameters }).ConfigureAwait(false);
     }
 
+    public async Task<Script.EvaluateResult> EvaluateAsync(string expression, bool awaitPromise)
+    {
+        var parameters = new Script.EvaluateCommandParameters { Expression = expression, Target = new Script.ContextTarget { Context = Id }, AwaitPromise = awaitPromise };
+
+        return await _session.Script.EvaluateAsync(parameters).ConfigureAwait(false);
+    }
+
     public async Task CloseAsync()
     {
         await _broker.ExecuteCommandAsync(new CloseCommand { Params = new CloseCommandParameters { Context = Id } }).ConfigureAwait(false);

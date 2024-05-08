@@ -10,7 +10,7 @@ internal class LocateNodesCommand : Command<LocateNodesParameters>
     public override string Method => "browsingContext.locateNodes";
 }
 
-public class LocateNodesParameters : EmptyCommandParameters
+public class LocateNodesParameters : CommandParameters
 {
     public string Context { get; set; }
 

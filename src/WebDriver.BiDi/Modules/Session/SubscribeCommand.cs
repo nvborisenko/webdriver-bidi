@@ -7,7 +7,7 @@ internal class SubscribeCommand : Command<SubscriptionCommandParameters>
     public override string Method { get; } = "session.subscribe";
 }
 
-internal class SubscriptionCommandParameters : EmptyCommandParameters
+internal class SubscriptionCommandParameters : CommandParameters
 {
     public string[] Events { get; set; }
 }

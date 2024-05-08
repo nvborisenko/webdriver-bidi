@@ -3,7 +3,7 @@ using OpenQA.Selenium.BiDi.Internal;
 
 namespace OpenQA.Selenium.BiDi.Modules.Session;
 
-internal class StatusCommand : Command<EmptyCommandParameters>
+internal class StatusCommand : Command<CommandParameters>
 {
     public override string Method { get; } = "session.status";
 }

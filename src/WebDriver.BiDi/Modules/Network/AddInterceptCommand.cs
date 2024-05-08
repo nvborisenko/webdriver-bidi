@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using OpenQA.Selenium.BiDi.Internal;
 
@@ -9,7 +10,7 @@ namespace OpenQA.Selenium.BiDi.Modules.Network
         public override string Method { get; } = "network.addIntercept";
     }
 
-    public class AddInterceptParameters : EmptyCommandParameters
+    public class AddInterceptParameters : CommandParameters
     {
         public List<InterceptPhase> Phases { get; set; } = [];
 
@@ -36,6 +37,8 @@ namespace OpenQA.Selenium.BiDi.Modules.Network
         {
             return new UrlPatternString { Pattern = pattern };
         }
+
+        public static implicit operator UrlPattern(string value) { return new UrlPatternString { Pattern = value }; }
     }
 
     public class UrlPatternPattern : UrlPattern

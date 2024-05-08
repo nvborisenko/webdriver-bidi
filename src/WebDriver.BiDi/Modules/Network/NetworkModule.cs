@@ -17,6 +17,17 @@ public sealed class NetworkModule
         _broker = broker;
     }
 
+    public async Task AddInterceptAsync(InterceptPhase phase, List<UrlPattern> urlPatterns = default)
+    {
+        var parameters = new AddInterceptParameters
+        {
+            Phases = [phase],
+            UrlPatterns = urlPatterns
+        };
+
+        await AddInterceptAsync(parameters).ConfigureAwait(false);
+    }
+
     public async Task AddInterceptAsync(List<InterceptPhase> phases, List<UrlPattern> urlPatterns = default)
     {
         var parameters = new AddInterceptParameters

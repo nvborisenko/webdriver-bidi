@@ -7,7 +7,7 @@ internal class ReleaseActionsCommand : Command<ReleaseActionsParameters>
     public override string Method => "input.releaseActions";
 }
 
-public class ReleaseActionsParameters : EmptyCommandParameters
+public class ReleaseActionsParameters : CommandParameters
 {
     public string Context { get; set; }
 }

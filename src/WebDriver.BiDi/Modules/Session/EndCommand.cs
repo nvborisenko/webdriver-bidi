@@ -2,7 +2,7 @@
 
 namespace OpenQA.Selenium.BiDi.Modules.Session;
 
-internal class EndCommand : Command<EmptyCommandParameters>
+internal class EndCommand : Command<CommandParameters>
 {
     public override string Method { get; } = "session.end";
 }

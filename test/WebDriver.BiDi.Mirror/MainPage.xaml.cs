@@ -1,5 +1,4 @@
 ﻿using OpenQA.Selenium.BiDi;
-using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 
 namespace WebDriver.BiDi.Mirror
@@ -32,7 +31,7 @@ namespace WebDriver.BiDi.Mirror
 
             using var driver = new ChromeDriver(options);
 
-            await using var session = await Session.ConnectAsync(((IHasCapabilities)driver).Capabilities.GetCapability("webSocketUrl").ToString()!);
+            await using var session = await driver.AsBiDiAsync();
 
             for (int i = 0; i < 5; i++)
             {
