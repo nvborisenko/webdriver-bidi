@@ -16,6 +16,11 @@ public sealed class BrowsingContextModule
         _broker = broker;
     }
 
+    public async Task<CreateResult> CreateAsync(CreateCommandParameters parameters)
+    {
+        return await _broker.ExecuteCommandAsync<CreateCommand, CreateResult>(new CreateCommand { Params = parameters }).ConfigureAwait(false);
+    }
+
     public async Task<NavigateResult> NavigateAsync(string url, ReadinessState wait = ReadinessState.Complete)
     {
         var parameters = new NavigateCommandParameters { Url = url, Wait = wait };

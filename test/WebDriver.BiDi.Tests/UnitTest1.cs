@@ -36,7 +36,7 @@ namespace OpenQA.Selenium.BiDi.Tests
 
             driver = new ChromeDriver(options);
 
-            session = await driver.AsBiDiAsync();
+            session = await driver.AsBiDiSessionAsync();
         }
 
         [TearDown]
@@ -53,6 +53,14 @@ namespace OpenQA.Selenium.BiDi.Tests
             var status = await session.StatusAsync();
 
             Console.WriteLine(status.Message);
+        }
+
+        [Test]
+        public async Task CurrentBrowsingContext()
+        {
+            var context = await driver.AsBiDiBrowsingContext();
+
+            await context.NavigateAsync("https://google.com");
         }
 
         [Test]
@@ -187,6 +195,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         {
             BrowsingContextInfoEventArgs args = null;
 
+            //TODO: await event handler to be invoked
             await session.OnBrowsingContextCreatedAsync(e => args = e);
 
             var context = await session.CreateBrowsingContextAsync();

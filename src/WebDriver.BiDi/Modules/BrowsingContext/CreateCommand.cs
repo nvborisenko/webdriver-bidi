@@ -8,12 +8,14 @@ internal class CreateCommand : Command<CreateCommandParameters>
     public override string Method { get; } = "browsingContext.create";
 }
 
-internal class CreateCommandParameters : CommandParameters
+public class CreateCommandParameters : CommandParameters
 {
-    public BrowsingContextType Type { get; } = BrowsingContextType.Tab;
+    public BrowsingContextType Type { get; set; } = BrowsingContextType.Tab;
+
+    public BrowsingContext? ReferenceContext { get; set; }
 }
 
-internal enum BrowsingContextType
+public enum BrowsingContextType
 {
     Tab,
     Window

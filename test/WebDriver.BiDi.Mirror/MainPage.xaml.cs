@@ -31,7 +31,7 @@ namespace WebDriver.BiDi.Mirror
 
             using var driver = new ChromeDriver(options);
 
-            await using var session = await driver.AsBiDiAsync();
+            await using var session = await driver.AsBiDiSessionAsync();
 
             for (int i = 0; i < 5; i++)
             {
