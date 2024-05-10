@@ -271,25 +271,25 @@ namespace OpenQA.Selenium.BiDi.Tests
         {
             var context = await session.CreateBrowsingContextAsync();
 
-            var res = await context.EvaluateAsync("2 + 2", true);
+            var evaluateResult = await context.EvaluateAsync("2 + 2", true);
 
-            res.GetType().Should().Be(typeof(EvaluateResultSuccess));
+            evaluateResult.GetType().Should().Be(typeof(EvaluateResultSuccess));
 
-            var resSuccess = res as EvaluateResultSuccess;
-            var number = resSuccess.Result as NumberValue;
-            number.Value.Should().Be(4);
+            var resSuccess = evaluateResult as EvaluateResultSuccess;
+            var numberValue = resSuccess.Result as NumberValue;
+            numberValue.Value.Should().Be(4);
 
-            int n2 = await context.EvaluateAsync("2 + 3", true);
-            n2.Should().Be(5);
+            int nmb = await context.EvaluateAsync("2 + 3", awaitPromise: true);
+            nmb.Should().Be(5);
 
-            var s2 = (string)await context.EvaluateAsync("'qwe' + 'asd'", true);
-            s2.Should().Be("qweasd");
+            var str = (string)await context.EvaluateAsync("'qwe' + 'asd'", true);
+            str.Should().Be("qweasd");
 
-            var nVal = (string)await context.EvaluateAsync("null", true);
-            nVal.Should().BeNull();
+            var nullStr = (string)await context.EvaluateAsync("null", true);
+            nullStr.Should().BeNull();
 
-            var nVal2 = async () => (string)await context.EvaluateAsync("function A() { return 'a' }", true);
-            await nVal2.Should().ThrowExactlyAsync<Exception>().WithMessage("Cannot convert*");
+            var invalidStr = async () => (string)await context.EvaluateAsync("function A() { return 'a' }", true);
+            await invalidStr.Should().ThrowExactlyAsync<Exception>().WithMessage("Cannot convert*");
         }
     }
 }
