@@ -1,4 +1,5 @@
 ﻿using OpenQA.Selenium.BiDi.Internal;
+using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
@@ -20,5 +21,6 @@ internal enum BrowsingContextType
 
 public class CreateResult
 {
-    public string Context { get; set; } = null!;
+    [JsonInclude]
+    public BrowsingContext Context { get; internal set; }
 }

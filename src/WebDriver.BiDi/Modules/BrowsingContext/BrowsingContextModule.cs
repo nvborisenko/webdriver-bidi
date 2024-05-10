@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using OpenQA.Selenium.BiDi.Internal;
@@ -11,15 +10,11 @@ public sealed class BrowsingContextModule
     private readonly BiDi.Session _session;
     private readonly Broker _broker;
 
-    internal BrowsingContextModule(string id, BiDi.Session session, Broker broker)
+    internal BrowsingContextModule(BiDi.Session session, Broker broker)
     {
-        Id = id;
-
         _session = session;
         _broker = broker;
     }
-
-    public string Id { get; }
 
     public async Task<NavigateResult> NavigateAsync(string url, ReadinessState wait = ReadinessState.Complete)
     {
@@ -30,40 +25,17 @@ public sealed class BrowsingContextModule
 
     public async Task<NavigateResult> NavigateAsync(NavigateCommandParameters parameters)
     {
-        parameters.Context = Id;
-
         return await _broker.ExecuteCommandAsync<NavigateCommand, NavigateResult>(new NavigateCommand { Params = parameters }).ConfigureAwait(false);
     }
 
-    public async Task ActivateAsync()
+    public async Task ActivateAsync(ActivateParameters parameters)
     {
-        await _broker.ExecuteCommandAsync(new ActivateCommand { Params = new ActivateParameters { Context = Id } }).ConfigureAwait(false);
+        await _broker.ExecuteCommandAsync(new ActivateCommand { Params = parameters }).ConfigureAwait(false);
     }
 
-    public async Task<IReadOnlyList<Script.NodeRemoteValue>> LocateNodesAsync(Locator locator)
+    public async Task<LocateNodesResult> LocateNodesAsync(LocateNodesParameters parameters)
     {
-        var parameters = new LocateNodesParameters
-        {
-            Locator = locator
-        };
-
-        return await LocateNodesAsync(parameters).ConfigureAwait(false);
-    }
-
-    public async Task<IReadOnlyList<Script.NodeRemoteValue>> LocateNodesAsync(LocateNodesParameters parameters)
-    {
-        parameters.Context = Id;
-
-        var result = await _broker.ExecuteCommandAsync<LocateNodesCommand, LocateNodesResult>(new LocateNodesCommand { Params = parameters }).ConfigureAwait(false);
-
-        return result.Nodes;
-    }
-
-    public async Task PerformActionsAsync(List<Input.SourceActions> actions)
-    {
-        var parameters = new Input.PerformActionsParameters { Context = Id, Actions = actions };
-
-        await _session.Input.PerformActionsAsync(parameters).ConfigureAwait(false);
+        return await _broker.ExecuteCommandAsync<LocateNodesCommand, LocateNodesResult>(new LocateNodesCommand { Params = parameters }).ConfigureAwait(false);
     }
 
     public async Task<CaptureScreenshotResult> CaptureScreenshotAsync(Origin? origin = default, ImageFormat? imageFormat = default, ClipRectangle? clip = default)
@@ -80,36 +52,23 @@ public sealed class BrowsingContextModule
 
     public async Task<CaptureScreenshotResult> CaptureScreenshotAsync(CaptureScreenshotCommandParameters parameters)
     {
-        parameters.Context = Id;
-
         return await _broker.ExecuteCommandAsync<CaptureScreenshotCommand, CaptureScreenshotResult>(new CaptureScreenshotCommand { Params = parameters }).ConfigureAwait(false);
     }
 
-    public async Task<Script.EvaluateResult> EvaluateAsync(string expression, bool awaitPromise)
+    public async Task CloseAsync(CloseCommandParameters parameters)
     {
-        var parameters = new Script.EvaluateCommandParameters { Expression = expression, Target = new Script.ContextTarget { Context = Id }, AwaitPromise = awaitPromise };
-
-        return await _session.Script.EvaluateAsync(parameters).ConfigureAwait(false);
+        await _broker.ExecuteCommandAsync(new CloseCommand { Params = parameters }).ConfigureAwait(false);
     }
 
-    public async Task CloseAsync()
+    public async Task OnNavigationStartedAsync(Func<NavigationInfoEventArgs, Task> callback, SynchronizationContext syncContext)
     {
-        await _broker.ExecuteCommandAsync(new CloseCommand { Params = new CloseCommandParameters { Context = Id } }).ConfigureAwait(false);
-    }
-
-    public async Task OnNavigationStartedAsync(Func<NavigationInfoEventArgs, Task> callback)
-    {
-        var syncContext = SynchronizationContext.Current;
-
         await _session.SubscribeAsync("browsingContext.navigationStarted").ConfigureAwait(false);
 
         _broker.RegisterEventHandler("browsingContext.navigationStarted", new BiDiEventHandler<NavigationInfoEventArgs>(syncContext, callback));
     }
 
-    public async Task OnNavigationStartedAsync(Action<NavigationInfoEventArgs> callback)
+    public async Task OnNavigationStartedAsync(Action<NavigationInfoEventArgs> callback, SynchronizationContext syncContext)
     {
-        var syncContext = SynchronizationContext.Current;
-
         await _session.SubscribeAsync("browsingContext.navigationStarted").ConfigureAwait(false);
 
         _broker.RegisterEventHandler("browsingContext.navigationStarted", new BiDiEventHandler<NavigationInfoEventArgs>(syncContext, callback));

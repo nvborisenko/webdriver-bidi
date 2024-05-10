@@ -9,7 +9,7 @@ internal class NavigateCommand : Command<NavigateCommandParameters>
 
 public class NavigateCommandParameters : CommandParameters
 {
-    public string Context { get; set; }
+    public BrowsingContext Context { get; set; }
 
     public string Url { get; set; }
 

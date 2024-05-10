@@ -14,6 +14,7 @@ namespace OpenQA.Selenium.BiDi
         private readonly Broker _broker;
 
         private readonly Lazy<Modules.Session.SessionModule> _sessionModule;
+        private readonly Lazy<Modules.BrowsingContext.BrowsingContextModule> _browsingContextModule;
         private readonly Lazy<Modules.Browser.BrowserModule> _browserModule;
         private readonly Lazy<Modules.Network.NetworkModule> _networkModule;
         private readonly Lazy<Modules.Input.InputModule> _inputModule;
@@ -25,6 +26,7 @@ namespace OpenQA.Selenium.BiDi
             _broker = new Broker(this, _transport);
 
             _sessionModule = new Lazy<Modules.Session.SessionModule>(() => new Modules.Session.SessionModule(_broker));
+            _browsingContextModule = new Lazy<Modules.BrowsingContext.BrowsingContextModule>(() => new Modules.BrowsingContext.BrowsingContextModule(this, _broker));
             _browserModule = new Lazy<Modules.Browser.BrowserModule>(() => new Modules.Browser.BrowserModule(_broker));
             _networkModule = new Lazy<Modules.Network.NetworkModule>(() => new Modules.Network.NetworkModule(this, _broker));
             _inputModule = new Lazy<Modules.Input.InputModule>(() => new Modules.Input.InputModule(_broker));
@@ -32,6 +34,8 @@ namespace OpenQA.Selenium.BiDi
         }
 
         public Modules.Session.SessionModule SessionModule => _sessionModule.Value;
+
+        public Modules.BrowsingContext.BrowsingContextModule BrowsingContextModule => _browsingContextModule.Value;
 
         public Modules.Browser.BrowserModule Browser => _browserModule.Value;
 
@@ -46,11 +50,11 @@ namespace OpenQA.Selenium.BiDi
             return await SessionModule.StatusAsync().ConfigureAwait(false);
         }
 
-        public async Task<Modules.BrowsingContext.BrowsingContextModule> CreateBrowsingContextAsync()
+        public async Task<Modules.BrowsingContext.BrowsingContext> CreateBrowsingContextAsync()
         {
             var context = await _broker.ExecuteCommandAsync<Modules.BrowsingContext.CreateCommand, Modules.BrowsingContext.CreateResult>(new Modules.BrowsingContext.CreateCommand()).ConfigureAwait(false);
 
-            return new Modules.BrowsingContext.BrowsingContextModule(context.Context, this, _broker);
+            return context.Context;
         }
 
         public async Task OnBrowsingContextCreatedAsync(Action<Modules.BrowsingContext.BrowsingContextInfoEventArgs> callback)

@@ -12,7 +12,7 @@ internal class PerformActionsCommand : Command<PerformActionsParameters>
 
 public class PerformActionsParameters : CommandParameters
 {
-    public string Context { get; set; }
+    public BrowsingContext.BrowsingContext Context { get; set; }
 
     public List<SourceActions> Actions { get; set; } = [];
 }

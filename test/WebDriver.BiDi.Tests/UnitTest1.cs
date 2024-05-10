@@ -219,7 +219,7 @@ namespace OpenQA.Selenium.BiDi.Tests
 
             await session.Input.PerformActionsAsync(new()
             {
-                Context = context.Id,
+                Context = context,
                 Actions =
                 {
                     SourceActions.Press("abc"),
@@ -252,7 +252,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         {
             var context = await session.CreateBrowsingContextAsync();
 
-            var res = await context.EvaluateAsync("return 42;", true);
+            var res = await context.EvaluateAsync("abc;", true);
 
             res.GetType().Should().Be(typeof(EvaluateResultException));
         }

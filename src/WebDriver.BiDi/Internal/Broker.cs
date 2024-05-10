@@ -1,3 +1,4 @@
+using OpenQA.Selenium.BiDi.Internal.Json;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -46,7 +47,7 @@ internal class Broker
             PropertyNameCaseInsensitive = true,
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-            Converters = { new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) },
+            Converters = { new JsonBrowsingContextConverter(_session), new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) },
             AllowOutOfOrderMetadataProperties = true,
         };
     }
