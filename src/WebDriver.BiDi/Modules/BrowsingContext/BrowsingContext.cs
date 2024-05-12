@@ -95,6 +95,27 @@ public class BrowsingContext
         await _session.BrowsingContextModule.CloseAsync(parameters).ConfigureAwait(false);
     }
 
+    public async Task TraverseHistoryAsync(int delta)
+    {
+        var parameters = new TraverseHistoryParameters
+        {
+            Context = this,
+            Delta = delta
+        };
+
+        await _session.BrowsingContextModule.TraverseHistoryAsync(parameters).ConfigureAwait(false);
+    }
+
+    public async Task NavigateBackAsync()
+    {
+        await TraverseHistoryAsync(-1).ConfigureAwait(false);
+    }
+
+    public async Task NavigateForwardAsync()
+    {
+        await TraverseHistoryAsync(1).ConfigureAwait(false);
+    }
+
     public async Task OnNavigationStartedAsync(Func<NavigationInfoEventArgs, Task> callback)
     {
         var syncContext = SynchronizationContext.Current;

@@ -64,6 +64,22 @@ namespace OpenQA.Selenium.BiDi.Tests
         }
 
         [Test]
+        public async Task BrowsingContextTraverseHistory()
+        {
+            var context = await session.CreateBrowsingContextAsync();
+
+            await context.NavigateAsync("https://google.com");
+
+            await Task.Delay(500);
+
+            await context.NavigateBackAsync();
+
+            await Task.Delay(500);
+
+            await context.NavigateForwardAsync();
+        }
+
+        [Test]
         public async Task BrowsingContextTest()
         {
             var context = await session.CreateBrowsingContextAsync();

@@ -65,6 +65,11 @@ public sealed class BrowsingContextModule
         await _broker.ExecuteCommandAsync(new CloseCommand { Params = parameters }).ConfigureAwait(false);
     }
 
+    public async Task<TraverseHistoryResult> TraverseHistoryAsync(TraverseHistoryParameters parameters)
+    {
+        return await _broker.ExecuteCommandAsync<TraverseHistoryCommand, TraverseHistoryResult>(new TraverseHistoryCommand { Params = parameters }).ConfigureAwait(false);
+    }
+
     public async Task OnNavigationStartedAsync(Func<NavigationInfoEventArgs, Task> callback, SynchronizationContext syncContext)
     {
         await _session.SubscribeAsync("browsingContext.navigationStarted").ConfigureAwait(false);
