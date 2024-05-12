@@ -116,6 +116,18 @@ public class BrowsingContext
         await TraverseHistoryAsync(1).ConfigureAwait(false);
     }
 
+    public async Task SetViewportAsync(Viewport? viewport = default, double? devicePixelRatio = default)
+    {
+        var parameters = new SetViewportParameters
+        {
+            Context = this,
+            Viewport = viewport,
+            DevicePixelRatio = devicePixelRatio
+        };
+
+        await _session.BrowsingContextModule.SetViewportAsync(parameters).ConfigureAwait(false);
+    }
+
     public async Task OnNavigationStartedAsync(Func<NavigationInfoEventArgs, Task> callback)
     {
         var syncContext = SynchronizationContext.Current;

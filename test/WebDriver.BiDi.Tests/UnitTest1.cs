@@ -3,6 +3,7 @@ using OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 using OpenQA.Selenium.BiDi.Modules.Input;
 using OpenQA.Selenium.BiDi.Modules.Script;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.DevTools.V122.Overlay;
 using OpenQA.Selenium.Firefox;
 using System;
 using System.Threading;
@@ -61,6 +62,16 @@ namespace OpenQA.Selenium.BiDi.Tests
             var context = await driver.AsBiDiBrowsingContext();
 
             await context.NavigateAsync("https://google.com");
+        }
+
+        [Test]
+        public async Task SetViewport()
+        {
+            var context = await driver.AsBiDiBrowsingContext();
+
+            await context.NavigateAsync("https://google.com");
+
+            await context.SetViewportAsync(new Viewport { Width = 500, Height = 300 });
         }
 
         [Test]
