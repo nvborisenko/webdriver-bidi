@@ -157,6 +157,19 @@ namespace OpenQA.Selenium.BiDi.Tests
         }
 
         [Test]
+        public async Task Reload()
+        {
+            var context = await session.CreateBrowsingContextAsync();
+
+            await context.NavigateAsync("https://selenium.dev");
+
+            var info = await context.ReloadAsync();
+
+            info.Navigation.Should().BeNull();
+            info.Url.Should().Contain("selenium.dev");
+        }
+
+        [Test]
         public async Task SubscribeInHandlerTest()
         {
             var context = await session.CreateBrowsingContextAsync();

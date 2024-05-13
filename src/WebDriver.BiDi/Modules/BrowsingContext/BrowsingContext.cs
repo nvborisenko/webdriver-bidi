@@ -30,6 +30,18 @@ public class BrowsingContext
         return await _session.BrowsingContextModule.NavigateAsync(parameters).ConfigureAwait(false);
     }
 
+    public async Task<NavigateResult> ReloadAsync(bool? ignoreCache = default, ReadinessState? wait = default)
+    {
+        var parameters = new ReloadParameters
+        {
+            Context = this,
+            IgnoreCache = ignoreCache,
+            Wait = wait
+        };
+
+        return await _session.BrowsingContextModule.ReloadAsync(parameters).ConfigureAwait(false);
+    }
+
     public async Task ActivateAsync()
     {
         var parameters = new ActivateParameters { Context = this };

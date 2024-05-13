@@ -70,6 +70,11 @@ public sealed class BrowsingContextModule
         return await _broker.ExecuteCommandAsync<TraverseHistoryCommand, TraverseHistoryResult>(new TraverseHistoryCommand { Params = parameters }).ConfigureAwait(false);
     }
 
+    public async Task<NavigateResult> ReloadAsync(ReloadParameters parameters)
+    {
+        return await _broker.ExecuteCommandAsync<ReloadCommand, NavigateResult>(new ReloadCommand { Params = parameters }).ConfigureAwait(false);
+    }
+
     public async Task SetViewportAsync(SetViewportParameters parameters)
     {
         await _broker.ExecuteCommandAsync(new SetViewportCommand { Params = parameters }).ConfigureAwait(false);
