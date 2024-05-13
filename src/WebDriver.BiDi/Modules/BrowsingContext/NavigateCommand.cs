@@ -25,7 +25,7 @@ public enum ReadinessState
 
 public class NavigateResult
 {
-    public string Navigation { get; set; }
+    public Navigation Navigation { get; set; }
 
     public string Url { get; set; }
 

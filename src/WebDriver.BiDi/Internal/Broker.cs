@@ -47,7 +47,12 @@ internal class Broker
             PropertyNameCaseInsensitive = true,
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-            Converters = { new JsonBrowsingContextConverter(_session), new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) },
+            Converters =
+            {
+                new JsonBrowsingContextConverter(_session),
+                new JsonNavigationConverter(),
+                new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)
+            },
             AllowOutOfOrderMetadataProperties = true,
         };
     }

@@ -61,7 +61,10 @@ namespace OpenQA.Selenium.BiDi.Tests
         {
             var context = await driver.AsBiDiBrowsingContext();
 
-            await context.NavigateAsync("https://google.com");
+            var navigateResult = await context.NavigateAsync("https://google.com");
+
+            navigateResult.Navigation.Should().NotBeNull();
+            navigateResult.Url.Should().Contain("google.com");
         }
 
         [Test]
@@ -133,6 +136,24 @@ namespace OpenQA.Selenium.BiDi.Tests
             var context = await session.CreateBrowsingContextAsync();
 
             await context.NavigateAsync("https://selenium.dev");
+        }
+
+        [Test]
+        public async Task Navigate()
+        {
+            var context = await session.CreateBrowsingContextAsync();
+
+            NavigationInfoEventArgs info = null;
+
+            await context.OnNavigationStartedAsync(args =>
+            {
+                info = args;
+            });
+
+            await context.NavigateAsync("https://selenium.dev");
+
+            info.Context.Should().NotBeNull();
+            // info.Url.Should().Contain("selenium.dev");
         }
 
         [Test]
