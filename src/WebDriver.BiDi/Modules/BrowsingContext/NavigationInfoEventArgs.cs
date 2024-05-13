@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System;
+using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
@@ -9,6 +10,9 @@ public class NavigationInfoEventArgs : EventArgs
 
     [JsonInclude]
     public Navigation Navigation { get; private set; }
+
+    [JsonInclude]
+    public DateTime Timestamp { get; private set; }
 
     [JsonInclude]
     public string Url { get; private set; }
