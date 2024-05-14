@@ -316,7 +316,7 @@ namespace OpenQA.Selenium.BiDi.Tests
                 }
             });
 
-            await context.PerformActionsAsync([SourceActions.Press("qwe").Pause(1000)]);
+            await context.PerformActionsAsync(SourceActions.Press("qwe").Pause(1000));
         }
 
         [Test]

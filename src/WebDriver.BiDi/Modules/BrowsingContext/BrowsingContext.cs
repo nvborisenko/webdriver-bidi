@@ -68,6 +68,11 @@ public class BrowsingContext
         return result.Nodes;
     }
 
+    public Task PerformActionsAsync(Input.SourceActions action)
+    {
+        return PerformActionsAsync([action]);
+    }
+
     public Task PerformActionsAsync(List<Input.SourceActions> actions)
     {
         var parameters = new Input.PerformActionsParameters { Context = this, Actions = actions };
