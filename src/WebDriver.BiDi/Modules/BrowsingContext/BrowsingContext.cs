@@ -17,20 +17,20 @@ public class BrowsingContext
 
     internal string Id { get; private set; }
 
-    public async Task<NavigateResult> NavigateAsync(string url, ReadinessState wait = ReadinessState.Complete)
+    public Task<NavigateResult> NavigateAsync(string url, ReadinessState wait = ReadinessState.Complete)
     {
         var parameters = new NavigateCommandParameters { Url = url, Wait = wait };
 
-        return await NavigateAsync(parameters).ConfigureAwait(false);
+        return NavigateAsync(parameters);
     }
-    public async Task<NavigateResult> NavigateAsync(NavigateCommandParameters parameters)
+    public Task<NavigateResult> NavigateAsync(NavigateCommandParameters parameters)
     {
         parameters.Context = this;
 
-        return await _session.BrowsingContextModule.NavigateAsync(parameters).ConfigureAwait(false);
+        return _session.BrowsingContextModule.NavigateAsync(parameters);
     }
 
-    public async Task<NavigateResult> ReloadAsync(bool? ignoreCache = default, ReadinessState? wait = default)
+    public Task<NavigateResult> ReloadAsync(bool? ignoreCache = default, ReadinessState? wait = default)
     {
         var parameters = new ReloadParameters
         {
@@ -39,24 +39,24 @@ public class BrowsingContext
             Wait = wait
         };
 
-        return await _session.BrowsingContextModule.ReloadAsync(parameters).ConfigureAwait(false);
+        return _session.BrowsingContextModule.ReloadAsync(parameters);
     }
 
-    public async Task ActivateAsync()
+    public Task ActivateAsync()
     {
         var parameters = new ActivateParameters { Context = this };
 
-        await _session.BrowsingContextModule.ActivateAsync(parameters).ConfigureAwait(false);
+        return _session.BrowsingContextModule.ActivateAsync(parameters);
     }
 
-    public async Task<IReadOnlyList<Script.NodeRemoteValue>> LocateNodesAsync(Locator locator)
+    public Task<IReadOnlyList<Script.NodeRemoteValue>> LocateNodesAsync(Locator locator)
     {
         var parameters = new LocateNodesParameters
         {
             Locator = locator
         };
 
-        return await LocateNodesAsync(parameters).ConfigureAwait(false);
+        return LocateNodesAsync(parameters);
     }
 
     public async Task<IReadOnlyList<Script.NodeRemoteValue>> LocateNodesAsync(LocateNodesParameters parameters)
@@ -68,14 +68,14 @@ public class BrowsingContext
         return result.Nodes;
     }
 
-    public async Task PerformActionsAsync(List<Input.SourceActions> actions)
+    public Task PerformActionsAsync(List<Input.SourceActions> actions)
     {
         var parameters = new Input.PerformActionsParameters { Context = this, Actions = actions };
 
-        await _session.Input.PerformActionsAsync(parameters).ConfigureAwait(false);
+        return _session.Input.PerformActionsAsync(parameters);
     }
 
-    public async Task<CaptureScreenshotResult> CaptureScreenshotAsync(Origin? origin = default, ImageFormat? imageFormat = default, ClipRectangle? clip = default)
+    public Task<CaptureScreenshotResult> CaptureScreenshotAsync(Origin? origin = default, ImageFormat? imageFormat = default, ClipRectangle? clip = default)
     {
         var parameters = new CaptureScreenshotCommandParameters
         {
@@ -84,30 +84,30 @@ public class BrowsingContext
             Clip = clip
         };
 
-        return await CaptureScreenshotAsync(parameters).ConfigureAwait(false);
+        return CaptureScreenshotAsync(parameters);
     }
 
-    public async Task<CaptureScreenshotResult> CaptureScreenshotAsync(CaptureScreenshotCommandParameters parameters)
+    public Task<CaptureScreenshotResult> CaptureScreenshotAsync(CaptureScreenshotCommandParameters parameters)
     {
         parameters.Context = Id;
 
-        return await _session.BrowsingContextModule.CaptureScreenshotAsync(parameters).ConfigureAwait(false);
+        return _session.BrowsingContextModule.CaptureScreenshotAsync(parameters);
     }
 
-    public async Task<Script.EvaluateResult> EvaluateAsync(string expression, bool awaitPromise)
+    public Task<Script.EvaluateResult> EvaluateAsync(string expression, bool awaitPromise)
     {
         var parameters = new Script.EvaluateCommandParameters { Expression = expression, Target = new Script.ContextTarget { Context = Id }, AwaitPromise = awaitPromise };
-        return await _session.Script.EvaluateAsync(parameters).ConfigureAwait(false);
+        return _session.Script.EvaluateAsync(parameters);
     }
 
-    public async Task CloseAsync()
+    public Task CloseAsync()
     {
         var parameters = new CloseCommandParameters { Context = this };
 
-        await _session.BrowsingContextModule.CloseAsync(parameters).ConfigureAwait(false);
+        return _session.BrowsingContextModule.CloseAsync(parameters);
     }
 
-    public async Task TraverseHistoryAsync(int delta)
+    public Task TraverseHistoryAsync(int delta)
     {
         var parameters = new TraverseHistoryParameters
         {
@@ -115,20 +115,20 @@ public class BrowsingContext
             Delta = delta
         };
 
-        await _session.BrowsingContextModule.TraverseHistoryAsync(parameters).ConfigureAwait(false);
+        return _session.BrowsingContextModule.TraverseHistoryAsync(parameters);
     }
 
-    public async Task NavigateBackAsync()
+    public Task NavigateBackAsync()
     {
-        await TraverseHistoryAsync(-1).ConfigureAwait(false);
+        return TraverseHistoryAsync(-1);
     }
 
-    public async Task NavigateForwardAsync()
+    public Task NavigateForwardAsync()
     {
-        await TraverseHistoryAsync(1).ConfigureAwait(false);
+        return TraverseHistoryAsync(1);
     }
 
-    public async Task SetViewportAsync(Viewport? viewport = default, double? devicePixelRatio = default)
+    public Task SetViewportAsync(Viewport? viewport = default, double? devicePixelRatio = default)
     {
         var parameters = new SetViewportParameters
         {
@@ -137,20 +137,20 @@ public class BrowsingContext
             DevicePixelRatio = devicePixelRatio
         };
 
-        await _session.BrowsingContextModule.SetViewportAsync(parameters).ConfigureAwait(false);
+        return _session.BrowsingContextModule.SetViewportAsync(parameters);
     }
 
-    public async Task OnNavigationStartedAsync(Func<NavigationInfoEventArgs, Task> callback)
+    public Task OnNavigationStartedAsync(Func<NavigationInfoEventArgs, Task> callback)
     {
         var syncContext = SynchronizationContext.Current;
 
-        await _session.BrowsingContextModule.OnNavigationStartedAsync(callback, syncContext).ConfigureAwait(false);
+        return _session.BrowsingContextModule.OnNavigationStartedAsync(callback, syncContext);
     }
 
-    public async Task OnNavigationStartedAsync(Action<NavigationInfoEventArgs> callback)
+    public Task OnNavigationStartedAsync(Action<NavigationInfoEventArgs> callback)
     {
         var syncContext = SynchronizationContext.Current;
 
-        await _session.BrowsingContextModule.OnNavigationStartedAsync(callback, syncContext).ConfigureAwait(false);
+        return _session.BrowsingContextModule.OnNavigationStartedAsync(callback, syncContext);
     }
 }
