@@ -342,13 +342,13 @@ namespace OpenQA.Selenium.BiDi.Tests
             var numberValue = resSuccess.Result as NumberValue;
             numberValue.Value.Should().Be(4);
 
-            int nmb = await context.EvaluateAsync("2 + 3", awaitPromise: true);
+            int nmb = await context.EvaluateAsync("2 + 3");
             nmb.Should().Be(5);
 
-            var str = (string)await context.EvaluateAsync("'qwe' + 'asd'", true);
+            var str = (string)await context.EvaluateAsync("'qwe' + 'asd'");
             str.Should().Be("qweasd");
 
-            var nullStr = (string)await context.EvaluateAsync("null", true);
+            var nullStr = (string)await context.EvaluateAsync("null");
             nullStr.Should().BeNull();
 
             var invalidStr = async () => (string)await context.EvaluateAsync("function A() { return 'a' }", true);

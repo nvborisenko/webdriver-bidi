@@ -17,7 +17,7 @@ public sealed class NetworkModule
         _broker = broker;
     }
 
-    public async Task AddInterceptAsync(InterceptPhase phase, List<UrlPattern> urlPatterns = default)
+    public async Task<AddInterceptResult> AddInterceptAsync(InterceptPhase phase, List<UrlPattern> urlPatterns = default)
     {
         var parameters = new AddInterceptParameters
         {
@@ -25,10 +25,10 @@ public sealed class NetworkModule
             UrlPatterns = urlPatterns
         };
 
-        await AddInterceptAsync(parameters).ConfigureAwait(false);
+        return await AddInterceptAsync(parameters).ConfigureAwait(false);
     }
 
-    public async Task AddInterceptAsync(List<InterceptPhase> phases, List<UrlPattern> urlPatterns = default)
+    public async Task<AddInterceptResult> AddInterceptAsync(List<InterceptPhase> phases, List<UrlPattern> urlPatterns = default)
     {
         var parameters = new AddInterceptParameters
         {
@@ -36,12 +36,12 @@ public sealed class NetworkModule
             UrlPatterns = urlPatterns
         };
 
-        await AddInterceptAsync(parameters).ConfigureAwait(false);
+        return await AddInterceptAsync(parameters).ConfigureAwait(false);
     }
 
-    public async Task AddInterceptAsync(AddInterceptParameters parameters)
+    public async Task<AddInterceptResult> AddInterceptAsync(AddInterceptParameters parameters)
     {
-        await _broker.ExecuteCommandAsync(new AddInterceptCommand { Params = parameters }).ConfigureAwait(false);
+        return await _broker.ExecuteCommandAsync<AddInterceptCommand, AddInterceptResult>(new AddInterceptCommand { Params = parameters }).ConfigureAwait(false);
     }
 
     public async Task ContinueRequestAsync(ContinueRequestParameters parameters)

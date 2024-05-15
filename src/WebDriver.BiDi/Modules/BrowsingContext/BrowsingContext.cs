@@ -99,7 +99,7 @@ public class BrowsingContext
         return _session.BrowsingContextModule.CaptureScreenshotAsync(parameters);
     }
 
-    public Task<Script.EvaluateResult> EvaluateAsync(string expression, bool awaitPromise)
+    public Task<Script.EvaluateResult> EvaluateAsync(string expression, bool awaitPromise = true)
     {
         var parameters = new Script.EvaluateCommandParameters { Expression = expression, Target = new Script.ContextTarget { Context = Id }, AwaitPromise = awaitPromise };
         return _session.Script.EvaluateAsync(parameters);

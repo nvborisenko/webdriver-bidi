@@ -51,6 +51,7 @@ internal class Broker
             {
                 new JsonBrowsingContextConverter(_session),
                 new JsonNavigationConverter(),
+                new JsonInterceptConverter(),
                 new JsonDateTimeConverter(),
                 new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)
             },

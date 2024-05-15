@@ -17,6 +17,11 @@ namespace OpenQA.Selenium.BiDi.Modules.Network
         public List<UrlPattern>? UrlPatterns { get; set; }
     }
 
+    public class AddInterceptResult
+    {
+        public Intercept Intercept { get; set; }
+    }
+
     public enum InterceptPhase
     {
         BeforeRequestSent,
