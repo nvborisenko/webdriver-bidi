@@ -24,4 +24,11 @@ public class Request
 
         await _session.Network.ContinueRequestAsync(parameters).ConfigureAwait(false);
     }
+
+    public async Task FailAsync()
+    {
+        var parameters = new FailRequestParameters { Request = this };
+
+        await _session.Network.FailRequestAsync(parameters).ConfigureAwait(false);
+    }
 }

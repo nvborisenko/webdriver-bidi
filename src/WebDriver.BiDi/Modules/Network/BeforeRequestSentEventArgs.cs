@@ -8,4 +8,9 @@ public class BeforeRequestSentEventArgs : BaseParametersEventArgs
     {
         return Request.Request.ContinueAsync(method);
     }
+
+    public Task FailRequestAsync()
+    {
+        return Request.Request.FailAsync();
+    }
 }
