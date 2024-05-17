@@ -13,4 +13,9 @@ public class BeforeRequestSentEventArgs : BaseParametersEventArgs
     {
         return Request.Request.FailAsync();
     }
+
+    public Task ProvideResponseAsync(uint? statusCode = default)
+    {
+        return Request.Request.ProvideResponseAsync(statusCode);
+    }
 }

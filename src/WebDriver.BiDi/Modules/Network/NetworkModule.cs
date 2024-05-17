@@ -31,6 +31,11 @@ public sealed class NetworkModule
         await _broker.ExecuteCommandAsync(new FailRequestCommand { Params = parameters }).ConfigureAwait(false);
     }
 
+    public async Task ProvideResponseAsync(ProvideResponseParameters parameters)
+    {
+        await _broker.ExecuteCommandAsync(new ProvideResponseCommand { Params = parameters }).ConfigureAwait(false);
+    }
+
     public async Task OnBeforeRequestSentAsync(Func<BeforeRequestSentEventArgs, Task> callback, SynchronizationContext syncContext)
     {
         await _session.SubscribeAsync("network.beforeRequestSent").ConfigureAwait(false);

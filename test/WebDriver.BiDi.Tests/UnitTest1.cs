@@ -241,6 +241,19 @@ namespace OpenQA.Selenium.BiDi.Tests
         }
 
         [Test]
+        public async Task InterceptTestProvideResponse()
+        {
+            var context = await session.CreateBrowsingContextAsync();
+
+            await context.AddInterceptBeforeRequestSentAsync(async e =>
+            {
+                await e.ProvideResponseAsync();
+            });
+
+            await context.NavigateAsync("https://selenium.dev");
+        }
+
+        [Test]
         public async Task InterceptTestAll()
         {
             await session.AddInterceptAsync(Modules.Network.InterceptPhase.BeforeRequestSent);

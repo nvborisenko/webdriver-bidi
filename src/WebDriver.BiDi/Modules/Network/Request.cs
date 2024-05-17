@@ -31,4 +31,15 @@ public class Request
 
         await _session.Network.FailRequestAsync(parameters).ConfigureAwait(false);
     }
+
+    public async Task ProvideResponseAsync(uint? statusCode = default)
+    {
+        var parameters = new ProvideResponseParameters
+        {
+            Request = this,
+            StatusCode = statusCode
+        };
+
+        await _session.Network.ProvideResponseAsync(parameters).ConfigureAwait(false);
+    }
 }
