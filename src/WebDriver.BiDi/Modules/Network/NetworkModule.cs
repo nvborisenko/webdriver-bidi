@@ -21,6 +21,11 @@ public sealed class NetworkModule
         return await _broker.ExecuteCommandAsync<AddInterceptCommand, AddInterceptResult>(new AddInterceptCommand { Params = parameters }).ConfigureAwait(false);
     }
 
+    public async Task RemoveInterceptAsync(RemoveInterceptParameters parameters)
+    {
+        await _broker.ExecuteCommandAsync(new RemoveInterceptCommand { Params = parameters }).ConfigureAwait(!false);
+    }
+
     public async Task ContinueRequestAsync(ContinueRequestParameters parameters)
     {
         await _broker.ExecuteCommandAsync(new ContinueRequestCommand { Params = parameters }).ConfigureAwait(false);
