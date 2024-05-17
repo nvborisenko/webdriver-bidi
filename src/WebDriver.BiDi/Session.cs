@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using OpenQA.Selenium.BiDi.Internal;
@@ -25,7 +26,7 @@ namespace OpenQA.Selenium.BiDi
             _transport = new Transport(new Uri(uri));
             _broker = new Broker(this, _transport);
 
-            _sessionModule = new Lazy<Modules.Session.SessionModule>(() => new Modules.Session.SessionModule(_broker));
+            _sessionModule = new Lazy<Modules.Session.SessionModule>(() => new Modules.Session.SessionModule(this, _broker));
             _browsingContextModule = new Lazy<Modules.BrowsingContext.BrowsingContextModule>(() => new Modules.BrowsingContext.BrowsingContextModule(this, _broker));
             _browserModule = new Lazy<Modules.Browser.BrowserModule>(() => new Modules.Browser.BrowserModule(_broker));
             _networkModule = new Lazy<Modules.Network.NetworkModule>(() => new Modules.Network.NetworkModule(this, _broker));
@@ -39,15 +40,15 @@ namespace OpenQA.Selenium.BiDi
 
         public Modules.Browser.BrowserModule Browser => _browserModule.Value;
 
-        public Modules.Network.NetworkModule Network => _networkModule.Value;
+        internal Modules.Network.NetworkModule Network => _networkModule.Value;
 
         public Modules.Input.InputModule Input => _inputModule.Value;
 
         public Modules.Script.ScriptModule Script => _scriptModule.Value;
 
-        public async Task<Modules.Session.StatusResult> StatusAsync()
+        public Task<Modules.Session.StatusResult> StatusAsync()
         {
-            return await SessionModule.StatusAsync().ConfigureAwait(false);
+            return SessionModule.StatusAsync();
         }
 
         public async Task<Modules.BrowsingContext.BrowsingContext> CreateBrowsingContextAsync()
@@ -55,6 +56,33 @@ namespace OpenQA.Selenium.BiDi
             var context = await _broker.ExecuteCommandAsync<Modules.BrowsingContext.CreateCommand, Modules.BrowsingContext.CreateResult>(new Modules.BrowsingContext.CreateCommand()).ConfigureAwait(false);
 
             return context.Context;
+        }
+
+        public Task<Modules.Network.AddInterceptResult> AddInterceptAsync(Modules.Network.InterceptPhase phase, List<Modules.Network.UrlPattern> urlPatterns = default)
+        {
+            var parameters = new Modules.Network.AddInterceptParameters
+            {
+                Phases = [phase],
+                UrlPatterns = urlPatterns
+            };
+
+            return AddInterceptAsync(parameters);
+        }
+
+        public Task<Modules.Network.AddInterceptResult> AddInterceptAsync(List<Modules.Network.InterceptPhase> phases, List<Modules.Network.UrlPattern> urlPatterns = default)
+        {
+            var parameters = new Modules.Network.AddInterceptParameters
+            {
+                Phases = phases,
+                UrlPatterns = urlPatterns
+            };
+
+            return AddInterceptAsync(parameters);
+        }
+
+        public Task<Modules.Network.AddInterceptResult> AddInterceptAsync(Modules.Network.AddInterceptParameters parameters)
+        {
+            return Network.AddInterceptAsync(parameters);
         }
 
         public async Task OnBrowsingContextCreatedAsync(Action<Modules.BrowsingContext.BrowsingContextInfoEventArgs> callback)
@@ -73,6 +101,20 @@ namespace OpenQA.Selenium.BiDi
             await SubscribeAsync("browsingContext.contextCreated").ConfigureAwait(false);
 
             _broker.RegisterEventHandler("browsingContext.contextCreated", new BiDiEventHandler<Modules.BrowsingContext.BrowsingContextInfoEventArgs>(syncContext, callback));
+        }
+
+        public Task OnBeforeRequestSentAsync(Func<Modules.Network.BeforeRequestSentEventArgs, Task> callback)
+        {
+            var syncContext = SynchronizationContext.Current;
+
+            return Network.OnBeforeRequestSentAsync(callback, syncContext);
+        }
+
+        public Task OnBeforeRequestSentAsync(Action<Modules.Network.BeforeRequestSentEventArgs> callback)
+        {
+            var syncContext = SynchronizationContext.Current;
+
+            return Network.OnBeforeRequestSentAsync(callback, syncContext);
         }
 
         public static async Task<Session> ConnectAsync(string url)

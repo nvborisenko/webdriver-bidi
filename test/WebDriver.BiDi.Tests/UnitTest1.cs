@@ -3,7 +3,6 @@ using OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 using OpenQA.Selenium.BiDi.Modules.Input;
 using OpenQA.Selenium.BiDi.Modules.Script;
 using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.DevTools.V122.Overlay;
 using OpenQA.Selenium.Firefox;
 using System;
 using System.Threading;
@@ -128,7 +127,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         [Test]
         public async Task SubscribeTest()
         {
-            await session.Network.OnBeforeRequestSentAsync(e =>
+            await session.OnBeforeRequestSentAsync(e =>
             {
                 Console.WriteLine(e.Request.Url);
             });
@@ -178,7 +177,7 @@ namespace OpenQA.Selenium.BiDi.Tests
 
             await context.OnNavigationStartedAsync(async args =>
             {
-                await session.Network.OnBeforeRequestSentAsync(args =>
+                await session.OnBeforeRequestSentAsync(args =>
                 {
                     Console.WriteLine(args.Request.Url);
                 });
@@ -188,7 +187,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         }
 
         [Test]
-        public async Task OnNavigationStartedTest()
+        public async Task OnNavigationStarted()
         {
             var context = await session.CreateBrowsingContextAsync();
 
@@ -206,17 +205,26 @@ namespace OpenQA.Selenium.BiDi.Tests
         }
 
         [Test]
+        public async Task OnBeforeRequestSent()
+        {
+            var context = await session.CreateBrowsingContextAsync();
+
+            await context.OnBeforeRequestSentAsync(e => Console.WriteLine(e.Context));
+
+            await context.NavigateAsync("https://selenium.dev");
+        }
+
+        [Test]
         public async Task InterceptTest()
         {
-            await session.Network.AddInterceptAsync(
+            await session.AddInterceptAsync(
                 phases: [Modules.Network.InterceptPhase.BeforeRequestSent],
                 urlPatterns: ["https://selenium.dev/"]);
 
             var context = await session.CreateBrowsingContextAsync();
 
-            //await session.Network.OnBeforeRequestSentAsync(args => throw new Exception("Blocked"));
-
-            await session.Network.OnBeforeRequestSentAsync(async args =>
+            //await session.OnBeforeRequestSentAsync(args => throw new Exception("Blocked"));
+            await session.OnBeforeRequestSentAsync(async args =>
             {
                 if (args.IsBlocked)
                 {
@@ -230,11 +238,11 @@ namespace OpenQA.Selenium.BiDi.Tests
         [Test]
         public async Task InterceptTestAll()
         {
-            await session.Network.AddInterceptAsync(Modules.Network.InterceptPhase.BeforeRequestSent);
+            await session.AddInterceptAsync(Modules.Network.InterceptPhase.BeforeRequestSent);
 
             var context = await session.CreateBrowsingContextAsync();
 
-            await session.Network.OnBeforeRequestSentAsync(async args =>
+            await session.OnBeforeRequestSentAsync(async args =>
             {
                 await args.ContinueRequestAsync(method: "post");
             });

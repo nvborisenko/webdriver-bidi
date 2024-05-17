@@ -5,6 +5,9 @@ namespace OpenQA.Selenium.BiDi.Modules.Network;
 public class BeforeRequestSentEventArgs : EventArgs
 {
     [JsonInclude]
+    public BrowsingContext.BrowsingContext Context { get; private set; }
+
+    [JsonInclude]
     public bool IsBlocked { get; private set; }
 
     [JsonInclude]

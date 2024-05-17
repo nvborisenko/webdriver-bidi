@@ -158,4 +158,18 @@ public class BrowsingContext
 
         return _session.BrowsingContextModule.OnNavigationStartedAsync(callback, syncContext);
     }
+
+    public Task OnBeforeRequestSentAsync(Func<Network.BeforeRequestSentEventArgs, Task> callback)
+    {
+        var syncContext = SynchronizationContext.Current;
+
+        return _session.Network.OnBeforeRequestSentAsync(callback, syncContext);
+    }
+
+    public Task OnBeforeRequestSentAsync(Action<Network.BeforeRequestSentEventArgs> callback)
+    {
+        var syncContext = SynchronizationContext.Current;
+
+        return _session.Network.OnBeforeRequestSentAsync(callback, syncContext);
+    }
 }

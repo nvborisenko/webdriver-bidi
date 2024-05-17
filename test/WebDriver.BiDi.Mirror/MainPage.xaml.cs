@@ -39,7 +39,7 @@ namespace WebDriver.BiDi.Mirror
 
                 CounterBtn.Text = "Started";
 
-                await session.Network.OnBeforeRequestSentAsync(async arg =>
+                await session.OnBeforeRequestSentAsync(async arg =>
                 {
                     await Task.Delay(10);
                     //MainThread.BeginInvokeOnMainThread(() => { CounterBtn.Text = arg.Request.Url; });
