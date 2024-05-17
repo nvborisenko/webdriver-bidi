@@ -217,19 +217,11 @@ namespace OpenQA.Selenium.BiDi.Tests
         [Test]
         public async Task InterceptTest()
         {
-            await session.AddInterceptAsync(
-                phases: [Modules.Network.InterceptPhase.BeforeRequestSent],
-                urlPatterns: ["https://selenium.dev/"]);
-
             var context = await session.CreateBrowsingContextAsync();
 
-            //await session.OnBeforeRequestSentAsync(args => throw new Exception("Blocked"));
-            await session.OnBeforeRequestSentAsync(async args =>
+            await context.AddInterceptBeforeRequestSentAsync(async e =>
             {
-                if (args.IsBlocked)
-                {
-                    await args.ContinueRequestAsync(method: "post");
-                }
+                await e.ContinueRequestAsync(method: "post");
             });
 
             await context.NavigateAsync("https://selenium.dev");
@@ -244,7 +236,7 @@ namespace OpenQA.Selenium.BiDi.Tests
 
             await session.OnBeforeRequestSentAsync(async args =>
             {
-                await args.ContinueRequestAsync(method: "post");
+                await args.Request.Request.ContinueAsync(method: "post");
             });
 
             await context.NavigateAsync("https://selenium.dev");

@@ -58,7 +58,7 @@ namespace OpenQA.Selenium.BiDi
             return context.Context;
         }
 
-        public Task<Modules.Network.AddInterceptResult> AddInterceptAsync(Modules.Network.InterceptPhase phase, List<Modules.Network.UrlPattern> urlPatterns = default)
+        public Task<Modules.Network.AddInterceptResult> AddInterceptAsync(Modules.Network.InterceptPhase phase, List<Modules.Network.UrlPattern>? urlPatterns = default)
         {
             var parameters = new Modules.Network.AddInterceptParameters
             {
@@ -69,7 +69,7 @@ namespace OpenQA.Selenium.BiDi
             return AddInterceptAsync(parameters);
         }
 
-        public Task<Modules.Network.AddInterceptResult> AddInterceptAsync(List<Modules.Network.InterceptPhase> phases, List<Modules.Network.UrlPattern> urlPatterns = default)
+        public Task<Modules.Network.AddInterceptResult> AddInterceptAsync(List<Modules.Network.InterceptPhase> phases, List<Modules.Network.UrlPattern>? urlPatterns = default)
         {
             var parameters = new Modules.Network.AddInterceptParameters
             {

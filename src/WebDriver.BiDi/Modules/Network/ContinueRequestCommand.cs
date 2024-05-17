@@ -9,7 +9,7 @@ namespace OpenQA.Selenium.BiDi.Modules.Network
 
     public class ContinueRequestParameters : CommandParameters
     {
-        public string Request { get; set; }
+        public Request Request { get; set; }
 
         public string? Url { get; set; }
 

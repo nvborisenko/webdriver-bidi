@@ -1,26 +1,11 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Threading.Tasks;
 
 namespace OpenQA.Selenium.BiDi.Modules.Network;
 
-public class BeforeRequestSentEventArgs : EventArgs
+public class BeforeRequestSentEventArgs : BaseParametersEventArgs
 {
-    [JsonInclude]
-    public BrowsingContext.BrowsingContext Context { get; private set; }
-
-    [JsonInclude]
-    public bool IsBlocked { get; private set; }
-
-    [JsonInclude]
-    public RequestData Request { get; private set; }
-}
-
-public class RequestData
-{
-    [JsonInclude, JsonPropertyName("request")]
-    public string Id { get; private set; }
-
-    [JsonInclude]
-    public string Url { get; private set; }
-
-    public int? BodySize { get; set; }
+    public Task ContinueRequestAsync(string? method = default)
+    {
+        return Request.Request.ContinueAsync(method);
+    }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using OpenQA.Selenium.BiDi.Internal;
 
@@ -13,6 +12,8 @@ namespace OpenQA.Selenium.BiDi.Modules.Network
     public class AddInterceptParameters : CommandParameters
     {
         public List<InterceptPhase> Phases { get; set; } = [];
+
+        public List<BrowsingContext.BrowsingContext>? Contexts { get; set; }
 
         public List<UrlPattern>? UrlPatterns { get; set; }
     }

@@ -145,6 +145,41 @@ public class BrowsingContext
         return _session.BrowsingContextModule.SetViewportAsync(parameters);
     }
 
+    public async Task<Network.Intercept> AddInterceptBeforeRequestSentAsync(Func<Network.BeforeRequestSentEventArgs, Task> callback, List<Network.UrlPattern>? urlPatterns = default)
+    {
+        var intercept = await AddInterceptAsync([Network.InterceptPhase.BeforeRequestSent], urlPatterns).ConfigureAwait(false);
+
+        await OnBeforeRequestSentAsync(async e =>
+        {
+            if (e.Intercepts?.Contains(intercept) is true)
+            {
+                await callback(e).ConfigureAwait(false);
+            }
+        }).ConfigureAwait(false);
+
+        return intercept;
+    }
+
+    public Task<Network.Intercept> AddInterceptAsync(List<Network.InterceptPhase> phases, List<Network.UrlPattern>? urlPatterns = default)
+    {
+        var parameters = new Network.AddInterceptParameters
+        {
+            Phases = phases,
+            UrlPatterns = urlPatterns
+        };
+
+        return AddInterceptAsync(parameters);
+    }
+
+    public async Task<Network.Intercept> AddInterceptAsync(Network.AddInterceptParameters parameters)
+    {
+        parameters.Contexts = [this];
+
+        var result = await _session.Network.AddInterceptAsync(parameters).ConfigureAwait(false);
+
+        return result.Intercept;
+    }
+
     public Task OnNavigationStartedAsync(Func<NavigationInfoEventArgs, Task> callback)
     {
         var syncContext = SynchronizationContext.Current;

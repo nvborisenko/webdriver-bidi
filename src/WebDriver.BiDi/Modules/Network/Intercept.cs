@@ -8,4 +8,9 @@ public class Intercept
     }
 
     public string Id { get; private set; }
+
+    public override bool Equals(object obj)
+    {
+        return Id == (obj as Intercept).Id;
+    }
 }
