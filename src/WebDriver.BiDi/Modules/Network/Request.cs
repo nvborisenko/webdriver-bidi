@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace OpenQA.Selenium.BiDi.Modules.Network;
 
@@ -14,7 +15,7 @@ public class Request
 
     public string Id { get; private set; }
 
-    public async Task ContinueAsync(string? method = default)
+    public async Task ContinueAsync(HttpMethod? method = default)
     {
         var parameters = new ContinueRequestParameters
         {

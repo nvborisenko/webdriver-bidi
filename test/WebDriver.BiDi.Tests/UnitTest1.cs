@@ -5,6 +5,7 @@ using OpenQA.Selenium.BiDi.Modules.Script;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
 using System;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -221,7 +222,7 @@ namespace OpenQA.Selenium.BiDi.Tests
 
             await using var intercept = await context.AddInterceptBeforeRequestSentAsync(async e =>
             {
-                await e.ContinueRequestAsync(method: "post");
+                await e.ContinueRequestAsync(HttpMethod.Post);
             });
 
             await context.NavigateAsync("https://selenium.dev");
@@ -262,7 +263,7 @@ namespace OpenQA.Selenium.BiDi.Tests
 
             await session.OnBeforeRequestSentAsync(async args =>
             {
-                await args.Request.Request.ContinueAsync(method: "post");
+                await args.Request.Request.ContinueAsync(HttpMethod.Post);
             });
 
             await context.NavigateAsync("https://selenium.dev");

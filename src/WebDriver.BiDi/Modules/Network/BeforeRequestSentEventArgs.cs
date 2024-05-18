@@ -1,10 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace OpenQA.Selenium.BiDi.Modules.Network;
 
 public class BeforeRequestSentEventArgs : BaseParametersEventArgs
 {
-    public Task ContinueRequestAsync(string? method = default)
+    public Task ContinueRequestAsync(HttpMethod? method = default)
     {
         return Request.Request.ContinueAsync(method);
     }
