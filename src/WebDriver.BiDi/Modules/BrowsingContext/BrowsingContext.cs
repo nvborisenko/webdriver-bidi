@@ -155,7 +155,7 @@ public class BrowsingContext
             {
                 await callback(e).ConfigureAwait(false);
 
-                if (e.IsBlocked)
+                if (e.Intercepts?.Count == 1 && e.IsBlocked)
                 {
                     await e.ContinueAsync().ConfigureAwait(false);
                 }
@@ -175,7 +175,7 @@ public class BrowsingContext
             {
                 await callback(e).ConfigureAwait(false);
 
-                if (e.IsBlocked)
+                if (e.Intercepts?.Count == 1 && e.IsBlocked)
                 {
                     await e.ContinueAsync().ConfigureAwait(false);
                 }
