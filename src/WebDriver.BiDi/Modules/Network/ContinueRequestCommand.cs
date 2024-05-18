@@ -1,5 +1,4 @@
 ﻿using OpenQA.Selenium.BiDi.Internal;
-using System.Net.Http;
 
 namespace OpenQA.Selenium.BiDi.Modules.Network
 {
@@ -14,7 +13,7 @@ namespace OpenQA.Selenium.BiDi.Modules.Network
 
         public string? Url { get; set; }
 
-        public HttpMethod? Method { get; set; }
+        public string? Method { get; set; }
     }
 
 

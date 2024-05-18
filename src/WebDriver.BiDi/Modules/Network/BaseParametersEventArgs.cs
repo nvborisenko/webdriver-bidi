@@ -2,7 +2,6 @@
 using System.Text.Json.Serialization;
 using System;
 using OpenQA.Selenium.BiDi.Modules.BrowsingContext;
-using System.Threading.Tasks;
 using System.Net.Http;
 
 namespace OpenQA.Selenium.BiDi.Modules.Network;
@@ -13,7 +12,7 @@ public class BaseParametersEventArgs : EventArgs
     public BrowsingContext.BrowsingContext Context { get; private set; }
 
     [JsonInclude]
-    public bool IsBlocked { get; private set; }
+    public bool IsBlocked { get; internal set; }
 
     [JsonInclude]
     public Navigation Navigation { get; private set; }
@@ -40,7 +39,7 @@ public class RequestData
     public string Url { get; private set; }
 
     [JsonInclude]
-    public HttpMethod Method { get; private set; }
+    public string Method { get; private set; }
 
     public int? BodySize { get; set; }
 

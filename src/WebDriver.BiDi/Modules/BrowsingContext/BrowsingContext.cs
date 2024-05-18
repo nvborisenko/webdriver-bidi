@@ -145,30 +145,40 @@ public class BrowsingContext
         return _session.BrowsingContextModule.SetViewportAsync(parameters);
     }
 
-    public async Task<Network.Intercept> AddInterceptOnBeforeRequestSentAsync(Func<Network.BeforeRequestSentEventArgs, Task> callback, List<Network.UrlPattern>? urlPatterns = default)
+    public async Task<Network.Intercept> OnBeforeRequestSentAsync(Network.UrlPattern urlPattern, Func<Network.BeforeRequestSentEventArgs, Task> callback)
     {
-        var intercept = await AddInterceptAsync([Network.InterceptPhase.BeforeRequestSent], urlPatterns).ConfigureAwait(false);
+        var intercept = await AddInterceptAsync([Network.InterceptPhase.BeforeRequestSent], [urlPattern]).ConfigureAwait(false);
 
         await OnBeforeRequestSentAsync(async e =>
         {
             if (e.Intercepts?.Contains(intercept) is true)
             {
                 await callback(e).ConfigureAwait(false);
+
+                if (e.IsBlocked)
+                {
+                    await e.ContinueAsync().ConfigureAwait(false);
+                }
             }
         }).ConfigureAwait(false);
 
         return intercept;
     }
 
-    public async Task<Network.Intercept> AddInterceptOnResponseStartedAsync(Func<Network.ResponseStartedEventArgs, Task> callback, List<Network.UrlPattern>? urlPatterns = default)
+    public async Task<Network.Intercept> OnResponseStartedAsync(Network.UrlPattern urlPattern, Func<Network.ResponseStartedEventArgs, Task> callback)
     {
-        var intercept = await AddInterceptAsync([Network.InterceptPhase.ResponseStarted], urlPatterns).ConfigureAwait(false);
+        var intercept = await AddInterceptAsync([Network.InterceptPhase.ResponseStarted], [urlPattern]).ConfigureAwait(false);
 
         await OnResponseStartedAsync(async e =>
         {
             if (e.Intercepts?.Contains(intercept) is true)
             {
                 await callback(e).ConfigureAwait(false);
+
+                if (e.IsBlocked)
+                {
+                    await e.ContinueAsync().ConfigureAwait(false);
+                }
             }
         }).ConfigureAwait(false);
 

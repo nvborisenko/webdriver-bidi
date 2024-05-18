@@ -233,9 +233,9 @@ namespace OpenQA.Selenium.BiDi.Tests
         {
             var context = await session.CreateBrowsingContextAsync();
 
-            await using var intercept = await context.AddInterceptOnBeforeRequestSentAsync(async e =>
+            await context.OnBeforeRequestSentAsync("https://**", async req =>
             {
-                await e.ContinueRequestAsync(HttpMethod.Post);
+                await req.ContinueAsync("POST");
             });
 
             await context.NavigateAsync("https://selenium.dev");
@@ -246,9 +246,9 @@ namespace OpenQA.Selenium.BiDi.Tests
         {
             var context = await session.CreateBrowsingContextAsync();
 
-            await using var intercept = await context.AddInterceptOnResponseStartedAsync(async e =>
+            await using var intercept = await context.OnResponseStartedAsync("https://**", async res =>
             {
-                await e.ContinueResponseAsync();
+                await res.ContinueAsync();
             });
 
             await context.NavigateAsync("https://selenium.dev");
@@ -259,9 +259,9 @@ namespace OpenQA.Selenium.BiDi.Tests
         {
             var context = await session.CreateBrowsingContextAsync();
 
-            await context.AddInterceptOnBeforeRequestSentAsync(async e =>
+            await context.OnBeforeRequestSentAsync("https://**", async req =>
             {
-                await e.FailRequestAsync();
+                await req.FailAsync();
             });
 
             await context.NavigateAsync("https://selenium.dev");
@@ -272,9 +272,9 @@ namespace OpenQA.Selenium.BiDi.Tests
         {
             var context = await session.CreateBrowsingContextAsync();
 
-            await context.AddInterceptOnBeforeRequestSentAsync(async e =>
+            await context.OnBeforeRequestSentAsync("https://**", async e =>
             {
-                await e.ProvideResponseAsync();
+                await e.ProvideAsync();
             });
 
             await context.NavigateAsync("https://selenium.dev");
@@ -285,9 +285,9 @@ namespace OpenQA.Selenium.BiDi.Tests
         {
             var context = await session.CreateBrowsingContextAsync();
 
-            var intercept = await context.AddInterceptOnResponseStartedAsync(async e =>
+            var intercept = await context.OnResponseStartedAsync("https://**", async e =>
             {
-                await e.Request.Request.ProvideResponseAsync(200);
+                await e.ProvideAsync(200);
             });
 
             await context.NavigateAsync("https://selenium.dev");
@@ -300,9 +300,9 @@ namespace OpenQA.Selenium.BiDi.Tests
 
             var context = await session.CreateBrowsingContextAsync();
 
-            await session.OnBeforeRequestSentAsync(async args =>
+            await session.OnBeforeRequestSentAsync(async req =>
             {
-                await args.Request.Request.ContinueAsync(HttpMethod.Post);
+                await req.ContinueAsync("POST");
             });
 
             await context.NavigateAsync("https://selenium.dev");

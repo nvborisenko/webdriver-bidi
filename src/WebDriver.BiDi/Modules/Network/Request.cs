@@ -15,7 +15,7 @@ public class Request
 
     public string Id { get; private set; }
 
-    public async Task ContinueAsync(HttpMethod? method = default)
+    internal async Task ContinueAsync(string? method = default)
     {
         var parameters = new ContinueRequestParameters
         {
@@ -26,14 +26,14 @@ public class Request
         await _session.Network.ContinueRequestAsync(parameters).ConfigureAwait(false);
     }
 
-    public async Task FailAsync()
+    internal async Task FailAsync()
     {
         var parameters = new FailRequestParameters { Request = this };
 
         await _session.Network.FailRequestAsync(parameters).ConfigureAwait(false);
     }
 
-    public async Task ProvideResponseAsync(uint? statusCode = default)
+    internal async Task ProvideResponseAsync(uint? statusCode = default)
     {
         var parameters = new ProvideResponseParameters
         {
@@ -44,7 +44,7 @@ public class Request
         await _session.Network.ProvideResponseAsync(parameters).ConfigureAwait(false);
     }
 
-    public async Task ContinueResponseAsync(uint? statusCode = default)
+    internal async Task ContinueResponseAsync(uint? statusCode = default)
     {
         var parameters = new ContinueResponseParameters
         {

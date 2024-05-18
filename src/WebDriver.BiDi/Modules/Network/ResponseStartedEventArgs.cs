@@ -8,9 +8,14 @@ public class ResponseStartedEventArgs : BaseParametersEventArgs
     [JsonInclude]
     public ResponseData Response { get; private set; }
 
-    public Task ContinueResponseAsync(uint? statusCode = default)
+    public Task ContinueAsync(uint? statusCode = default)
     {
         return Request.Request.ContinueResponseAsync(statusCode);
+    }
+
+    public Task ProvideAsync(uint? statusCoode = default)
+    {
+        return Request.Request.ProvideResponseAsync(statusCoode);
     }
 
     public override string ToString()
