@@ -12,22 +12,16 @@ public class BeforeRequestSentEventArgs : BaseParametersEventArgs
 
     public Task ContinueAsync(string? method = default)
     {
-        IsBlocked = false;
-
         return Request.Request.ContinueAsync(method);
     }
 
     public Task FailAsync()
     {
-        IsBlocked = false;
-
         return Request.Request.FailAsync();
     }
 
     public Task ProvideAsync(uint? statusCode = default)
     {
-        IsBlocked = false;
-
         return Request.Request.ProvideResponseAsync(statusCode);
     }
 }

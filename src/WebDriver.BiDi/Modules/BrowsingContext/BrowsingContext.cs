@@ -154,11 +154,6 @@ public class BrowsingContext
             if (e.Intercepts?.Contains(intercept) is true)
             {
                 await callback(e).ConfigureAwait(false);
-
-                if (e.IsBlocked)
-                {
-                    await e.ContinueAsync().ConfigureAwait(false);
-                }
             }
         }).ConfigureAwait(false);
 
@@ -174,11 +169,6 @@ public class BrowsingContext
             if (e.Intercepts?.Contains(intercept) is true)
             {
                 await callback(e).ConfigureAwait(false);
-
-                if (e.IsBlocked)
-                {
-                    await e.ContinueAsync().ConfigureAwait(false);
-                }
             }
         }).ConfigureAwait(false);
 
