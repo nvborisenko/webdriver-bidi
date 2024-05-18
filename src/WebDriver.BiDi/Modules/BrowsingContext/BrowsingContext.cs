@@ -175,6 +175,8 @@ public class BrowsingContext
             {
                 await callback(e).ConfigureAwait(false);
 
+                // TODO: register it as separate handler with low priority
+                // to be executed at after all event handlers
                 if (e.Intercepts?.Count == 1 && e.IsBlocked)
                 {
                     await e.ContinueAsync().ConfigureAwait(false);
