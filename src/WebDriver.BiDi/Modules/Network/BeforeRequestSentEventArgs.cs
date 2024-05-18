@@ -5,6 +5,11 @@ namespace OpenQA.Selenium.BiDi.Modules.Network;
 
 public class BeforeRequestSentEventArgs : BaseParametersEventArgs
 {
+    public override string ToString()
+    {
+        return $"{Request.Method} {Request.Url}";
+    }
+
     public Task ContinueRequestAsync(HttpMethod? method = default)
     {
         return Request.Request.ContinueAsync(method);

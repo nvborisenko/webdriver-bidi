@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 using System;
 using OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 using System.Threading.Tasks;
+using System.Net.Http;
 
 namespace OpenQA.Selenium.BiDi.Modules.Network;
 
@@ -37,6 +38,9 @@ public class RequestData
 
     [JsonInclude]
     public string Url { get; private set; }
+
+    [JsonInclude]
+    public HttpMethod Method { get; private set; }
 
     public int? BodySize { get; set; }
 

@@ -210,7 +210,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         {
             var context = await session.CreateBrowsingContextAsync();
 
-            await context.OnBeforeRequestSentAsync(e => Console.WriteLine(e.Context));
+            await context.OnBeforeRequestSentAsync(Console.WriteLine);
 
             await context.NavigateAsync("https://selenium.dev");
         }
