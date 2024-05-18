@@ -117,6 +117,20 @@ namespace OpenQA.Selenium.BiDi
             return Network.OnBeforeRequestSentAsync(callback, syncContext);
         }
 
+        public Task OnResponseStartedAsync(Func<Modules.Network.ResponseStartedEventArgs, Task> callback)
+        {
+            var syncContext = SynchronizationContext.Current;
+
+            return Network.OnResponseStartedAsync(callback, syncContext);
+        }
+
+        public Task OnResponseStartedAsync(Action<Modules.Network.ResponseStartedEventArgs> callback)
+        {
+            var syncContext = SynchronizationContext.Current;
+
+            return Network.OnResponseStartedAsync(callback, syncContext);
+        }
+
         public static async Task<Session> ConnectAsync(string url)
         {
             var session = new Session(url);

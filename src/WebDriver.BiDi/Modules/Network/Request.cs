@@ -43,4 +43,15 @@ public class Request
 
         await _session.Network.ProvideResponseAsync(parameters).ConfigureAwait(false);
     }
+
+    public async Task ContinueResponseAsync(uint? statusCode = default)
+    {
+        var parameters = new ContinueResponseParameters
+        {
+            Request = this,
+            StatusCode = statusCode
+        };
+
+        await _session.Network.ContinueResponseAsync(parameters).ConfigureAwait(false);
+    }
 }
