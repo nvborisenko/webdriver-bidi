@@ -21,9 +21,11 @@ namespace OpenQA.Selenium.BiDi
         private readonly Lazy<Modules.Input.InputModule> _inputModule;
         private readonly Lazy<Modules.Script.ScriptModule> _scriptModule;
 
-        internal Session(string uri)
+        internal Session(string url)
         {
-            _transport = new Transport(new Uri(uri));
+            var uri = new Uri(url);
+
+            _transport = new Transport(new Uri(url));
             _broker = new Broker(this, _transport);
 
             _sessionModule = new Lazy<Modules.Session.SessionModule>(() => new Modules.Session.SessionModule(this, _broker));

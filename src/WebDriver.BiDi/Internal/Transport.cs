@@ -1,79 +1,66 @@
-using System;
-using System.Diagnostics;
+﻿using System;
+using System.IO;
 using System.Net.WebSockets;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
+using System.Threading;
+using System.Text.Json;
+using System.Diagnostics;
+using System.Text;
 
 namespace OpenQA.Selenium.BiDi.Internal;
 
 internal class Transport : IDisposable
 {
-    private readonly Uri uri;
-    private readonly ClientWebSocket webSocket;
+    private readonly ClientWebSocket _webSocket;
+    private readonly Uri _uri;
 
     public Transport(Uri uri)
     {
-        webSocket = new ClientWebSocket();
-        this.uri = uri;
+        _webSocket = new ClientWebSocket();
+        _uri = uri;
     }
 
     public async Task ConnectAsync(CancellationToken cancellationToken)
     {
-        await webSocket.ConnectAsync(uri, cancellationToken).ConfigureAwait(false);
-
-        IsClosed = false;
+        await _webSocket.ConnectAsync(_uri, cancellationToken).ConfigureAwait(false);
     }
 
-    public async Task SendAsync(string message, CancellationToken cancellationToken)
+    public async Task<T> ReceiveAsJsonAsync<T>(JsonSerializerOptions jsonSerializerOptions, CancellationToken cancellationToken)
     {
-        Debug.WriteLine($"SND >> {message}");
-        var encoded = Encoding.UTF8.GetBytes(message);
-        var buffer = new ArraySegment<byte>(encoded, 0, encoded.Length);
-        await webSocket.SendAsync(buffer, WebSocketMessageType.Text, true, cancellationToken).ConfigureAwait(false);
-    }
+        var buffer = new ArraySegment<byte>(new byte[1024]);
 
-    public event EventHandler<MessageReceivedEventArgs>? MessageReceived;
+        using var ms = new MemoryStream();
 
-    public async Task ReceiveMessageAsync(CancellationToken cancellationToken)
-    {
-        var buffer = new byte[2048];
+        WebSocketReceiveResult result;
 
-        while (!IsClosed)
+        do
         {
-            var endOfMessage = false;
-            var response = new StringBuilder();
+            result = await _webSocket.ReceiveAsync(buffer, cancellationToken).ConfigureAwait(false);
+            ms.Write(buffer.Array, buffer.Offset, result.Count);
+        } while (!result.EndOfMessage);
 
-            while (!endOfMessage)
-            {
-                WebSocketReceiveResult result;
+        ms.Seek(0, SeekOrigin.Begin);
 
-                result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), cancellationToken).ConfigureAwait(false);
+#if DEBUG
+        Debug.WriteLine($"RCV << {Encoding.UTF8.GetString(buffer)}");
+#endif
 
-                endOfMessage = result.EndOfMessage;
-
-                if (result.MessageType == WebSocketMessageType.Text)
-                {
-                    response.Append(Encoding.UTF8.GetString(buffer, 0, result.Count));
-                }
-                else if (result.MessageType == WebSocketMessageType.Close)
-                {
-                    IsClosed = true;
-                }
-            }
-
-            Debug.WriteLine($"RCV << {response}");
-
-            MessageReceived?.Invoke(this, new MessageReceivedEventArgs(response.ToString()));
-        }
+        return JsonSerializer.Deserialize<T>(ms, jsonSerializerOptions)!;
     }
 
-    public bool IsClosed { get; private set; } = true;
+    public async Task SendAsJsonAsync<T>(T obj, JsonSerializerOptions jsonSerializerOptions, CancellationToken cancellationToken)
+    {
+        var buffer = JsonSerializer.SerializeToUtf8Bytes(obj, jsonSerializerOptions);
+
+#if DEBUG
+        Debug.WriteLine($"SND >> {Encoding.UTF8.GetString(buffer)}");
+#endif
+
+        await _webSocket.SendAsync(new ReadOnlyMemory<byte>(buffer), WebSocketMessageType.Text, true, cancellationToken).ConfigureAwait(false);
+    }
 
     public void Dispose()
     {
-        IsClosed = true;
-
-        webSocket.Dispose();
+        _webSocket.Dispose();
     }
 }

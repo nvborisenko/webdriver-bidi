@@ -64,14 +64,40 @@ internal class Broker
     {
         await _transport.ConnectAsync(cancellationToken).ConfigureAwait(false);
 
-        _transport.MessageReceived += (s, args) =>
-        {
-            _channel.Add(args.Message);
-        };
-
-        _receivingMessageTask = _myTaskFactory.StartNew(async () => await _transport.ReceiveMessageAsync(default)).Unwrap();
+        //_receivingMessageTask = _myTaskFactory.StartNew(async () => await _transport.ReceiveMessageAsync(default)).Unwrap();
+        _receivingMessageTask = _myTaskFactory.StartNew(async () => await ReceiveMessagesAsync()).Unwrap();
         _commandQueueTask = _myTaskFactory.StartNew(ProcessMessages);
         _eventEmitterTask = _myTaskFactory.StartNew(async () => await ProcessEventsAwaiterAsync()).Unwrap();
+    }
+
+    private async Task ReceiveMessagesAsync()
+    {
+        while (true)
+        {
+            //var notification = await JsonSerializer.DeserializeAsync<Notification>(_transport, _jsonSerializerOptions);
+            var notification = await _transport.ReceiveAsJsonAsync<Notification>(_jsonSerializerOptions, CancellationToken.None);
+
+            if (notification is NotificationSuccess<object> successNotification)
+            {
+                _pendingCommands[successNotification.Id].SetResult(successNotification.Result);
+
+                _pendingCommands.TryRemove(successNotification.Id, out _);
+            }
+            else if (notification is NotificationEvent eventNotification)
+            {
+                ProcessEvent(eventNotification);
+            }
+            else if (notification is NotificationError errorNotification)
+            {
+                _pendingCommands[errorNotification.Id].SetException(new BiDiException($"{errorNotification.Error}: {errorNotification.Message}"));
+
+                _pendingCommands.TryRemove(errorNotification.Id, out _);
+            }
+            else
+            {
+                throw new Exception("Unknown type");
+            }
+        }
     }
 
     private void ProcessMessages()
@@ -173,7 +199,11 @@ internal class Broker
 
         _pendingCommands[command.Id] = tcs;
 
-        await _transport.SendAsync(json, cancellationToken).ConfigureAwait(false);
+        //await JsonSerializer.SerializeAsync(_transport, command, _jsonSerializerOptions);
+
+        await _transport.SendAsJsonAsync(command, _jsonSerializerOptions, cts.Token);
+
+        //await _transport.SendAsync(json, cancellationToken).ConfigureAwait(false);
 
         return await tcs.Task.ConfigureAwait(false);
     }
