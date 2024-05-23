@@ -42,7 +42,7 @@ internal class Transport : IDisposable
         ms.Seek(0, SeekOrigin.Begin);
 
 #if DEBUG
-        Debug.WriteLine($"RCV << {Encoding.UTF8.GetString(buffer)}");
+        Debug.WriteLine($"RCV << {Encoding.UTF8.GetString(ms.ToArray())}");
 #endif
 
         return JsonSerializer.Deserialize<T>(ms, jsonSerializerOptions)!;
