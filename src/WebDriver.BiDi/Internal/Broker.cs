@@ -64,9 +64,7 @@ internal class Broker
     {
         await _transport.ConnectAsync(cancellationToken).ConfigureAwait(false);
 
-        //_receivingMessageTask = _myTaskFactory.StartNew(async () => await _transport.ReceiveMessageAsync(default)).Unwrap();
         _receivingMessageTask = _myTaskFactory.StartNew(async () => await ReceiveMessagesAsync()).Unwrap();
-        _commandQueueTask = _myTaskFactory.StartNew(ProcessMessages);
         _eventEmitterTask = _myTaskFactory.StartNew(async () => await ProcessEventsAwaiterAsync()).Unwrap();
     }
 
@@ -85,7 +83,7 @@ internal class Broker
             }
             else if (notification is NotificationEvent eventNotification)
             {
-                ProcessEvent(eventNotification);
+                _pendingEvents.Add(eventNotification);
             }
             else if (notification is NotificationError errorNotification)
             {
@@ -98,44 +96,6 @@ internal class Broker
                 throw new Exception("Unknown type");
             }
         }
-    }
-
-    private void ProcessMessages()
-    {
-        foreach (var message in _channel.GetConsumingEnumerable())
-        {
-            Debug.WriteLine($"Processing message: {message}");
-
-            var notification = JsonSerializer.Deserialize<Notification>(message, _jsonSerializerOptions);
-
-            if (notification is NotificationSuccess<object> successNotification)
-            {
-                _pendingCommands[successNotification.Id].SetResult(successNotification.Result);
-
-                _pendingCommands.TryRemove(successNotification.Id, out _);
-            }
-            else if (notification is NotificationEvent eventNotification)
-            {
-                ProcessEvent(eventNotification);
-            }
-            else if (notification is NotificationError errorNotification)
-            {
-                _pendingCommands[errorNotification.Id].SetException(new BiDiException($"{errorNotification.Error}: {errorNotification.Message}"));
-
-                _pendingCommands.TryRemove(errorNotification.Id, out _);
-            }
-            else
-            {
-                throw new Exception("Unknown type");
-            }
-
-            Debug.WriteLine($"Processed message successfully");
-        }
-    }
-
-    private void ProcessEvent(NotificationEvent notificationEvent)
-    {
-        _pendingEvents.Add(notificationEvent);
     }
 
     private async Task ProcessEventsAwaiterAsync()
