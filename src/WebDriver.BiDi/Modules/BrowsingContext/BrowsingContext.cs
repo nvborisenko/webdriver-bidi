@@ -209,43 +209,31 @@ public class BrowsingContext
 
     public Task OnNavigationStartedAsync(Func<NavigationInfoEventArgs, Task> callback)
     {
-        var syncContext = SynchronizationContext.Current;
-
-        return _session.BrowsingContextModule.OnNavigationStartedAsync(callback, syncContext);
+        return _session.BrowsingContextModule.OnNavigationStartedAsync(callback);
     }
 
     public Task OnNavigationStartedAsync(Action<NavigationInfoEventArgs> callback)
     {
-        var syncContext = SynchronizationContext.Current;
-
-        return _session.BrowsingContextModule.OnNavigationStartedAsync(callback, syncContext);
+        return _session.BrowsingContextModule.OnNavigationStartedAsync(callback);
     }
 
     public Task OnBeforeRequestSentAsync(Func<Network.BeforeRequestSentEventArgs, Task> callback)
     {
-        var syncContext = SynchronizationContext.Current;
-
-        return _session.Network.OnBeforeRequestSentAsync(callback, syncContext);
+        return _session.Network.OnBeforeRequestSentAsync(callback);
     }
 
     public Task OnBeforeRequestSentAsync(Action<Network.BeforeRequestSentEventArgs> callback)
     {
-        var syncContext = SynchronizationContext.Current;
-
-        return _session.Network.OnBeforeRequestSentAsync(callback, syncContext);
+        return _session.Network.OnBeforeRequestSentAsync(callback);
     }
 
     public Task OnResponseStartedAsync(Func<Network.ResponseStartedEventArgs, Task> callback)
     {
-        var syncContext = SynchronizationContext.Current;
-
-        return _session.Network.OnResponseStartedAsync(callback, syncContext);
+        return _session.Network.OnResponseStartedAsync(callback);
     }
 
     public Task OnResponseStartedAsync(Action<Network.ResponseStartedEventArgs> callback)
     {
-        var syncContext = SynchronizationContext.Current;
-
-        return _session.Network.OnResponseStartedAsync(callback, syncContext);
+        return _session.Network.OnResponseStartedAsync(callback);
     }
 }

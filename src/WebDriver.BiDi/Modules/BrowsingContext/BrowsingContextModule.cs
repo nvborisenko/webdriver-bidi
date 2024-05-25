@@ -80,17 +80,17 @@ public sealed class BrowsingContextModule
         await _broker.ExecuteCommandAsync(new SetViewportCommand { Params = parameters }).ConfigureAwait(false);
     }
 
-    public async Task OnNavigationStartedAsync(Func<NavigationInfoEventArgs, Task> callback, SynchronizationContext syncContext)
+    public async Task OnNavigationStartedAsync(Func<NavigationInfoEventArgs, Task> callback)
     {
         await _session.SubscribeAsync("browsingContext.navigationStarted").ConfigureAwait(false);
 
-        _broker.RegisterEventHandler("browsingContext.navigationStarted", new BiDiEventHandler<NavigationInfoEventArgs>(syncContext, callback));
+        _broker.RegisterEventHandler("browsingContext.navigationStarted", new BiDiEventHandler<NavigationInfoEventArgs>(callback));
     }
 
-    public async Task OnNavigationStartedAsync(Action<NavigationInfoEventArgs> callback, SynchronizationContext syncContext)
+    public async Task OnNavigationStartedAsync(Action<NavigationInfoEventArgs> callback)
     {
         await _session.SubscribeAsync("browsingContext.navigationStarted").ConfigureAwait(false);
 
-        _broker.RegisterEventHandler("browsingContext.navigationStarted", new BiDiEventHandler<NavigationInfoEventArgs>(syncContext, callback));
+        _broker.RegisterEventHandler("browsingContext.navigationStarted", new BiDiEventHandler<NavigationInfoEventArgs>(callback));
     }
 }

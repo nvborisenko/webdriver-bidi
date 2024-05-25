@@ -89,48 +89,36 @@ namespace OpenQA.Selenium.BiDi
 
         public async Task OnBrowsingContextCreatedAsync(Action<Modules.BrowsingContext.BrowsingContextInfoEventArgs> callback)
         {
-            var syncContext = SynchronizationContext.Current;
-
             await SubscribeAsync("browsingContext.contextCreated").ConfigureAwait(false);
 
-            _broker.RegisterEventHandler("browsingContext.contextCreated", new BiDiEventHandler<Modules.BrowsingContext.BrowsingContextInfoEventArgs>(syncContext, callback));
+            _broker.RegisterEventHandler("browsingContext.contextCreated", new BiDiEventHandler<Modules.BrowsingContext.BrowsingContextInfoEventArgs>(callback));
         }
 
         public async Task OnBrowsingContextCreatedAsync(Func<Modules.BrowsingContext.BrowsingContextInfoEventArgs, Task> callback)
         {
-            var syncContext = SynchronizationContext.Current;
-
             await SubscribeAsync("browsingContext.contextCreated").ConfigureAwait(false);
 
-            _broker.RegisterEventHandler("browsingContext.contextCreated", new BiDiEventHandler<Modules.BrowsingContext.BrowsingContextInfoEventArgs>(syncContext, callback));
+            _broker.RegisterEventHandler("browsingContext.contextCreated", new BiDiEventHandler<Modules.BrowsingContext.BrowsingContextInfoEventArgs>(callback));
         }
 
         public Task OnBeforeRequestSentAsync(Func<Modules.Network.BeforeRequestSentEventArgs, Task> callback)
         {
-            var syncContext = SynchronizationContext.Current;
-
-            return Network.OnBeforeRequestSentAsync(callback, syncContext);
+            return Network.OnBeforeRequestSentAsync(callback);
         }
 
         public Task OnBeforeRequestSentAsync(Action<Modules.Network.BeforeRequestSentEventArgs> callback)
         {
-            var syncContext = SynchronizationContext.Current;
-
-            return Network.OnBeforeRequestSentAsync(callback, syncContext);
+            return Network.OnBeforeRequestSentAsync(callback);
         }
 
         public Task OnResponseStartedAsync(Func<Modules.Network.ResponseStartedEventArgs, Task> callback)
         {
-            var syncContext = SynchronizationContext.Current;
-
-            return Network.OnResponseStartedAsync(callback, syncContext);
+            return Network.OnResponseStartedAsync(callback);
         }
 
         public Task OnResponseStartedAsync(Action<Modules.Network.ResponseStartedEventArgs> callback)
         {
-            var syncContext = SynchronizationContext.Current;
-
-            return Network.OnResponseStartedAsync(callback, syncContext);
+            return Network.OnResponseStartedAsync(callback);
         }
 
         public static async Task<Session> ConnectAsync(string url)

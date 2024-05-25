@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading;
 using System.Threading.Tasks;
 using OpenQA.Selenium.BiDi.Internal;
 
@@ -46,31 +45,31 @@ public sealed class NetworkModule
         await _broker.ExecuteCommandAsync(new ProvideResponseCommand { Params = parameters }).ConfigureAwait(false);
     }
 
-    public async Task OnBeforeRequestSentAsync(Func<BeforeRequestSentEventArgs, Task> callback, SynchronizationContext syncContext)
+    public async Task OnBeforeRequestSentAsync(Func<BeforeRequestSentEventArgs, Task> callback)
     {
         await _session.SubscribeAsync("network.beforeRequestSent").ConfigureAwait(false);
 
-        _broker.RegisterEventHandler("network.beforeRequestSent", new BiDiEventHandler<BeforeRequestSentEventArgs>(syncContext, callback));
+        _broker.RegisterEventHandler("network.beforeRequestSent", new BiDiEventHandler<BeforeRequestSentEventArgs>(callback));
     }
 
-    public async Task OnBeforeRequestSentAsync(Action<BeforeRequestSentEventArgs> callback, SynchronizationContext syncContext)
+    public async Task OnBeforeRequestSentAsync(Action<BeforeRequestSentEventArgs> callback)
     {
         await _session.SubscribeAsync("network.beforeRequestSent").ConfigureAwait(false);
 
-        _broker.RegisterEventHandler("network.beforeRequestSent", new BiDiEventHandler<BeforeRequestSentEventArgs>(syncContext, callback));
+        _broker.RegisterEventHandler("network.beforeRequestSent", new BiDiEventHandler<BeforeRequestSentEventArgs>(callback));
     }
 
-    public async Task OnResponseStartedAsync(Func<ResponseStartedEventArgs, Task> callback, SynchronizationContext syncContext)
+    public async Task OnResponseStartedAsync(Func<ResponseStartedEventArgs, Task> callback)
     {
         await _session.SubscribeAsync("network.responseStarted").ConfigureAwait(false);
 
-        _broker.RegisterEventHandler("network.responseStarted", new BiDiEventHandler<ResponseStartedEventArgs>(syncContext, callback));
+        _broker.RegisterEventHandler("network.responseStarted", new BiDiEventHandler<ResponseStartedEventArgs>(callback));
     }
 
-    public async Task OnResponseStartedAsync(Action<ResponseStartedEventArgs> callback, SynchronizationContext syncContext)
+    public async Task OnResponseStartedAsync(Action<ResponseStartedEventArgs> callback)
     {
         await _session.SubscribeAsync("network.responseStarted").ConfigureAwait(false);
 
-        _broker.RegisterEventHandler("network.responseStarted", new BiDiEventHandler<ResponseStartedEventArgs>(syncContext, callback));
+        _broker.RegisterEventHandler("network.responseStarted", new BiDiEventHandler<ResponseStartedEventArgs>(callback));
     }
 }

@@ -23,15 +23,11 @@ public sealed class SessionModule
 
     public Task OnBeforeRequestSent(Func<Network.BeforeRequestSentEventArgs, Task> callback)
     {
-        var syncContext = SynchronizationContext.Current;
-
-        return _session.Network.OnBeforeRequestSentAsync(callback, syncContext);
+        return _session.Network.OnBeforeRequestSentAsync(callback);
     }
 
     public Task OnBeforeRequestSent(Action<Network.BeforeRequestSentEventArgs> callback)
     {
-        var syncContext = SynchronizationContext.Current;
-
-        return _session.Network.OnBeforeRequestSentAsync(callback, syncContext);
+        return _session.Network.OnBeforeRequestSentAsync(callback);
     }
 }

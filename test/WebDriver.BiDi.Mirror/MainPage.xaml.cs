@@ -42,12 +42,7 @@ namespace WebDriver.BiDi.Mirror
                 await session.OnBeforeRequestSentAsync(async arg =>
                 {
                     await Task.Delay(10);
-                    //MainThread.BeginInvokeOnMainThread(() => { CounterBtn.Text = arg.Request.Url; });
-                    //Thread.Sleep(100);
-                    //CounterBtn.Text = arg.Request.Url;
-                    //await Task.Delay(1000);
-
-                    CounterBtn.Text = (await session.StatusAsync()).Message + $" {arg.Request.Url}";
+                    MainThread.BeginInvokeOnMainThread(() => { CounterBtn.Text = arg.Request.Url; });
                 });
 
                 await context.NavigateAsync("https://google.com");
