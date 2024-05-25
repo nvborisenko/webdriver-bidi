@@ -56,7 +56,7 @@ internal class Transport : IDisposable
         Debug.WriteLine($"SND >> {Encoding.UTF8.GetString(buffer)}");
 #endif
 
-        await _webSocket.SendAsync(new ReadOnlyMemory<byte>(buffer), WebSocketMessageType.Text, true, cancellationToken).ConfigureAwait(false);
+        await _webSocket.SendAsync(new ArraySegment<byte>(buffer), WebSocketMessageType.Text, true, cancellationToken).ConfigureAwait(false);
     }
 
     public void Dispose()
