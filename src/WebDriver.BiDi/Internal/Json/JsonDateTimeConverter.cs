@@ -11,7 +11,7 @@ internal class JsonDateTimeConverter : JsonConverter<DateTime>
     {
         var unixTime = reader.GetUInt64();
 
-        return s_epoch.AddMilliseconds(unixTime).ToLocalTime();
+        return s_epoch.AddMilliseconds(unixTime);
     }
 
     public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)

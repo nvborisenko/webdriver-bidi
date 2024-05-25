@@ -28,7 +28,7 @@ internal class Broker
     private readonly TaskFactory _myTaskFactory = new TaskFactory(CancellationToken.None,
         TaskCreationOptions.None, TaskContinuationOptions.None, TaskScheduler.Default);
 
-    private Task? _commandQueueTask;
+    private readonly Task? _commandQueueTask;
     private Task? _receivingMessageTask;
     private Task? _eventEmitterTask;
 

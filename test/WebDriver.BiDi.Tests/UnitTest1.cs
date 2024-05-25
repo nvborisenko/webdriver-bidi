@@ -156,7 +156,7 @@ namespace OpenQA.Selenium.BiDi.Tests
             await context.NavigateAsync("https://selenium.dev");
 
             info.Context.Should().NotBeNull();
-            info.Timestamp.Should().BeCloseTo(DateTime.Now, TimeSpan.FromSeconds(30));
+            info.Timestamp.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(30));
             // info.Navigation.Should().NotBeNull();
             // info.Url.Should().Contain("selenium.dev");
         }
