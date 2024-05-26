@@ -4,22 +4,22 @@ using System.Text.Json.Serialization;
 namespace OpenQA.Selenium.BiDi.Internal;
 
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
-[JsonDerivedType(typeof(NotificationSuccess<object>), "success")]
-[JsonDerivedType(typeof(NotificationError), "error")]
-[JsonDerivedType(typeof(NotificationEvent), "event")]
-internal abstract class Notification
+[JsonDerivedType(typeof(MessageSuccess<object>), "success")]
+[JsonDerivedType(typeof(MessageError), "error")]
+[JsonDerivedType(typeof(MessageEvent), "event")]
+internal abstract class Message
 {
 
 }
 
-internal class NotificationSuccess<T> : Notification
+internal class MessageSuccess<T> : Message
 {
     public int Id { get; set; }
 
     public T Result { get; set; }
 }
 
-internal class NotificationError : Notification
+internal class MessageError : Message
 {
     public int Id { get; set; }
 
@@ -28,7 +28,7 @@ internal class NotificationError : Notification
     public string? Message { get; set; }
 }
 
-internal class NotificationEvent : Notification
+internal class MessageEvent : Message
 {
     public string Method { get; set; }
 

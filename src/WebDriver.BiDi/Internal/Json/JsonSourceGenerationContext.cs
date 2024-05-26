@@ -2,7 +2,7 @@
 
 namespace OpenQA.Selenium.BiDi.Internal.Json
 {
-    [JsonSerializable(typeof(Notification))]
+    [JsonSerializable(typeof(Message))]
 
     [JsonSerializable(typeof(Modules.Session.StatusCommand))]
     [JsonSerializable(typeof(Modules.Session.StatusResult))]

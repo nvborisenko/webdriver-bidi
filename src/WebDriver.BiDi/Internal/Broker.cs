@@ -19,7 +19,7 @@ internal class Broker
     private readonly Transport _transport;
 
     private readonly ConcurrentDictionary<int?, TaskCompletionSource<object>> _pendingCommands = new();
-    private readonly BlockingCollection<NotificationEvent> _pendingEvents = [];
+    private readonly BlockingCollection<MessageEvent> _pendingEvents = [];
 
     private CancellationTokenSource _receiveMessagesCancellationTokenSource;
 
@@ -27,7 +27,7 @@ internal class Broker
 
     private int _currentCommandId;
 
-    private readonly TaskFactory _myTaskFactory = new TaskFactory(CancellationToken.None,
+    private static readonly TaskFactory _myTaskFactory = new TaskFactory(CancellationToken.None,
         TaskCreationOptions.None, TaskContinuationOptions.None, TaskScheduler.Default);
 
     private readonly Task? _commandQueueTask;
@@ -76,23 +76,23 @@ internal class Broker
         {
             try
             {
-                var notification = await _transport.ReceiveAsJsonAsync<Notification>(_jsonSourceGenerationContext, CancellationToken.None);
+                var message = await _transport.ReceiveAsJsonAsync<Message>(_jsonSourceGenerationContext, CancellationToken.None);
 
-                if (notification is NotificationSuccess<object> successNotification)
+                if (message is MessageSuccess<object> messageSuccess)
                 {
-                    _pendingCommands[successNotification.Id].SetResult(successNotification.Result);
+                    _pendingCommands[messageSuccess.Id].SetResult(messageSuccess.Result);
 
-                    _pendingCommands.TryRemove(successNotification.Id, out _);
+                    _pendingCommands.TryRemove(messageSuccess.Id, out _);
                 }
-                else if (notification is NotificationEvent eventNotification)
+                else if (message is MessageEvent messageEvent)
                 {
-                    _pendingEvents.Add(eventNotification);
+                    _pendingEvents.Add(messageEvent);
                 }
-                else if (notification is NotificationError errorNotification)
+                else if (message is MessageError mesageError)
                 {
-                    _pendingCommands[errorNotification.Id].SetException(new BiDiException($"{errorNotification.Error}: {errorNotification.Message}"));
+                    _pendingCommands[mesageError.Id].SetException(new BiDiException($"{mesageError.Error}: {mesageError.Message}"));
 
-                    _pendingCommands.TryRemove(errorNotification.Id, out _);
+                    _pendingCommands.TryRemove(mesageError.Id, out _);
                 }
                 else
                 {
