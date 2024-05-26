@@ -70,7 +70,7 @@ public class ElementClipRectangle : ClipRectangle
 public class CaptureScreenshotResult
 {
     [JsonInclude]
-    public string Data { get; private set; }
+    public string Data { get; internal set; }
 
     public byte[] AsBytes()
     {

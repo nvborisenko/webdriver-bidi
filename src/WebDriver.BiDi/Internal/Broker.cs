@@ -19,7 +19,9 @@ internal class Broker
     private readonly Transport _transport;
 
     private readonly ConcurrentDictionary<int?, TaskCompletionSource<object>> _pendingCommands = new();
-    private readonly BlockingCollection<NotificationEvent> _pendingEvents = new();
+    private readonly BlockingCollection<NotificationEvent> _pendingEvents = [];
+
+    private CancellationTokenSource _receiveMessagesCancellationTokenSource;
 
     private readonly ConcurrentDictionary<string, List<BiDiEventHandler>> _eventHandlers = new();
 
@@ -32,17 +34,14 @@ internal class Broker
     private Task? _receivingMessageTask;
     private Task? _eventEmitterTask;
 
-    private readonly JsonSerializerOptions _jsonSerializerOptions;
-
-    private readonly BlockingCollection<string> _channel;
+    private readonly SourceGenerationContext _jsonSourceGenerationContext;
 
     public Broker(Session session, Transport transport)
     {
         _session = session;
         _transport = transport;
-        _channel = new BlockingCollection<string>();
 
-        _jsonSerializerOptions = new JsonSerializerOptions
+        var jsonSerializerOptions = new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true,
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
@@ -58,42 +57,51 @@ internal class Broker
             },
             AllowOutOfOrderMetadataProperties = true,
         };
+
+        _jsonSourceGenerationContext = new SourceGenerationContext(jsonSerializerOptions);
     }
 
     public async Task ConnectAsync(CancellationToken cancellationToken)
     {
         await _transport.ConnectAsync(cancellationToken).ConfigureAwait(false);
 
-        _receivingMessageTask = _myTaskFactory.StartNew(async () => await ReceiveMessagesAsync()).Unwrap();
+        _receiveMessagesCancellationTokenSource = new CancellationTokenSource();
+        _receivingMessageTask = _myTaskFactory.StartNew(async () => await ReceiveMessagesAsync(_receiveMessagesCancellationTokenSource.Token)).Unwrap();
         _eventEmitterTask = _myTaskFactory.StartNew(async () => await ProcessEventsAwaiterAsync()).Unwrap();
     }
 
-    private async Task ReceiveMessagesAsync()
+    private async Task ReceiveMessagesAsync(CancellationToken cancellationToken)
     {
-        while (true)
+        while (!cancellationToken.IsCancellationRequested)
         {
-            //var notification = await JsonSerializer.DeserializeAsync<Notification>(_transport, _jsonSerializerOptions);
-            var notification = await _transport.ReceiveAsJsonAsync<Notification>(_jsonSerializerOptions, CancellationToken.None);
+            try
+            {
+                var notification = await _transport.ReceiveAsJsonAsync<Notification>(_jsonSourceGenerationContext, CancellationToken.None);
 
-            if (notification is NotificationSuccess<object> successNotification)
-            {
-                _pendingCommands[successNotification.Id].SetResult(successNotification.Result);
+                if (notification is NotificationSuccess<object> successNotification)
+                {
+                    _pendingCommands[successNotification.Id].SetResult(successNotification.Result);
 
-                _pendingCommands.TryRemove(successNotification.Id, out _);
-            }
-            else if (notification is NotificationEvent eventNotification)
-            {
-                _pendingEvents.Add(eventNotification);
-            }
-            else if (notification is NotificationError errorNotification)
-            {
-                _pendingCommands[errorNotification.Id].SetException(new BiDiException($"{errorNotification.Error}: {errorNotification.Message}"));
+                    _pendingCommands.TryRemove(successNotification.Id, out _);
+                }
+                else if (notification is NotificationEvent eventNotification)
+                {
+                    _pendingEvents.Add(eventNotification);
+                }
+                else if (notification is NotificationError errorNotification)
+                {
+                    _pendingCommands[errorNotification.Id].SetException(new BiDiException($"{errorNotification.Error}: {errorNotification.Message}"));
 
-                _pendingCommands.TryRemove(errorNotification.Id, out _);
+                    _pendingCommands.TryRemove(errorNotification.Id, out _);
+                }
+                else
+                {
+                    throw new Exception("Unknown type");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                throw new Exception("Unknown type");
+                Debug.WriteLine(ex);
             }
         }
     }
@@ -110,7 +118,7 @@ internal class Broker
                     {
                         foreach (var handler in eventHandlers)
                         {
-                            var args = (EventArgs)((JsonElement)result.Params!).Deserialize(handler.EventArgsType, _jsonSerializerOptions)!;
+                            var args = (EventArgs)((JsonElement)result.Params!).Deserialize(handler.EventArgsType, _jsonSourceGenerationContext)!;
 
                             args.Session = _session;
 
@@ -132,7 +140,7 @@ internal class Broker
     {
         var result = await ExecuteCommandCoreAsync(command, cancellationToken).ConfigureAwait(false);
 
-        return ((JsonElement)result).Deserialize<TResult>(_jsonSerializerOptions)!;
+        return (TResult)((JsonElement)result).Deserialize(typeof(TResult), _jsonSourceGenerationContext)!;
     }
 
     public async Task ExecuteCommandAsync<TCommand>(TCommand command, CancellationToken cancellationToken = default)
@@ -146,7 +154,7 @@ internal class Broker
     {
         command.Id = Interlocked.Increment(ref _currentCommandId);
 
-        var json = JsonSerializer.Serialize(command, _jsonSerializerOptions);
+        var json = JsonSerializer.Serialize(command, typeof(TCommand), _jsonSourceGenerationContext);
 
         var tcs = new TaskCompletionSource<object>(TaskCreationOptions.RunContinuationsAsynchronously);
 
@@ -159,11 +167,7 @@ internal class Broker
 
         _pendingCommands[command.Id] = tcs;
 
-        //await JsonSerializer.SerializeAsync(_transport, command, _jsonSerializerOptions);
-
-        await _transport.SendAsJsonAsync(command, _jsonSerializerOptions, cts.Token);
-
-        //await _transport.SendAsync(json, cancellationToken).ConfigureAwait(false);
+        await _transport.SendAsJsonAsync(command, _jsonSourceGenerationContext, cts.Token).ConfigureAwait(false);
 
         return await tcs.Task.ConfigureAwait(false);
     }
@@ -179,7 +183,8 @@ internal class Broker
     public async ValueTask DisposeAsync()
     {
         _pendingEvents.CompleteAdding();
-        _channel.CompleteAdding();
+
+        _receiveMessagesCancellationTokenSource.Cancel();
 
         if (_eventEmitterTask is not null)
         {

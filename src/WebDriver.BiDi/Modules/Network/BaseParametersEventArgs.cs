@@ -2,44 +2,43 @@
 using System.Text.Json.Serialization;
 using System;
 using OpenQA.Selenium.BiDi.Modules.BrowsingContext;
-using System.Net.Http;
 
 namespace OpenQA.Selenium.BiDi.Modules.Network;
 
 public class BaseParametersEventArgs : EventArgs
 {
     [JsonInclude]
-    public BrowsingContext.BrowsingContext Context { get; private set; }
+    public BrowsingContext.BrowsingContext Context { get; internal set; }
 
     [JsonInclude]
     public bool IsBlocked { get; internal set; }
 
     [JsonInclude]
-    public Navigation Navigation { get; private set; }
+    public Navigation Navigation { get; internal set; }
 
     [JsonInclude]
-    public uint RedirectCount { get; private set; }
+    public uint RedirectCount { get; internal set; }
 
     [JsonInclude]
-    public RequestData Request { get; private set; }
+    public RequestData Request { get; internal set; }
 
     [JsonInclude]
-    public DateTime Timestamp { get; private set; }
+    public DateTime Timestamp { get; internal set; }
 
     [JsonInclude]
-    public List<Intercept>? Intercepts { get; private set; }
+    public List<Intercept>? Intercepts { get; internal set; }
 }
 
 public class RequestData
 {
     [JsonInclude]
-    public Request Request { get; private set; }
+    public Request Request { get; internal set; }
 
     [JsonInclude]
-    public string Url { get; private set; }
+    public string Url { get; internal set; }
 
     [JsonInclude]
-    public string Method { get; private set; }
+    public string Method { get; internal set; }
 
     public int? BodySize { get; set; }
 

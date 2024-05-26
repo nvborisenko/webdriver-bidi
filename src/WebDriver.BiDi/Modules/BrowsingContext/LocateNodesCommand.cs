@@ -20,5 +20,5 @@ public class LocateNodesParameters : CommandParameters
 public class LocateNodesResult
 {
     [JsonInclude]
-    public IReadOnlyList<NodeRemoteValue> Nodes { get; private set; }
+    public IReadOnlyList<NodeRemoteValue> Nodes { get; internal set; }
 }

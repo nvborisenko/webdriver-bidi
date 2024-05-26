@@ -5,7 +5,6 @@ using OpenQA.Selenium.BiDi.Modules.Script;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
 using System;
-using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 

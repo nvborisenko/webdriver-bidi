@@ -41,5 +41,5 @@ public class UndefinedValue : PrimitiveProtocolValue
 public class NodeRemoteValue : RemoteValue
 {
     [JsonInclude]
-    public string SharedId { get; private set; }
+    public string SharedId { get; internal set; }
 }

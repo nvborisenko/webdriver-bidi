@@ -6,7 +6,7 @@ namespace OpenQA.Selenium.BiDi.Modules.Network;
 public class ResponseStartedEventArgs : BaseParametersEventArgs
 {
     [JsonInclude]
-    public ResponseData Response { get; private set; }
+    public ResponseData Response { get; internal set; }
 
     public Task ContinueAsync(uint? statusCode = default)
     {

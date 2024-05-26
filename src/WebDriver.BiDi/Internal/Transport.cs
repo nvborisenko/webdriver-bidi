@@ -6,6 +6,7 @@ using System.Threading;
 using System.Text.Json;
 using System.Diagnostics;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Internal;
 
@@ -25,7 +26,7 @@ internal class Transport : IDisposable
         await _webSocket.ConnectAsync(_uri, cancellationToken).ConfigureAwait(false);
     }
 
-    public async Task<T> ReceiveAsJsonAsync<T>(JsonSerializerOptions jsonSerializerOptions, CancellationToken cancellationToken)
+    public async Task<T> ReceiveAsJsonAsync<T>(JsonSerializerContext jsonSerializerContext, CancellationToken cancellationToken)
     {
         var buffer = new ArraySegment<byte>(new byte[1024]);
 
@@ -45,12 +46,12 @@ internal class Transport : IDisposable
         Debug.WriteLine($"RCV << {Encoding.UTF8.GetString(ms.ToArray())}");
 #endif
 
-        return JsonSerializer.Deserialize<T>(ms, jsonSerializerOptions)!;
+        return (T)JsonSerializer.Deserialize(ms, typeof(T), jsonSerializerContext)!;
     }
 
-    public async Task SendAsJsonAsync<T>(T obj, JsonSerializerOptions jsonSerializerOptions, CancellationToken cancellationToken)
+    public async Task SendAsJsonAsync<T>(T obj, JsonSerializerContext jsonSerializerContext, CancellationToken cancellationToken)
     {
-        var buffer = JsonSerializer.SerializeToUtf8Bytes(obj, jsonSerializerOptions);
+        var buffer = JsonSerializer.SerializeToUtf8Bytes(obj, typeof(T), jsonSerializerContext);
 
 #if DEBUG
         Debug.WriteLine($"SND >> {Encoding.UTF8.GetString(buffer)}");

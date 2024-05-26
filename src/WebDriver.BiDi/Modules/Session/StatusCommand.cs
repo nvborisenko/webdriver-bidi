@@ -11,8 +11,8 @@ internal class StatusCommand : Command<CommandParameters>
 public class StatusResult
 {
     [JsonInclude]
-    public bool Ready { get; private set; }
+    public bool Ready { get; internal set; }
 
     [JsonInclude]
-    public string Message { get; private set; }
+    public string Message { get; internal set; }
 }
