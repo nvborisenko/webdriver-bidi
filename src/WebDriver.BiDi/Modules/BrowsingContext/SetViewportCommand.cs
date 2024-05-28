@@ -19,9 +19,9 @@ public class SetViewportParameters : CommandParameters
     public double? DevicePixelRatio { get; set; }
 }
 
-public class Viewport
+public class Viewport(uint width, uint height)
 {
-    public uint Width { get; set; }
+    public uint Width { get; } = width;
 
-    public uint Height { get; set; }
+    public uint Height { get; } = height;
 }

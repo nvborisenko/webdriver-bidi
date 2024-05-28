@@ -77,7 +77,7 @@ namespace OpenQA.Selenium.BiDi.Tests
 
             await context.NavigateAsync("https://google.com");
 
-            await context.SetViewportAsync(new Viewport { Width = 500, Height = 300 });
+            await context.SetViewportAsync(new Viewport(500, 300));
         }
 
         [Test]
@@ -218,7 +218,7 @@ namespace OpenQA.Selenium.BiDi.Tests
             await context.OnLogEntryAddedAsync(e => consoleLog = e as ConsoleLogEntry);
 
             await context.EvaluateAsync("console.log('abc')");
-            
+
             // think about it
             await Task.Delay(100);
 
