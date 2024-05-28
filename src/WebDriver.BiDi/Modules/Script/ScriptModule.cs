@@ -1,5 +1,4 @@
 ﻿using OpenQA.Selenium.BiDi.Internal;
-using System;
 using System.Threading.Tasks;
 
 namespace OpenQA.Selenium.BiDi.Modules.Script;

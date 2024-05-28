@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Threading;
 using System;
 
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
@@ -235,5 +234,15 @@ public class BrowsingContext
     public Task OnResponseStartedAsync(Action<Network.ResponseStartedEventArgs> callback)
     {
         return _session.Network.OnResponseStartedAsync(callback);
+    }
+
+    public Task OnLogEntryAddedAsync(Func<Log.LogEntryEventArgs, Task> callback)
+    {
+        return _session.Log.OnEntryAddedAsync(callback);
+    }
+
+    public Task OnLogEntryAddedAsync(Action<Log.LogEntryEventArgs> callback)
+    {
+        return _session.Log.OnEntryAddedAsync(callback);
     }
 }

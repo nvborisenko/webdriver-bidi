@@ -20,6 +20,7 @@ namespace OpenQA.Selenium.BiDi
         private readonly Lazy<Modules.Network.NetworkModule> _networkModule;
         private readonly Lazy<Modules.Input.InputModule> _inputModule;
         private readonly Lazy<Modules.Script.ScriptModule> _scriptModule;
+        private readonly Lazy<Modules.Log.LogModule> _logModule;
 
         internal Session(string url)
         {
@@ -34,6 +35,7 @@ namespace OpenQA.Selenium.BiDi
             _networkModule = new Lazy<Modules.Network.NetworkModule>(() => new Modules.Network.NetworkModule(this, _broker));
             _inputModule = new Lazy<Modules.Input.InputModule>(() => new Modules.Input.InputModule(_broker));
             _scriptModule = new Lazy<Modules.Script.ScriptModule>(() => new Modules.Script.ScriptModule(_broker));
+            _logModule = new Lazy<Modules.Log.LogModule>(() => new Modules.Log.LogModule(this, _broker));
         }
 
         public Modules.Session.SessionModule SessionModule => _sessionModule.Value;
@@ -47,6 +49,8 @@ namespace OpenQA.Selenium.BiDi
         public Modules.Input.InputModule Input => _inputModule.Value;
 
         public Modules.Script.ScriptModule Script => _scriptModule.Value;
+
+        public Modules.Log.LogModule Log => _logModule.Value;
 
         public Task<Modules.Session.StatusResult> StatusAsync()
         {
@@ -144,9 +148,9 @@ namespace OpenQA.Selenium.BiDi
             _transport?.Dispose();
         }
 
-        internal async Task SubscribeAsync(params string[] events)
+        internal Task SubscribeAsync(params string[] events)
         {
-            await _broker.ExecuteCommandAsync(new Modules.Session.SubscribeCommand() { Params = new Modules.Session.SubscriptionCommandParameters { Events = events } }).ConfigureAwait(false);
+            return SessionModule.SubscribeAsync(new Modules.Session.SubscriptionCommandParameters { Events = events });
         }
 
         public async ValueTask DisposeAsync()

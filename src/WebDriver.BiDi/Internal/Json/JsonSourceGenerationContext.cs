@@ -42,6 +42,8 @@ namespace OpenQA.Selenium.BiDi.Internal.Json
 
     [JsonSerializable(typeof(Modules.Input.PerformActionsCommand))]
     [JsonSerializable(typeof(Modules.Input.ReleaseActionsCommand))]
+
+    [JsonSerializable(typeof(Modules.Log.LogEntryEventArgs))]
     internal partial class SourceGenerationContext : JsonSerializerContext
     {
 

@@ -1,6 +1,4 @@
 ﻿using OpenQA.Selenium.BiDi.Internal;
-using System.Threading;
-using System;
 using System.Threading.Tasks;
 
 namespace OpenQA.Selenium.BiDi.Modules.Session;
@@ -21,13 +19,8 @@ public sealed class SessionModule
         return await _broker.ExecuteCommandAsync<StatusCommand, StatusResult>(new StatusCommand()).ConfigureAwait(false);
     }
 
-    public Task OnBeforeRequestSent(Func<Network.BeforeRequestSentEventArgs, Task> callback)
+    internal async Task SubscribeAsync(SubscriptionCommandParameters parameters)
     {
-        return _session.Network.OnBeforeRequestSentAsync(callback);
-    }
-
-    public Task OnBeforeRequestSent(Action<Network.BeforeRequestSentEventArgs> callback)
-    {
-        return _session.Network.OnBeforeRequestSentAsync(callback);
+        await _broker.ExecuteCommandAsync(new SubscribeCommand() { Params = parameters }).ConfigureAwait(false);
     }
 }

@@ -6,7 +6,7 @@ namespace OpenQA.Selenium.BiDi.Internal;
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
 [JsonDerivedType(typeof(MessageSuccess<object>), "success")]
 [JsonDerivedType(typeof(MessageError), "error")]
-[JsonDerivedType(typeof(MessageEvent), "event")]
+[JsonDerivedType(typeof(MessageEvent<object>), "event")]
 internal abstract class Message
 {
 
@@ -28,9 +28,9 @@ internal class MessageError : Message
     public string? Message { get; set; }
 }
 
-internal class MessageEvent : Message
+internal class MessageEvent<T> : Message
 {
     public string Method { get; set; }
 
-    public object Params { get; set; }
+    public T Params { get; set; }
 }

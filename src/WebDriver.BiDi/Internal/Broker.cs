@@ -19,7 +19,7 @@ internal class Broker
     private readonly Transport _transport;
 
     private readonly ConcurrentDictionary<int?, TaskCompletionSource<object>> _pendingCommands = new();
-    private readonly BlockingCollection<MessageEvent> _pendingEvents = [];
+    private readonly BlockingCollection<MessageEvent<object>> _pendingEvents = [];
 
     private CancellationTokenSource _receiveMessagesCancellationTokenSource;
 
@@ -55,7 +55,7 @@ internal class Broker
                 new JsonDateTimeConverter(),
                 new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)
             },
-            AllowOutOfOrderMetadataProperties = true,
+            AllowOutOfOrderMetadataProperties = true
         };
 
         _jsonSourceGenerationContext = new SourceGenerationContext(jsonSerializerOptions);
@@ -84,7 +84,7 @@ internal class Broker
 
                     _pendingCommands.TryRemove(messageSuccess.Id, out _);
                 }
-                else if (message is MessageEvent messageEvent)
+                else if (message is MessageEvent<object> messageEvent)
                 {
                     _pendingEvents.Add(messageEvent);
                 }

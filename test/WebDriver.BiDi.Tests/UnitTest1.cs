@@ -1,6 +1,7 @@
 using FluentAssertions;
 using OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 using OpenQA.Selenium.BiDi.Modules.Input;
+using OpenQA.Selenium.BiDi.Modules.Log;
 using OpenQA.Selenium.BiDi.Modules.Script;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
@@ -205,6 +206,24 @@ namespace OpenQA.Selenium.BiDi.Tests
             });
 
             await context.NavigateAsync("https://selenium.dev");
+        }
+
+        [Test]
+        public async Task OnLogEntryAdded()
+        {
+            var context = await session.CreateBrowsingContextAsync();
+
+            ConsoleLogEntry consoleLog = null;
+
+            await context.OnLogEntryAddedAsync(e => consoleLog = e as ConsoleLogEntry);
+
+            await context.EvaluateAsync("console.log('abc')");
+            
+            // think about it
+            await Task.Delay(100);
+
+            consoleLog.Should().NotBeNull();
+            consoleLog.Text.Should().Be("abc");
         }
 
         [Test]
