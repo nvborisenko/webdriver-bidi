@@ -17,32 +17,32 @@ public sealed class NetworkModule
 
     public async Task<AddInterceptResult> AddInterceptAsync(AddInterceptParameters parameters)
     {
-        return await _broker.ExecuteCommandAsync<AddInterceptCommand, AddInterceptResult>(new AddInterceptCommand { Params = parameters }).ConfigureAwait(false);
+        return await _broker.ExecuteCommandAsync<AddInterceptResult>(new AddInterceptCommand(parameters)).ConfigureAwait(false);
     }
 
     public async Task RemoveInterceptAsync(RemoveInterceptParameters parameters)
     {
-        await _broker.ExecuteCommandAsync(new RemoveInterceptCommand { Params = parameters }).ConfigureAwait(!false);
+        await _broker.ExecuteCommandAsync(new RemoveInterceptCommand(parameters)).ConfigureAwait(!false);
     }
 
     public async Task ContinueRequestAsync(ContinueRequestParameters parameters)
     {
-        await _broker.ExecuteCommandAsync(new ContinueRequestCommand { Params = parameters }).ConfigureAwait(false);
+        await _broker.ExecuteCommandAsync(new ContinueRequestCommand(parameters)).ConfigureAwait(false);
     }
 
     public async Task ContinueResponseAsync(ContinueResponseParameters parameters)
     {
-        await _broker.ExecuteCommandAsync(new ContinueResponseCommand { Params = parameters }).ConfigureAwait(false);
+        await _broker.ExecuteCommandAsync(new ContinueResponseCommand(parameters)).ConfigureAwait(false);
     }
 
     public async Task FailRequestAsync(FailRequestParameters parameters)
     {
-        await _broker.ExecuteCommandAsync(new FailRequestCommand { Params = parameters }).ConfigureAwait(false);
+        await _broker.ExecuteCommandAsync(new FailRequestCommand(parameters)).ConfigureAwait(false);
     }
 
     public async Task ProvideResponseAsync(ProvideResponseParameters parameters)
     {
-        await _broker.ExecuteCommandAsync(new ProvideResponseCommand { Params = parameters }).ConfigureAwait(false);
+        await _broker.ExecuteCommandAsync(new ProvideResponseCommand(parameters)).ConfigureAwait(false);
     }
 
     public async Task OnBeforeRequestSentAsync(Func<BeforeRequestSentEventArgs, Task> callback)

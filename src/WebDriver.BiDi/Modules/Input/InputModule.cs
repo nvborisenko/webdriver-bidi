@@ -14,11 +14,11 @@ public sealed class InputModule
 
     public async Task PerformActionsAsync(PerformActionsParameters parameters)
     {
-        await _broker.ExecuteCommandAsync(new PerformActionsCommand() { Params = parameters }).ConfigureAwait(false);
+        await _broker.ExecuteCommandAsync(new PerformActionsCommand(parameters)).ConfigureAwait(false);
     }
 
     public async Task ReleaseActionsAsync(ReleaseActionsParameters parameters)
     {
-        await _broker.ExecuteCommandAsync(new ReleaseActionsCommand { Params = parameters });
+        await _broker.ExecuteCommandAsync(new ReleaseActionsCommand(parameters));
     }
 }

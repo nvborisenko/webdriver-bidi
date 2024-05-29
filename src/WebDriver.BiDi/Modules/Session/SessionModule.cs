@@ -16,11 +16,11 @@ public sealed class SessionModule
 
     public async Task<StatusResult> StatusAsync()
     {
-        return await _broker.ExecuteCommandAsync<StatusCommand, StatusResult>(new StatusCommand()).ConfigureAwait(false);
+        return await _broker.ExecuteCommandAsync<StatusResult>(new StatusCommand()).ConfigureAwait(false);
     }
 
     internal async Task SubscribeAsync(SubscriptionCommandParameters parameters)
     {
-        await _broker.ExecuteCommandAsync(new SubscribeCommand() { Params = parameters }).ConfigureAwait(false);
+        await _broker.ExecuteCommandAsync(new SubscribeCommand(parameters)).ConfigureAwait(false);
     }
 }

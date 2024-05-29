@@ -1,13 +1,10 @@
 ﻿using OpenQA.Selenium.BiDi.Internal;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
-internal class SetViewportCommand : Command<SetViewportParameters>
+internal class SetViewportCommand(SetViewportParameters parameters) : Command<SetViewportParameters>("browsingContext.setViewport", parameters)
 {
-    public override string Method => "browsingContext.setViewport";
+
 }
 
 public class SetViewportParameters : CommandParameters

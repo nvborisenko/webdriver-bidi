@@ -2,9 +2,9 @@
 
 namespace OpenQA.Selenium.BiDi.Modules.Input;
 
-internal class ReleaseActionsCommand : Command<ReleaseActionsParameters>
+internal class ReleaseActionsCommand(ReleaseActionsParameters parameters) : Command<ReleaseActionsParameters>("input.releaseActions", parameters)
 {
-    public override string Method => "input.releaseActions";
+
 }
 
 public class ReleaseActionsParameters : CommandParameters

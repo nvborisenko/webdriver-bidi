@@ -49,9 +49,9 @@ internal class Transport : IDisposable
         return (T)JsonSerializer.Deserialize(ms, typeof(T), jsonSerializerContext)!;
     }
 
-    public async Task SendAsJsonAsync<T>(T obj, JsonSerializerContext jsonSerializerContext, CancellationToken cancellationToken)
+    public async Task SendAsJsonAsync(object obj, JsonSerializerContext jsonSerializerContext, CancellationToken cancellationToken)
     {
-        var buffer = JsonSerializer.SerializeToUtf8Bytes(obj, typeof(T), jsonSerializerContext);
+        var buffer = JsonSerializer.SerializeToUtf8Bytes(obj, obj.GetType(), jsonSerializerContext);
 
 #if DEBUG
         Debug.WriteLine($"SND >> {Encoding.UTF8.GetString(buffer)}");

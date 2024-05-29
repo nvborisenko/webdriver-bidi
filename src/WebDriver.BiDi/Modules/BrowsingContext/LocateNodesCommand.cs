@@ -5,9 +5,9 @@ using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
-internal class LocateNodesCommand : Command<LocateNodesParameters>
+internal class LocateNodesCommand(LocateNodesParameters parameters) : Command<LocateNodesParameters>("browsingContext.locateNodes", parameters)
 {
-    public override string Method => "browsingContext.locateNodes";
+
 }
 
 public class LocateNodesParameters : CommandParameters

@@ -1,14 +1,14 @@
 ﻿namespace OpenQA.Selenium.BiDi.Internal;
 
-internal abstract class Command
+internal abstract class Command(string method)
 {
-    public int Id { get; set; }
+    public int Id { get; internal set; }
+
+    public string Method { get; } = method;
 }
 
-internal abstract class Command<TCommandParameters> : Command
-    where TCommandParameters : CommandParameters, new()
+internal abstract class Command<TCommandParameters>(string method, TCommandParameters parameters) : Command(method)
+    where TCommandParameters : CommandParameters
 {
-    public abstract string Method { get; }
-
-    public TCommandParameters Params { get; set; } = new TCommandParameters();
+    public TCommandParameters Params { get; } = parameters;
 }

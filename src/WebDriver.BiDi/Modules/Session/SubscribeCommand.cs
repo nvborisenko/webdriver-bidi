@@ -2,9 +2,9 @@
 
 namespace OpenQA.Selenium.BiDi.Modules.Session;
 
-internal class SubscribeCommand : Command<SubscriptionCommandParameters>
+internal class SubscribeCommand(SubscriptionCommandParameters parameters) : Command<SubscriptionCommandParameters>("session.subscribe", parameters)
 {
-    public override string Method { get; } = "session.subscribe";
+
 }
 
 internal class SubscriptionCommandParameters : CommandParameters

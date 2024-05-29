@@ -3,9 +3,10 @@ using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
-internal class CreateCommand : Command<CreateCommandParameters>
+internal class CreateCommand(CreateCommandParameters parameters)
+    : Command<CreateCommandParameters>("browsingContext.create", parameters)
 {
-    public override string Method { get; } = "browsingContext.create";
+
 }
 
 public class CreateCommandParameters : CommandParameters

@@ -3,9 +3,9 @@ using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
-internal class CaptureScreenshotCommand : Command<CaptureScreenshotCommandParameters>
+internal class CaptureScreenshotCommand(CaptureScreenshotCommandParameters parameters) : Command<CaptureScreenshotCommandParameters>("browsingContext.captureScreenshot", parameters)
 {
-    public override string Method => "browsingContext.captureScreenshot";
+
 }
 
 public class CaptureScreenshotCommandParameters : CommandParameters

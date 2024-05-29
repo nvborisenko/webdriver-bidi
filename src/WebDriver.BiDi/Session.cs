@@ -59,9 +59,9 @@ namespace OpenQA.Selenium.BiDi
 
         public async Task<Modules.BrowsingContext.BrowsingContext> CreateBrowsingContextAsync()
         {
-            var context = await _broker.ExecuteCommandAsync<Modules.BrowsingContext.CreateCommand, Modules.BrowsingContext.CreateResult>(new Modules.BrowsingContext.CreateCommand()).ConfigureAwait(false);
+            var createResult = await BrowsingContextModule.CreateAsync(new Modules.BrowsingContext.CreateCommandParameters()).ConfigureAwait(false);
 
-            return context.Context;
+            return createResult.Context;
         }
 
         public Task<Modules.Network.AddInterceptResult> AddInterceptAsync(Modules.Network.InterceptPhase phase, List<Modules.Network.UrlPattern>? urlPatterns = default)

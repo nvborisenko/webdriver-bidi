@@ -2,9 +2,9 @@
 
 namespace OpenQA.Selenium.BiDi.Modules.Network;
 
-internal class FailRequestCommand : Command<FailRequestParameters>
+internal class FailRequestCommand(FailRequestParameters parameters) : Command<FailRequestParameters>("network.failRequest", parameters)
 {
-    public override string Method => "network.failRequest";
+
 }
 
 public class FailRequestParameters : CommandParameters

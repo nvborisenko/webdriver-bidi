@@ -14,6 +14,6 @@ public sealed class ScriptModule
 
     public async Task<EvaluateResult> EvaluateAsync(EvaluateCommandParameters parameters)
     {
-        return await _broker.ExecuteCommandAsync<EvaluateCommand, EvaluateResult>(new EvaluateCommand { Params = parameters }).ConfigureAwait(false);
+        return await _broker.ExecuteCommandAsync<EvaluateResult>(new EvaluateCommand(parameters)).ConfigureAwait(false);
     }
 }

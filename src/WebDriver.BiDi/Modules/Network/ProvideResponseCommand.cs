@@ -2,9 +2,9 @@
 
 namespace OpenQA.Selenium.BiDi.Modules.Network;
 
-internal class ProvideResponseCommand : Command<ProvideResponseParameters>
+internal class ProvideResponseCommand(ProvideResponseParameters parameters) : Command<ProvideResponseParameters>("network.provideResponse", parameters)
 {
-    public override string Method => "network.provideResponse";
+
 }
 
 public class ProvideResponseParameters : CommandParameters

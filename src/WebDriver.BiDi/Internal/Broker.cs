@@ -135,26 +135,21 @@ internal class Broker
         }
     }
 
-    public async Task<TResult> ExecuteCommandAsync<TCommand, TResult>(TCommand command, CancellationToken cancellationToken = default)
-        where TCommand : Command
+    public async Task<TResult> ExecuteCommandAsync<TResult>(Command command, CancellationToken cancellationToken = default)
     {
         var result = await ExecuteCommandCoreAsync(command, cancellationToken).ConfigureAwait(false);
 
         return (TResult)((JsonElement)result).Deserialize(typeof(TResult), _jsonSourceGenerationContext)!;
     }
 
-    public async Task ExecuteCommandAsync<TCommand>(TCommand command, CancellationToken cancellationToken = default)
-        where TCommand : Command
+    public async Task ExecuteCommandAsync(Command command, CancellationToken cancellationToken = default)
     {
         await ExecuteCommandCoreAsync(command, cancellationToken).ConfigureAwait(false);
     }
 
-    private async Task<object> ExecuteCommandCoreAsync<TCommand>(TCommand command, CancellationToken cancellationToken = default)
-        where TCommand : Command
+    private async Task<object> ExecuteCommandCoreAsync(Command command, CancellationToken cancellationToken = default)
     {
         command.Id = Interlocked.Increment(ref _currentCommandId);
-
-        var json = JsonSerializer.Serialize(command, typeof(TCommand), _jsonSourceGenerationContext);
 
         var tcs = new TaskCompletionSource<object>(TaskCreationOptions.RunContinuationsAsynchronously);
 

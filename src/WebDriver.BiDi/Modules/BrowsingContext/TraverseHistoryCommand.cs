@@ -2,9 +2,9 @@
 
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
-internal class TraverseHistoryCommand : Command<TraverseHistoryParameters>
+internal class TraverseHistoryCommand(TraverseHistoryParameters parameters) : Command<TraverseHistoryParameters>("browsingContext.traverseHistory", parameters)
 {
-    public override string Method => "browsingContext.traverseHistory";
+
 }
 
 public class TraverseHistoryParameters : CommandParameters

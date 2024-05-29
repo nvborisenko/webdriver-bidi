@@ -2,7 +2,7 @@
 
 namespace OpenQA.Selenium.BiDi.Modules.Browser;
 
-internal class CloseCommand : Command<CommandParameters>
+internal class CloseCommand() : Command<CommandParameters>("browser.close", CommandParameters.Empty)
 {
-    public override string Method { get; } = "browser.close";
+
 }

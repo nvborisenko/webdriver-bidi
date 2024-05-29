@@ -3,9 +3,9 @@ using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Modules.Script;
 
-internal class EvaluateCommand : Command<EvaluateCommandParameters>
+internal class EvaluateCommand(EvaluateCommandParameters parameters) : Command<EvaluateCommandParameters>("script.evaluate", parameters)
 {
-    public override string Method => "script.evaluate";
+
 }
 
 public class EvaluateCommandParameters : CommandParameters

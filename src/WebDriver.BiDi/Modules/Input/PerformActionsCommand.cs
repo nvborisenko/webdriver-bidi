@@ -5,9 +5,9 @@ using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Modules.Input;
 
-internal class PerformActionsCommand : Command<PerformActionsParameters>
+internal class PerformActionsCommand(PerformActionsParameters parameters) : Command<PerformActionsParameters>("input.performActions", parameters)
 {
-    public override string Method => "input.performActions";
+
 }
 
 public class PerformActionsParameters : CommandParameters
