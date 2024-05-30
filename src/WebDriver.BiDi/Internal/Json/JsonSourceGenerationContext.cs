@@ -10,6 +10,13 @@ namespace OpenQA.Selenium.BiDi.Internal.Json
     [JsonSerializable(typeof(Modules.Session.SubscribeCommand.Parameters), TypeInfoPropertyName = "Session_SubscribeCommand_Parameters")]
     [JsonSerializable(typeof(Modules.Session.EndCommand))]
 
+    [JsonSerializable(typeof(Modules.Browser.CreateUserContextCommand))]
+    [JsonSerializable(typeof(Modules.Browser.UserContextInfo))]
+    [JsonSerializable(typeof(Modules.Browser.GetUserContextsCommand))]
+    [JsonSerializable(typeof(Modules.Browser.GetUserContextsResult))]
+    [JsonSerializable(typeof(Modules.Browser.RemoveUserContextCommand))]
+    [JsonSerializable(typeof(Modules.Browser.RemoveUserContextCommand.Parameters), TypeInfoPropertyName = "Browser_RemoveUserContextCommand_Parameters")]
+
     [JsonSerializable(typeof(Modules.BrowsingContext.CreateCommand))]
     [JsonSerializable(typeof(Modules.BrowsingContext.CreateCommand.Parameters), TypeInfoPropertyName = "BrowsingContext_CreateCommand_Parameters")]
     [JsonSerializable(typeof(Modules.BrowsingContext.CreateResult))]
@@ -50,7 +57,7 @@ namespace OpenQA.Selenium.BiDi.Internal.Json
     [JsonSerializable(typeof(Modules.Network.ProvideResponseCommand))]
     [JsonSerializable(typeof(Modules.Network.ProvideResponseCommand.Parameters), TypeInfoPropertyName = "Network_ProvideResponseCommand_Parameters")]
     [JsonSerializable(typeof(Modules.Network.RemoveInterceptCommand))]
-    [JsonSerializable(typeof(Modules.Network.RemoveInterceptCommand.Parameters),TypeInfoPropertyName = "Network_RemoveInterceptCommand_Parameters")]
+    [JsonSerializable(typeof(Modules.Network.RemoveInterceptCommand.Parameters), TypeInfoPropertyName = "Network_RemoveInterceptCommand_Parameters")]
     [JsonSerializable(typeof(Modules.Network.BeforeRequestSentEventArgs))]
     [JsonSerializable(typeof(Modules.Network.ResponseStartedEventArgs))]
 

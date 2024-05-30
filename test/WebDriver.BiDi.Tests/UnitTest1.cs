@@ -6,6 +6,7 @@ using OpenQA.Selenium.BiDi.Modules.Script;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -68,6 +69,20 @@ namespace OpenQA.Selenium.BiDi.Tests
 
             navigateResult.Navigation.Should().NotBeNull();
             navigateResult.Url.Should().Contain("google.com");
+        }
+
+        [Test]
+        public async Task BrowserUserContext()
+        {
+            var session = await driver.AsBiDiSessionAsync();
+
+            var userContextInfo = await session.CreateBrowserUserContextAsync();
+
+            var allUserInfoContexts = await session.GetBrowserUserContextsAsync();
+
+            allUserInfoContexts.Select(uc => uc.UserContext.Id).Should().Contain(userContextInfo.UserContext.Id);
+
+            await userContextInfo.UserContext.RemoveAsync();
         }
 
         [Test]

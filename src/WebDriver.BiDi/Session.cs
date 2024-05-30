@@ -91,6 +91,18 @@ namespace OpenQA.Selenium.BiDi
             return Network.AddInterceptAsync(@params);
         }
 
+        public Task<Modules.Browser.UserContextInfo> CreateBrowserUserContextAsync()
+        {
+            return Browser.CreateUserContextAsync();
+        }
+
+        public async Task<IReadOnlyList<Modules.Browser.UserContextInfo>> GetBrowserUserContextsAsync()
+        {
+            var result = await Browser.GetUserContextsAsync().ConfigureAwait(false);
+
+            return result.UserContexts;
+        }
+
         public async Task OnBrowsingContextCreatedAsync(Action<Modules.BrowsingContext.BrowsingContextInfoEventArgs> callback)
         {
             await SubscribeAsync("browsingContext.contextCreated").ConfigureAwait(false);

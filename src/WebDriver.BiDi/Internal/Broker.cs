@@ -49,6 +49,7 @@ internal class Broker
             Converters =
             {
                 new JsonBrowsingContextConverter(_session),
+                new BrowserUserContextConverter(session),
                 new JsonNavigationConverter(),
                 new JsonInterceptConverter(_session),
                 new JsonRequestConverter(_session),
