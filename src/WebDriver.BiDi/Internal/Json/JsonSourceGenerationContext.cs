@@ -20,7 +20,7 @@ namespace OpenQA.Selenium.BiDi.Internal.Json
     [JsonSerializable(typeof(Modules.BrowsingContext.CreateCommand))]
     [JsonSerializable(typeof(Modules.BrowsingContext.CreateCommand.Parameters), TypeInfoPropertyName = "BrowsingContext_CreateCommand_Parameters")]
     [JsonSerializable(typeof(Modules.BrowsingContext.CreateResult))]
-    [JsonSerializable(typeof(Modules.BrowsingContext.BrowsingContextInfoEventArgs))]
+    [JsonSerializable(typeof(Modules.BrowsingContext.BrowsingContextInfo))]
     [JsonSerializable(typeof(Modules.BrowsingContext.NavigateCommand))]
     [JsonSerializable(typeof(Modules.BrowsingContext.NavigateCommand.Parameters), TypeInfoPropertyName = "BrowsingContext_NavigateCommand_Parameters")]
     [JsonSerializable(typeof(Modules.BrowsingContext.NavigateResult))]
@@ -42,6 +42,9 @@ namespace OpenQA.Selenium.BiDi.Internal.Json
     [JsonSerializable(typeof(Modules.BrowsingContext.CaptureScreenshotResult))]
     [JsonSerializable(typeof(Modules.BrowsingContext.SetViewportCommand))]
     [JsonSerializable(typeof(Modules.BrowsingContext.SetViewportCommand.Parameters), TypeInfoPropertyName = "BrowsingContext_SetViewportCommand_Parameters")]
+    [JsonSerializable(typeof(Modules.BrowsingContext.GetTreeCommand))]
+    [JsonSerializable(typeof(Modules.BrowsingContext.GetTreeCommand.Parameters), TypeInfoPropertyName = "BrowsingContext_GetTreeCommand_Parameters")]
+    [JsonSerializable(typeof(Modules.BrowsingContext.GetTreeResult))]
     [JsonSerializable(typeof(Modules.BrowsingContext.CloseCommand))]
     [JsonSerializable(typeof(Modules.BrowsingContext.CloseCommand.Parameters), TypeInfoPropertyName = "BrowsingContext_CloseCommand_Parameters")]
 

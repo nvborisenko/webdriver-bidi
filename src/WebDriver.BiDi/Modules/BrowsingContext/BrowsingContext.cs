@@ -146,6 +146,11 @@ public class BrowsingContext
         return _session.BrowsingContextModule.SetViewportAsync(@params);
     }
 
+    public Task<IReadOnlyList<BrowsingContextInfo>> GetTreeAsync(uint? maxDepth = default)
+    {
+        return _session.GetTreeAsync(maxDepth, this);
+    }
+
     public async Task<Network.Intercept> OnBeforeRequestSentAsync(Network.UrlPattern urlPattern, Func<Network.BeforeRequestSentEventArgs, Task> callback)
     {
         var intercept = await AddInterceptAsync([Network.InterceptPhase.BeforeRequestSent], [urlPattern]).ConfigureAwait(false);

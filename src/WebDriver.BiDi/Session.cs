@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
 using OpenQA.Selenium.BiDi.Internal;
 
@@ -103,18 +102,31 @@ namespace OpenQA.Selenium.BiDi
             return result.UserContexts;
         }
 
-        public async Task OnBrowsingContextCreatedAsync(Action<Modules.BrowsingContext.BrowsingContextInfoEventArgs> callback)
+        public async Task<IReadOnlyList<Modules.BrowsingContext.BrowsingContextInfo>> GetTreeAsync(uint? maxDepth = default, Modules.BrowsingContext.BrowsingContext? context = default)
         {
-            await SubscribeAsync("browsingContext.contextCreated").ConfigureAwait(false);
+            var @params = new Modules.BrowsingContext.GetTreeCommand.Parameters
+            {
+                MaxDepth = maxDepth,
+                Root = context
+            };
 
-            _broker.RegisterEventHandler("browsingContext.contextCreated", new BiDiEventHandler<Modules.BrowsingContext.BrowsingContextInfoEventArgs>(callback));
+            var result = await BrowsingContextModule.GetTreeAsync(@params).ConfigureAwait(false);
+
+            return result.Contexts;
         }
 
-        public async Task OnBrowsingContextCreatedAsync(Func<Modules.BrowsingContext.BrowsingContextInfoEventArgs, Task> callback)
+        public async Task OnBrowsingContextCreatedAsync(Action<Modules.BrowsingContext.BrowsingContextInfo> callback)
         {
             await SubscribeAsync("browsingContext.contextCreated").ConfigureAwait(false);
 
-            _broker.RegisterEventHandler("browsingContext.contextCreated", new BiDiEventHandler<Modules.BrowsingContext.BrowsingContextInfoEventArgs>(callback));
+            _broker.RegisterEventHandler("browsingContext.contextCreated", new BiDiEventHandler<Modules.BrowsingContext.BrowsingContextInfo>(callback));
+        }
+
+        public async Task OnBrowsingContextCreatedAsync(Func<Modules.BrowsingContext.BrowsingContextInfo, Task> callback)
+        {
+            await SubscribeAsync("browsingContext.contextCreated").ConfigureAwait(false);
+
+            _broker.RegisterEventHandler("browsingContext.contextCreated", new BiDiEventHandler<Modules.BrowsingContext.BrowsingContextInfo>(callback));
         }
 
         public Task OnBeforeRequestSentAsync(Func<Modules.Network.BeforeRequestSentEventArgs, Task> callback)

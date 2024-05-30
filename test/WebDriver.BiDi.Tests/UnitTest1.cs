@@ -72,6 +72,16 @@ namespace OpenQA.Selenium.BiDi.Tests
         }
 
         [Test]
+        public async Task GetTree()
+        {
+            var session = await driver.AsBiDiSessionAsync();
+
+            var contexts = await session.GetTreeAsync();
+
+            await contexts[0].Context.GetTreeAsync();
+        }
+
+        [Test]
         public async Task BrowserUserContext()
         {
             var session = await driver.AsBiDiSessionAsync();
@@ -355,7 +365,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         [Test]
         public async Task SubscribeOnBrowsingContextCreated()
         {
-            BrowsingContextInfoEventArgs args = null;
+            BrowsingContextInfo args = null;
 
             //TODO: await event handler to be invoked
             await session.OnBrowsingContextCreatedAsync(e => args = e);
