@@ -16,4 +16,9 @@ internal sealed class ScriptModule
     {
         return await _broker.ExecuteCommandAsync<EvaluateResult>(new EvaluateCommand(@params)).ConfigureAwait(false);
     }
+
+    public async Task<EvaluateResult> CallFunctionAsync(CallFunctionCommand.Parameters @params)
+    {
+        return await _broker.ExecuteCommandAsync<EvaluateResult>(new CallFunctionCommand(@params)).ConfigureAwait(false);
+    }
 }

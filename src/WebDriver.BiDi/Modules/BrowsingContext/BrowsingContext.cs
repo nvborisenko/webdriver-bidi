@@ -106,6 +106,21 @@ public class BrowsingContext
         return _session.Script.EvaluateAsync(@params);
     }
 
+    public Task<Script.EvaluateResult> CallFunctionAsync(string functionDeclaration, params Script.LocalValue[] arguments)
+    {
+        return CallFunctionAsync(functionDeclaration, awaitPromise: true, arguments: arguments);
+    }
+
+    public Task<Script.EvaluateResult> CallFunctionAsync(string functionDeclaration, bool awaitPromise = true, IEnumerable<Script.LocalValue>? arguments = default)
+    {
+        var @params = new Script.CallFunctionCommand.Parameters(functionDeclaration, awaitPromise, new Script.ContextTarget { Context = Id })
+        {
+            Arguments = arguments
+        };
+
+        return _session.Script.CallFunctionAsync(@params);
+    }
+
     public Task CloseAsync()
     {
         var @params = new CloseCommand.Parameters { Context = this };

@@ -463,7 +463,7 @@ namespace OpenQA.Selenium.BiDi.Tests
             evaluateResult.GetType().Should().Be(typeof(EvaluateResultSuccess));
 
             var resSuccess = evaluateResult as EvaluateResultSuccess;
-            var numberValue = resSuccess.Result as NumberValue;
+            var numberValue = resSuccess.Result as NumberRemoteValue;
             numberValue.Value.Should().Be(4);
 
             int nmb = await context.EvaluateAsync("2 + 3");
@@ -477,6 +477,25 @@ namespace OpenQA.Selenium.BiDi.Tests
 
             var invalidStr = async () => (string)await context.EvaluateAsync("function A() { return 'a' }", true);
             await invalidStr.Should().ThrowExactlyAsync<Exception>().WithMessage("Cannot convert*");
+        }
+
+        [Test]
+        public async Task CallFunction()
+        {
+            var context = await session.CreateBrowsingContextAsync();
+
+            await context.NavigateAsync("https://selenium.dev");
+
+            int sum = await context.CallFunctionAsync("function sum(a, b) { return a + b; }", 2, 3);
+
+            sum.Should().Be(5);
+
+            string concat = await context.CallFunctionAsync("function hello(name) { return 'Hello, ' + name; }", "World");
+
+            concat.Should().Be("Hello, World");
+
+            NodeRemoteValue el = await context.CallFunctionAsync("() => document.querySelector('div')");
+            Console.WriteLine(el.Value.LocalName);
         }
     }
 }

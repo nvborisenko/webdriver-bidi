@@ -21,19 +21,20 @@ internal class EvaluateCommand(EvaluateCommand.Parameters @params)
 [JsonDerivedType(typeof(EvaluateResultException), "exception")]
 public abstract class EvaluateResult
 {
-    public static implicit operator int(EvaluateResult r) => (int)(AsSuccess(r).Result as NumberValue).Value;
-    public static implicit operator long(EvaluateResult r) => (AsSuccess(r).Result as NumberValue).Value;
+    public static implicit operator int(EvaluateResult r) => (int)(AsSuccess(r).Result as NumberRemoteValue).Value;
+    public static implicit operator long(EvaluateResult r) => (AsSuccess(r).Result as NumberRemoteValue).Value;
+    public static implicit operator NodeRemoteValue(EvaluateResult r) => AsSuccess(r).Result as NodeRemoteValue;
 
     public static implicit operator string(EvaluateResult r)
     {
         var successResult = AsSuccess(r).Result;
 
-        if (successResult is StringValue stringValue)
+        if (successResult is StringRemoteValue stringValue)
         {
             return stringValue.Value;
         }
 
-        if (successResult is NullValue)
+        if (successResult is NullRemoteValue)
         {
             return null;
         }

@@ -69,6 +69,8 @@ namespace OpenQA.Selenium.BiDi.Internal.Json
 
     [JsonSerializable(typeof(Modules.Script.EvaluateCommand))]
     [JsonSerializable(typeof(Modules.Script.EvaluateCommand.Parameters), TypeInfoPropertyName = "Script_EvaluateCommand_Parameters")]
+    [JsonSerializable(typeof(Modules.Script.CallFunctionCommand))]
+    [JsonSerializable(typeof(Modules.Script.CallFunctionCommand.Parameters), TypeInfoPropertyName = "Script_CallFunctionCommand_Parameters")]
     [JsonSerializable(typeof(Modules.Script.EvaluateResult))]
 
     [JsonSerializable(typeof(Modules.Input.PerformActionsCommand))]

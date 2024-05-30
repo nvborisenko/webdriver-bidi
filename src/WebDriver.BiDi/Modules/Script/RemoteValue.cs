@@ -4,37 +4,37 @@ using System.Text.Json.Serialization;
 namespace OpenQA.Selenium.BiDi.Modules.Script;
 
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
-[JsonDerivedType(typeof(NumberValue), "number")]
-[JsonDerivedType(typeof(StringValue), "string")]
-[JsonDerivedType(typeof(NullValue), "null")]
-[JsonDerivedType(typeof(UndefinedValue), "undefined")]
+[JsonDerivedType(typeof(NumberRemoteValue), "number")]
+[JsonDerivedType(typeof(StringRemoteValue), "string")]
+[JsonDerivedType(typeof(NullRemoteValue), "null")]
+[JsonDerivedType(typeof(UndefinedRemoteValue), "undefined")]
 [JsonDerivedType(typeof(NodeRemoteValue), "node")]
 public abstract class RemoteValue
 {
 
 }
 
-public abstract class PrimitiveProtocolValue : RemoteValue
+public abstract class PrimitiveProtocolRemoteValue : RemoteValue
 {
 
 }
 
-public class NumberValue : PrimitiveProtocolValue
+public class NumberRemoteValue : PrimitiveProtocolRemoteValue
 {
     public long Value { get; set; }
 }
 
-public class StringValue : PrimitiveProtocolValue
+public class StringRemoteValue : PrimitiveProtocolRemoteValue
 {
     public string Value { get; set; }
 }
 
-public class NullValue : PrimitiveProtocolValue
+public class NullRemoteValue : PrimitiveProtocolRemoteValue
 {
 
 }
 
-public class UndefinedValue : PrimitiveProtocolValue
+public class UndefinedRemoteValue : PrimitiveProtocolRemoteValue
 {
 
 }
