@@ -373,11 +373,8 @@ namespace OpenQA.Selenium.BiDi.Tests
 
             //var searchInput = (await context.LocateNodesAsync(Locator.Css("#search"))).First();
 
-            await session.Input.PerformActionsAsync(new()
-            {
-                Context = context,
-                Actions =
-                {
+            await context.PerformActionsAsync(
+                [
                     SourceActions.Press("abc"),
                     new KeySourceActions()
                     {
@@ -397,8 +394,7 @@ namespace OpenQA.Selenium.BiDi.Tests
                             }
                         }
                     }.Press("World").Pause(1000).Press("!").Pause(1000)
-                }
-            });
+                 ]);
 
             await context.PerformActionsAsync(SourceActions.Press("qwe").Pause(1000));
         }

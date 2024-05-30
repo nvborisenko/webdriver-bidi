@@ -4,7 +4,7 @@ using OpenQA.Selenium.BiDi.Internal;
 
 namespace OpenQA.Selenium.BiDi.Modules.Network;
 
-public sealed class NetworkModule
+internal sealed class NetworkModule
 {
     private readonly BiDi.Session _session;
     private readonly Broker _broker;
@@ -15,34 +15,34 @@ public sealed class NetworkModule
         _broker = broker;
     }
 
-    public async Task<AddInterceptResult> AddInterceptAsync(AddInterceptParameters parameters)
+    public async Task<AddInterceptResult> AddInterceptAsync(AddInterceptCommand.Parameters @params)
     {
-        return await _broker.ExecuteCommandAsync<AddInterceptResult>(new AddInterceptCommand(parameters)).ConfigureAwait(false);
+        return await _broker.ExecuteCommandAsync<AddInterceptResult>(new AddInterceptCommand(@params)).ConfigureAwait(false);
     }
 
-    public async Task RemoveInterceptAsync(RemoveInterceptParameters parameters)
+    public async Task RemoveInterceptAsync(RemoveInterceptCommand.Parameters @params)
     {
-        await _broker.ExecuteCommandAsync(new RemoveInterceptCommand(parameters)).ConfigureAwait(!false);
+        await _broker.ExecuteCommandAsync(new RemoveInterceptCommand(@params)).ConfigureAwait(!false);
     }
 
-    public async Task ContinueRequestAsync(ContinueRequestParameters parameters)
+    public async Task ContinueRequestAsync(ContinueRequestCommand.Parameters @params)
     {
-        await _broker.ExecuteCommandAsync(new ContinueRequestCommand(parameters)).ConfigureAwait(false);
+        await _broker.ExecuteCommandAsync(new ContinueRequestCommand(@params)).ConfigureAwait(false);
     }
 
-    public async Task ContinueResponseAsync(ContinueResponseParameters parameters)
+    public async Task ContinueResponseAsync(ContinueResponseCommand.Parameters @params)
     {
-        await _broker.ExecuteCommandAsync(new ContinueResponseCommand(parameters)).ConfigureAwait(false);
+        await _broker.ExecuteCommandAsync(new ContinueResponseCommand(@params)).ConfigureAwait(false);
     }
 
-    public async Task FailRequestAsync(FailRequestParameters parameters)
+    public async Task FailRequestAsync(FailRequestCommand.Parameters @params)
     {
-        await _broker.ExecuteCommandAsync(new FailRequestCommand(parameters)).ConfigureAwait(false);
+        await _broker.ExecuteCommandAsync(new FailRequestCommand(@params)).ConfigureAwait(false);
     }
 
-    public async Task ProvideResponseAsync(ProvideResponseParameters parameters)
+    public async Task ProvideResponseAsync(ProvideResponseCommand.Parameters @params)
     {
-        await _broker.ExecuteCommandAsync(new ProvideResponseCommand(parameters)).ConfigureAwait(false);
+        await _broker.ExecuteCommandAsync(new ProvideResponseCommand(@params)).ConfigureAwait(false);
     }
 
     public async Task OnBeforeRequestSentAsync(Func<BeforeRequestSentEventArgs, Task> callback)

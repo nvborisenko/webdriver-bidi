@@ -16,41 +16,41 @@ public class Request
 
     internal async Task ContinueAsync(string? method = default)
     {
-        var parameters = new ContinueRequestParameters
+        var @params = new ContinueRequestCommand.Parameters
         {
             Request = this,
             Method = method,
         };
 
-        await _session.Network.ContinueRequestAsync(parameters).ConfigureAwait(false);
+        await _session.Network.ContinueRequestAsync(@params).ConfigureAwait(false);
     }
 
     internal async Task FailAsync()
     {
-        var parameters = new FailRequestParameters { Request = this };
+        var @params = new FailRequestCommand.Parameters { Request = this };
 
-        await _session.Network.FailRequestAsync(parameters).ConfigureAwait(false);
+        await _session.Network.FailRequestAsync(@params).ConfigureAwait(false);
     }
 
     internal async Task ProvideResponseAsync(uint? statusCode = default)
     {
-        var parameters = new ProvideResponseParameters
+        var @params = new ProvideResponseCommand.Parameters
         {
             Request = this,
             StatusCode = statusCode
         };
 
-        await _session.Network.ProvideResponseAsync(parameters).ConfigureAwait(false);
+        await _session.Network.ProvideResponseAsync(@params).ConfigureAwait(false);
     }
 
     internal async Task ContinueResponseAsync(uint? statusCode = default)
     {
-        var parameters = new ContinueResponseParameters
+        var @params = new ContinueResponseCommand.Parameters
         {
             Request = this,
             StatusCode = statusCode
         };
 
-        await _session.Network.ContinueResponseAsync(parameters).ConfigureAwait(false);
+        await _session.Network.ContinueResponseAsync(@params).ConfigureAwait(false);
     }
 }

@@ -5,16 +5,15 @@ using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Modules.Input;
 
-internal class PerformActionsCommand(PerformActionsParameters parameters) : Command<PerformActionsParameters>("input.performActions", parameters)
+internal class PerformActionsCommand(PerformActionsCommand.Parameters @params)
+    : Command<PerformActionsCommand.Parameters>("input.performActions", @params)
 {
+    internal class Parameters : CommandParameters
+    {
+        public BrowsingContext.BrowsingContext Context { get; set; }
 
-}
-
-public class PerformActionsParameters : CommandParameters
-{
-    public BrowsingContext.BrowsingContext Context { get; set; }
-
-    public List<SourceActions> Actions { get; set; } = [];
+        public List<SourceActions> Actions { get; set; } = [];
+    }
 }
 
 [JsonDerivedType(typeof(KeySourceActions))]

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace OpenQA.Selenium.BiDi.Modules.Session;
 
-public sealed class SessionModule
+internal sealed class SessionModule
 {
     private readonly BiDi.Session _session;
     private readonly Broker _broker;
@@ -19,8 +19,8 @@ public sealed class SessionModule
         return await _broker.ExecuteCommandAsync<StatusResult>(new StatusCommand()).ConfigureAwait(false);
     }
 
-    internal async Task SubscribeAsync(SubscriptionCommandParameters parameters)
+    internal async Task SubscribeAsync(SubscribeCommand.Parameters @params)
     {
-        await _broker.ExecuteCommandAsync(new SubscribeCommand(parameters)).ConfigureAwait(false);
+        await _broker.ExecuteCommandAsync(new SubscribeCommand(@params)).ConfigureAwait(false);
     }
 }

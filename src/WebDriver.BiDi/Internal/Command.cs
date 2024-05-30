@@ -7,8 +7,9 @@ internal abstract class Command(string method)
     public string Method { get; } = method;
 }
 
-internal abstract class Command<TCommandParameters>(string method, TCommandParameters parameters) : Command(method)
+internal abstract class Command<TCommandParameters>(string method, TCommandParameters @params)
+    : Command(method)
     where TCommandParameters : CommandParameters
 {
-    public TCommandParameters Params { get; } = parameters;
+    public TCommandParameters Params { get; } = @params;
 }

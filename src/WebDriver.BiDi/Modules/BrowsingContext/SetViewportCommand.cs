@@ -2,21 +2,20 @@
 
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
-internal class SetViewportCommand(SetViewportParameters parameters) : Command<SetViewportParameters>("browsingContext.setViewport", parameters)
+internal class SetViewportCommand(SetViewportCommand.Parameters @params)
+    : Command<SetViewportCommand.Parameters>("browsingContext.setViewport", @params)
 {
+    internal class Parameters : CommandParameters
+    {
+        public BrowsingContext Context { get; set; }
 
+        public Viewport? Viewport { get; set; }
+
+        public double? DevicePixelRatio { get; set; }
+    }
 }
 
-public class SetViewportParameters : CommandParameters
-{
-    public BrowsingContext Context { get; set; }
-
-    public Viewport? Viewport { get; set; }
-
-    public double? DevicePixelRatio { get; set; }
-}
-
-public class Viewport(uint width, uint height)
+public readonly struct Viewport(uint width, uint height)
 {
     public uint Width { get; } = width;
 

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace OpenQA.Selenium.BiDi.Modules.Input;
 
-public sealed class InputModule
+internal sealed class InputModule
 {
     private readonly Broker _broker;
 
@@ -12,13 +12,13 @@ public sealed class InputModule
         _broker = broker;
     }
 
-    public async Task PerformActionsAsync(PerformActionsParameters parameters)
+    public async Task PerformActionsAsync(PerformActionsCommand.Parameters @params)
     {
-        await _broker.ExecuteCommandAsync(new PerformActionsCommand(parameters)).ConfigureAwait(false);
+        await _broker.ExecuteCommandAsync(new PerformActionsCommand(@params)).ConfigureAwait(false);
     }
 
-    public async Task ReleaseActionsAsync(ReleaseActionsParameters parameters)
+    public async Task ReleaseActionsAsync(ReleaseActionsCommand.Parameters @params)
     {
-        await _broker.ExecuteCommandAsync(new ReleaseActionsCommand(parameters));
+        await _broker.ExecuteCommandAsync(new ReleaseActionsCommand(@params));
     }
 }

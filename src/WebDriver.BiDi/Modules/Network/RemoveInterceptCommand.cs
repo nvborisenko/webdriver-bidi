@@ -2,12 +2,11 @@
 
 namespace OpenQA.Selenium.BiDi.Modules.Network;
 
-internal class RemoveInterceptCommand(RemoveInterceptParameters parameters) : Command<RemoveInterceptParameters>("network.removeIntercept", parameters)
+internal class RemoveInterceptCommand(RemoveInterceptCommand.Parameters @params)
+    : Command<RemoveInterceptCommand.Parameters>("network.removeIntercept", @params)
 {
-
-}
-
-public class RemoveInterceptParameters : CommandParameters
-{
-    public Intercept Intercept { get; set; }
+    internal class Parameters : CommandParameters
+    {
+        public Intercept Intercept { get; set; }
+    }
 }

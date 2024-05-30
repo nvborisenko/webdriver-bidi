@@ -2,18 +2,17 @@
 
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
-internal class NavigateCommand(NavigateCommandParameters parameters) : Command<NavigateCommandParameters>("browsingContext.navigate", parameters)
+internal class NavigateCommand(NavigateCommand.Parameters @params)
+    : Command<NavigateCommand.Parameters>("browsingContext.navigate", @params)
 {
+    internal class Parameters : CommandParameters
+    {
+        public BrowsingContext Context { get; set; }
 
-}
+        public string Url { get; set; }
 
-public class NavigateCommandParameters : CommandParameters
-{
-    public BrowsingContext Context { get; set; }
-
-    public string Url { get; set; }
-
-    public ReadinessState? Wait { get; set; }
+        public ReadinessState? Wait { get; set; }
+    }
 }
 
 public enum ReadinessState

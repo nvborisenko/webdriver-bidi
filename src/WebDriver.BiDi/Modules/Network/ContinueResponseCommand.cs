@@ -2,14 +2,13 @@
 
 namespace OpenQA.Selenium.BiDi.Modules.Network;
 
-internal class ContinueResponseCommand(ContinueResponseParameters parameters) : Command<ContinueResponseParameters>("network.continueResponse", parameters)
+internal class ContinueResponseCommand(ContinueResponseCommand.Parameters @params)
+    : Command<ContinueResponseCommand.Parameters>("network.continueResponse", @params)
 {
+    internal class Parameters : CommandParameters
+    {
+        public Request Request { get; set; }
 
-}
-
-public class ContinueResponseParameters : CommandParameters
-{
-    public Request Request { get; set; }
-
-    public uint? StatusCode { get; set; }
+        public uint? StatusCode { get; set; }
+    }
 }

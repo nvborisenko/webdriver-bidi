@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace OpenQA.Selenium.BiDi.Modules.Script;
 
-public sealed class ScriptModule
+internal sealed class ScriptModule
 {
     private readonly Broker _broker;
 
@@ -12,8 +12,8 @@ public sealed class ScriptModule
         _broker = broker;
     }
 
-    public async Task<EvaluateResult> EvaluateAsync(EvaluateCommandParameters parameters)
+    public async Task<EvaluateResult> EvaluateAsync(EvaluateCommand.Parameters @params)
     {
-        return await _broker.ExecuteCommandAsync<EvaluateResult>(new EvaluateCommand(parameters)).ConfigureAwait(false);
+        return await _broker.ExecuteCommandAsync<EvaluateResult>(new EvaluateCommand(@params)).ConfigureAwait(false);
     }
 }

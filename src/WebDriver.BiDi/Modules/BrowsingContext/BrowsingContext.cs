@@ -18,51 +18,52 @@ public class BrowsingContext
 
     public Task<NavigateResult> NavigateAsync(string url, ReadinessState wait = ReadinessState.Complete)
     {
-        var parameters = new NavigateCommandParameters { Url = url, Wait = wait };
+        var @params = new NavigateCommand.Parameters { Url = url, Wait = wait };
 
-        return NavigateAsync(parameters);
+        return NavigateAsync(@params);
     }
-    public Task<NavigateResult> NavigateAsync(NavigateCommandParameters parameters)
-    {
-        parameters.Context = this;
 
-        return _session.BrowsingContextModule.NavigateAsync(parameters);
+    private Task<NavigateResult> NavigateAsync(NavigateCommand.Parameters @params)
+    {
+        @params.Context = this;
+
+        return _session.BrowsingContextModule.NavigateAsync(@params);
     }
 
     public Task<NavigateResult> ReloadAsync(bool? ignoreCache = default, ReadinessState? wait = default)
     {
-        var parameters = new ReloadParameters
+        var @params = new ReloadCommand.Parameters
         {
             Context = this,
             IgnoreCache = ignoreCache,
             Wait = wait
         };
 
-        return _session.BrowsingContextModule.ReloadAsync(parameters);
+        return _session.BrowsingContextModule.ReloadAsync(@params);
     }
 
     public Task ActivateAsync()
     {
-        var parameters = new ActivateParameters { Context = this };
+        var @params = new ActivateCommand.Parameters { Context = this };
 
-        return _session.BrowsingContextModule.ActivateAsync(parameters);
+        return _session.BrowsingContextModule.ActivateAsync(@params);
     }
 
     public Task<IReadOnlyList<Script.NodeRemoteValue>> LocateNodesAsync(Locator locator)
     {
-        var parameters = new LocateNodesParameters
+        var @params = new LocateNodesCommand.Parameters
         {
             Locator = locator
         };
 
-        return LocateNodesAsync(parameters);
+        return LocateNodesAsync(@params);
     }
 
-    public async Task<IReadOnlyList<Script.NodeRemoteValue>> LocateNodesAsync(LocateNodesParameters parameters)
+    private async Task<IReadOnlyList<Script.NodeRemoteValue>> LocateNodesAsync(LocateNodesCommand.Parameters @params)
     {
-        parameters.Context = Id;
+        @params.Context = Id;
 
-        var result = await _session.BrowsingContextModule.LocateNodesAsync(parameters).ConfigureAwait(false);
+        var result = await _session.BrowsingContextModule.LocateNodesAsync(@params).ConfigureAwait(false);
 
         return result.Nodes;
     }
@@ -74,52 +75,52 @@ public class BrowsingContext
 
     public Task PerformActionsAsync(List<Input.SourceActions> actions)
     {
-        var parameters = new Input.PerformActionsParameters { Context = this, Actions = actions };
+        var @params = new Input.PerformActionsCommand.Parameters { Context = this, Actions = actions };
 
-        return _session.Input.PerformActionsAsync(parameters);
+        return _session.Input.PerformActionsAsync(@params);
     }
 
     public Task<CaptureScreenshotResult> CaptureScreenshotAsync(Origin? origin = default, ImageFormat? imageFormat = default, ClipRectangle? clip = default)
     {
-        var parameters = new CaptureScreenshotCommandParameters
+        var @params = new CaptureScreenshotCommand.Parameters
         {
             Origin = origin,
             Format = imageFormat,
             Clip = clip
         };
 
-        return CaptureScreenshotAsync(parameters);
+        return CaptureScreenshotAsync(@params);
     }
 
-    public Task<CaptureScreenshotResult> CaptureScreenshotAsync(CaptureScreenshotCommandParameters parameters)
+    private Task<CaptureScreenshotResult> CaptureScreenshotAsync(CaptureScreenshotCommand.Parameters @params)
     {
-        parameters.Context = Id;
+        @params.Context = Id;
 
-        return _session.BrowsingContextModule.CaptureScreenshotAsync(parameters);
+        return _session.BrowsingContextModule.CaptureScreenshotAsync(@params);
     }
 
     public Task<Script.EvaluateResult> EvaluateAsync(string expression, bool awaitPromise = true)
     {
-        var parameters = new Script.EvaluateCommandParameters { Expression = expression, Target = new Script.ContextTarget { Context = Id }, AwaitPromise = awaitPromise };
-        return _session.Script.EvaluateAsync(parameters);
+        var @params = new Script.EvaluateCommand.Parameters { Expression = expression, Target = new Script.ContextTarget { Context = Id }, AwaitPromise = awaitPromise };
+        return _session.Script.EvaluateAsync(@params);
     }
 
     public Task CloseAsync()
     {
-        var parameters = new CloseCommandParameters { Context = this };
+        var @params = new CloseCommand.Parameters { Context = this };
 
-        return _session.BrowsingContextModule.CloseAsync(parameters);
+        return _session.BrowsingContextModule.CloseAsync(@params);
     }
 
     public Task TraverseHistoryAsync(int delta)
     {
-        var parameters = new TraverseHistoryParameters
+        var @params = new TraverseHistoryCommand.Parameters
         {
             Context = this,
             Delta = delta
         };
 
-        return _session.BrowsingContextModule.TraverseHistoryAsync(parameters);
+        return _session.BrowsingContextModule.TraverseHistoryAsync(@params);
     }
 
     public Task NavigateBackAsync()
@@ -134,14 +135,14 @@ public class BrowsingContext
 
     public Task SetViewportAsync(Viewport? viewport = default, double? devicePixelRatio = default)
     {
-        var parameters = new SetViewportParameters
+        var @params = new SetViewportCommand.Parameters
         {
             Context = this,
             Viewport = viewport,
             DevicePixelRatio = devicePixelRatio
         };
 
-        return _session.BrowsingContextModule.SetViewportAsync(parameters);
+        return _session.BrowsingContextModule.SetViewportAsync(@params);
     }
 
     public async Task<Network.Intercept> OnBeforeRequestSentAsync(Network.UrlPattern urlPattern, Func<Network.BeforeRequestSentEventArgs, Task> callback)
@@ -188,20 +189,20 @@ public class BrowsingContext
 
     public Task<Network.Intercept> AddInterceptAsync(List<Network.InterceptPhase> phases, List<Network.UrlPattern>? urlPatterns = default)
     {
-        var parameters = new Network.AddInterceptParameters
+        var @params = new Network.AddInterceptCommand.Parameters
         {
             Phases = phases,
             UrlPatterns = urlPatterns
         };
 
-        return AddInterceptAsync(parameters);
+        return AddInterceptAsync(@params);
     }
 
-    public async Task<Network.Intercept> AddInterceptAsync(Network.AddInterceptParameters parameters)
+    private async Task<Network.Intercept> AddInterceptAsync(Network.AddInterceptCommand.Parameters @params)
     {
-        parameters.Contexts = [this];
+        @params.Contexts = [this];
 
-        var result = await _session.Network.AddInterceptAsync(parameters).ConfigureAwait(false);
+        var result = await _session.Network.AddInterceptAsync(@params).ConfigureAwait(false);
 
         return result.Intercept;
     }

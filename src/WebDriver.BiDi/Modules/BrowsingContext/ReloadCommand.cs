@@ -2,16 +2,15 @@
 
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
-internal class ReloadCommand(ReloadParameters parameters) : Command<ReloadParameters>("browsingContext.reload", parameters)
+internal class ReloadCommand(ReloadCommand.Parameters @params) 
+    : Command<ReloadCommand.Parameters>("browsingContext.reload", @params)
 {
+    internal class Parameters : CommandParameters
+    {
+        public BrowsingContext Context { get; set; }
 
-}
+        public bool? IgnoreCache { get; set; }
 
-public class ReloadParameters : CommandParameters
-{
-    public BrowsingContext Context { get; set; }
-
-    public bool? IgnoreCache { get; set; }
-
-    public ReadinessState? Wait { get; set; }
+        public ReadinessState? Wait { get; set; }
+    }
 }

@@ -20,12 +20,12 @@ public class Intercept
 
     public Task RemoveAsync()
     {
-        var parameters = new RemoveInterceptParameters
+        var @params = new RemoveInterceptCommand.Parameters
         {
             Intercept = this
         };
 
-        return _session.Network.RemoveInterceptAsync(parameters);
+        return _session.Network.RemoveInterceptAsync(@params);
     }
 
     public async ValueTask DisposeAsync()

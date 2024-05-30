@@ -3,17 +3,15 @@ using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
-internal class CreateCommand(CreateCommandParameters parameters)
-    : Command<CreateCommandParameters>("browsingContext.create", parameters)
+internal class CreateCommand(CreateCommand.Parameters @params)
+    : Command<CreateCommand.Parameters>("browsingContext.create", @params)
 {
+    internal class Parameters : CommandParameters
+    {
+        public BrowsingContextType Type { get; set; } = BrowsingContextType.Tab;
 
-}
-
-public class CreateCommandParameters : CommandParameters
-{
-    public BrowsingContextType Type { get; set; } = BrowsingContextType.Tab;
-
-    public BrowsingContext? ReferenceContext { get; set; }
+        public BrowsingContext? ReferenceContext { get; set; }
+    }
 }
 
 public enum BrowsingContextType

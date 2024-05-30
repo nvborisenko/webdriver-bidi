@@ -2,12 +2,11 @@
 
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
-internal class ActivateCommand(ActivateParameters parameters) : Command<ActivateParameters>("browsingContext.activate", parameters)
+internal class ActivateCommand(ActivateCommand.Parameters @params)
+    : Command<ActivateCommand.Parameters>("browsingContext.activate", @params)
 {
-
-}
-
-public class ActivateParameters : CommandParameters
-{
-    public BrowsingContext Context { get; set; }
+    internal class Parameters : CommandParameters
+    {
+        public BrowsingContext Context { get; set; }
+    }
 }

@@ -4,7 +4,7 @@ using OpenQA.Selenium.BiDi.Internal;
 
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
-public sealed class BrowsingContextModule
+sealed class BrowsingContextModule
 {
     private readonly BiDi.Session _session;
     private readonly Broker _broker;
@@ -15,68 +15,68 @@ public sealed class BrowsingContextModule
         _broker = broker;
     }
 
-    public async Task<CreateResult> CreateAsync(CreateCommandParameters parameters)
+    public async Task<CreateResult> CreateAsync(CreateCommand.Parameters @params)
     {
-        return await _broker.ExecuteCommandAsync<CreateResult>(new CreateCommand(parameters)).ConfigureAwait(false);
+        return await _broker.ExecuteCommandAsync<CreateResult>(new CreateCommand(@params)).ConfigureAwait(false);
     }
 
     public async Task<NavigateResult> NavigateAsync(string url, ReadinessState wait = ReadinessState.Complete)
     {
-        var parameters = new NavigateCommandParameters { Url = url, Wait = wait };
+        var @params = new NavigateCommand.Parameters { Url = url, Wait = wait };
 
-        return await NavigateAsync(parameters).ConfigureAwait(false);
+        return await NavigateAsync(@params).ConfigureAwait(false);
     }
 
-    public async Task<NavigateResult> NavigateAsync(NavigateCommandParameters parameters)
+    public async Task<NavigateResult> NavigateAsync(NavigateCommand.Parameters @params)
     {
-        return await _broker.ExecuteCommandAsync<NavigateResult>(new NavigateCommand(parameters)).ConfigureAwait(false);
+        return await _broker.ExecuteCommandAsync<NavigateResult>(new NavigateCommand(@params)).ConfigureAwait(false);
     }
 
-    public async Task ActivateAsync(ActivateParameters parameters)
+    public async Task ActivateAsync(ActivateCommand.Parameters @params)
     {
-        await _broker.ExecuteCommandAsync(new ActivateCommand(parameters)).ConfigureAwait(false);
+        await _broker.ExecuteCommandAsync(new ActivateCommand(@params)).ConfigureAwait(false);
     }
 
-    public async Task<LocateNodesResult> LocateNodesAsync(LocateNodesParameters parameters)
+    public async Task<LocateNodesResult> LocateNodesAsync(LocateNodesCommand.Parameters @params)
     {
-        return await _broker.ExecuteCommandAsync<LocateNodesResult>(new LocateNodesCommand(parameters)).ConfigureAwait(false);
+        return await _broker.ExecuteCommandAsync<LocateNodesResult>(new LocateNodesCommand(@params)).ConfigureAwait(false);
     }
 
     public async Task<CaptureScreenshotResult> CaptureScreenshotAsync(Origin? origin = default, ImageFormat? imageFormat = default, ClipRectangle? clip = default)
     {
-        var parameters = new CaptureScreenshotCommandParameters
+        var @params = new CaptureScreenshotCommand.Parameters
         {
             Origin = origin,
             Format = imageFormat,
             Clip = clip
         };
 
-        return await CaptureScreenshotAsync(parameters).ConfigureAwait(false);
+        return await CaptureScreenshotAsync(@params).ConfigureAwait(false);
     }
 
-    public async Task<CaptureScreenshotResult> CaptureScreenshotAsync(CaptureScreenshotCommandParameters parameters)
+    public async Task<CaptureScreenshotResult> CaptureScreenshotAsync(CaptureScreenshotCommand.Parameters @params)
     {
-        return await _broker.ExecuteCommandAsync<CaptureScreenshotResult>(new CaptureScreenshotCommand(parameters)).ConfigureAwait(false);
+        return await _broker.ExecuteCommandAsync<CaptureScreenshotResult>(new CaptureScreenshotCommand(@params)).ConfigureAwait(false);
     }
 
-    public async Task CloseAsync(CloseCommandParameters parameters)
+    public async Task CloseAsync(CloseCommand.Parameters @params)
     {
-        await _broker.ExecuteCommandAsync(new CloseCommand(parameters)).ConfigureAwait(false);
+        await _broker.ExecuteCommandAsync(new CloseCommand(@params)).ConfigureAwait(false);
     }
 
-    public async Task<TraverseHistoryResult> TraverseHistoryAsync(TraverseHistoryParameters parameters)
+    public async Task<TraverseHistoryResult> TraverseHistoryAsync(TraverseHistoryCommand.Parameters @params)
     {
-        return await _broker.ExecuteCommandAsync<TraverseHistoryResult>(new TraverseHistoryCommand(parameters)).ConfigureAwait(false);
+        return await _broker.ExecuteCommandAsync<TraverseHistoryResult>(new TraverseHistoryCommand(@params)).ConfigureAwait(false);
     }
 
-    public async Task<NavigateResult> ReloadAsync(ReloadParameters parameters)
+    public async Task<NavigateResult> ReloadAsync(ReloadCommand.Parameters @params)
     {
-        return await _broker.ExecuteCommandAsync<NavigateResult>(new ReloadCommand(parameters)).ConfigureAwait(false);
+        return await _broker.ExecuteCommandAsync<NavigateResult>(new ReloadCommand(@params)).ConfigureAwait(false);
     }
 
-    public async Task SetViewportAsync(SetViewportParameters parameters)
+    public async Task SetViewportAsync(SetViewportCommand.Parameters @params)
     {
-        await _broker.ExecuteCommandAsync(new SetViewportCommand(parameters)).ConfigureAwait(false);
+        await _broker.ExecuteCommandAsync(new SetViewportCommand(@params)).ConfigureAwait(false);
     }
 
     public async Task OnNavigationStartedAsync(Func<NavigationInfoEventArgs, Task> callback)

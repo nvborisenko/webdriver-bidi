@@ -38,19 +38,19 @@ namespace OpenQA.Selenium.BiDi
             _logModule = new Lazy<Modules.Log.LogModule>(() => new Modules.Log.LogModule(this, _broker));
         }
 
-        public Modules.Session.SessionModule SessionModule => _sessionModule.Value;
+        internal Modules.Session.SessionModule SessionModule => _sessionModule.Value;
 
-        public Modules.BrowsingContext.BrowsingContextModule BrowsingContextModule => _browsingContextModule.Value;
+        internal Modules.BrowsingContext.BrowsingContextModule BrowsingContextModule => _browsingContextModule.Value;
 
-        public Modules.Browser.BrowserModule Browser => _browserModule.Value;
+        internal Modules.Browser.BrowserModule Browser => _browserModule.Value;
 
         internal Modules.Network.NetworkModule Network => _networkModule.Value;
 
-        public Modules.Input.InputModule Input => _inputModule.Value;
+        internal Modules.Input.InputModule Input => _inputModule.Value;
 
-        public Modules.Script.ScriptModule Script => _scriptModule.Value;
+        internal Modules.Script.ScriptModule Script => _scriptModule.Value;
 
-        public Modules.Log.LogModule Log => _logModule.Value;
+        internal Modules.Log.LogModule Log => _logModule.Value;
 
         public Task<Modules.Session.StatusResult> StatusAsync()
         {
@@ -59,36 +59,36 @@ namespace OpenQA.Selenium.BiDi
 
         public async Task<Modules.BrowsingContext.BrowsingContext> CreateBrowsingContextAsync()
         {
-            var createResult = await BrowsingContextModule.CreateAsync(new Modules.BrowsingContext.CreateCommandParameters()).ConfigureAwait(false);
+            var createResult = await BrowsingContextModule.CreateAsync(new Modules.BrowsingContext.CreateCommand.Parameters()).ConfigureAwait(false);
 
             return createResult.Context;
         }
 
         public Task<Modules.Network.AddInterceptResult> AddInterceptAsync(Modules.Network.InterceptPhase phase, List<Modules.Network.UrlPattern>? urlPatterns = default)
         {
-            var parameters = new Modules.Network.AddInterceptParameters
+            var @params = new Modules.Network.AddInterceptCommand.Parameters
             {
                 Phases = [phase],
                 UrlPatterns = urlPatterns
             };
 
-            return AddInterceptAsync(parameters);
+            return AddInterceptAsync(@params);
         }
 
         public Task<Modules.Network.AddInterceptResult> AddInterceptAsync(List<Modules.Network.InterceptPhase> phases, List<Modules.Network.UrlPattern>? urlPatterns = default)
         {
-            var parameters = new Modules.Network.AddInterceptParameters
+            var @params = new Modules.Network.AddInterceptCommand.Parameters
             {
                 Phases = phases,
                 UrlPatterns = urlPatterns
             };
 
-            return AddInterceptAsync(parameters);
+            return AddInterceptAsync(@params);
         }
 
-        public Task<Modules.Network.AddInterceptResult> AddInterceptAsync(Modules.Network.AddInterceptParameters parameters)
+        private Task<Modules.Network.AddInterceptResult> AddInterceptAsync(Modules.Network.AddInterceptCommand.Parameters @params)
         {
-            return Network.AddInterceptAsync(parameters);
+            return Network.AddInterceptAsync(@params);
         }
 
         public async Task OnBrowsingContextCreatedAsync(Action<Modules.BrowsingContext.BrowsingContextInfoEventArgs> callback)
@@ -150,7 +150,7 @@ namespace OpenQA.Selenium.BiDi
 
         internal Task SubscribeAsync(params string[] events)
         {
-            return SessionModule.SubscribeAsync(new Modules.Session.SubscriptionCommandParameters { Events = events });
+            return SessionModule.SubscribeAsync(new Modules.Session.SubscribeCommand.Parameters { Events = events });
         }
 
         public async ValueTask DisposeAsync()

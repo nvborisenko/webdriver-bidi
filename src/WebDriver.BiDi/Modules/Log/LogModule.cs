@@ -4,7 +4,7 @@ using System;
 
 namespace OpenQA.Selenium.BiDi.Modules.Log;
 
-public sealed class LogModule
+internal sealed class LogModule
 {
     private readonly BiDi.Session _session;
     private readonly Broker _broker;
