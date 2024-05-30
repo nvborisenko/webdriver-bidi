@@ -396,7 +396,16 @@ namespace OpenQA.Selenium.BiDi.Tests
 
             var nodes = await context.LocateNodesAsync(Locator.Css("div"));
 
-            Console.WriteLine(nodes[0].SharedId);
+            foreach (var node in nodes)
+            {
+                Console.WriteLine(node.SharedId);
+                Console.WriteLine($"Namespace: {node.Value.NamespaceUri}");
+
+                foreach (var attr in node.Value.Attributes)
+                {
+                    Console.WriteLine($"{attr.Key}: {attr.Value}");
+                }
+            }
         }
 
         [Test]
