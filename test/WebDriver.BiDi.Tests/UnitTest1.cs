@@ -448,9 +448,9 @@ namespace OpenQA.Selenium.BiDi.Tests
         {
             var context = await session.CreateBrowsingContextAsync();
 
-            var res = await context.EvaluateAsync("abc;", true);
+            var func = async () => await context.EvaluateAsync("abc;", true);
 
-            res.GetType().Should().Be(typeof(EvaluateResultException));
+            await func.Should().ThrowAsync<ScriptException>();
         }
 
         [Test]
@@ -460,10 +460,7 @@ namespace OpenQA.Selenium.BiDi.Tests
 
             var evaluateResult = await context.EvaluateAsync("2 + 2", true);
 
-            evaluateResult.GetType().Should().Be(typeof(EvaluateResultSuccess));
-
-            var resSuccess = evaluateResult as EvaluateResultSuccess;
-            var numberValue = resSuccess.Result as NumberRemoteValue;
+            var numberValue = evaluateResult.Result as NumberRemoteValue;
             numberValue.Value.Should().Be(4);
 
             int nmb = await context.EvaluateAsync("2 + 3");

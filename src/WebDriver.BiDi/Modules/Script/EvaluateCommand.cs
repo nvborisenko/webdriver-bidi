@@ -21,41 +21,30 @@ internal class EvaluateCommand(EvaluateCommand.Parameters @params)
 [JsonDerivedType(typeof(EvaluateResultException), "exception")]
 public abstract class EvaluateResult
 {
-    public static implicit operator int(EvaluateResult r) => (int)(AsSuccess(r).Result as NumberRemoteValue).Value;
-    public static implicit operator long(EvaluateResult r) => (AsSuccess(r).Result as NumberRemoteValue).Value;
-    public static implicit operator NodeRemoteValue(EvaluateResult r) => AsSuccess(r).Result as NodeRemoteValue;
 
-    public static implicit operator string(EvaluateResult r)
-    {
-        var successResult = AsSuccess(r).Result;
-
-        if (successResult is StringRemoteValue stringValue)
-        {
-            return stringValue.Value;
-        }
-
-        if (successResult is NullRemoteValue)
-        {
-            return null;
-        }
-
-        throw new System.Exception($"Cannot convert {successResult} to string");
-    }
-
-    private static EvaluateResultSuccess AsSuccess(EvaluateResult evaluateResult)
-    {
-        if (evaluateResult is EvaluateResultException exception)
-        {
-            throw new System.Exception(exception.ExceptionDetails.Text);
-        }
-
-        return (EvaluateResultSuccess)evaluateResult;
-    }
 }
 
 public class EvaluateResultSuccess : EvaluateResult
 {
     public RemoteValue Result { get; set; }
+
+    public static implicit operator int(EvaluateResultSuccess r) => (int)(r.Result as NumberRemoteValue).Value;
+    public static implicit operator long(EvaluateResultSuccess r) => (r.Result as NumberRemoteValue).Value;
+    public static implicit operator NodeRemoteValue(EvaluateResultSuccess r) => r.Result as NodeRemoteValue;
+    public static implicit operator string(EvaluateResultSuccess r)
+    {
+        if (r.Result is StringRemoteValue stringValue)
+        {
+            return stringValue.Value;
+        }
+
+        if (r.Result is NullRemoteValue)
+        {
+            return null;
+        }
+
+        throw new System.Exception($"Cannot convert {r.Result} to string");
+    }
 }
 
 public class EvaluateResultException : EvaluateResult
@@ -66,6 +55,10 @@ public class EvaluateResultException : EvaluateResult
 public class ExceptionDetails
 {
     public uint ColumnNumber { get; set; }
+
+    public uint LineNumber { get; set; }
+
+    public StackTrace StackTrace { get; set; }
 
     public string Text { get; set; }
 }

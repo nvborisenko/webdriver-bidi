@@ -99,19 +99,19 @@ public class BrowsingContext
         return _session.BrowsingContextModule.CaptureScreenshotAsync(@params);
     }
 
-    public Task<Script.EvaluateResult> EvaluateAsync(string expression, bool awaitPromise = true)
+    public Task<Script.EvaluateResultSuccess> EvaluateAsync(string expression, bool awaitPromise = true)
     {
         var @params = new Script.EvaluateCommand.Parameters(expression, new Script.ContextTarget { Context = Id }, awaitPromise);
 
         return _session.Script.EvaluateAsync(@params);
     }
 
-    public Task<Script.EvaluateResult> CallFunctionAsync(string functionDeclaration, params Script.LocalValue[] arguments)
+    public Task<Script.EvaluateResultSuccess> CallFunctionAsync(string functionDeclaration, params Script.LocalValue[] arguments)
     {
         return CallFunctionAsync(functionDeclaration, awaitPromise: true, arguments: arguments);
     }
 
-    public Task<Script.EvaluateResult> CallFunctionAsync(string functionDeclaration, bool awaitPromise = true, IEnumerable<Script.LocalValue>? arguments = default)
+    public Task<Script.EvaluateResultSuccess> CallFunctionAsync(string functionDeclaration, bool awaitPromise = true, IEnumerable<Script.LocalValue>? arguments = default)
     {
         var @params = new Script.CallFunctionCommand.Parameters(functionDeclaration, awaitPromise, new Script.ContextTarget { Context = Id })
         {

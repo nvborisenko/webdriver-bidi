@@ -12,13 +12,27 @@ internal sealed class ScriptModule
         _broker = broker;
     }
 
-    public async Task<EvaluateResult> EvaluateAsync(EvaluateCommand.Parameters @params)
+    public async Task<EvaluateResultSuccess> EvaluateAsync(EvaluateCommand.Parameters @params)
     {
-        return await _broker.ExecuteCommandAsync<EvaluateResult>(new EvaluateCommand(@params)).ConfigureAwait(false);
+        var result = await _broker.ExecuteCommandAsync<EvaluateResult>(new EvaluateCommand(@params)).ConfigureAwait(false);
+
+        if (result is EvaluateResultException exp)
+        {
+            throw new ScriptException(exp);
+        }
+
+        return (EvaluateResultSuccess)result;
     }
 
-    public async Task<EvaluateResult> CallFunctionAsync(CallFunctionCommand.Parameters @params)
+    public async Task<EvaluateResultSuccess> CallFunctionAsync(CallFunctionCommand.Parameters @params)
     {
-        return await _broker.ExecuteCommandAsync<EvaluateResult>(new CallFunctionCommand(@params)).ConfigureAwait(false);
+        var result = await _broker.ExecuteCommandAsync<EvaluateResult>(new CallFunctionCommand(@params)).ConfigureAwait(false);
+
+        if (result is EvaluateResultException exp)
+        {
+            throw new ScriptException(exp);
+        }
+
+        return (EvaluateResultSuccess)result;
     }
 }
