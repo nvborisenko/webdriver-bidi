@@ -19,7 +19,7 @@ internal class Broker
     private readonly Transport _transport;
 
     private readonly ConcurrentDictionary<int?, TaskCompletionSource<object>> _pendingCommands = new();
-    private readonly BlockingCollection<MessageEvent<object>> _pendingEvents = [];
+    private readonly BlockingCollection<MessageEvent> _pendingEvents = [];
 
     private CancellationTokenSource _receiveMessagesCancellationTokenSource;
 
@@ -78,13 +78,13 @@ internal class Broker
             {
                 var message = await _transport.ReceiveAsJsonAsync<Message>(_jsonSourceGenerationContext, cancellationToken);
 
-                if (message is MessageSuccess<object> messageSuccess)
+                if (message is MessageSuccess messageSuccess)
                 {
                     _pendingCommands[messageSuccess.Id].SetResult(messageSuccess.Result);
 
                     _pendingCommands.TryRemove(messageSuccess.Id, out _);
                 }
-                else if (message is MessageEvent<object> messageEvent)
+                else if (message is MessageEvent messageEvent)
                 {
                     _pendingEvents.Add(messageEvent);
                 }
