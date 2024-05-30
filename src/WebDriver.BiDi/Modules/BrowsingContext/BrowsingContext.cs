@@ -101,7 +101,8 @@ public class BrowsingContext
 
     public Task<Script.EvaluateResult> EvaluateAsync(string expression, bool awaitPromise = true)
     {
-        var @params = new Script.EvaluateCommand.Parameters { Expression = expression, Target = new Script.ContextTarget { Context = Id }, AwaitPromise = awaitPromise };
+        var @params = new Script.EvaluateCommand.Parameters(expression, new Script.ContextTarget { Context = Id }, awaitPromise);
+
         return _session.Script.EvaluateAsync(@params);
     }
 

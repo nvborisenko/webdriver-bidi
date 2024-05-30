@@ -6,13 +6,13 @@ namespace OpenQA.Selenium.BiDi.Modules.Script;
 internal class EvaluateCommand(EvaluateCommand.Parameters @params)
     : Command<EvaluateCommand.Parameters>("script.evaluate", @params)
 {
-    internal class Parameters : CommandParameters
+    internal class Parameters(string expression, Target target, bool awaitPromise) : CommandParameters
     {
-        public string Expression { get; set; }
+        public string Expression { get; set; } = expression;
 
-        public Target Target { get; set; }
+        public Target Target { get; set; } = target;
 
-        public bool AwaitPromise { get; set; }
+        public bool AwaitPromise { get; set; } = awaitPromise;
     }
 }
 
