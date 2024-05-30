@@ -84,6 +84,11 @@ sealed class BrowsingContextModule
         return await _broker.ExecuteCommandAsync<GetTreeResult>(new GetTreeCommand(@params)).ConfigureAwait(false);
     }
 
+    public async Task<PrintResult> PrintAsync(PrintCommand.Parameters @params)
+    {
+        return await _broker.ExecuteCommandAsync<PrintResult>(new PrintCommand(@params)).ConfigureAwait(false);
+    }
+
     public async Task OnNavigationStartedAsync(Func<NavigationInfoEventArgs, Task> callback)
     {
         await _session.SubscribeAsync("browsingContext.navigationStarted").ConfigureAwait(false);

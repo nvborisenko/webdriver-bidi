@@ -33,7 +33,7 @@ namespace OpenQA.Selenium.BiDi.Tests
             var options = new ChromeOptions
             {
                 UseWebSocketUrl = true,
-                BrowserVersion = "beta"
+                BrowserVersion = "beta",
             };
 
             driver = new ChromeDriver(options);
@@ -79,6 +79,16 @@ namespace OpenQA.Selenium.BiDi.Tests
             var contexts = await session.GetTreeAsync();
 
             await contexts[0].Context.GetTreeAsync();
+        }
+
+        [Test]
+        public async Task Print()
+        {
+            var context = await driver.AsBiDiBrowsingContext();
+
+            var res = await context.PrintAsync(background: true);
+
+            res.Should().NotBeNull();
         }
 
         [Test]

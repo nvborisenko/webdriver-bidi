@@ -151,6 +151,24 @@ public class BrowsingContext
         return _session.GetTreeAsync(maxDepth, this);
     }
 
+    public async Task<string> PrintAsync(bool? background = default, Margin? margin = default, Orientation? orientation = default, Page? page = default, IEnumerable<uint>? pageRanges = default, double? scale = default, bool? shrinkToFit = default)
+    {
+        var @params = new PrintCommand.Parameters(this)
+        {
+            Background = background,
+            Margin = margin,
+            Orientation = orientation,
+            Page = page,
+            PageRanges = pageRanges,
+            Scale = scale,
+            ShrinkToFit = shrinkToFit
+        };
+
+        var result = await _session.BrowsingContextModule.PrintAsync(@params).ConfigureAwait(false);
+
+        return result.Data;
+    }
+
     public async Task<Network.Intercept> OnBeforeRequestSentAsync(Network.UrlPattern urlPattern, Func<Network.BeforeRequestSentEventArgs, Task> callback)
     {
         var intercept = await AddInterceptAsync([Network.InterceptPhase.BeforeRequestSent], [urlPattern]).ConfigureAwait(false);
