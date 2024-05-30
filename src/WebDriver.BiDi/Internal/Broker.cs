@@ -27,8 +27,7 @@ internal class Broker
 
     private int _currentCommandId;
 
-    private static readonly TaskFactory _myTaskFactory = new TaskFactory(CancellationToken.None,
-        TaskCreationOptions.None, TaskContinuationOptions.None, TaskScheduler.Default);
+    private static readonly TaskFactory _myTaskFactory = new(CancellationToken.None, TaskCreationOptions.DenyChildAttach, TaskContinuationOptions.None, TaskScheduler.Default);
 
     private readonly Task? _commandQueueTask;
     private Task? _receivingMessageTask;
@@ -67,8 +66,8 @@ internal class Broker
         await _transport.ConnectAsync(cancellationToken).ConfigureAwait(false);
 
         _receiveMessagesCancellationTokenSource = new CancellationTokenSource();
-        _receivingMessageTask = _myTaskFactory.StartNew(async () => await ReceiveMessagesAsync(_receiveMessagesCancellationTokenSource.Token)).Unwrap();
-        _eventEmitterTask = _myTaskFactory.StartNew(async () => await ProcessEventsAwaiterAsync()).Unwrap();
+        _receivingMessageTask = _myTaskFactory.StartNew(async () => await ReceiveMessagesAsync(_receiveMessagesCancellationTokenSource.Token), TaskCreationOptions.LongRunning).Unwrap();
+        _eventEmitterTask = _myTaskFactory.StartNew(async () => await ProcessEventsAwaiterAsync(), TaskCreationOptions.LongRunning).Unwrap();
     }
 
     private async Task ReceiveMessagesAsync(CancellationToken cancellationToken)
@@ -77,7 +76,7 @@ internal class Broker
         {
             try
             {
-                var message = await _transport.ReceiveAsJsonAsync<Message>(_jsonSourceGenerationContext, CancellationToken.None);
+                var message = await _transport.ReceiveAsJsonAsync<Message>(_jsonSourceGenerationContext, cancellationToken);
 
                 if (message is MessageSuccess<object> messageSuccess)
                 {
