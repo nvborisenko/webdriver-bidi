@@ -21,11 +21,11 @@ internal class Transport : IDisposable
         _uri = uri;
     }
 
-    private readonly ArraySegment<byte> _receiveBuffer = new(new byte[1024]);
+    private readonly ArraySegment<byte> _receiveBuffer = new(new byte[1024 * 8]);
 
     public async Task ConnectAsync(CancellationToken cancellationToken)
     {
-        _webSocket.Options.SetBuffer(1024, 1024, _receiveBuffer);
+        _webSocket.Options.SetBuffer(_receiveBuffer.Count, _receiveBuffer.Count, _receiveBuffer);
         await _webSocket.ConnectAsync(_uri, cancellationToken).ConfigureAwait(false);
     }
 
