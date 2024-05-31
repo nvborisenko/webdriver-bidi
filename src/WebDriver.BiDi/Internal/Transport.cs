@@ -26,18 +26,19 @@ internal class Transport : IDisposable
         await _webSocket.ConnectAsync(_uri, cancellationToken).ConfigureAwait(false);
     }
 
+    private readonly ArraySegment<byte> _receiveBuffer = new(new byte[1024]);
+
     public async Task<T> ReceiveAsJsonAsync<T>(JsonSerializerContext jsonSerializerContext, CancellationToken cancellationToken)
     {
-        var buffer = new ArraySegment<byte>(new byte[1024]);
-
         using var ms = new MemoryStream();
 
         WebSocketReceiveResult result;
 
         do
         {
-            result = await _webSocket.ReceiveAsync(buffer, cancellationToken).ConfigureAwait(false);
-            ms.Write(buffer.Array, buffer.Offset, result.Count);
+            result = await _webSocket.ReceiveAsync(_receiveBuffer, cancellationToken).ConfigureAwait(false);
+
+            ms.Write(_receiveBuffer.Array, _receiveBuffer.Offset, result.Count);
         } while (!result.EndOfMessage);
 
         ms.Seek(0, SeekOrigin.Begin);
