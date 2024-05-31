@@ -28,7 +28,7 @@ internal class Transport : IDisposable
 
     public async Task<T> ReceiveAsJsonAsync<T>(JsonSerializerContext jsonSerializerContext, CancellationToken cancellationToken)
     {
-        var buffer = new ArraySegment<byte>(new byte[jsonSerializerContext.Options.DefaultBufferSize]);
+        var buffer = new ArraySegment<byte>(new byte[1024]);
 
         using var ms = new MemoryStream();
 
