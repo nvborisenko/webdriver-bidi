@@ -21,12 +21,13 @@ internal class Transport : IDisposable
         _uri = uri;
     }
 
+    private readonly ArraySegment<byte> _receiveBuffer = new(new byte[1024]);
+
     public async Task ConnectAsync(CancellationToken cancellationToken)
     {
+        _webSocket.Options.SetBuffer(1024, 1024, _receiveBuffer);
         await _webSocket.ConnectAsync(_uri, cancellationToken).ConfigureAwait(false);
     }
-
-    private readonly ArraySegment<byte> _receiveBuffer = new(new byte[1024]);
 
     public async Task<T> ReceiveAsJsonAsync<T>(JsonSerializerContext jsonSerializerContext, CancellationToken cancellationToken)
     {
@@ -55,7 +56,7 @@ internal class Transport : IDisposable
         var buffer = JsonSerializer.SerializeToUtf8Bytes(obj, obj.GetType(), jsonSerializerContext);
 
 #if DEBUG
-        Debug.WriteLine($"SND >> {Encoding.UTF8.GetString(buffer)}");
+        Debug.WriteLine($"SND >> {buffer.Length} > {Encoding.UTF8.GetString(buffer)}");
 #endif
 
         await _webSocket.SendAsync(new ArraySegment<byte>(buffer), WebSocketMessageType.Text, true, cancellationToken).ConfigureAwait(false);
