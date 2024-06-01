@@ -1,8 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using OpenQA.Selenium.BiDi.Modules.BrowsingContext;
+using System;
+using System.Threading.Tasks;
 
 namespace OpenQA.Selenium.BiDi.Modules.Network;
 
-public class ResponseStartedEventArgs(ResponseData response) : BaseParametersEventArgs
+public class ResponseStartedEventArgs(BrowsingContext.BrowsingContext context, bool isBlocked, Navigation navigation, uint redirectCount, RequestData request, DateTime timestamp, ResponseData response)
+    : BaseParametersEventArgs(context, isBlocked, navigation, redirectCount, request, timestamp)
 {
     public ResponseData Response { get; } = response;
 

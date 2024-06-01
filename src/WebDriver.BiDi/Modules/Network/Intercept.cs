@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace OpenQA.Selenium.BiDi.Modules.Network;
 
@@ -10,7 +9,7 @@ public class Intercept
 {
     private BiDi.Session _session;
 
-    public Intercept(BiDi.Session session, string id)
+    internal Intercept(BiDi.Session session, string id)
     {
         _session = session;
         Id = id;
@@ -20,10 +19,7 @@ public class Intercept
 
     public Task RemoveAsync()
     {
-        var @params = new RemoveInterceptCommand.Parameters
-        {
-            Intercept = this
-        };
+        var @params = new RemoveInterceptCommand.Parameters(this);
 
         return _session.Network.RemoveInterceptAsync(@params);
     }

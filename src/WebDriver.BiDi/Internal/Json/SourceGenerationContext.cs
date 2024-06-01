@@ -74,6 +74,8 @@ namespace OpenQA.Selenium.BiDi.Internal.Json
     [JsonSerializable(typeof(Modules.Network.RemoveInterceptCommand.Parameters), TypeInfoPropertyName = "Network_RemoveInterceptCommand_Parameters")]
     [JsonSerializable(typeof(Modules.Network.BeforeRequestSentEventArgs))]
     [JsonSerializable(typeof(Modules.Network.ResponseStartedEventArgs))]
+    [JsonSerializable(typeof(Modules.Network.ResponseCompletedEventArgs))]
+    [JsonSerializable(typeof(Modules.Network.FetchErrorEventArgs))]
 
     [JsonSerializable(typeof(Modules.Script.EvaluateCommand))]
     [JsonSerializable(typeof(Modules.Script.EvaluateCommand.Parameters), TypeInfoPropertyName = "Script_EvaluateCommand_Parameters")]

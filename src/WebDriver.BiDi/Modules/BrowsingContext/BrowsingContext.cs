@@ -210,9 +210,8 @@ public class BrowsingContext
 
     public Task<Network.Intercept> AddInterceptAsync(List<Network.InterceptPhase> phases, List<Network.UrlPattern>? urlPatterns = default)
     {
-        var @params = new Network.AddInterceptCommand.Parameters
+        var @params = new Network.AddInterceptCommand.Parameters(phases)
         {
-            Phases = phases,
             UrlPatterns = urlPatterns
         };
 
@@ -372,6 +371,26 @@ public class BrowsingContext
     public Task OnResponseStartedAsync(Action<Network.ResponseStartedEventArgs> callback)
     {
         return _session.Network.OnResponseStartedAsync(callback);
+    }
+
+    public Task OnResponseCompletedAsync(Func<Network.ResponseCompletedEventArgs, Task> callback)
+    {
+        return _session.Network.OnResponseCompletedAsync(callback);
+    }
+
+    public Task OnResponseCompletedAsync(Action<Network.ResponseCompletedEventArgs> callback)
+    {
+        return _session.Network.OnResponseCompletedAsync(callback);
+    }
+
+    public Task OnFetchErrorAsync(Func<Network.FetchErrorEventArgs, Task> callback)
+    {
+        return _session.Network.OnFetchErrorAsync(callback);
+    }
+
+    public Task OnFetchErrorAsync(Action<Network.FetchErrorEventArgs> callback)
+    {
+        return _session.Network.OnFetchErrorAsync(callback);
     }
 
     public Task OnLogEntryAddedAsync(Func<Log.LogEntryEventArgs, Task> callback)

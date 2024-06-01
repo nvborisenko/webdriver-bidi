@@ -69,9 +69,8 @@ namespace OpenQA.Selenium.BiDi
 
         public Task<Modules.Network.AddInterceptResult> AddInterceptAsync(Modules.Network.InterceptPhase phase, List<Modules.Network.UrlPattern>? urlPatterns = default)
         {
-            var @params = new Modules.Network.AddInterceptCommand.Parameters
+            var @params = new Modules.Network.AddInterceptCommand.Parameters([phase])
             {
-                Phases = [phase],
                 UrlPatterns = urlPatterns
             };
 
@@ -80,9 +79,8 @@ namespace OpenQA.Selenium.BiDi
 
         public Task<Modules.Network.AddInterceptResult> AddInterceptAsync(List<Modules.Network.InterceptPhase> phases, List<Modules.Network.UrlPattern>? urlPatterns = default)
         {
-            var @params = new Modules.Network.AddInterceptCommand.Parameters
+            var @params = new Modules.Network.AddInterceptCommand.Parameters(phases)
             {
-                Phases = phases,
                 UrlPatterns = urlPatterns
             };
 

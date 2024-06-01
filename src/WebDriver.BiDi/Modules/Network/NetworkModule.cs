@@ -72,4 +72,32 @@ internal sealed class NetworkModule
 
         _broker.RegisterEventHandler("network.responseStarted", new BiDiEventHandler<ResponseStartedEventArgs>(callback));
     }
+
+    public async Task OnResponseCompletedAsync(Func<ResponseCompletedEventArgs, Task> callback)
+    {
+        await _session.SubscribeAsync("network.responseCompleted").ConfigureAwait(false);
+
+        _broker.RegisterEventHandler("network.responseCompleted", new BiDiEventHandler<ResponseCompletedEventArgs>(callback));
+    }
+
+    public async Task OnResponseCompletedAsync(Action<ResponseCompletedEventArgs> callback)
+    {
+        await _session.SubscribeAsync("network.responseCompleted").ConfigureAwait(false);
+
+        _broker.RegisterEventHandler("network.responseCompleted", new BiDiEventHandler<ResponseCompletedEventArgs>(callback));
+    }
+
+    public async Task OnFetchErrorAsync(Func<FetchErrorEventArgs, Task> callback)
+    {
+        await _session.SubscribeAsync("network.fetchError").ConfigureAwait(false);
+
+        _broker.RegisterEventHandler("network.fetchError", new BiDiEventHandler<FetchErrorEventArgs>(callback));
+    }
+
+    public async Task OnFetchErrorAsync(Action<FetchErrorEventArgs> callback)
+    {
+        await _session.SubscribeAsync("network.fetchError").ConfigureAwait(false);
+
+        _broker.RegisterEventHandler("network.fetchError", new BiDiEventHandler<FetchErrorEventArgs>(callback));
+    }
 }

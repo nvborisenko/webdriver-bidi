@@ -6,7 +6,7 @@ public class Request
 {
     private readonly BiDi.Session _session;
 
-    public Request(BiDi.Session session, string id)
+    internal Request(BiDi.Session session, string id)
     {
         _session = session;
         Id = id;
@@ -16,9 +16,8 @@ public class Request
 
     internal async Task ContinueAsync(string? method = default)
     {
-        var @params = new ContinueRequestCommand.Parameters
+        var @params = new ContinueRequestCommand.Parameters(this)
         {
-            Request = this,
             Method = method,
         };
 
@@ -27,16 +26,15 @@ public class Request
 
     internal async Task FailAsync()
     {
-        var @params = new FailRequestCommand.Parameters { Request = this };
+        var @params = new FailRequestCommand.Parameters(this);
 
         await _session.Network.FailRequestAsync(@params).ConfigureAwait(false);
     }
 
     internal async Task ProvideResponseAsync(uint? statusCode = default)
     {
-        var @params = new ProvideResponseCommand.Parameters
+        var @params = new ProvideResponseCommand.Parameters(this)
         {
-            Request = this,
             StatusCode = statusCode
         };
 
@@ -45,9 +43,8 @@ public class Request
 
     internal async Task ContinueResponseAsync(uint? statusCode = default)
     {
-        var @params = new ContinueResponseCommand.Parameters
+        var @params = new ContinueResponseCommand.Parameters(this)
         {
-            Request = this,
             StatusCode = statusCode
         };
 

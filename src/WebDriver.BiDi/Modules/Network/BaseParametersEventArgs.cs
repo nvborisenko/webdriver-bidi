@@ -1,46 +1,25 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using System;
-using OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
 namespace OpenQA.Selenium.BiDi.Modules.Network;
 
-public class BaseParametersEventArgs : EventArgs
+public class BaseParametersEventArgs(BrowsingContext.BrowsingContext context, bool isBlocked, BrowsingContext.Navigation navigation, uint redirectCount, RequestData request, DateTime timestamp)
+    : EventArgs
 {
-    [JsonInclude]
-    public BrowsingContext.BrowsingContext Context { get; internal set; }
+    public BrowsingContext.BrowsingContext Context { get; } = context;
 
-    [JsonInclude]
-    public bool IsBlocked { get; internal set; }
+    public bool IsBlocked { get; } = isBlocked;
 
-    [JsonInclude]
-    public Navigation Navigation { get; internal set; }
+    public BrowsingContext.Navigation Navigation { get; } = navigation;
 
-    [JsonInclude]
-    public uint RedirectCount { get; internal set; }
+    public uint RedirectCount { get; } = redirectCount;
 
-    [JsonInclude]
-    public RequestData Request { get; internal set; }
+    public RequestData Request { get; } = request;
 
-    [JsonInclude]
-    public DateTime Timestamp { get; internal set; }
+    public DateTime Timestamp { get; } = timestamp;
 
     [JsonInclude]
     public List<Intercept>? Intercepts { get; internal set; }
 }
 
-public class RequestData
-{
-    [JsonInclude]
-    public Request Request { get; internal set; }
-
-    [JsonInclude]
-    public string Url { get; internal set; }
-
-    [JsonInclude]
-    public string Method { get; internal set; }
-
-    public int? BodySize { get; set; }
-
-
-}
