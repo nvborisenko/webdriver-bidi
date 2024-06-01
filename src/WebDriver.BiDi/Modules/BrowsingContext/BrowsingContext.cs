@@ -334,6 +334,16 @@ public class BrowsingContext
         return _session.BrowsingContextModule.OnFragmentNavigatedAsync(callback);
     }
 
+    public Task OnDomContentLoadedAsync(Func<NavigationInfoEventArgs, Task> callback)
+    {
+        return _session.BrowsingContextModule.OnDomContentLoadedAsync(callback);
+    }
+
+    public Task OnDomContentLoadedAsync(Action<NavigationInfoEventArgs> callback)
+    {
+        return _session.BrowsingContextModule.OnDomContentLoadedAsync(callback);
+    }
+
     public Task OnBeforeRequestSentAsync(Func<Network.BeforeRequestSentEventArgs, Task> callback)
     {
         return _session.Network.OnBeforeRequestSentAsync(callback);
