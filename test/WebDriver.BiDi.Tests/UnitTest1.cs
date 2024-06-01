@@ -149,7 +149,7 @@ namespace OpenQA.Selenium.BiDi.Tests
 
             await context.NavigateAsync("https://google.com");
 
-            await context.SetViewportAsync(new Viewport(500, 300));
+            await context.SetViewportAsync(500, 300);
         }
 
         [Test]

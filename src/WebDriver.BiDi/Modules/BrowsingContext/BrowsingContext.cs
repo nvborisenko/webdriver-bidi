@@ -149,12 +149,12 @@ public class BrowsingContext
         return TraverseHistoryAsync(1);
     }
 
-    public Task SetViewportAsync(Viewport? viewport = default, double? devicePixelRatio = default)
+    public Task SetViewportAsync(uint width, uint height, double? devicePixelRatio = default)
     {
         var @params = new SetViewportCommand.Parameters
         {
             Context = this,
-            Viewport = viewport,
+            Viewport = new(width, height),
             DevicePixelRatio = devicePixelRatio
         };
 
