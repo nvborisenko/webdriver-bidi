@@ -18,6 +18,6 @@ public class UserContext
     {
         var @params = new RemoveUserContextCommand.Parameters(this);
 
-        await _session.Browser.RemoveUserContextAsync(@params).ConfigureAwait(false);
+        await _session.BrowserModule.RemoveUserContextAsync(@params).ConfigureAwait(false);
     }
 }

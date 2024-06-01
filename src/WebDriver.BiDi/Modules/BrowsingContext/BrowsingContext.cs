@@ -71,7 +71,7 @@ public class BrowsingContext
     {
         var @params = new Input.PerformActionsCommand.Parameters { Context = this, Actions = actions };
 
-        return _session.Input.PerformActionsAsync(@params);
+        return _session.InputModule.PerformActionsAsync(@params);
     }
 
     public Task<CaptureScreenshotResult> CaptureScreenshotAsync(Origin? origin = default, ImageFormat? imageFormat = default, ClipRectangle? clip = default)
@@ -90,7 +90,7 @@ public class BrowsingContext
     {
         var @params = new Script.EvaluateCommand.Parameters(expression, new Script.ContextTarget { Context = Id }, awaitPromise);
 
-        return _session.Script.EvaluateAsync(@params);
+        return _session.ScriptModule.EvaluateAsync(@params);
     }
 
     public Task<Script.EvaluateResultSuccess> CallFunctionAsync(string functionDeclaration, params Script.LocalValue[] arguments)
@@ -105,7 +105,7 @@ public class BrowsingContext
             Arguments = arguments
         };
 
-        return _session.Script.CallFunctionAsync(@params);
+        return _session.ScriptModule.CallFunctionAsync(@params);
     }
 
     public Task CloseAsync()
@@ -222,7 +222,7 @@ public class BrowsingContext
     {
         @params.Contexts = [this];
 
-        var result = await _session.Network.AddInterceptAsync(@params).ConfigureAwait(false);
+        var result = await _session.NetworkModule.AddInterceptAsync(@params).ConfigureAwait(false);
 
         return result.Intercept;
     }
@@ -246,7 +246,7 @@ public class BrowsingContext
             Partition = new Storage.BrowsingContextPartitionDescriptor(this)
         };
 
-        return _session.Storage.GetCookiesAsync(@params);
+        return _session.StorageModule.GetCookiesAsync(@params);
     }
 
     public async Task<Storage.PartitionKey> DeleteCookiesAsync(string? name = default, Network.BytesValue? value = default, string? domain = default, string? path = default, uint? size = default, bool? httpOnly = default, bool? secure = default, Network.SameSite sameSite = default, DateTime? expiry = default)
@@ -257,7 +257,7 @@ public class BrowsingContext
             Partition = new Storage.BrowsingContextPartitionDescriptor(this)
         };
 
-        var res = await _session.Storage.DeleteCookiesAsync(@params).ConfigureAwait(false);
+        var res = await _session.StorageModule.DeleteCookiesAsync(@params).ConfigureAwait(false);
 
         return res.PartitionKey;
     }
@@ -278,7 +278,7 @@ public class BrowsingContext
             Partition = new Storage.BrowsingContextPartitionDescriptor(this)
         };
 
-        var res = await _session.Storage.SetCookieAsync(@params).ConfigureAwait(false);
+        var res = await _session.StorageModule.SetCookieAsync(@params).ConfigureAwait(false);
 
         return res.PartitionKey;
     }
@@ -355,51 +355,51 @@ public class BrowsingContext
 
     public Task OnBeforeRequestSentAsync(Func<Network.BeforeRequestSentEventArgs, Task> callback)
     {
-        return _session.Network.OnBeforeRequestSentAsync(callback);
+        return _session.NetworkModule.OnBeforeRequestSentAsync(callback);
     }
 
     public Task OnBeforeRequestSentAsync(Action<Network.BeforeRequestSentEventArgs> callback)
     {
-        return _session.Network.OnBeforeRequestSentAsync(callback);
+        return _session.NetworkModule.OnBeforeRequestSentAsync(callback);
     }
 
     public Task OnResponseStartedAsync(Func<Network.ResponseStartedEventArgs, Task> callback)
     {
-        return _session.Network.OnResponseStartedAsync(callback);
+        return _session.NetworkModule.OnResponseStartedAsync(callback);
     }
 
     public Task OnResponseStartedAsync(Action<Network.ResponseStartedEventArgs> callback)
     {
-        return _session.Network.OnResponseStartedAsync(callback);
+        return _session.NetworkModule.OnResponseStartedAsync(callback);
     }
 
     public Task OnResponseCompletedAsync(Func<Network.ResponseCompletedEventArgs, Task> callback)
     {
-        return _session.Network.OnResponseCompletedAsync(callback);
+        return _session.NetworkModule.OnResponseCompletedAsync(callback);
     }
 
     public Task OnResponseCompletedAsync(Action<Network.ResponseCompletedEventArgs> callback)
     {
-        return _session.Network.OnResponseCompletedAsync(callback);
+        return _session.NetworkModule.OnResponseCompletedAsync(callback);
     }
 
     public Task OnFetchErrorAsync(Func<Network.FetchErrorEventArgs, Task> callback)
     {
-        return _session.Network.OnFetchErrorAsync(callback);
+        return _session.NetworkModule.OnFetchErrorAsync(callback);
     }
 
     public Task OnFetchErrorAsync(Action<Network.FetchErrorEventArgs> callback)
     {
-        return _session.Network.OnFetchErrorAsync(callback);
+        return _session.NetworkModule.OnFetchErrorAsync(callback);
     }
 
     public Task OnLogEntryAddedAsync(Func<Log.BaseLogEntryEventArgs, Task> callback)
     {
-        return _session.Log.OnEntryAddedAsync(callback);
+        return _session.LogModule.OnEntryAddedAsync(callback);
     }
 
     public Task OnLogEntryAddedAsync(Action<Log.BaseLogEntryEventArgs> callback)
     {
-        return _session.Log.OnEntryAddedAsync(callback);
+        return _session.LogModule.OnEntryAddedAsync(callback);
     }
 }

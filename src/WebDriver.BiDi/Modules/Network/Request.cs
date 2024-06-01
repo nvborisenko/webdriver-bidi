@@ -21,14 +21,14 @@ public class Request
             Method = method,
         };
 
-        await _session.Network.ContinueRequestAsync(@params).ConfigureAwait(false);
+        await _session.NetworkModule.ContinueRequestAsync(@params).ConfigureAwait(false);
     }
 
     internal async Task FailAsync()
     {
         var @params = new FailRequestCommand.Parameters(this);
 
-        await _session.Network.FailRequestAsync(@params).ConfigureAwait(false);
+        await _session.NetworkModule.FailRequestAsync(@params).ConfigureAwait(false);
     }
 
     internal async Task ProvideResponseAsync(uint? statusCode = default)
@@ -38,7 +38,7 @@ public class Request
             StatusCode = statusCode
         };
 
-        await _session.Network.ProvideResponseAsync(@params).ConfigureAwait(false);
+        await _session.NetworkModule.ProvideResponseAsync(@params).ConfigureAwait(false);
     }
 
     internal async Task ContinueResponseAsync(uint? statusCode = default)
@@ -48,6 +48,6 @@ public class Request
             StatusCode = statusCode
         };
 
-        await _session.Network.ContinueResponseAsync(@params).ConfigureAwait(false);
+        await _session.NetworkModule.ContinueResponseAsync(@params).ConfigureAwait(false);
     }
 }

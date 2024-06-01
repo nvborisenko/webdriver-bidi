@@ -43,17 +43,17 @@ namespace OpenQA.Selenium.BiDi
 
         internal Modules.BrowsingContext.Module BrowsingContextModule => _browsingContextModule.Value;
 
-        internal Modules.Browser.Module Browser => _browserModule.Value;
+        internal Modules.Browser.Module BrowserModule => _browserModule.Value;
 
-        internal Modules.Network.Module Network => _networkModule.Value;
+        internal Modules.Network.Module NetworkModule => _networkModule.Value;
 
-        internal Modules.Input.Module Input => _inputModule.Value;
+        internal Modules.Input.Module InputModule => _inputModule.Value;
 
-        internal Modules.Script.Module Script => _scriptModule.Value;
+        internal Modules.Script.Module ScriptModule => _scriptModule.Value;
 
-        internal Modules.Log.Module Log => _logModule.Value;
+        internal Modules.Log.Module LogModule => _logModule.Value;
 
-        internal Modules.Storage.Module Storage => _storageModule.Value;
+        internal Modules.Storage.Module StorageModule => _storageModule.Value;
 
         public Task<Modules.Session.StatusResult> StatusAsync()
         {
@@ -89,17 +89,17 @@ namespace OpenQA.Selenium.BiDi
 
         private Task<Modules.Network.AddInterceptResult> AddInterceptAsync(Modules.Network.AddInterceptCommand.Parameters @params)
         {
-            return Network.AddInterceptAsync(@params);
+            return NetworkModule.AddInterceptAsync(@params);
         }
 
         public Task<Modules.Browser.UserContextInfo> CreateBrowserUserContextAsync()
         {
-            return Browser.CreateUserContextAsync();
+            return BrowserModule.CreateUserContextAsync();
         }
 
         public async Task<IReadOnlyList<Modules.Browser.UserContextInfo>> GetBrowserUserContextsAsync()
         {
-            var result = await Browser.GetUserContextsAsync().ConfigureAwait(false);
+            var result = await BrowserModule.GetUserContextsAsync().ConfigureAwait(false);
 
             return result.UserContexts;
         }
@@ -139,22 +139,22 @@ namespace OpenQA.Selenium.BiDi
 
         public Task OnBeforeRequestSentAsync(Func<Modules.Network.BeforeRequestSentEventArgs, Task> callback)
         {
-            return Network.OnBeforeRequestSentAsync(callback);
+            return NetworkModule.OnBeforeRequestSentAsync(callback);
         }
 
         public Task OnBeforeRequestSentAsync(Action<Modules.Network.BeforeRequestSentEventArgs> callback)
         {
-            return Network.OnBeforeRequestSentAsync(callback);
+            return NetworkModule.OnBeforeRequestSentAsync(callback);
         }
 
         public Task OnResponseStartedAsync(Func<Modules.Network.ResponseStartedEventArgs, Task> callback)
         {
-            return Network.OnResponseStartedAsync(callback);
+            return NetworkModule.OnResponseStartedAsync(callback);
         }
 
         public Task OnResponseStartedAsync(Action<Modules.Network.ResponseStartedEventArgs> callback)
         {
-            return Network.OnResponseStartedAsync(callback);
+            return NetworkModule.OnResponseStartedAsync(callback);
         }
 
         public Task OnUserPromptOpenedAsync(Func<Modules.BrowsingContext.UserPromptOpenedEventArgs, Task> callback)

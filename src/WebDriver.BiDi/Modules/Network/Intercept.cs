@@ -21,7 +21,7 @@ public class Intercept
     {
         var @params = new RemoveInterceptCommand.Parameters(this);
 
-        return _session.Network.RemoveInterceptAsync(@params);
+        return _session.NetworkModule.RemoveInterceptAsync(@params);
     }
 
     public async ValueTask DisposeAsync()
