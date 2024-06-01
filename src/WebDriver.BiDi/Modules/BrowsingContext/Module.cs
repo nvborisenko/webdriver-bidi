@@ -4,12 +4,12 @@ using OpenQA.Selenium.BiDi.Internal;
 
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
-sealed class BrowsingContextModule
+sealed class Module
 {
     private readonly BiDi.Session _session;
     private readonly Broker _broker;
 
-    internal BrowsingContextModule(BiDi.Session session, Broker broker)
+    internal Module(BiDi.Session session, Broker broker)
     {
         _session = session;
         _broker = broker;

@@ -3,11 +3,11 @@ using System.Threading.Tasks;
 
 namespace OpenQA.Selenium.BiDi.Modules.Script;
 
-internal sealed class ScriptModule
+internal sealed class Module
 {
     private readonly Broker _broker;
 
-    internal ScriptModule(Broker broker)
+    internal Module(Broker broker)
     {
         _broker = broker;
     }

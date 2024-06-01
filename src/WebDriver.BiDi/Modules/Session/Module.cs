@@ -3,12 +3,12 @@ using System.Threading.Tasks;
 
 namespace OpenQA.Selenium.BiDi.Modules.Session;
 
-internal sealed class SessionModule
+internal sealed class Module
 {
     private readonly BiDi.Session _session;
     private readonly Broker _broker;
 
-    internal SessionModule(BiDi.Session session, Broker broker)
+    internal Module(BiDi.Session session, Broker broker)
     {
         _session = session;
         _broker = broker;

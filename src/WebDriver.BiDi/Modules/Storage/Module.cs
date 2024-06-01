@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace OpenQA.Selenium.BiDi.Modules.Storage;
 
-internal class StorageModule(Broker broker)
+internal class Module(Broker broker)
 {
     private readonly Broker _broker = broker;
 

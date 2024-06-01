@@ -3,11 +3,11 @@ using OpenQA.Selenium.BiDi.Internal;
 
 namespace OpenQA.Selenium.BiDi.Modules.Browser;
 
-internal sealed class BrowserModule
+internal sealed class Module
 {
     private readonly Broker _broker;
 
-    internal BrowserModule(Broker broker)
+    internal Module(Broker broker)
     {
         _broker = broker;
     }
