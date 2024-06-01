@@ -128,7 +128,7 @@ namespace OpenQA.Selenium.BiDi.Tests
 
             UserPromptClosedEventArgs args = null;
 
-            await session.OnUserPromptOpenedAsync(async e => await e.Context.HandleUserPromptAsync(accept:true, userText: "hi"));
+            await session.OnUserPromptOpenedAsync(async e => await e.Context.HandleUserPromptAsync(accept: true, userText: "hi"));
             await session.OnUserPromptClosedAsync(e => args = e);
 
             var context = await session.CreateBrowsingContextAsync();
@@ -243,6 +243,16 @@ namespace OpenQA.Selenium.BiDi.Tests
 
             info.Navigation.Should().BeNull();
             info.Url.Should().Contain("selenium.dev");
+        }
+
+        [Test]
+        public async Task GetCookies()
+        {
+            var context = await session.CreateBrowsingContextAsync();
+
+            var res = await context.GetCookiesAsync();
+
+            res.PartitionKey.UserContext.Should().Be("default");
         }
 
         [Test]

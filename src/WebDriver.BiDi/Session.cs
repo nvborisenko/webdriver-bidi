@@ -20,6 +20,7 @@ namespace OpenQA.Selenium.BiDi
         private readonly Lazy<Modules.Input.InputModule> _inputModule;
         private readonly Lazy<Modules.Script.ScriptModule> _scriptModule;
         private readonly Lazy<Modules.Log.LogModule> _logModule;
+        private readonly Lazy<Modules.Storage.StorageModule> _storageModule;
 
         internal Session(string url)
         {
@@ -35,6 +36,7 @@ namespace OpenQA.Selenium.BiDi
             _inputModule = new Lazy<Modules.Input.InputModule>(() => new Modules.Input.InputModule(_broker));
             _scriptModule = new Lazy<Modules.Script.ScriptModule>(() => new Modules.Script.ScriptModule(_broker));
             _logModule = new Lazy<Modules.Log.LogModule>(() => new Modules.Log.LogModule(this, _broker));
+            _storageModule = new Lazy<Modules.Storage.StorageModule>(() => new Modules.Storage.StorageModule(_broker));
         }
 
         internal Modules.Session.SessionModule SessionModule => _sessionModule.Value;
@@ -50,6 +52,8 @@ namespace OpenQA.Selenium.BiDi
         internal Modules.Script.ScriptModule Script => _scriptModule.Value;
 
         internal Modules.Log.LogModule Log => _logModule.Value;
+
+        internal Modules.Storage.StorageModule Storage => _storageModule.Value;
 
         public Task<Modules.Session.StatusResult> StatusAsync()
         {

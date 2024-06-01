@@ -257,6 +257,17 @@ public class BrowsingContext
         return _session.BrowsingContextModule.HandleUserPrompAsync(@params);
     }
 
+    public Task<Storage.GetCookiesResult> GetCookiesAsync(string? name = default, Network.BytesValue? value = default, string? domain = default, string? path = default, uint? size = default, bool? httpOnly = default, bool? secure = default, Network.SameSite sameSite = default, DateTime? expiry = default)
+    {
+        var @params = new Storage.GetCookiesCommand.Parameters()
+        {
+            Filter = new() { Name = name, Value = value, Domain = domain, Path = path, Size = size, HttpOnly = httpOnly, Secure = secure, SameSite = sameSite, Expiry = expiry },
+            Partition = new Storage.BrowsingContextPartitionDescriptor(this)
+        };
+
+        return _session.Storage.GetCookiesAsync(@params);
+    }
+
     public Task OnNavigationStartedAsync(Func<NavigationInfoEventArgs, Task> callback)
     {
         return _session.BrowsingContextModule.OnNavigationStartedAsync(callback);

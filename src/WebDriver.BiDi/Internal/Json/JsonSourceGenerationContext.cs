@@ -83,6 +83,10 @@ namespace OpenQA.Selenium.BiDi.Internal.Json
     [JsonSerializable(typeof(Modules.Input.ReleaseActionsCommand.Parameters), TypeInfoPropertyName = "Input_ReleaseActionsCommand_Parameters")]
 
     [JsonSerializable(typeof(Modules.Log.LogEntryEventArgs))]
+
+    [JsonSerializable(typeof(Modules.Storage.GetCookiesCommand))]
+    [JsonSerializable(typeof(Modules.Storage.GetCookiesCommand.Parameters), TypeInfoPropertyName = "Storage_GetCookiesCommand_Parameters")]
+    [JsonSerializable(typeof(Modules.Storage.GetCookiesResult))]
     internal partial class SourceGenerationContext : JsonSerializerContext
     {
 
