@@ -178,6 +178,20 @@ sealed class BrowsingContextModule
         _broker.RegisterEventHandler("browsingContext.navigationAborted", new BiDiEventHandler<NavigationInfoEventArgs>(callback));
     }
 
+    public async Task OnNavigationFailedAsync(Func<NavigationInfoEventArgs, Task> callback)
+    {
+        await _session.SubscribeAsync("browsingContext.navigationFailed").ConfigureAwait(false);
+
+        _broker.RegisterEventHandler("browsingContext.navigationFailed", new BiDiEventHandler<NavigationInfoEventArgs>(callback));
+    }
+
+    public async Task OnNavigationFailedAsync(Action<NavigationInfoEventArgs> callback)
+    {
+        await _session.SubscribeAsync("browsingContext.navigationFailed").ConfigureAwait(false);
+
+        _broker.RegisterEventHandler("browsingContext.navigationFailed", new BiDiEventHandler<NavigationInfoEventArgs>(callback));
+    }
+
     public async Task OnContextCreatedAsync(Func<BrowsingContextInfo, Task> callback)
     {
         await _session.SubscribeAsync("browsingContext.contextCreated").ConfigureAwait(false);

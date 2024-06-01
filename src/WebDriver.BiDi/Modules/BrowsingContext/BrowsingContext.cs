@@ -369,6 +369,16 @@ public class BrowsingContext
         return _session.BrowsingContextModule.OnNavigationAbortedAsync(callback);
     }
 
+    public Task OnNavigationFailedAsync(Action<NavigationInfoEventArgs> callback)
+    {
+        return _session.BrowsingContextModule.OnNavigationFailedAsync(callback);
+    }
+
+    public Task OnNavigationFailedAsync(Func<NavigationInfoEventArgs, Task> callback)
+    {
+        return _session.BrowsingContextModule.OnNavigationFailedAsync(callback);
+    }
+
     public Task OnDomContentLoadedAsync(Action<NavigationInfoEventArgs> callback)
     {
         return _session.BrowsingContextModule.OnDomContentLoadedAsync(callback);
