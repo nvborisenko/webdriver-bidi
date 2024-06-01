@@ -164,6 +164,20 @@ sealed class BrowsingContextModule
         _broker.RegisterEventHandler("browsingContext.downloadWillBegin", new BiDiEventHandler<NavigationInfoEventArgs>(callback));
     }
 
+    public async Task OnNavigationAbortedAsync(Func<NavigationInfoEventArgs, Task> callback)
+    {
+        await _session.SubscribeAsync("browsingContext.navigationAborted").ConfigureAwait(false);
+
+        _broker.RegisterEventHandler("browsingContext.navigationAborted", new BiDiEventHandler<NavigationInfoEventArgs>(callback));
+    }
+
+    public async Task OnNavigationAbortedAsync(Action<NavigationInfoEventArgs> callback)
+    {
+        await _session.SubscribeAsync("browsingContext.navigationAborted").ConfigureAwait(false);
+
+        _broker.RegisterEventHandler("browsingContext.navigationAborted", new BiDiEventHandler<NavigationInfoEventArgs>(callback));
+    }
+
     public async Task OnContextCreatedAsync(Func<BrowsingContextInfo, Task> callback)
     {
         await _session.SubscribeAsync("browsingContext.contextCreated").ConfigureAwait(false);
