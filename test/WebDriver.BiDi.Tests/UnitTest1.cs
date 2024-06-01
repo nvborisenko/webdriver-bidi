@@ -378,6 +378,19 @@ namespace OpenQA.Selenium.BiDi.Tests
         }
 
         [Test]
+        public async Task OnDownloadWillBegin()
+        {
+            var context = await session.CreateBrowsingContextAsync();
+
+            await context.OnDownloadWillBeginAsync(args =>
+            {
+                Console.WriteLine($"{DateTime.Now} {args}");
+            });
+
+            await context.NavigateAsync("https://selenium.dev");
+        }
+
+        [Test]
         public async Task OnLogEntryAdded()
         {
             var context = await session.CreateBrowsingContextAsync();

@@ -150,6 +150,20 @@ sealed class BrowsingContextModule
         _broker.RegisterEventHandler("browsingContext.load", new BiDiEventHandler<NavigationInfoEventArgs>(callback));
     }
 
+    public async Task OnDownloadWillBeginAsync(Func<NavigationInfoEventArgs, Task> callback)
+    {
+        await _session.SubscribeAsync("browsingContext.downloadWillBegin").ConfigureAwait(false);
+
+        _broker.RegisterEventHandler("browsingContext.downloadWillBegin", new BiDiEventHandler<NavigationInfoEventArgs>(callback));
+    }
+
+    public async Task OnDownloadWillBeginAsync(Action<NavigationInfoEventArgs> callback)
+    {
+        await _session.SubscribeAsync("browsingContext.downloadWillBegin").ConfigureAwait(false);
+
+        _broker.RegisterEventHandler("browsingContext.downloadWillBegin", new BiDiEventHandler<NavigationInfoEventArgs>(callback));
+    }
+
     public async Task OnContextCreatedAsync(Func<BrowsingContextInfo, Task> callback)
     {
         await _session.SubscribeAsync("browsingContext.contextCreated").ConfigureAwait(false);
