@@ -246,6 +246,17 @@ public class BrowsingContext
         return result.Intercept;
     }
 
+    public Task HandleUserPromptAsync(bool? accept = default, string? userText = default)
+    {
+        var @params = new HandleUserPromptCommand.Parameters(this)
+        {
+            Accept = accept,
+            UserText = userText
+        };
+
+        return _session.BrowsingContextModule.HandleUserPrompAsync(@params);
+    }
+
     public Task OnNavigationStartedAsync(Func<NavigationInfoEventArgs, Task> callback)
     {
         return _session.BrowsingContextModule.OnNavigationStartedAsync(callback);

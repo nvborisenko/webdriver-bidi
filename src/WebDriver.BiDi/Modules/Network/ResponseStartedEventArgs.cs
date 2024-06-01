@@ -1,12 +1,10 @@
-﻿using System.Text.Json.Serialization;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace OpenQA.Selenium.BiDi.Modules.Network;
 
-public class ResponseStartedEventArgs : BaseParametersEventArgs
+public class ResponseStartedEventArgs(ResponseData response) : BaseParametersEventArgs
 {
-    [JsonInclude]
-    public ResponseData Response { get; internal set; }
+    public ResponseData Response { get; } = response;
 
     public Task ContinueAsync(uint? statusCode = default)
     {

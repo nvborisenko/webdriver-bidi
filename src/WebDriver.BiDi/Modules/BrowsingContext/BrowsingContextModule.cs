@@ -89,6 +89,11 @@ sealed class BrowsingContextModule
         return await _broker.ExecuteCommandAsync<PrintResult>(new PrintCommand(@params)).ConfigureAwait(false);
     }
 
+    public async Task HandleUserPrompAsync(HandleUserPromptCommand.Parameters @params)
+    {
+        await _broker.ExecuteCommandAsync(new HandleUserPromptCommand(@params)).ConfigureAwait(false);
+    }
+
     public async Task OnNavigationStartedAsync(Func<NavigationInfoEventArgs, Task> callback)
     {
         await _session.SubscribeAsync("browsingContext.navigationStarted").ConfigureAwait(false);
@@ -101,5 +106,47 @@ sealed class BrowsingContextModule
         await _session.SubscribeAsync("browsingContext.navigationStarted").ConfigureAwait(false);
 
         _broker.RegisterEventHandler("browsingContext.navigationStarted", new BiDiEventHandler<NavigationInfoEventArgs>(callback));
+    }
+
+    public async Task OnContextCreatedAsync(Func<BrowsingContextInfo, Task> callback)
+    {
+        await _session.SubscribeAsync("browsingContext.contextCreated").ConfigureAwait(false);
+
+        _broker.RegisterEventHandler("browsingContext.contextCreated", new BiDiEventHandler<BrowsingContextInfo>(callback));
+    }
+
+    public async Task OnContextCreatedAsync(Action<BrowsingContextInfo> callback)
+    {
+        await _session.SubscribeAsync("browsingContext.contextCreated").ConfigureAwait(false);
+
+        _broker.RegisterEventHandler("browsingContext.contextCreated", new BiDiEventHandler<BrowsingContextInfo>(callback));
+    }
+
+    public async Task OnUserPromptOpenedAsync(Func<UserPromptOpenedEventArgs, Task> callback)
+    {
+        await _session.SubscribeAsync("browsingContext.userPromptOpened").ConfigureAwait(false);
+
+        _broker.RegisterEventHandler("browsingContext.userPromptOpened", new BiDiEventHandler<UserPromptOpenedEventArgs>(callback));
+    }
+
+    public async Task OnUserPromptOpenedAsync(Action<UserPromptOpenedEventArgs> callback)
+    {
+        await _session.SubscribeAsync("browsingContext.userPromptOpened").ConfigureAwait(false);
+
+        _broker.RegisterEventHandler("browsingContext.userPromptOpened", new BiDiEventHandler<UserPromptOpenedEventArgs>(callback));
+    }
+
+    public async Task OnUserPromptClosedAsync(Func<UserPromptClosedEventArgs, Task> callback)
+    {
+        await _session.SubscribeAsync("browsingContext.userPromptClosed").ConfigureAwait(false);
+
+        _broker.RegisterEventHandler("browsingContext.userPromptClosed", new BiDiEventHandler<UserPromptClosedEventArgs>(callback));
+    }
+
+    public async Task OnUserPromptClosedAsync(Action<UserPromptClosedEventArgs> callback)
+    {
+        await _session.SubscribeAsync("browsingContext.userPromptClosed").ConfigureAwait(false);
+
+        _broker.RegisterEventHandler("browsingContext.userPromptClosed", new BiDiEventHandler<UserPromptClosedEventArgs>(callback));
     }
 }

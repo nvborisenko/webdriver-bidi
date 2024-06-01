@@ -48,6 +48,10 @@ namespace OpenQA.Selenium.BiDi.Internal.Json
     [JsonSerializable(typeof(Modules.BrowsingContext.PrintCommand))]
     [JsonSerializable(typeof(Modules.BrowsingContext.PrintCommand.Parameters), TypeInfoPropertyName = "BrowsingContext_PrintCommand_Parameters")]
     [JsonSerializable(typeof(Modules.BrowsingContext.PrintResult))]
+    [JsonSerializable(typeof(Modules.BrowsingContext.HandleUserPromptCommand))]
+    [JsonSerializable(typeof(Modules.BrowsingContext.HandleUserPromptCommand.Parameters), TypeInfoPropertyName = "BrowsingContext_HandleUserPromptCommand_Parameters")]
+    [JsonSerializable(typeof(Modules.BrowsingContext.UserPromptOpenedEventArgs))]
+    [JsonSerializable(typeof(Modules.BrowsingContext.UserPromptClosedEventArgs))]
     [JsonSerializable(typeof(Modules.BrowsingContext.CloseCommand))]
     [JsonSerializable(typeof(Modules.BrowsingContext.CloseCommand.Parameters), TypeInfoPropertyName = "BrowsingContext_CloseCommand_Parameters")]
 

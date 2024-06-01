@@ -115,18 +115,14 @@ namespace OpenQA.Selenium.BiDi
             return result.Contexts;
         }
 
-        public async Task OnBrowsingContextCreatedAsync(Action<Modules.BrowsingContext.BrowsingContextInfo> callback)
+        public Task OnBrowsingContextCreatedAsync(Action<Modules.BrowsingContext.BrowsingContextInfo> callback)
         {
-            await SubscribeAsync("browsingContext.contextCreated").ConfigureAwait(false);
-
-            _broker.RegisterEventHandler("browsingContext.contextCreated", new BiDiEventHandler<Modules.BrowsingContext.BrowsingContextInfo>(callback));
+            return BrowsingContextModule.OnContextCreatedAsync(callback);
         }
 
-        public async Task OnBrowsingContextCreatedAsync(Func<Modules.BrowsingContext.BrowsingContextInfo, Task> callback)
+        public Task OnBrowsingContextCreatedAsync(Func<Modules.BrowsingContext.BrowsingContextInfo, Task> callback)
         {
-            await SubscribeAsync("browsingContext.contextCreated").ConfigureAwait(false);
-
-            _broker.RegisterEventHandler("browsingContext.contextCreated", new BiDiEventHandler<Modules.BrowsingContext.BrowsingContextInfo>(callback));
+            return BrowsingContextModule.OnContextCreatedAsync(callback);
         }
 
         public Task OnBeforeRequestSentAsync(Func<Modules.Network.BeforeRequestSentEventArgs, Task> callback)
@@ -147,6 +143,26 @@ namespace OpenQA.Selenium.BiDi
         public Task OnResponseStartedAsync(Action<Modules.Network.ResponseStartedEventArgs> callback)
         {
             return Network.OnResponseStartedAsync(callback);
+        }
+
+        public Task OnUserPromptOpenedAsync(Func<Modules.BrowsingContext.UserPromptOpenedEventArgs, Task> callback)
+        {
+            return BrowsingContextModule.OnUserPromptOpenedAsync(callback);
+        }
+
+        public Task OnUserPromptOpenedAsync(Action<Modules.BrowsingContext.UserPromptOpenedEventArgs> callback)
+        {
+            return BrowsingContextModule.OnUserPromptOpenedAsync(callback);
+        }
+
+        public Task OnUserPromptClosedAsync(Func<Modules.BrowsingContext.UserPromptClosedEventArgs, Task> callback)
+        {
+            return BrowsingContextModule.OnUserPromptClosedAsync(callback);
+        }
+
+        public Task OnUserPromptClosedAsync(Action<Modules.BrowsingContext.UserPromptClosedEventArgs> callback)
+        {
+            return BrowsingContextModule.OnUserPromptClosedAsync(callback);
         }
 
         public static async Task<Session> ConnectAsync(string url)

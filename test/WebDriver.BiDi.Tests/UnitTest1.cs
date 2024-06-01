@@ -106,6 +106,42 @@ namespace OpenQA.Selenium.BiDi.Tests
         }
 
         [Test]
+        public async Task OnBrowsingContextCreated()
+        {
+            var session = await driver.AsBiDiSessionAsync();
+
+            await session.OnBrowsingContextCreatedAsync(async e => await e.Context.NavigateAsync("https://selenium.dev"));
+
+            var context = await session.CreateBrowsingContextAsync();
+
+            await Task.Delay(500);
+
+            string url = await context.EvaluateAsync("window.location.href");
+
+            url.Should().Be("https://www.selenium.dev/");
+        }
+
+        [Test]
+        public async Task OnUserPromptOpened()
+        {
+            var session = await driver.AsBiDiSessionAsync();
+
+            UserPromptClosedEventArgs args = null;
+
+            await session.OnUserPromptOpenedAsync(async e => await e.Context.HandleUserPromptAsync(accept:true, userText: "hi"));
+            await session.OnUserPromptClosedAsync(e => args = e);
+
+            var context = await session.CreateBrowsingContextAsync();
+
+            await context.EvaluateAsync("prompt()");
+
+            await Task.Delay(100);
+
+            args.Should().NotBeNull();
+            args.UserText.Should().Be("hi");
+        }
+
+        [Test]
         public async Task SetViewport()
         {
             var context = await driver.AsBiDiBrowsingContext();
