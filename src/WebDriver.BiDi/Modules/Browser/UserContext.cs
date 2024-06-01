@@ -1,5 +1,4 @@
-﻿using System.Text.Json.Serialization;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace OpenQA.Selenium.BiDi.Modules.Browser;
 
@@ -13,8 +12,7 @@ public class UserContext
         Id = id;
     }
 
-    [JsonInclude]
-    public string Id { get; internal set; }
+    public string Id { get; }
 
     public async Task RemoveAsync()
     {

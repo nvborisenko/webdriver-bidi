@@ -3,20 +3,17 @@ using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
-public class BrowsingContextInfo : EventArgs
+public class BrowsingContextInfo(IReadOnlyList<BrowsingContextInfo> children, BrowsingContext context, string url, Browser.UserContext userContext)
+    : EventArgs
 {
-    [JsonInclude]
-    public IReadOnlyList<BrowsingContextInfo> Children { get; internal set; }
+    public IReadOnlyList<BrowsingContextInfo> Children { get; } = children;
+
+    public BrowsingContext Context { get; } = context;
+
+    public string Url { get; } = url;
+
+    public Browser.UserContext UserContext { get; } = userContext;
 
     [JsonInclude]
-    public BrowsingContext Context { get; internal set; }
-
-    [JsonInclude]
-    public string Url { get; internal set; }
-
-    [JsonInclude]
-    public Browser.UserContext UserContext { get; internal set; }
-
-    [JsonInclude]
-    public BrowsingContext Parent { get; internal set; }
+    public BrowsingContext? Parent { get; internal set; }
 }

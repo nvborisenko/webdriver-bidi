@@ -1,9 +1,6 @@
-﻿using System.Text.Json.Serialization;
+﻿namespace OpenQA.Selenium.BiDi.Modules.Browser;
 
-namespace OpenQA.Selenium.BiDi.Modules.Browser;
-
-public class UserContextInfo
+public class UserContextInfo(UserContext userContext)
 {
-    [JsonInclude]
-    public UserContext UserContext { get; internal set; }
+    public UserContext UserContext { get; } = userContext;
 }

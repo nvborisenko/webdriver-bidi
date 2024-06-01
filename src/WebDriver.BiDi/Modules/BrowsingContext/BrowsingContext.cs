@@ -6,15 +6,15 @@ namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
 public class BrowsingContext
 {
-    private readonly BiDi.Session _session;
+    readonly BiDi.Session _session;
 
-    public BrowsingContext(BiDi.Session session, string id)
+    internal BrowsingContext(BiDi.Session session, string id)
     {
         _session = session;
         Id = id;
     }
 
-    internal string Id { get; private set; }
+    internal string Id { get; }
 
     public override bool Equals(object obj)
     {
