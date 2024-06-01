@@ -1,5 +1,4 @@
 ﻿using OpenQA.Selenium.BiDi.Modules.Browser;
-using OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;

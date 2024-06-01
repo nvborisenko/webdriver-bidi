@@ -47,12 +47,12 @@ internal class Broker
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
             Converters =
             {
-                new JsonBrowsingContextConverter(_session),
+                new BrowsingContextConverter(_session),
                 new BrowserUserContextConverter(session),
-                new JsonNavigationConverter(),
-                new JsonInterceptConverter(_session),
-                new JsonRequestConverter(_session),
-                new JsonDateTimeConverter(),
+                new NavigationConverter(),
+                new InterceptConverter(_session),
+                new RequestConverter(_session),
+                new DateTimeConverter(),
                 new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)
             },
             AllowOutOfOrderMetadataProperties = true

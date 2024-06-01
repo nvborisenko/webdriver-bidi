@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Internal.Json;
 
-internal class JsonNavigationConverter : JsonConverter<Navigation>
+internal class NavigationConverter : JsonConverter<Navigation>
 {
     public override Navigation? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {

@@ -5,11 +5,11 @@ using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Internal.Json;
 
-internal class JsonRequestConverter : JsonConverter<Request>
+internal class RequestConverter : JsonConverter<Request>
 {
     private readonly Session _session;
 
-    public JsonRequestConverter(Session session)
+    public RequestConverter(Session session)
     {
         _session = session;
     }

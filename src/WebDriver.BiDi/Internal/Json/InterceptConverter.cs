@@ -5,11 +5,11 @@ using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Internal.Json;
 
-internal class JsonInterceptConverter : JsonConverter<Intercept>
+internal class InterceptConverter : JsonConverter<Intercept>
 {
     private readonly Session _session;
 
-    public JsonInterceptConverter(Session session)
+    public InterceptConverter(Session session)
     {
         _session = session;
     }

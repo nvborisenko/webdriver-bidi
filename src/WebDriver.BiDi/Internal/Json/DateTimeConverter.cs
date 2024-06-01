@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Internal.Json;
 
-internal class JsonDateTimeConverter : JsonConverter<DateTime>
+internal class DateTimeConverter : JsonConverter<DateTime>
 {
     static readonly DateTime s_epoch = new(1970, 1, 1, 0, 0, 0);
     public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
