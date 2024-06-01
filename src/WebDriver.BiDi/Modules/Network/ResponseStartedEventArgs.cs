@@ -1,13 +1,19 @@
 ﻿using OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 using System;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace OpenQA.Selenium.BiDi.Modules.Network;
 
-public class ResponseStartedEventArgs(BrowsingContext.BrowsingContext context, bool isBlocked, Navigation navigation, uint redirectCount, RequestData request, DateTime timestamp, ResponseData response)
-    : BaseParametersEventArgs(context, isBlocked, navigation, redirectCount, request, timestamp)
+public class ResponseStartedEventArgs : BaseParametersEventArgs
 {
-    public ResponseData Response { get; } = response;
+    [JsonConstructor]
+    internal ResponseStartedEventArgs(BrowsingContext.BrowsingContext context, bool isBlocked, Navigation navigation, uint redirectCount, RequestData request, DateTime timestamp, ResponseData response) : base(context, isBlocked, navigation, redirectCount, request, timestamp)
+    {
+        Response = response;
+    }
+
+    public ResponseData Response { get; }
 
     public Task ContinueAsync(uint? statusCode = default)
     {

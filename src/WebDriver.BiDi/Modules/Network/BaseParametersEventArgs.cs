@@ -4,7 +4,7 @@ using System;
 
 namespace OpenQA.Selenium.BiDi.Modules.Network;
 
-public class BaseParametersEventArgs(BrowsingContext.BrowsingContext context, bool isBlocked, BrowsingContext.Navigation navigation, uint redirectCount, RequestData request, DateTime timestamp)
+public abstract class BaseParametersEventArgs(BrowsingContext.BrowsingContext context, bool isBlocked, BrowsingContext.Navigation navigation, uint redirectCount, RequestData request, DateTime timestamp)
     : EventArgs
 {
     public BrowsingContext.BrowsingContext Context { get; } = context;
