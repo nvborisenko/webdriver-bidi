@@ -63,10 +63,3 @@ public class StorageKeyPartitionDescriptor : PartitionDescriptor
 
     public string? SourceOrigin { get; set; }
 }
-
-public class PartitionKey
-{
-    public string? UserContext { get; set; }
-
-    public string? SourceOrigin { get; set; }
-}

@@ -393,12 +393,12 @@ public class BrowsingContext
         return _session.Network.OnFetchErrorAsync(callback);
     }
 
-    public Task OnLogEntryAddedAsync(Func<Log.LogEntryEventArgs, Task> callback)
+    public Task OnLogEntryAddedAsync(Func<Log.BaseLogEntryEventArgs, Task> callback)
     {
         return _session.Log.OnEntryAddedAsync(callback);
     }
 
-    public Task OnLogEntryAddedAsync(Action<Log.LogEntryEventArgs> callback)
+    public Task OnLogEntryAddedAsync(Action<Log.BaseLogEntryEventArgs> callback)
     {
         return _session.Log.OnEntryAddedAsync(callback);
     }
