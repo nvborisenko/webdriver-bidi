@@ -204,7 +204,7 @@ namespace OpenQA.Selenium.BiDi
 
         internal Task SubscribeAsync(params string[] events)
         {
-            return SessionModule.SubscribeAsync(new Modules.Session.SubscribeCommand.Parameters { Events = events });
+            return SessionModule.SubscribeAsync(new Modules.Session.SubscribeCommand.Parameters(events));
         }
 
         public async ValueTask DisposeAsync()

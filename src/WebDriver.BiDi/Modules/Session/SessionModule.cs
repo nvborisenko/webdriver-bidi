@@ -19,8 +19,13 @@ internal sealed class SessionModule
         return await _broker.ExecuteCommandAsync<StatusResult>(new StatusCommand()).ConfigureAwait(false);
     }
 
-    internal async Task SubscribeAsync(SubscribeCommand.Parameters @params)
+    public async Task SubscribeAsync(SubscribeCommand.Parameters @params)
     {
         await _broker.ExecuteCommandAsync(new SubscribeCommand(@params)).ConfigureAwait(false);
+    }
+
+    public async Task<NewResult> NewAsync(NewCommand.Parameters @params)
+    {
+        return await _broker.ExecuteCommandAsync<NewResult>(new NewCommand(@params)).ConfigureAwait(false);
     }
 }

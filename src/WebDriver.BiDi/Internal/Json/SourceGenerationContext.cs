@@ -8,6 +8,10 @@ namespace OpenQA.Selenium.BiDi.Internal.Json
     [JsonSerializable(typeof(Modules.Session.StatusResult))]
     [JsonSerializable(typeof(Modules.Session.SubscribeCommand))]
     [JsonSerializable(typeof(Modules.Session.SubscribeCommand.Parameters), TypeInfoPropertyName = "Session_SubscribeCommand_Parameters")]
+    [JsonSerializable(typeof(Modules.Session.UnsubscribeCommand))]
+    [JsonSerializable(typeof(Modules.Session.NewCommand))]
+    [JsonSerializable(typeof(Modules.Session.NewCommand.Parameters), TypeInfoPropertyName = "Session_NewCommand_Parameters")]
+    [JsonSerializable(typeof(Modules.Session.NewResult))]
     [JsonSerializable(typeof(Modules.Session.EndCommand))]
 
     [JsonSerializable(typeof(Modules.Browser.CreateUserContextCommand))]
