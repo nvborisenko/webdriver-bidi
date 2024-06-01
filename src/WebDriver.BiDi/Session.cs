@@ -62,7 +62,7 @@ namespace OpenQA.Selenium.BiDi
 
         public async Task<Modules.BrowsingContext.BrowsingContext> CreateBrowsingContextAsync()
         {
-            var createResult = await BrowsingContextModule.CreateAsync(new Modules.BrowsingContext.CreateCommand.Parameters()).ConfigureAwait(false);
+            var createResult = await BrowsingContextModule.CreateAsync(new Modules.BrowsingContext.CreateCommand.Parameters(Modules.BrowsingContext.BrowsingContextType.Tab)).ConfigureAwait(false);
 
             return createResult.Context;
         }

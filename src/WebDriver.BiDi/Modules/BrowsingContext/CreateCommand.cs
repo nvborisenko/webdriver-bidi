@@ -1,16 +1,19 @@
 ﻿using OpenQA.Selenium.BiDi.Internal;
-using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
 internal class CreateCommand(CreateCommand.Parameters @params)
     : Command<CreateCommand.Parameters>("browsingContext.create", @params)
 {
-    internal class Parameters : CommandParameters
+    internal class Parameters(BrowsingContextType type) : CommandParameters
     {
-        public BrowsingContextType Type { get; set; } = BrowsingContextType.Tab;
+        public BrowsingContextType Type { get; } = type;
 
         public BrowsingContext? ReferenceContext { get; set; }
+
+        public bool? Background { get; set; }
+
+        public Browser.UserContext? UserContext { get; set; }
     }
 }
 
@@ -20,8 +23,7 @@ public enum BrowsingContextType
     Window
 }
 
-public class CreateResult
+public class CreateResult(BrowsingContext context)
 {
-    [JsonInclude]
-    public BrowsingContext Context { get; internal set; }
+    public BrowsingContext Context { get; } = context;
 }

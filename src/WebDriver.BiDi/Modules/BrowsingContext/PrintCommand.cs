@@ -1,6 +1,5 @@
 ﻿using OpenQA.Selenium.BiDi.Internal;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
@@ -52,8 +51,7 @@ public struct Page
     public double? Width { get; set; }
 }
 
-internal class PrintResult
+internal class PrintResult(string data)
 {
-    [JsonInclude]
-    public string Data { get; internal set; }
+    public string Data { get; } = data;
 }

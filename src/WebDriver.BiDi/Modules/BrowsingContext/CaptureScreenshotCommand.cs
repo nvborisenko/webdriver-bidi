@@ -6,9 +6,9 @@ namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 internal class CaptureScreenshotCommand(CaptureScreenshotCommand.Parameters @params)
     : Command<CaptureScreenshotCommand.Parameters>("browsingContext.captureScreenshot", @params)
 {
-    internal class Parameters : CommandParameters
+    internal class Parameters(BrowsingContext context) : CommandParameters
     {
-        public string Context { get; set; }
+        public BrowsingContext Context { get; } = context;
 
         public Origin? Origin { get; set; }
 
@@ -18,60 +18,48 @@ internal class CaptureScreenshotCommand(CaptureScreenshotCommand.Parameters @par
     }
 }
 
-
-
 public enum Origin
 {
     Viewport,
     Document
 }
 
-public class ImageFormat
+public class ImageFormat(string type)
 {
-    public ImageFormat(string type)
-    {
-        Type = type;
-    }
-
-    public string Type { get; set; }
+    public string Type { get; set; } = type;
 
     public double? Quality { get; set; }
 }
 
-[JsonDerivedType(typeof(BoxClipRectangle))]
-[JsonDerivedType(typeof(ElementClipRectangle))]
+[JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
+[JsonDerivedType(typeof(BoxClipRectangle), "box")]
+[JsonDerivedType(typeof(ElementClipRectangle), "element")]
 public abstract class ClipRectangle
 {
-    public abstract string Type { get; }
 
-    public static BoxClipRectangle Box(double x, double y, double width, double height)
-        => new() { X = x, Y = y, Width = width, Height = height };
 }
 
-public class BoxClipRectangle : ClipRectangle
+public class BoxClipRectangle(double x, double y, double width, double height)
+    : ClipRectangle
 {
-    public override string Type => "box";
+    public double X { get; } = x;
 
-    public double X { get; set; }
+    public double Y { get; } = y;
 
-    public double Y { get; set; }
+    public double Width { get; } = width;
 
-    public double Width { get; set; }
-
-    public double Height { get; set; }
+    public double Height { get; } = height;
 }
 
-public class ElementClipRectangle : ClipRectangle
+public class ElementClipRectangle(Script.SharedReference element)
+    : ClipRectangle
 {
-    public override string Type => "element";
-
-    public Script.SharedReference Element { get; set; }
+    public Script.SharedReference Element { get; } = element;
 }
 
-public class CaptureScreenshotResult
+public class CaptureScreenshotResult(string data)
 {
-    [JsonInclude]
-    public string Data { get; internal set; }
+    public string Data { get; } = data;
 
     public byte[] AsBytes()
     {

@@ -30,23 +30,15 @@ public class BrowsingContext
 
     public Task<NavigateResult> NavigateAsync(string url, ReadinessState wait = ReadinessState.Complete)
     {
-        var @params = new NavigateCommand.Parameters { Url = url, Wait = wait };
-
-        return NavigateAsync(@params);
-    }
-
-    private Task<NavigateResult> NavigateAsync(NavigateCommand.Parameters @params)
-    {
-        @params.Context = this;
+        var @params = new NavigateCommand.Parameters(this, url) { Wait = wait };
 
         return _session.BrowsingContextModule.NavigateAsync(@params);
     }
 
     public Task<NavigateResult> ReloadAsync(bool? ignoreCache = default, ReadinessState? wait = default)
     {
-        var @params = new ReloadCommand.Parameters
+        var @params = new ReloadCommand.Parameters(this)
         {
-            Context = this,
             IgnoreCache = ignoreCache,
             Wait = wait
         };
@@ -61,19 +53,9 @@ public class BrowsingContext
         return _session.BrowsingContextModule.ActivateAsync(@params);
     }
 
-    public Task<IReadOnlyList<Script.NodeRemoteValue>> LocateNodesAsync(Locator locator)
+    public async Task<IReadOnlyList<Script.NodeRemoteValue>> LocateNodesAsync(Locator locator)
     {
-        var @params = new LocateNodesCommand.Parameters
-        {
-            Locator = locator
-        };
-
-        return LocateNodesAsync(@params);
-    }
-
-    private async Task<IReadOnlyList<Script.NodeRemoteValue>> LocateNodesAsync(LocateNodesCommand.Parameters @params)
-    {
-        @params.Context = Id;
+        var @params = new LocateNodesCommand.Parameters(this, locator);
 
         var result = await _session.BrowsingContextModule.LocateNodesAsync(@params).ConfigureAwait(false);
 
@@ -94,19 +76,12 @@ public class BrowsingContext
 
     public Task<CaptureScreenshotResult> CaptureScreenshotAsync(Origin? origin = default, ImageFormat? imageFormat = default, ClipRectangle? clip = default)
     {
-        var @params = new CaptureScreenshotCommand.Parameters
+        var @params = new CaptureScreenshotCommand.Parameters(this)
         {
             Origin = origin,
             Format = imageFormat,
             Clip = clip
         };
-
-        return CaptureScreenshotAsync(@params);
-    }
-
-    private Task<CaptureScreenshotResult> CaptureScreenshotAsync(CaptureScreenshotCommand.Parameters @params)
-    {
-        @params.Context = Id;
 
         return _session.BrowsingContextModule.CaptureScreenshotAsync(@params);
     }
@@ -135,18 +110,14 @@ public class BrowsingContext
 
     public Task CloseAsync()
     {
-        var @params = new CloseCommand.Parameters { Context = this };
+        var @params = new CloseCommand.Parameters(this);
 
         return _session.BrowsingContextModule.CloseAsync(@params);
     }
 
     public Task TraverseHistoryAsync(int delta)
     {
-        var @params = new TraverseHistoryCommand.Parameters
-        {
-            Context = this,
-            Delta = delta
-        };
+        var @params = new TraverseHistoryCommand.Parameters(this, delta);
 
         return _session.BrowsingContextModule.TraverseHistoryAsync(@params);
     }
@@ -163,9 +134,8 @@ public class BrowsingContext
 
     public Task SetViewportAsync(uint width, uint height, double? devicePixelRatio = default)
     {
-        var @params = new SetViewportCommand.Parameters
+        var @params = new SetViewportCommand.Parameters(this)
         {
-            Context = this,
             Viewport = new(width, height),
             DevicePixelRatio = devicePixelRatio
         };

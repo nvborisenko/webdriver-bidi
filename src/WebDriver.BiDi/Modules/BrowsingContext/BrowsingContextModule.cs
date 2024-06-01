@@ -20,13 +20,6 @@ sealed class BrowsingContextModule
         return await _broker.ExecuteCommandAsync<CreateResult>(new CreateCommand(@params)).ConfigureAwait(false);
     }
 
-    public async Task<NavigateResult> NavigateAsync(string url, ReadinessState wait = ReadinessState.Complete)
-    {
-        var @params = new NavigateCommand.Parameters { Url = url, Wait = wait };
-
-        return await NavigateAsync(@params).ConfigureAwait(false);
-    }
-
     public async Task<NavigateResult> NavigateAsync(NavigateCommand.Parameters @params)
     {
         return await _broker.ExecuteCommandAsync<NavigateResult>(new NavigateCommand(@params)).ConfigureAwait(false);
@@ -40,18 +33,6 @@ sealed class BrowsingContextModule
     public async Task<LocateNodesResult> LocateNodesAsync(LocateNodesCommand.Parameters @params)
     {
         return await _broker.ExecuteCommandAsync<LocateNodesResult>(new LocateNodesCommand(@params)).ConfigureAwait(false);
-    }
-
-    public async Task<CaptureScreenshotResult> CaptureScreenshotAsync(Origin? origin = default, ImageFormat? imageFormat = default, ClipRectangle? clip = default)
-    {
-        var @params = new CaptureScreenshotCommand.Parameters
-        {
-            Origin = origin,
-            Format = imageFormat,
-            Clip = clip
-        };
-
-        return await CaptureScreenshotAsync(@params).ConfigureAwait(false);
     }
 
     public async Task<CaptureScreenshotResult> CaptureScreenshotAsync(CaptureScreenshotCommand.Parameters @params)
