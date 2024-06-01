@@ -2,6 +2,7 @@ using FluentAssertions;
 using OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 using OpenQA.Selenium.BiDi.Modules.Input;
 using OpenQA.Selenium.BiDi.Modules.Log;
+using OpenQA.Selenium.BiDi.Modules.Network;
 using OpenQA.Selenium.BiDi.Modules.Script;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
@@ -263,6 +264,26 @@ namespace OpenQA.Selenium.BiDi.Tests
             var partitionKey = await context.DeleteCookiesAsync();
 
             partitionKey.UserContext.Should().Be("default");
+        }
+
+        [Test]
+        public async Task SetCookie()
+        {
+            var context = await session.CreateBrowsingContextAsync();
+
+            var tomorrow = DateTime.Now.AddDays(1);
+
+            var partitionKey = await context.SetCookieAsync("test", "value", "domain", expiry: tomorrow);
+
+            partitionKey.UserContext.Should().Be("default");
+
+            var cookies = await context.GetCookiesAsync();
+
+            cookies.Cookies.Should().HaveCount(1);
+            cookies.Cookies[0].Name.Should().Be("test");
+            (cookies.Cookies[0].Value as StringValue).Value.Should().Be("value");
+            cookies.Cookies[0].Domain.Should().Be("domain");
+            cookies.Cookies[0].Expiry.Should().BeCloseTo(tomorrow, TimeSpan.FromMilliseconds(1)); // microseconds are not considered
         }
 
         [Test]

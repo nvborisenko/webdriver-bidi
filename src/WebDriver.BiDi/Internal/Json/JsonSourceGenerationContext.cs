@@ -90,6 +90,9 @@ namespace OpenQA.Selenium.BiDi.Internal.Json
     [JsonSerializable(typeof(Modules.Storage.DeleteCookiesCommand))]
     [JsonSerializable(typeof(Modules.Storage.DeleteCookiesCommand.Parameters), TypeInfoPropertyName = "Storage_DeleteCookiesCommand_Parameters")]
     [JsonSerializable(typeof(Modules.Storage.DeleteCookiesResult))]
+    [JsonSerializable(typeof(Modules.Storage.SetCookieCommand))]
+    [JsonSerializable(typeof(Modules.Storage.SetCookieCommand.Parameters), TypeInfoPropertyName = "Storage_SetCookieCommand_Parameters")]
+    [JsonSerializable(typeof(Modules.Storage.SetCookieResult))]
     internal partial class SourceGenerationContext : JsonSerializerContext
     {
 

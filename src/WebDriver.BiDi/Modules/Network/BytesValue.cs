@@ -7,6 +7,7 @@ namespace OpenQA.Selenium.BiDi.Modules.Network;
 [JsonDerivedType(typeof(Base64Value), "base64")]
 public abstract class BytesValue
 {
+    public static implicit operator BytesValue(string value) => new StringValue(value);
 }
 
 public class StringValue(string value) : BytesValue

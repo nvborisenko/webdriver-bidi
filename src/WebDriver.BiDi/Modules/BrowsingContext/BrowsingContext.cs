@@ -281,6 +281,27 @@ public class BrowsingContext
         return res.PartitionKey;
     }
 
+    public async Task<Storage.PartitionKey> SetCookieAsync(string name, Network.BytesValue value, string domain, string? path = default, bool? httpOnly = default, bool? secure = default, Network.SameSite sameSite = default, DateTime? expiry = default)
+    {
+        Storage.PartialCookie cookie = new(name, value, domain)
+        {
+            Path = path,
+            HttpOnly = httpOnly,
+            Secure = secure,
+            SameSite = sameSite,
+            Expiry = expiry
+        };
+
+        var @params = new Storage.SetCookieCommand.Parameters(cookie)
+        {
+            Partition = new Storage.BrowsingContextPartitionDescriptor(this)
+        };
+
+        var res = await _session.Storage.SetCookieAsync(@params).ConfigureAwait(false);
+
+        return res.PartitionKey;
+    }
+
     public Task OnNavigationStartedAsync(Func<NavigationInfoEventArgs, Task> callback)
     {
         return _session.BrowsingContextModule.OnNavigationStartedAsync(callback);
