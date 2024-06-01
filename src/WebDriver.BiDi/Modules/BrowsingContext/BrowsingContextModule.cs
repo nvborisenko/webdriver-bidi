@@ -122,6 +122,20 @@ sealed class BrowsingContextModule
         _broker.RegisterEventHandler("browsingContext.contextCreated", new BiDiEventHandler<BrowsingContextInfo>(callback));
     }
 
+    public async Task OnContextDestroyedAsync(Func<BrowsingContextInfo, Task> callback)
+    {
+        await _session.SubscribeAsync("browsingContext.contextDestroyed").ConfigureAwait(false);
+
+        _broker.RegisterEventHandler("browsingContext.contextDestroyed", new BiDiEventHandler<BrowsingContextInfo>(callback));
+    }
+
+    public async Task OnContextDestroyedAsync(Action<BrowsingContextInfo> callback)
+    {
+        await _session.SubscribeAsync("browsingContext.contextDestroyed").ConfigureAwait(false);
+
+        _broker.RegisterEventHandler("browsingContext.contextDestroyed", new BiDiEventHandler<BrowsingContextInfo>(callback));
+    }
+
     public async Task OnUserPromptOpenedAsync(Func<UserPromptOpenedEventArgs, Task> callback)
     {
         await _session.SubscribeAsync("browsingContext.userPromptOpened").ConfigureAwait(false);

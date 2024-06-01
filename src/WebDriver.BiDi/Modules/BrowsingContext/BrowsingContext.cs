@@ -16,6 +16,18 @@ public class BrowsingContext
 
     internal string Id { get; private set; }
 
+    public override bool Equals(object obj)
+    {
+        if (obj is BrowsingContext browsingContextObj) return browsingContextObj.Id == Id;
+
+        return false;
+    }
+
+    public override int GetHashCode()
+    {
+        return Id.GetHashCode();
+    }
+
     public Task<NavigateResult> NavigateAsync(string url, ReadinessState wait = ReadinessState.Complete)
     {
         var @params = new NavigateCommand.Parameters { Url = url, Wait = wait };

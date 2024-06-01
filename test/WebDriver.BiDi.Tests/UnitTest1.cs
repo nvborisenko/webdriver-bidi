@@ -123,6 +123,24 @@ namespace OpenQA.Selenium.BiDi.Tests
         }
 
         [Test]
+        public async Task OnBrowsingContextDestroyed()
+        {
+            var session = await driver.AsBiDiSessionAsync();
+
+            var context = await session.CreateBrowsingContextAsync();
+
+            BrowsingContext destroyedContext = null;
+
+            await session.OnBrowsingContextDestroyedAsync(e => destroyedContext = e.Context);
+
+            await context.CloseAsync();
+
+            await Task.Delay(500);
+
+            destroyedContext.Should().Be(context);
+        }
+
+        [Test]
         public async Task OnUserPromptOpened()
         {
             var session = await driver.AsBiDiSessionAsync();

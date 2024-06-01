@@ -129,6 +129,16 @@ namespace OpenQA.Selenium.BiDi
             return BrowsingContextModule.OnContextCreatedAsync(callback);
         }
 
+        public Task OnBrowsingContextDestroyedAsync(Action<Modules.BrowsingContext.BrowsingContextInfo> callback)
+        {
+            return BrowsingContextModule.OnContextDestroyedAsync(callback);
+        }
+
+        public Task OnBrowsingContextDestroyedAsync(Func<Modules.BrowsingContext.BrowsingContextInfo, Task> callback)
+        {
+            return BrowsingContextModule.OnContextDestroyedAsync(callback);
+        }
+
         public Task OnBeforeRequestSentAsync(Func<Modules.Network.BeforeRequestSentEventArgs, Task> callback)
         {
             return Network.OnBeforeRequestSentAsync(callback);
