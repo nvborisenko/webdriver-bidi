@@ -268,6 +268,19 @@ public class BrowsingContext
         return _session.Storage.GetCookiesAsync(@params);
     }
 
+    public async Task<Storage.PartitionKey> DeleteCookiesAsync(string? name = default, Network.BytesValue? value = default, string? domain = default, string? path = default, uint? size = default, bool? httpOnly = default, bool? secure = default, Network.SameSite sameSite = default, DateTime? expiry = default)
+    {
+        var @params = new Storage.DeleteCookiesCommand.Parameters()
+        {
+            Filter = new() { Name = name, Value = value, Domain = domain, Path = path, Size = size, HttpOnly = httpOnly, Secure = secure, SameSite = sameSite, Expiry = expiry },
+            Partition = new Storage.BrowsingContextPartitionDescriptor(this)
+        };
+
+        var res = await _session.Storage.DeleteCookiesAsync(@params).ConfigureAwait(false);
+
+        return res.PartitionKey;
+    }
+
     public Task OnNavigationStartedAsync(Func<NavigationInfoEventArgs, Task> callback)
     {
         return _session.BrowsingContextModule.OnNavigationStartedAsync(callback);

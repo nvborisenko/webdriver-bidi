@@ -11,4 +11,9 @@ internal class StorageModule(Broker broker)
     {
         return await _broker.ExecuteCommandAsync<GetCookiesResult>(new GetCookiesCommand(@params)).ConfigureAwait(false);
     }
+
+    public async Task<DeleteCookiesResult> DeleteCookiesAsync(DeleteCookiesCommand.Parameters @params)
+    {
+        return await _broker.ExecuteCommandAsync<DeleteCookiesResult>(new DeleteCookiesCommand(@params)).ConfigureAwait(false);
+    }
 }

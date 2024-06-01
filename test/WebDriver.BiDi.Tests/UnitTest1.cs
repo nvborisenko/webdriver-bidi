@@ -256,6 +256,16 @@ namespace OpenQA.Selenium.BiDi.Tests
         }
 
         [Test]
+        public async Task DeleteCookies()
+        {
+            var context = await session.CreateBrowsingContextAsync();
+
+            var partitionKey = await context.DeleteCookiesAsync();
+
+            partitionKey.UserContext.Should().Be("default");
+        }
+
+        [Test]
         public async Task SubscribeInHandlerTest()
         {
             var context = await session.CreateBrowsingContextAsync();
