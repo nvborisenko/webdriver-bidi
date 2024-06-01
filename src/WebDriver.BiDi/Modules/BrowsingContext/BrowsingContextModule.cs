@@ -108,6 +108,20 @@ sealed class BrowsingContextModule
         _broker.RegisterEventHandler("browsingContext.navigationStarted", new BiDiEventHandler<NavigationInfoEventArgs>(callback));
     }
 
+    public async Task OnFragmentNavigatedAsync(Func<NavigationInfoEventArgs, Task> callback)
+    {
+        await _session.SubscribeAsync("browsingContext.fragmentNavigated").ConfigureAwait(false);
+
+        _broker.RegisterEventHandler("browsingContext.fragmentNavigated", new BiDiEventHandler<NavigationInfoEventArgs>(callback));
+    }
+
+    public async Task OnFragmentNavigatedAsync(Action<NavigationInfoEventArgs> callback)
+    {
+        await _session.SubscribeAsync("browsingContext.fragmentNavigated").ConfigureAwait(false);
+
+        _broker.RegisterEventHandler("browsingContext.fragmentNavigated", new BiDiEventHandler<NavigationInfoEventArgs>(callback));
+    }
+
     public async Task OnContextCreatedAsync(Func<BrowsingContextInfo, Task> callback)
     {
         await _session.SubscribeAsync("browsingContext.contextCreated").ConfigureAwait(false);

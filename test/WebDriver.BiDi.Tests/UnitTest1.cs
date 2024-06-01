@@ -339,6 +339,19 @@ namespace OpenQA.Selenium.BiDi.Tests
         }
 
         [Test]
+        public async Task OnFragmentNavigated()
+        {
+            var context = await session.CreateBrowsingContextAsync();
+
+            await context.OnFragmentNavigatedAsync(args =>
+            {
+                Console.WriteLine($"{DateTime.Now} {args}");
+            });
+
+            await context.NavigateAsync("https://selenium.dev");
+        }
+
+        [Test]
         public async Task OnLogEntryAdded()
         {
             var context = await session.CreateBrowsingContextAsync();
