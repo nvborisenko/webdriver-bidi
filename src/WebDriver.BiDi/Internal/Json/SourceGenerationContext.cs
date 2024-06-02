@@ -87,6 +87,8 @@ namespace OpenQA.Selenium.BiDi.Internal.Json
     [JsonSerializable(typeof(Modules.Script.EvaluateResult))]
     [JsonSerializable(typeof(Modules.Script.CallFunctionCommand))]
     [JsonSerializable(typeof(Modules.Script.CallFunctionCommand.Parameters), TypeInfoPropertyName = "Script_CallFunctionCommand_Parameters")]
+    [JsonSerializable(typeof(Modules.Script.DisownCommand))]
+    [JsonSerializable(typeof(Modules.Script.DisownCommand.Parameters), TypeInfoPropertyName = "Script_DisownCommand_Parameters")]
     [JsonSerializable(typeof(Modules.Script.GetRealmsCommand))]
     [JsonSerializable(typeof(Modules.Script.GetRealmsCommand.Parameters), TypeInfoPropertyName = "Script_GetRealmsCommand_Parameters")]
     [JsonSerializable(typeof(Modules.Script.GetRealmsResult))]
