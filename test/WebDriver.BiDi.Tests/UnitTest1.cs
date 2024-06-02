@@ -265,6 +265,32 @@ namespace OpenQA.Selenium.BiDi.Tests
         }
 
         [Test]
+        public async Task GetRealms()
+        {
+            var context = await session.CreateBrowsingContextAsync();
+
+            await context.NavigateAsync("https://selenium.dev");
+
+            var realms = await context.GetRealmsAsync();
+
+            realms.Should().HaveCount(1);
+        }
+
+        [Test]
+        public async Task AddPreloadScript()
+        {
+            var context = await session.CreateBrowsingContextAsync();
+
+            var script = await context.AddPreloadScriptAsync("prompt()");
+
+            await context.NavigateAsync("https://selenium.dev", wait: ReadinessState.None);
+
+            await context.HandleUserPromptAsync();
+
+            await script.RemoveAsync();
+        }
+
+        [Test]
         public async Task GetCookies()
         {
             var context = await session.CreateBrowsingContextAsync();

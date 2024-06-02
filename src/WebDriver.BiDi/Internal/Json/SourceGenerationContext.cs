@@ -77,11 +77,20 @@ namespace OpenQA.Selenium.BiDi.Internal.Json
     [JsonSerializable(typeof(Modules.Network.ResponseCompletedEventArgs))]
     [JsonSerializable(typeof(Modules.Network.FetchErrorEventArgs))]
 
+    [JsonSerializable(typeof(Modules.Script.AddPreloadScriptCommand))]
+    [JsonSerializable(typeof(Modules.Script.AddPreloadScriptCommand.Parameters), TypeInfoPropertyName = "Script_AddPreloadScriptCommand_Parameters")]
+    [JsonSerializable(typeof(Modules.Script.AddPreloadScriptResult))]
+    [JsonSerializable(typeof(Modules.Script.RemovePreloadScriptCommand))]
+    [JsonSerializable(typeof(Modules.Script.RemovePreloadScriptCommand.Parameters), TypeInfoPropertyName = "Script_RemovePreloadScriptCommand_Parameters")]
     [JsonSerializable(typeof(Modules.Script.EvaluateCommand))]
     [JsonSerializable(typeof(Modules.Script.EvaluateCommand.Parameters), TypeInfoPropertyName = "Script_EvaluateCommand_Parameters")]
+    [JsonSerializable(typeof(Modules.Script.EvaluateResult))]
     [JsonSerializable(typeof(Modules.Script.CallFunctionCommand))]
     [JsonSerializable(typeof(Modules.Script.CallFunctionCommand.Parameters), TypeInfoPropertyName = "Script_CallFunctionCommand_Parameters")]
-    [JsonSerializable(typeof(Modules.Script.EvaluateResult))]
+    [JsonSerializable(typeof(Modules.Script.GetRealmsCommand))]
+    [JsonSerializable(typeof(Modules.Script.GetRealmsCommand.Parameters), TypeInfoPropertyName = "Script_GetRealmsCommand_Parameters")]
+    [JsonSerializable(typeof(Modules.Script.GetRealmsResult))]
+
 
     [JsonSerializable(typeof(Modules.Input.PerformActionsCommand))]
     [JsonSerializable(typeof(Modules.Input.PerformActionsCommand.Parameters), TypeInfoPropertyName = "Input_PerformActionsCommand_Parameters")]

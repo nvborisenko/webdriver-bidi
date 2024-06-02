@@ -52,6 +52,12 @@ internal class Broker
                 new NavigationConverter(),
                 new InterceptConverter(_session),
                 new RequestConverter(_session),
+                new ChannelConverter(_session),
+                new HandleConverter(_session),
+                new InternalIdConverter(_session),
+                new PreloadScriptConverter(_session),
+                new RealmConverter(_session),
+                new RealmTypeConverter(),
                 new DateTimeConverter(),
                 new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)
             },

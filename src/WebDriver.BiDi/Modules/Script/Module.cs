@@ -35,4 +35,19 @@ internal sealed class Module
 
         return (EvaluateResultSuccess)result;
     }
+
+    public async Task<GetRealmsResult> GetRealmAsync(GetRealmsCommand.Parameters @params)
+    {
+        return await _broker.ExecuteCommandAsync<GetRealmsResult>(new GetRealmsCommand(@params)).ConfigureAwait(false);
+    }
+
+    public async Task<AddPreloadScriptResult> AddPreloadScriptAsync(AddPreloadScriptCommand.Parameters @params)
+    {
+        return await _broker.ExecuteCommandAsync<AddPreloadScriptResult>(new AddPreloadScriptCommand(@params)).ConfigureAwait(false);
+    }
+
+    public async Task RemovePreloadScriptAsync(RemovePreloadScriptCommand.Parameters @params)
+    {
+        await _broker.ExecuteCommandAsync(new RemovePreloadScriptCommand(@params)).ConfigureAwait(false);
+    }
 }

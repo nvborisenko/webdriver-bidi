@@ -283,6 +283,27 @@ public class BrowsingContext
         return res.PartitionKey;
     }
 
+    public async Task<Script.PreloadScript> AddPreloadScriptAsync(string functionoDeclaration)
+    {
+        var @params = new Script.AddPreloadScriptCommand.Parameters(functionoDeclaration)
+        {
+            Contexts = [this]
+        };
+
+        var res = await _session.ScriptModule.AddPreloadScriptAsync(@params).ConfigureAwait(false);
+
+        return res.Script;
+    }
+
+    public async Task<IReadOnlyList<Script.RealmInfoEventArgs>> GetRealmsAsync()
+    {
+        var @params = new Script.GetRealmsCommand.Parameters { Context = this };
+
+        var res = await _session.ScriptModule.GetRealmAsync(@params).ConfigureAwait(false);
+
+        return res.Realms;
+    }
+
     public Task OnNavigationStartedAsync(Func<NavigationInfoEventArgs, Task> callback)
     {
         return _session.BrowsingContextModule.OnNavigationStartedAsync(callback);

@@ -8,6 +8,8 @@ namespace OpenQA.Selenium.BiDi.Modules.Script;
 [JsonDerivedType(typeof(StringRemoteValue), "string")]
 [JsonDerivedType(typeof(NullRemoteValue), "null")]
 [JsonDerivedType(typeof(UndefinedRemoteValue), "undefined")]
+[JsonDerivedType(typeof(SymbolRemoteValue), "symbol")]
+[JsonDerivedType(typeof(ObjectRemoteValue), "object")]
 [JsonDerivedType(typeof(NodeRemoteValue), "node")]
 public abstract class RemoteValue
 {
@@ -37,6 +39,31 @@ public class NullRemoteValue : PrimitiveProtocolRemoteValue
 public class UndefinedRemoteValue : PrimitiveProtocolRemoteValue
 {
 
+}
+
+public class SymbolRemoteValue : RemoteValue
+{
+    public Handle? Handle { get; set; }
+
+    public InternalId? InternalId { get; set; }
+}
+
+public class ArrayRemoteValue : RemoteValue
+{
+    public Handle? Handle { get; set; }
+
+    public InternalId? InternalId { get; set; }
+
+    public IReadOnlyList<RemoteValue>? Value { get; set; }
+}
+
+public class ObjectRemoteValue : RemoteValue
+{
+    public Handle? Handle { get; set; }
+
+    public InternalId? InternalId { get; set; }
+
+    public IDictionary<string, RemoteValue>? Value { get; set; }
 }
 
 public class NodeRemoteValue : RemoteValue
