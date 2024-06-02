@@ -19,7 +19,7 @@ namespace OpenQA.Selenium.BiDi.Modules.Script;
 [JsonDerivedType(typeof(WeakSetRemoteValue), "weakset")]
 [JsonDerivedType(typeof(GeneratorRemoteValue), "generator")]
 [JsonDerivedType(typeof(ErrorRemoteValue), "error")]
-[JsonDerivedType(typeof(PromiseRemoteValue), "proxy")]
+[JsonDerivedType(typeof(ProxyRemoteValue), "proxy")]
 [JsonDerivedType(typeof(PromiseRemoteValue), "promise")]
 [JsonDerivedType(typeof(TypedArrayRemoteValue), "typedarray")]
 [JsonDerivedType(typeof(ArrayBufferRemoteValue), "arraybuffer")]
