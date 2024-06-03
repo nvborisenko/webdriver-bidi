@@ -1,21 +1,16 @@
 ﻿using System;
-using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
-public class NavigationInfoEventArgs : EventArgs
+public class NavigationInfoEventArgs(BrowsingContext context, Navigation navigation, DateTime timestamp, string url) : EventArgs
 {
-    [JsonInclude]
-    public BrowsingContext Context { get; internal set; }
+    public BrowsingContext Context { get; } = context;
 
-    [JsonInclude]
-    public Navigation Navigation { get; internal set; }
+    public Navigation Navigation { get; } = navigation;
 
-    [JsonInclude]
-    public DateTime Timestamp { get; internal set; }
+    public DateTime Timestamp { get; } = timestamp;
 
-    [JsonInclude]
-    public string Url { get; internal set; }
+    public string Url { get; } = url;
 
     public override string ToString()
     {
