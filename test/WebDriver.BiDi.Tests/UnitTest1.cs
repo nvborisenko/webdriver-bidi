@@ -682,7 +682,7 @@ namespace OpenQA.Selenium.BiDi.Tests
 
             await context.NavigateAsync("https://selenium.dev");
 
-            int sum = await context.CallFunctionAsync("function sum(a, b) { return a + b; }", 2, 3);
+            int sum = await context.CallFunctionAsync("(a, b) => a + b", 2, 3);
 
             sum.Should().Be(5);
 
