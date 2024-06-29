@@ -4,8 +4,7 @@ using System.Threading.Tasks;
 
 namespace OpenQA.Selenium.BiDi;
 
-public class Subscription
-    : IAsyncDisposable
+public class Subscription : IAsyncDisposable
 {
     private readonly Broker _broker;
     private readonly Internal.EventHandler _eventHandler;

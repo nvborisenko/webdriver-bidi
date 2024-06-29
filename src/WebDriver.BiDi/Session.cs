@@ -5,10 +5,7 @@ using OpenQA.Selenium.BiDi.Internal;
 
 namespace OpenQA.Selenium.BiDi
 {
-    public class Session
-#if NET8_0_OR_GREATER
-        : IAsyncDisposable
-#endif
+    public class Session : IAsyncDisposable
     {
         private readonly Transport _transport;
         private readonly Broker _broker;

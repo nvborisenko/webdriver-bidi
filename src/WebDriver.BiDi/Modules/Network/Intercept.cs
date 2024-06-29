@@ -1,13 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace OpenQA.Selenium.BiDi.Modules.Network;
 
-public class Intercept
-#if NET8_0_OR_GREATER
-        : IAsyncDisposable
-#endif
+public class Intercept : IAsyncDisposable
 {
-    private BiDi.Session _session;
+    private readonly BiDi.Session _session;
 
     internal Intercept(BiDi.Session session, string id)
     {

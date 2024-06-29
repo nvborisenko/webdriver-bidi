@@ -12,10 +12,7 @@ using System.Threading.Tasks;
 
 namespace OpenQA.Selenium.BiDi.Internal;
 
-internal class Broker
-#if NET8_0_OR_GREATER
-    : IAsyncDisposable
-#endif
+internal class Broker : IAsyncDisposable
 {
     private readonly Session _session;
     private readonly Transport _transport;
