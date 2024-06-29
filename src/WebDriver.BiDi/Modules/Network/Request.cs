@@ -16,7 +16,7 @@ public class Request
 
     internal async Task ContinueAsync(string? method = default)
     {
-        var @params = new ContinueRequestCommand.Parameters(this)
+        var @params = new ContinueRequestCommandParameters(this)
         {
             Method = method,
         };
@@ -33,7 +33,7 @@ public class Request
 
     internal async Task ProvideResponseAsync(uint? statusCode = default)
     {
-        var @params = new ProvideResponseCommand.Parameters(this)
+        var @params = new ProvideResponseCommandParameters(this)
         {
             StatusCode = statusCode
         };
@@ -43,7 +43,7 @@ public class Request
 
     internal async Task ContinueResponseAsync(uint? statusCode = default)
     {
-        var @params = new ContinueResponseCommand.Parameters(this)
+        var @params = new ContinueResponseCommandParameters(this)
         {
             StatusCode = statusCode
         };

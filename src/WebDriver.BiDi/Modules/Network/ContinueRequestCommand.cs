@@ -3,21 +3,23 @@ using System.Collections.Generic;
 
 namespace OpenQA.Selenium.BiDi.Modules.Network;
 
-internal class ContinueRequestCommand(ContinueRequestCommand.Parameters @params)
-    : Command<ContinueRequestCommand.Parameters>("network.continueRequest", @params)
+internal class ContinueRequestCommand(ContinueRequestCommandParameters @params)
+    : Command<ContinueRequestCommandParameters>("network.continueRequest", @params)
 {
-    internal class Parameters(Request request) : CommandParameters
-    {
-        public Request Request { get; } = request;
+    
+}
 
-        public BytesValue? Body { get; set; }
+internal class ContinueRequestCommandParameters(Request request) : CommandParameters
+{
+    public Request Request { get; } = request;
 
-        public IEnumerable<CookieHeader>? Cookies { get; set; }
+    public BytesValue? Body { get; set; }
 
-        public IEnumerable<Header>? Headers { get; set; }
+    public IEnumerable<CookieHeader>? Cookies { get; set; }
 
-        public string? Method { get; set; }
+    public IEnumerable<Header>? Headers { get; set; }
 
-        public string? Url { get; set; }
-    }
+    public string? Method { get; set; }
+
+    public string? Url { get; set; }
 }

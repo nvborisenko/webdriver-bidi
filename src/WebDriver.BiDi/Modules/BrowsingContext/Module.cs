@@ -15,62 +15,62 @@ sealed class Module
         _broker = broker;
     }
 
-    public async Task<CreateResult> CreateAsync(CreateCommand.Parameters @params)
+    public async Task<CreateResult> CreateAsync(CreateCommandParameters @params)
     {
         return await _broker.ExecuteCommandAsync<CreateResult>(new CreateCommand(@params)).ConfigureAwait(false);
     }
 
-    public async Task<NavigateResult> NavigateAsync(NavigateCommand.Parameters @params)
+    public async Task<NavigateResult> NavigateAsync(NavigateCommandParameters @params)
     {
         return await _broker.ExecuteCommandAsync<NavigateResult>(new NavigateCommand(@params)).ConfigureAwait(false);
     }
 
-    public async Task ActivateAsync(ActivateCommand.Parameters @params)
+    public async Task ActivateAsync(ActivateCommandParameters @params)
     {
         await _broker.ExecuteCommandAsync(new ActivateCommand(@params)).ConfigureAwait(false);
     }
 
-    public async Task<LocateNodesResult> LocateNodesAsync(LocateNodesCommand.Parameters @params)
+    public async Task<LocateNodesResult> LocateNodesAsync(LocateNodesCommandParameters @params)
     {
         return await _broker.ExecuteCommandAsync<LocateNodesResult>(new LocateNodesCommand(@params)).ConfigureAwait(false);
     }
 
-    public async Task<CaptureScreenshotResult> CaptureScreenshotAsync(CaptureScreenshotCommand.Parameters @params)
+    public async Task<CaptureScreenshotResult> CaptureScreenshotAsync(CaptureScreenshotCommandParameters @params)
     {
         return await _broker.ExecuteCommandAsync<CaptureScreenshotResult>(new CaptureScreenshotCommand(@params)).ConfigureAwait(false);
     }
 
-    public async Task CloseAsync(CloseCommand.Parameters @params)
+    public async Task CloseAsync(CloseCommandParameters @params)
     {
         await _broker.ExecuteCommandAsync(new CloseCommand(@params)).ConfigureAwait(false);
     }
 
-    public async Task<TraverseHistoryResult> TraverseHistoryAsync(TraverseHistoryCommand.Parameters @params)
+    public async Task<TraverseHistoryResult> TraverseHistoryAsync(TraverseHistoryCommandParameters @params)
     {
         return await _broker.ExecuteCommandAsync<TraverseHistoryResult>(new TraverseHistoryCommand(@params)).ConfigureAwait(false);
     }
 
-    public async Task<NavigateResult> ReloadAsync(ReloadCommand.Parameters @params)
+    public async Task<NavigateResult> ReloadAsync(ReloadCommandParameters @params)
     {
         return await _broker.ExecuteCommandAsync<NavigateResult>(new ReloadCommand(@params)).ConfigureAwait(false);
     }
 
-    public async Task SetViewportAsync(SetViewportCommand.Parameters @params)
+    public async Task SetViewportAsync(SetViewportCommandParameters @params)
     {
         await _broker.ExecuteCommandAsync(new SetViewportCommand(@params)).ConfigureAwait(false);
     }
 
-    public async Task<GetTreeResult> GetTreeAsync(GetTreeCommand.Parameters @params)
+    public async Task<GetTreeResult> GetTreeAsync(GetTreeCommandParameters @params)
     {
         return await _broker.ExecuteCommandAsync<GetTreeResult>(new GetTreeCommand(@params)).ConfigureAwait(false);
     }
 
-    public async Task<PrintResult> PrintAsync(PrintCommand.Parameters @params)
+    public async Task<PrintResult> PrintAsync(PrintCommandParameters @params)
     {
         return await _broker.ExecuteCommandAsync<PrintResult>(new PrintCommand(@params)).ConfigureAwait(false);
     }
 
-    public async Task HandleUserPrompAsync(HandleUserPromptCommand.Parameters @params)
+    public async Task HandleUserPrompAsync(HandleUserPromptCommandParameters @params)
     {
         await _broker.ExecuteCommandAsync(new HandleUserPromptCommand(@params)).ConfigureAwait(false);
     }

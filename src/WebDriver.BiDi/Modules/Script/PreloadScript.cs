@@ -16,7 +16,7 @@ public class PreloadScript
 
     public async Task RemoveAsync()
     {
-        var @params = new RemovePreloadScriptCommand.Parameters(this);
+        var @params = new RemovePreloadScriptCommandParameters(this);
 
         await _session.ScriptModule.RemovePreloadScriptAsync(@params).ConfigureAwait(false);
     }

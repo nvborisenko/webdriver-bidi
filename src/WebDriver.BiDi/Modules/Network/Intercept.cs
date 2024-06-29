@@ -17,7 +17,7 @@ public class Intercept : IAsyncDisposable
 
     public Task RemoveAsync()
     {
-        var @params = new RemoveInterceptCommand.Parameters(this);
+        var @params = new RemoveInterceptCommandParameters(this);
 
         return _session.NetworkModule.RemoveInterceptAsync(@params);
     }
@@ -29,8 +29,13 @@ public class Intercept : IAsyncDisposable
 
     public override bool Equals(object obj)
     {
-        return Id == (obj as Intercept).Id;
+        if (obj is Intercept interceptObj) return interceptObj.Id == Id;
+
+        return false;
     }
 
-
+    public override int GetHashCode()
+    {
+        return Id.GetHashCode();
+    }
 }

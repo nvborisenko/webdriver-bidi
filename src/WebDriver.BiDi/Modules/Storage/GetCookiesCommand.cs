@@ -5,15 +5,17 @@ using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Modules.Storage;
 
-internal class GetCookiesCommand(GetCookiesCommand.Parameters @params)
-    : Command<GetCookiesCommand.Parameters>("storage.getCookies", @params)
+internal class GetCookiesCommand(GetCookiesCommandParameters @params)
+    : Command<GetCookiesCommandParameters>("storage.getCookies", @params)
 {
-    internal class Parameters : CommandParameters
-    {
-        public CookieFilter? Filter { get; set; }
+    
+}
 
-        public PartitionDescriptor? Partition { get; set; }
-    }
+internal class GetCookiesCommandParameters : CommandParameters
+{
+    public CookieFilter? Filter { get; set; }
+
+    public PartitionDescriptor? Partition { get; set; }
 }
 
 public class GetCookiesResult(IReadOnlyList<Network.Cookie> cookies, PartitionKey partitionKey)

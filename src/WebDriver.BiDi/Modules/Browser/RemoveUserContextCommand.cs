@@ -2,11 +2,13 @@
 
 namespace OpenQA.Selenium.BiDi.Modules.Browser;
 
-internal class RemoveUserContextCommand(RemoveUserContextCommand.Parameters @params)
-    : Command<RemoveUserContextCommand.Parameters>("browser.removeUserContext", @params)
+internal class RemoveUserContextCommand(RemoveUserContextCommandParameters @params)
+    : Command<RemoveUserContextCommandParameters>("browser.removeUserContext", @params)
 {
-    internal class Parameters(UserContext userContext) : CommandParameters
-    {
-        public UserContext UserContext { get; } = userContext;
-    }
+    
+}
+
+internal class RemoveUserContextCommandParameters(UserContext userContext) : CommandParameters
+{
+    public UserContext UserContext { get; } = userContext;
 }

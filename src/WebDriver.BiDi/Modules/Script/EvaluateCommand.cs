@@ -3,17 +3,19 @@ using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Modules.Script;
 
-internal class EvaluateCommand(EvaluateCommand.Parameters @params)
-    : Command<EvaluateCommand.Parameters>("script.evaluate", @params)
+internal class EvaluateCommand(EvaluateCommandParameters @params)
+    : Command<EvaluateCommandParameters>("script.evaluate", @params)
 {
-    internal class Parameters(string expression, Target target, bool awaitPromise) : CommandParameters
-    {
-        public string Expression { get; set; } = expression;
+    
+}
 
-        public Target Target { get; set; } = target;
+internal class EvaluateCommandParameters(string expression, Target target, bool awaitPromise) : CommandParameters
+{
+    public string Expression { get; set; } = expression;
 
-        public bool AwaitPromise { get; set; } = awaitPromise;
-    }
+    public Target Target { get; set; } = target;
+
+    public bool AwaitPromise { get; set; } = awaitPromise;
 }
 
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]

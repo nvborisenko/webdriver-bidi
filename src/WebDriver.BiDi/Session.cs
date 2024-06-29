@@ -59,33 +59,23 @@ public class Session : IAsyncDisposable
 
     public async Task<Modules.BrowsingContext.BrowsingContext> CreateBrowsingContextAsync()
     {
-        var createResult = await BrowsingContextModule.CreateAsync(new Modules.BrowsingContext.CreateCommand.Parameters(Modules.BrowsingContext.BrowsingContextType.Tab)).ConfigureAwait(false);
+        var createResult = await BrowsingContextModule.CreateAsync(new Modules.BrowsingContext.CreateCommandParameters(Modules.BrowsingContext.BrowsingContextType.Tab)).ConfigureAwait(false);
 
         return createResult.Context;
     }
 
-    public Task<Modules.Network.AddInterceptResult> AddInterceptAsync(Modules.Network.InterceptPhase phase, List<Modules.Network.UrlPattern>? urlPatterns = default)
+    public Task<Modules.Network.AddInterceptResult> AddInterceptAsync(Modules.Network.InterceptPhase phase, IEnumerable<Modules.Network.UrlPattern>? urlPatterns = default)
     {
-        var @params = new Modules.Network.AddInterceptCommand.Parameters([phase])
+        return AddInterceptAsync([phase], urlPatterns);
+    }
+
+    public Task<Modules.Network.AddInterceptResult> AddInterceptAsync(IEnumerable<Modules.Network.InterceptPhase> phases, IEnumerable<Modules.Network.UrlPattern>? urlPatterns = default)
+    {
+        var @params = new Modules.Network.AddInterceptCommandParameters(phases)
         {
             UrlPatterns = urlPatterns
         };
 
-        return AddInterceptAsync(@params);
-    }
-
-    public Task<Modules.Network.AddInterceptResult> AddInterceptAsync(List<Modules.Network.InterceptPhase> phases, List<Modules.Network.UrlPattern>? urlPatterns = default)
-    {
-        var @params = new Modules.Network.AddInterceptCommand.Parameters(phases)
-        {
-            UrlPatterns = urlPatterns
-        };
-
-        return AddInterceptAsync(@params);
-    }
-
-    private Task<Modules.Network.AddInterceptResult> AddInterceptAsync(Modules.Network.AddInterceptCommand.Parameters @params)
-    {
         return NetworkModule.AddInterceptAsync(@params);
     }
 
@@ -103,7 +93,7 @@ public class Session : IAsyncDisposable
 
     public async Task<IReadOnlyList<Modules.BrowsingContext.BrowsingContextInfo>> GetTreeAsync(uint? maxDepth = default, Modules.BrowsingContext.BrowsingContext? context = default)
     {
-        var @params = new Modules.BrowsingContext.GetTreeCommand.Parameters
+        var @params = new Modules.BrowsingContext.GetTreeCommandParameters
         {
             MaxDepth = maxDepth,
             Root = context
@@ -199,7 +189,7 @@ public class Session : IAsyncDisposable
 
     internal Task SubscribeAsync(params string[] events)
     {
-        return SessionModule.SubscribeAsync(new Modules.Session.SubscribeCommand.Parameters(events));
+        return SessionModule.SubscribeAsync(new Modules.Session.SubscribeCommandParameters(events));
     }
 
     public async ValueTask DisposeAsync()

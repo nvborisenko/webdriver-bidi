@@ -3,21 +3,23 @@ using System.Collections.Generic;
 
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
-internal class LocateNodesCommand(LocateNodesCommand.Parameters @params)
-    : Command<LocateNodesCommand.Parameters>("browsingContext.locateNodes", @params)
+internal class LocateNodesCommand(LocateNodesCommandParameters @params)
+    : Command<LocateNodesCommandParameters>("browsingContext.locateNodes", @params)
 {
-    internal class Parameters(BrowsingContext context, Locator locator) : CommandParameters
-    {
-        public BrowsingContext Context { get; } = context;
+    
+}
 
-        public Locator Locator { get; } = locator;
+internal class LocateNodesCommandParameters(BrowsingContext context, Locator locator) : CommandParameters
+{
+    public BrowsingContext Context { get; } = context;
 
-        public uint? MaxNodeCount { get; set; }
+    public Locator Locator { get; } = locator;
 
-        public Script.SerializationOptions? SerializationOptions { get; set; }
+    public uint? MaxNodeCount { get; set; }
 
-        public IEnumerable<Script.SharedReference> StartNodes { get; set; }
-    }
+    public Script.SerializationOptions? SerializationOptions { get; set; }
+
+    public IEnumerable<Script.SharedReference> StartNodes { get; set; }
 }
 
 public class LocateNodesResult(IReadOnlyList<Script.NodeRemoteValue> nodes)

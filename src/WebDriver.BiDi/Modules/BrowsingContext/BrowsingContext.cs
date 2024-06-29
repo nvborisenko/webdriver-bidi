@@ -30,14 +30,14 @@ public class BrowsingContext
 
     public Task<NavigateResult> NavigateAsync(string url, ReadinessState wait = ReadinessState.Complete)
     {
-        var @params = new NavigateCommand.Parameters(this, url) { Wait = wait };
+        var @params = new NavigateCommandParameters(this, url) { Wait = wait };
 
         return _session.BrowsingContextModule.NavigateAsync(@params);
     }
 
     public Task<NavigateResult> ReloadAsync(bool? ignoreCache = default, ReadinessState? wait = default)
     {
-        var @params = new ReloadCommand.Parameters(this)
+        var @params = new ReloadCommandParameters(this)
         {
             IgnoreCache = ignoreCache,
             Wait = wait
@@ -48,14 +48,14 @@ public class BrowsingContext
 
     public Task ActivateAsync()
     {
-        var @params = new ActivateCommand.Parameters { Context = this };
+        var @params = new ActivateCommandParameters(this);
 
         return _session.BrowsingContextModule.ActivateAsync(@params);
     }
 
     public async Task<IReadOnlyList<Script.NodeRemoteValue>> LocateNodesAsync(Locator locator)
     {
-        var @params = new LocateNodesCommand.Parameters(this, locator);
+        var @params = new LocateNodesCommandParameters(this, locator);
 
         var result = await _session.BrowsingContextModule.LocateNodesAsync(@params).ConfigureAwait(false);
 
@@ -69,14 +69,14 @@ public class BrowsingContext
 
     public Task PerformActionsAsync(List<Input.SourceActions> actions)
     {
-        var @params = new Input.PerformActionsCommand.Parameters { Context = this, Actions = actions };
+        var @params = new Input.PerformActionsCommandParameters { Context = this, Actions = actions };
 
         return _session.InputModule.PerformActionsAsync(@params);
     }
 
     public Task<CaptureScreenshotResult> CaptureScreenshotAsync(Origin? origin = default, ImageFormat? imageFormat = default, ClipRectangle? clip = default)
     {
-        var @params = new CaptureScreenshotCommand.Parameters(this)
+        var @params = new CaptureScreenshotCommandParameters(this)
         {
             Origin = origin,
             Format = imageFormat,
@@ -88,7 +88,7 @@ public class BrowsingContext
 
     public Task<Script.EvaluateResultSuccess> EvaluateAsync(string expression, bool awaitPromise = true)
     {
-        var @params = new Script.EvaluateCommand.Parameters(expression, new Script.ContextTarget { Context = Id }, awaitPromise);
+        var @params = new Script.EvaluateCommandParameters(expression, new Script.ContextTarget { Context = Id }, awaitPromise);
 
         return _session.ScriptModule.EvaluateAsync(@params);
     }
@@ -100,7 +100,7 @@ public class BrowsingContext
 
     public Task<Script.EvaluateResultSuccess> CallFunctionAsync(string functionDeclaration, bool awaitPromise = true, IEnumerable<Script.LocalValue>? arguments = default)
     {
-        var @params = new Script.CallFunctionCommand.Parameters(functionDeclaration, awaitPromise, new Script.ContextTarget { Context = Id })
+        var @params = new Script.CallFunctionCommandParameters(functionDeclaration, awaitPromise, new Script.ContextTarget { Context = Id })
         {
             Arguments = arguments
         };
@@ -110,14 +110,14 @@ public class BrowsingContext
 
     public Task CloseAsync()
     {
-        var @params = new CloseCommand.Parameters(this);
+        var @params = new CloseCommandParameters(this);
 
         return _session.BrowsingContextModule.CloseAsync(@params);
     }
 
     public Task TraverseHistoryAsync(int delta)
     {
-        var @params = new TraverseHistoryCommand.Parameters(this, delta);
+        var @params = new TraverseHistoryCommandParameters(this, delta);
 
         return _session.BrowsingContextModule.TraverseHistoryAsync(@params);
     }
@@ -134,7 +134,7 @@ public class BrowsingContext
 
     public Task SetViewportAsync(uint width, uint height, double? devicePixelRatio = default)
     {
-        var @params = new SetViewportCommand.Parameters(this)
+        var @params = new SetViewportCommandParameters(this)
         {
             Viewport = new(width, height),
             DevicePixelRatio = devicePixelRatio
@@ -150,7 +150,7 @@ public class BrowsingContext
 
     public async Task<string> PrintAsync(bool? background = default, Margin? margin = default, Orientation? orientation = default, Page? page = default, IEnumerable<uint>? pageRanges = default, double? scale = default, bool? shrinkToFit = default)
     {
-        var @params = new PrintCommand.Parameters(this)
+        var @params = new PrintCommandParameters(this)
         {
             Background = background,
             Margin = margin,
@@ -166,9 +166,14 @@ public class BrowsingContext
         return result.Data;
     }
 
-    public Task<Network.Intercept> AddInterceptAsync(List<Network.InterceptPhase> phases, List<Network.UrlPattern>? urlPatterns = default)
+    public Task<Network.Intercept> AddInterceptAsync(Network.InterceptPhase phase, IEnumerable<Network.UrlPattern>? urlPatterns = default)
     {
-        var @params = new Network.AddInterceptCommand.Parameters(phases)
+        return AddInterceptAsync([phase], urlPatterns);
+    }
+
+    public Task<Network.Intercept> AddInterceptAsync(IEnumerable<Network.InterceptPhase> phases, IEnumerable<Network.UrlPattern>? urlPatterns = default)
+    {
+        var @params = new Network.AddInterceptCommandParameters(phases)
         {
             UrlPatterns = urlPatterns
         };
@@ -176,7 +181,7 @@ public class BrowsingContext
         return AddInterceptAsync(@params);
     }
 
-    private async Task<Network.Intercept> AddInterceptAsync(Network.AddInterceptCommand.Parameters @params)
+    private async Task<Network.Intercept> AddInterceptAsync(Network.AddInterceptCommandParameters @params)
     {
         @params.Contexts = [this];
 
@@ -187,7 +192,7 @@ public class BrowsingContext
 
     public Task HandleUserPromptAsync(bool? accept = default, string? userText = default)
     {
-        var @params = new HandleUserPromptCommand.Parameters(this)
+        var @params = new HandleUserPromptCommandParameters(this)
         {
             Accept = accept,
             UserText = userText
@@ -198,7 +203,7 @@ public class BrowsingContext
 
     public Task<Storage.GetCookiesResult> GetCookiesAsync(string? name = default, Network.BytesValue? value = default, string? domain = default, string? path = default, uint? size = default, bool? httpOnly = default, bool? secure = default, Network.SameSite sameSite = default, DateTime? expiry = default)
     {
-        var @params = new Storage.GetCookiesCommand.Parameters()
+        var @params = new Storage.GetCookiesCommandParameters()
         {
             Filter = new() { Name = name, Value = value, Domain = domain, Path = path, Size = size, HttpOnly = httpOnly, Secure = secure, SameSite = sameSite, Expiry = expiry },
             Partition = new Storage.BrowsingContextPartitionDescriptor(this)
@@ -209,7 +214,7 @@ public class BrowsingContext
 
     public async Task<Storage.PartitionKey> DeleteCookiesAsync(string? name = default, Network.BytesValue? value = default, string? domain = default, string? path = default, uint? size = default, bool? httpOnly = default, bool? secure = default, Network.SameSite sameSite = default, DateTime? expiry = default)
     {
-        var @params = new Storage.DeleteCookiesCommand.Parameters()
+        var @params = new Storage.DeleteCookiesCommandParameters()
         {
             Filter = new() { Name = name, Value = value, Domain = domain, Path = path, Size = size, HttpOnly = httpOnly, Secure = secure, SameSite = sameSite, Expiry = expiry },
             Partition = new Storage.BrowsingContextPartitionDescriptor(this)
@@ -231,7 +236,7 @@ public class BrowsingContext
             Expiry = expiry
         };
 
-        var @params = new Storage.SetCookieCommand.Parameters(cookie)
+        var @params = new Storage.SetCookieCommandParameters(cookie)
         {
             Partition = new Storage.BrowsingContextPartitionDescriptor(this)
         };
@@ -241,9 +246,9 @@ public class BrowsingContext
         return res.PartitionKey;
     }
 
-    public async Task<Script.PreloadScript> AddPreloadScriptAsync(string functionoDeclaration)
+    public async Task<Script.PreloadScript> AddPreloadScriptAsync(string functionDeclaration)
     {
-        var @params = new Script.AddPreloadScriptCommand.Parameters(functionoDeclaration)
+        var @params = new Script.AddPreloadScriptCommandParameters(functionDeclaration)
         {
             Contexts = [this]
         };
@@ -255,7 +260,7 @@ public class BrowsingContext
 
     public async Task<IReadOnlyList<Script.RealmInfoEventArgs>> GetRealmsAsync()
     {
-        var @params = new Script.GetRealmsCommand.Parameters { Context = this };
+        var @params = new Script.GetRealmsCommandParameters { Context = this };
 
         var res = await _session.ScriptModule.GetRealmAsync(@params).ConfigureAwait(false);
 

@@ -12,7 +12,7 @@ internal sealed class Module
         _broker = broker;
     }
 
-    public async Task<EvaluateResultSuccess> EvaluateAsync(EvaluateCommand.Parameters @params)
+    public async Task<EvaluateResultSuccess> EvaluateAsync(EvaluateCommandParameters @params)
     {
         var result = await _broker.ExecuteCommandAsync<EvaluateResult>(new EvaluateCommand(@params)).ConfigureAwait(false);
 
@@ -24,7 +24,7 @@ internal sealed class Module
         return (EvaluateResultSuccess)result;
     }
 
-    public async Task<EvaluateResultSuccess> CallFunctionAsync(CallFunctionCommand.Parameters @params)
+    public async Task<EvaluateResultSuccess> CallFunctionAsync(CallFunctionCommandParameters @params)
     {
         var result = await _broker.ExecuteCommandAsync<EvaluateResult>(new CallFunctionCommand(@params)).ConfigureAwait(false);
 
@@ -36,17 +36,17 @@ internal sealed class Module
         return (EvaluateResultSuccess)result;
     }
 
-    public async Task<GetRealmsResult> GetRealmAsync(GetRealmsCommand.Parameters @params)
+    public async Task<GetRealmsResult> GetRealmAsync(GetRealmsCommandParameters @params)
     {
         return await _broker.ExecuteCommandAsync<GetRealmsResult>(new GetRealmsCommand(@params)).ConfigureAwait(false);
     }
 
-    public async Task<AddPreloadScriptResult> AddPreloadScriptAsync(AddPreloadScriptCommand.Parameters @params)
+    public async Task<AddPreloadScriptResult> AddPreloadScriptAsync(AddPreloadScriptCommandParameters @params)
     {
         return await _broker.ExecuteCommandAsync<AddPreloadScriptResult>(new AddPreloadScriptCommand(@params)).ConfigureAwait(false);
     }
 
-    public async Task RemovePreloadScriptAsync(RemovePreloadScriptCommand.Parameters @params)
+    public async Task RemovePreloadScriptAsync(RemovePreloadScriptCommandParameters @params)
     {
         await _broker.ExecuteCommandAsync(new RemovePreloadScriptCommand(@params)).ConfigureAwait(false);
     }

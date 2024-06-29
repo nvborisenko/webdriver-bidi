@@ -3,13 +3,15 @@ using System.Collections.Generic;
 
 namespace OpenQA.Selenium.BiDi.Modules.Script;
 
-internal class DisownCommand(DisownCommand.Parameters @params)
-    : Command<DisownCommand.Parameters>("script.disown", @params)
+internal class DisownCommand(DisownCommandParameters @params)
+    : Command<DisownCommandParameters>("script.disown", @params)
 {
-    internal class Parameters(IEnumerable<Handle> handles, Target target) : CommandParameters
-    {
-        public IEnumerable<Handle> Handles { get; } = handles;
 
-        public Target Target { get; } = target;
-    }
+}
+
+internal class DisownCommandParameters(IEnumerable<Handle> handles, Target target) : CommandParameters
+{
+    public IEnumerable<Handle> Handles { get; } = handles;
+
+    public Target Target { get; } = target;
 }

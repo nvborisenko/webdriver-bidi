@@ -7,7 +7,11 @@ public static class WebDriverExtensions
 {
     public static async Task<Session> AsBiDiSessionAsync(this IWebDriver webDriver)
     {
-        var session = await Session.ConnectAsync(((IHasCapabilities)webDriver).Capabilities.GetCapability("webSocketUrl").ToString()!).ConfigureAwait(false);
+        var webSocketUrl = ((IHasCapabilities)webDriver).Capabilities.GetCapability("webSocketUrl");
+
+        if (webSocketUrl is null) throw new System.Exception("The driver is not compatible with bidirectional protocol.");
+
+        var session = await Session.ConnectAsync(webSocketUrl.ToString()).ConfigureAwait(false);
 
         return session;
     }

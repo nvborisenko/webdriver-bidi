@@ -12,12 +12,12 @@ internal sealed class Module
         _broker = broker;
     }
 
-    public async Task PerformActionsAsync(PerformActionsCommand.Parameters @params)
+    public async Task PerformActionsAsync(PerformActionsCommandParameters @params)
     {
         await _broker.ExecuteCommandAsync(new PerformActionsCommand(@params)).ConfigureAwait(false);
     }
 
-    public async Task ReleaseActionsAsync(ReleaseActionsCommand.Parameters @params)
+    public async Task ReleaseActionsAsync(ReleaseActionsCommandParameters @params)
     {
         await _broker.ExecuteCommandAsync(new ReleaseActionsCommand(@params));
     }

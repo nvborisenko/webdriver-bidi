@@ -3,28 +3,30 @@ using System.Collections.Generic;
 
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
-internal class PrintCommand(PrintCommand.Parameters @params)
-    : Command<PrintCommand.Parameters>("browsingContext.print", @params)
+internal class PrintCommand(PrintCommandParameters @params)
+    : Command<PrintCommandParameters>("browsingContext.print", @params)
 {
-    internal class Parameters(BrowsingContext context) : CommandParameters
-    {
-        public BrowsingContext Context { get; } = context;
+    
+}
 
-        public bool? Background { get; set; }
+internal class PrintCommandParameters(BrowsingContext context) : CommandParameters
+{
+    public BrowsingContext Context { get; } = context;
 
-        public Margin? Margin { get; set; }
+    public bool? Background { get; set; }
 
-        public Orientation? Orientation { get; set; }
+    public Margin? Margin { get; set; }
 
-        public Page? Page { get; set; }
+    public Orientation? Orientation { get; set; }
 
-        // TODO: It also supports strings
-        public IEnumerable<uint>? PageRanges { get; set; }
+    public Page? Page { get; set; }
 
-        public double? Scale { get; set; }
+    // TODO: It also supports strings
+    public IEnumerable<uint>? PageRanges { get; set; }
 
-        public bool? ShrinkToFit { get; set; }
-    }
+    public double? Scale { get; set; }
+
+    public bool? ShrinkToFit { get; set; }
 }
 
 public struct Margin

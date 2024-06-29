@@ -3,22 +3,24 @@ using OpenQA.Selenium.BiDi.Internal;
 
 namespace OpenQA.Selenium.BiDi.Modules.Network;
 
-internal class AddInterceptCommand(AddInterceptCommand.Parameters @params)
-    : Command<AddInterceptCommand.Parameters>("network.addIntercept", @params)
+internal class AddInterceptCommand(AddInterceptCommandParameters @params)
+    : Command<AddInterceptCommandParameters>("network.addIntercept", @params)
 {
-    internal class Parameters(IEnumerable<InterceptPhase> phases) : CommandParameters
-    {
-        public IEnumerable<InterceptPhase> Phases { get; set; } = phases;
 
-        public List<BrowsingContext.BrowsingContext>? Contexts { get; set; }
-
-        public List<UrlPattern>? UrlPatterns { get; set; }
-    }
 }
 
-public class AddInterceptResult
+internal class AddInterceptCommandParameters(IEnumerable<InterceptPhase> phases) : CommandParameters
 {
-    public Intercept Intercept { get; set; }
+    public IEnumerable<InterceptPhase> Phases { get; set; } = phases;
+
+    public IEnumerable<BrowsingContext.BrowsingContext>? Contexts { get; set; }
+
+    public IEnumerable<UrlPattern>? UrlPatterns { get; set; }
+}
+
+public class AddInterceptResult(Intercept intercept)
+{
+    public Intercept Intercept { get; } = intercept;
 }
 
 public enum InterceptPhase

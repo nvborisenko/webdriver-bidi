@@ -27,7 +27,7 @@ internal sealed class Module
         return await _broker.ExecuteCommandAsync<GetUserContextsResult>(new GetUserContextsCommand()).ConfigureAwait(false);
     }
 
-    public async Task RemoveUserContextAsync(RemoveUserContextCommand.Parameters @params)
+    public async Task RemoveUserContextAsync(RemoveUserContextCommandParameters @params)
     {
         await _broker.ExecuteCommandAsync(new RemoveUserContextCommand(@params)).ConfigureAwait(false);
     }

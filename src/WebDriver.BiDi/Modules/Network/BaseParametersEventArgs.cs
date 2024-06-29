@@ -20,6 +20,6 @@ public abstract class BaseParametersEventArgs(BrowsingContext.BrowsingContext co
     public DateTime Timestamp { get; } = timestamp;
 
     [JsonInclude]
-    public List<Intercept>? Intercepts { get; internal set; }
+    public IReadOnlyList<Intercept>? Intercepts { get; internal set; }
 }
 

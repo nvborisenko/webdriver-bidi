@@ -15,22 +15,22 @@ internal sealed class Module
         _broker = broker;
     }
 
-    public async Task<AddInterceptResult> AddInterceptAsync(AddInterceptCommand.Parameters @params)
+    public async Task<AddInterceptResult> AddInterceptAsync(AddInterceptCommandParameters @params)
     {
         return await _broker.ExecuteCommandAsync<AddInterceptResult>(new AddInterceptCommand(@params)).ConfigureAwait(false);
     }
 
-    public async Task RemoveInterceptAsync(RemoveInterceptCommand.Parameters @params)
+    public async Task RemoveInterceptAsync(RemoveInterceptCommandParameters @params)
     {
         await _broker.ExecuteCommandAsync(new RemoveInterceptCommand(@params)).ConfigureAwait(!false);
     }
 
-    public async Task ContinueRequestAsync(ContinueRequestCommand.Parameters @params)
+    public async Task ContinueRequestAsync(ContinueRequestCommandParameters @params)
     {
         await _broker.ExecuteCommandAsync(new ContinueRequestCommand(@params)).ConfigureAwait(false);
     }
 
-    public async Task ContinueResponseAsync(ContinueResponseCommand.Parameters @params)
+    public async Task ContinueResponseAsync(ContinueResponseCommandParameters @params)
     {
         await _broker.ExecuteCommandAsync(new ContinueResponseCommand(@params)).ConfigureAwait(false);
     }
@@ -40,7 +40,7 @@ internal sealed class Module
         await _broker.ExecuteCommandAsync(new FailRequestCommand(@params)).ConfigureAwait(false);
     }
 
-    public async Task ProvideResponseAsync(ProvideResponseCommand.Parameters @params)
+    public async Task ProvideResponseAsync(ProvideResponseCommandParameters @params)
     {
         await _broker.ExecuteCommandAsync(new ProvideResponseCommand(@params)).ConfigureAwait(false);
     }

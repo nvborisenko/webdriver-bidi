@@ -3,19 +3,21 @@ using System.Collections.Generic;
 
 namespace OpenQA.Selenium.BiDi.Modules.Script;
 
-internal class AddPreloadScriptCommand(AddPreloadScriptCommand.Parameters @params)
-    : Command<AddPreloadScriptCommand.Parameters>("script.addPreloadScript", @params)
+internal class AddPreloadScriptCommand(AddPreloadScriptCommandParameters @params)
+    : Command<AddPreloadScriptCommandParameters>("script.addPreloadScript", @params)
 {
-    internal class Parameters(string functionDeclaration) : CommandParameters
-    {
-        public string FunctionDeclaration { get; } = functionDeclaration;
+    
+}
 
-        public IEnumerable<ChannelValue>? Arguments { get; set; }
+internal class AddPreloadScriptCommandParameters(string functionDeclaration) : CommandParameters
+{
+    public string FunctionDeclaration { get; } = functionDeclaration;
 
-        public IEnumerable<BrowsingContext.BrowsingContext>? Contexts { get; set; }
+    public IEnumerable<ChannelValue>? Arguments { get; set; }
 
-        public string? Sandbox { get; set; }
-    }
+    public IEnumerable<BrowsingContext.BrowsingContext>? Contexts { get; set; }
+
+    public string? Sandbox { get; set; }
 }
 
 internal class AddPreloadScriptResult(PreloadScript script)

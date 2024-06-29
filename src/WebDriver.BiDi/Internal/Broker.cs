@@ -177,7 +177,7 @@ internal class Broker : IAsyncDisposable
     {
         var handlers = _eventHandlers.GetOrAdd(eventName, (a) => []);
 
-        var @params = new Modules.Session.SubscribeCommand.Parameters([eventName]);
+        var @params = new Modules.Session.SubscribeCommandParameters([eventName]);
 
         if (context is not null)
         {
@@ -198,7 +198,7 @@ internal class Broker : IAsyncDisposable
     {
         var handlers = _eventHandlers.GetOrAdd(eventName, (a) => []);
 
-        var @params = new Modules.Session.SubscribeCommand.Parameters([eventName]);
+        var @params = new Modules.Session.SubscribeCommandParameters([eventName]);
 
         if (context is not null)
         {

@@ -3,19 +3,21 @@ using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
-internal class CaptureScreenshotCommand(CaptureScreenshotCommand.Parameters @params)
-    : Command<CaptureScreenshotCommand.Parameters>("browsingContext.captureScreenshot", @params)
+internal class CaptureScreenshotCommand(CaptureScreenshotCommandParameters @params)
+    : Command<CaptureScreenshotCommandParameters>("browsingContext.captureScreenshot", @params)
 {
-    internal class Parameters(BrowsingContext context) : CommandParameters
-    {
-        public BrowsingContext Context { get; } = context;
+    
+}
 
-        public Origin? Origin { get; set; }
+internal class CaptureScreenshotCommandParameters(BrowsingContext context) : CommandParameters
+{
+    public BrowsingContext Context { get; } = context;
 
-        public ImageFormat? Format { get; set; }
+    public Origin? Origin { get; set; }
 
-        public ClipRectangle? Clip { get; set; }
-    }
+    public ImageFormat? Format { get; set; }
+
+    public ClipRectangle? Clip { get; set; }
 }
 
 public enum Origin

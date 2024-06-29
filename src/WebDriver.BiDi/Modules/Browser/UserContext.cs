@@ -16,7 +16,7 @@ public class UserContext
 
     public async Task RemoveAsync()
     {
-        var @params = new RemoveUserContextCommand.Parameters(this);
+        var @params = new RemoveUserContextCommandParameters(this);
 
         await _session.BrowserModule.RemoveUserContextAsync(@params).ConfigureAwait(false);
     }

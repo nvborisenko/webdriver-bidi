@@ -2,11 +2,13 @@
 
 namespace OpenQA.Selenium.BiDi.Modules.Input;
 
-internal class ReleaseActionsCommand(ReleaseActionsCommand.Parameters @params)
-    : Command<ReleaseActionsCommand.Parameters>("input.releaseActions", @params)
+internal class ReleaseActionsCommand(ReleaseActionsCommandParameters @params)
+    : Command<ReleaseActionsCommandParameters>("input.releaseActions", @params)
 {
-    internal class Parameters : CommandParameters
-    {
-        public string Context { get; set; }
-    }
+
+}
+
+internal class ReleaseActionsCommandParameters(BrowsingContext.BrowsingContext context) : CommandParameters
+{
+    public BrowsingContext.BrowsingContext Context { get; } = context;
 }
