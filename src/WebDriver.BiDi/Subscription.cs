@@ -17,11 +17,11 @@ public class Subscription : IAsyncDisposable
 
     public async Task UnsubscribeAsync()
     {
-        await _broker.UnsubscribeAsync(_eventHandler);
+        await _broker.UnsubscribeAsync(_eventHandler).ConfigureAwait(false);
     }
 
     public async ValueTask DisposeAsync()
     {
-        await UnsubscribeAsync();
+        await UnsubscribeAsync().ConfigureAwait(false);
     }
 }

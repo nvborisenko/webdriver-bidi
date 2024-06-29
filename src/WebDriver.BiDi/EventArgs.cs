@@ -1,7 +1,6 @@
-﻿namespace OpenQA.Selenium.BiDi
+﻿namespace OpenQA.Selenium.BiDi;
+
+public abstract class EventArgs : System.EventArgs
 {
-    public abstract class EventArgs : System.EventArgs
-    {
-        public Session Session { get; internal set; }
-    }
+    public Session Session { get; internal set; }
 }

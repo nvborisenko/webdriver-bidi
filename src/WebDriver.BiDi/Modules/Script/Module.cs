@@ -18,7 +18,7 @@ internal sealed class Module
 
         if (result is EvaluateResultException exp)
         {
-            throw new ScriptException(exp);
+            throw new ScriptEvaluateException(exp);
         }
 
         return (EvaluateResultSuccess)result;
@@ -30,7 +30,7 @@ internal sealed class Module
 
         if (result is EvaluateResultException exp)
         {
-            throw new ScriptException(exp);
+            throw new ScriptEvaluateException(exp);
         }
 
         return (EvaluateResultSuccess)result;

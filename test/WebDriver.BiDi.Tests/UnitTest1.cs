@@ -674,7 +674,7 @@ namespace OpenQA.Selenium.BiDi.Tests
 
             var func = async () => await context.EvaluateAsync("abc;", true);
 
-            await func.Should().ThrowAsync<ScriptException>();
+            await func.Should().ThrowAsync<ScriptEvaluateException>();
         }
 
         [Test]

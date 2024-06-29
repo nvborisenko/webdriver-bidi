@@ -3,7 +3,7 @@ using OpenQA.Selenium.BiDi.Modules.Script;
 
 namespace OpenQA.Selenium.BiDi;
 
-public class ScriptException(EvaluateResultException evaluateResultException) : Exception
+public class ScriptEvaluateException(EvaluateResultException evaluateResultException) : Exception
 {
     private readonly EvaluateResultException _evaluateResultException = evaluateResultException;
 

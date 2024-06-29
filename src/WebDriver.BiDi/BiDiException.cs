@@ -1,11 +1,10 @@
 ﻿using System;
 
-namespace OpenQA.Selenium.BiDi
+namespace OpenQA.Selenium.BiDi;
+
+public class BiDiException : Exception
 {
-    public class BiDiException : Exception
+    public BiDiException(string message) : base(message)
     {
-        public BiDiException(string message) : base(message)
-        {
-        }
     }
 }
