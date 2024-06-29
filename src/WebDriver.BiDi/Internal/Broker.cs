@@ -189,7 +189,7 @@ internal class Broker
 
         await _session.SessionModule.SubscribeAsync(@params);
 
-        var eventHandler = new BiDiEventHandler<TEventArgs>(eventName, action, context);
+        var eventHandler = new SyncEventHandler<TEventArgs>(eventName, action, context);
 
         handlers.Add(eventHandler);
 
@@ -210,7 +210,7 @@ internal class Broker
 
         await _session.SessionModule.SubscribeAsync(@params);
 
-        var eventHandler = new BiDiEventHandler<TEventArgs>(eventName, func, context);
+        var eventHandler = new AsyncEventHandler<TEventArgs>(eventName, func, context);
 
         handlers.Add(eventHandler);
 
