@@ -166,48 +166,6 @@ public class BrowsingContext
         return result.Data;
     }
 
-    public async Task<Network.Intercept> OnBeforeRequestSentAsync(Network.UrlPattern urlPattern, Func<Network.BeforeRequestSentEventArgs, Task> callback)
-    {
-        var intercept = await AddInterceptAsync([Network.InterceptPhase.BeforeRequestSent], [urlPattern]).ConfigureAwait(false);
-
-        await OnBeforeRequestSentAsync(async e =>
-        {
-            if (e.Intercepts?.Contains(intercept) is true)
-            {
-                await callback(e).ConfigureAwait(false);
-
-                if (e.Intercepts?.Count == 1 && e.IsBlocked)
-                {
-                    await e.ContinueAsync().ConfigureAwait(false);
-                }
-            }
-        }).ConfigureAwait(false);
-
-        return intercept;
-    }
-
-    public async Task<Network.Intercept> OnResponseStartedAsync(Network.UrlPattern urlPattern, Func<Network.ResponseStartedEventArgs, Task> callback)
-    {
-        var intercept = await AddInterceptAsync([Network.InterceptPhase.ResponseStarted], [urlPattern]).ConfigureAwait(false);
-
-        await OnResponseStartedAsync(async e =>
-        {
-            if (e.Intercepts?.Contains(intercept) is true)
-            {
-                await callback(e).ConfigureAwait(false);
-
-                // TODO: register it as separate handler with low priority
-                // to be executed at after all event handlers
-                if (e.Intercepts?.Count == 1 && e.IsBlocked)
-                {
-                    await e.ContinueAsync().ConfigureAwait(false);
-                }
-            }
-        }).ConfigureAwait(false);
-
-        return intercept;
-    }
-
     public Task<Network.Intercept> AddInterceptAsync(List<Network.InterceptPhase> phases, List<Network.UrlPattern>? urlPatterns = default)
     {
         var @params = new Network.AddInterceptCommand.Parameters(phases)

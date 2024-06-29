@@ -8,7 +8,8 @@ namespace OpenQA.Selenium.BiDi.Modules.Network;
 public class ResponseStartedEventArgs : BaseParametersEventArgs
 {
     [JsonConstructor]
-    internal ResponseStartedEventArgs(BrowsingContext.BrowsingContext context, bool isBlocked, Navigation navigation, uint redirectCount, RequestData request, DateTime timestamp, ResponseData response) : base(context, isBlocked, navigation, redirectCount, request, timestamp)
+    internal ResponseStartedEventArgs(BrowsingContext.BrowsingContext context, bool isBlocked, Navigation navigation, uint redirectCount, RequestData request, DateTime timestamp, ResponseData response)
+        : base(context, isBlocked, navigation, redirectCount, request, timestamp)
     {
         Response = response;
     }
@@ -20,9 +21,9 @@ public class ResponseStartedEventArgs : BaseParametersEventArgs
         return Request.Request.ContinueResponseAsync(statusCode);
     }
 
-    public Task ProvideAsync(uint? statusCoode = default)
+    public Task ProvideAsync(uint? statusCode = default)
     {
-        return Request.Request.ProvideResponseAsync(statusCoode);
+        return Request.Request.ProvideResponseAsync(statusCode);
     }
 
     public override string ToString()
