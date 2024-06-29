@@ -262,123 +262,123 @@ public class BrowsingContext
         return res.Realms;
     }
 
-    public Task OnNavigationStartedAsync(Func<NavigationInfoEventArgs, Task> callback)
+    public Task<Subscription> OnNavigationStartedAsync(Func<NavigationInfoEventArgs, Task> callback)
     {
-        return _session.BrowsingContextModule.OnNavigationStartedAsync(callback);
+        return _session.BrowsingContextModule.OnNavigationStartedAsync(callback, this);
     }
 
-    public Task OnNavigationStartedAsync(Action<NavigationInfoEventArgs> callback)
+    public Task<Subscription> OnNavigationStartedAsync(Action<NavigationInfoEventArgs> callback)
     {
-        return _session.BrowsingContextModule.OnNavigationStartedAsync(callback);
+        return _session.BrowsingContextModule.OnNavigationStartedAsync(callback, this);
     }
 
-    public Task OnFragmentNavigatedAsync(Func<NavigationInfoEventArgs, Task> callback)
+    public Task<Subscription> OnFragmentNavigatedAsync(Func<NavigationInfoEventArgs, Task> callback)
     {
-        return _session.BrowsingContextModule.OnFragmentNavigatedAsync(callback);
+        return _session.BrowsingContextModule.OnFragmentNavigatedAsync(callback, this);
     }
 
-    public Task OnFragmentNavigatedAsync(Action<NavigationInfoEventArgs> callback)
+    public Task<Subscription> OnFragmentNavigatedAsync(Action<NavigationInfoEventArgs> callback)
     {
-        return _session.BrowsingContextModule.OnFragmentNavigatedAsync(callback);
+        return _session.BrowsingContextModule.OnFragmentNavigatedAsync(callback, this);
     }
 
-    public Task OnDomContentLoadedAsync(Func<NavigationInfoEventArgs, Task> callback)
+    public Task<Subscription> OnDomContentLoadedAsync(Func<NavigationInfoEventArgs, Task> callback)
     {
-        return _session.BrowsingContextModule.OnDomContentLoadedAsync(callback);
+        return _session.BrowsingContextModule.OnDomContentLoadedAsync(callback, this);
     }
 
-    public Task OnLoadAsync(Action<NavigationInfoEventArgs> callback)
+    public Task<Subscription> OnLoadAsync(Action<NavigationInfoEventArgs> callback)
     {
-        return _session.BrowsingContextModule.OnLoadAsync(callback);
+        return _session.BrowsingContextModule.OnLoadAsync(callback, this);
     }
 
-    public Task OnLoadAsync(Func<NavigationInfoEventArgs, Task> callback)
+    public Task<Subscription> OnLoadAsync(Func<NavigationInfoEventArgs, Task> callback)
     {
-        return _session.BrowsingContextModule.OnLoadAsync(callback);
+        return _session.BrowsingContextModule.OnLoadAsync(callback, this);
     }
 
-    public Task OnDownloadWillBeginAsync(Action<NavigationInfoEventArgs> callback)
+    public Task<Subscription> OnDownloadWillBeginAsync(Action<NavigationInfoEventArgs> callback)
     {
-        return _session.BrowsingContextModule.OnDownloadWillBeginAsync(callback);
+        return _session.BrowsingContextModule.OnDownloadWillBeginAsync(callback, this);
     }
 
-    public Task OnDownloadWillBeginAsync(Func<NavigationInfoEventArgs, Task> callback)
+    public Task<Subscription> OnDownloadWillBeginAsync(Func<NavigationInfoEventArgs, Task> callback)
     {
-        return _session.BrowsingContextModule.OnDownloadWillBeginAsync(callback);
+        return _session.BrowsingContextModule.OnDownloadWillBeginAsync(callback, this);
     }
 
-    public Task OnNavigationAbortedAsync(Action<NavigationInfoEventArgs> callback)
+    public Task<Subscription> OnNavigationAbortedAsync(Action<NavigationInfoEventArgs> callback)
     {
-        return _session.BrowsingContextModule.OnNavigationAbortedAsync(callback);
+        return _session.BrowsingContextModule.OnNavigationAbortedAsync(callback, this);
     }
 
-    public Task OnNavigationAbortedAsync(Func<NavigationInfoEventArgs, Task> callback)
+    public Task<Subscription> OnNavigationAbortedAsync(Func<NavigationInfoEventArgs, Task> callback)
     {
-        return _session.BrowsingContextModule.OnNavigationAbortedAsync(callback);
+        return _session.BrowsingContextModule.OnNavigationAbortedAsync(callback, this);
     }
 
-    public Task OnNavigationFailedAsync(Action<NavigationInfoEventArgs> callback)
+    public Task<Subscription> OnNavigationFailedAsync(Action<NavigationInfoEventArgs> callback)
     {
-        return _session.BrowsingContextModule.OnNavigationFailedAsync(callback);
+        return _session.BrowsingContextModule.OnNavigationFailedAsync(callback, this);
     }
 
-    public Task OnNavigationFailedAsync(Func<NavigationInfoEventArgs, Task> callback)
+    public Task<Subscription> OnNavigationFailedAsync(Func<NavigationInfoEventArgs, Task> callback)
     {
-        return _session.BrowsingContextModule.OnNavigationFailedAsync(callback);
+        return _session.BrowsingContextModule.OnNavigationFailedAsync(callback, this);
     }
 
-    public Task OnDomContentLoadedAsync(Action<NavigationInfoEventArgs> callback)
+    public Task<Subscription> OnDomContentLoadedAsync(Action<NavigationInfoEventArgs> callback)
     {
-        return _session.BrowsingContextModule.OnDomContentLoadedAsync(callback);
+        return _session.BrowsingContextModule.OnDomContentLoadedAsync(callback, this);
     }
 
-    public Task OnBeforeRequestSentAsync(Func<Network.BeforeRequestSentEventArgs, Task> callback)
+    public Task<Subscription> OnBeforeRequestSentAsync(Func<Network.BeforeRequestSentEventArgs, Task> callback)
     {
-        return _session.NetworkModule.OnBeforeRequestSentAsync(callback);
+        return _session.NetworkModule.OnBeforeRequestSentAsync(callback, this);
     }
 
-    public Task OnBeforeRequestSentAsync(Action<Network.BeforeRequestSentEventArgs> callback)
+    public Task<Subscription> OnBeforeRequestSentAsync(Action<Network.BeforeRequestSentEventArgs> callback)
     {
-        return _session.NetworkModule.OnBeforeRequestSentAsync(callback);
+        return _session.NetworkModule.OnBeforeRequestSentAsync(callback, this);
     }
 
-    public Task OnResponseStartedAsync(Func<Network.ResponseStartedEventArgs, Task> callback)
+    public Task<Subscription> OnResponseStartedAsync(Func<Network.ResponseStartedEventArgs, Task> callback)
     {
-        return _session.NetworkModule.OnResponseStartedAsync(callback);
+        return _session.NetworkModule.OnResponseStartedAsync(callback, this);
     }
 
-    public Task OnResponseStartedAsync(Action<Network.ResponseStartedEventArgs> callback)
+    public Task<Subscription> OnResponseStartedAsync(Action<Network.ResponseStartedEventArgs> callback)
     {
-        return _session.NetworkModule.OnResponseStartedAsync(callback);
+        return _session.NetworkModule.OnResponseStartedAsync(callback, this);
     }
 
-    public Task OnResponseCompletedAsync(Func<Network.ResponseCompletedEventArgs, Task> callback)
+    public Task<Subscription> OnResponseCompletedAsync(Func<Network.ResponseCompletedEventArgs, Task> callback)
     {
-        return _session.NetworkModule.OnResponseCompletedAsync(callback);
+        return _session.NetworkModule.OnResponseCompletedAsync(callback, this);
     }
 
-    public Task OnResponseCompletedAsync(Action<Network.ResponseCompletedEventArgs> callback)
+    public Task<Subscription> OnResponseCompletedAsync(Action<Network.ResponseCompletedEventArgs> callback)
     {
-        return _session.NetworkModule.OnResponseCompletedAsync(callback);
+        return _session.NetworkModule.OnResponseCompletedAsync(callback, this);
     }
 
-    public Task OnFetchErrorAsync(Func<Network.FetchErrorEventArgs, Task> callback)
+    public Task<Subscription> OnFetchErrorAsync(Func<Network.FetchErrorEventArgs, Task> callback)
     {
-        return _session.NetworkModule.OnFetchErrorAsync(callback);
+        return _session.NetworkModule.OnFetchErrorAsync(callback, this);
     }
 
-    public Task OnFetchErrorAsync(Action<Network.FetchErrorEventArgs> callback)
+    public Task<Subscription> OnFetchErrorAsync(Action<Network.FetchErrorEventArgs> callback)
     {
-        return _session.NetworkModule.OnFetchErrorAsync(callback);
+        return _session.NetworkModule.OnFetchErrorAsync(callback, this);
     }
 
-    public Task OnLogEntryAddedAsync(Func<Log.BaseLogEntryEventArgs, Task> callback)
+    public Task<Subscription> OnLogEntryAddedAsync(Func<Log.BaseLogEntryEventArgs, Task> callback)
     {
-        return _session.LogModule.OnEntryAddedAsync(callback);
+        return _session.LogModule.OnEntryAddedAsync(callback, this);
     }
 
-    public Task OnLogEntryAddedAsync(Action<Log.BaseLogEntryEventArgs> callback)
+    public Task<Subscription> OnLogEntryAddedAsync(Action<Log.BaseLogEntryEventArgs> callback)
     {
-        return _session.LogModule.OnEntryAddedAsync(callback);
+        return _session.LogModule.OnEntryAddedAsync(callback, this);
     }
 }

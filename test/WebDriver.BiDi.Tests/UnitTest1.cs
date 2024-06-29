@@ -449,7 +449,7 @@ namespace OpenQA.Selenium.BiDi.Tests
 
             ConsoleLogEntry consoleLog = null;
 
-            await context.OnLogEntryAddedAsync(e => consoleLog = e as ConsoleLogEntry);
+            await using var subscription = await context.OnLogEntryAddedAsync(e => consoleLog = e as ConsoleLogEntry);
 
             await context.EvaluateAsync("console.log('abc')");
 

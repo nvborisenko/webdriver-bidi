@@ -75,157 +75,113 @@ sealed class Module
         await _broker.ExecuteCommandAsync(new HandleUserPromptCommand(@params)).ConfigureAwait(false);
     }
 
-    public async Task OnNavigationStartedAsync(Func<NavigationInfoEventArgs, Task> callback)
+    public async Task<Subscription> OnNavigationStartedAsync(Func<NavigationInfoEventArgs, Task> callback, BrowsingContext? context = default)
     {
-        await _session.SubscribeAsync("browsingContext.navigationStarted").ConfigureAwait(false);
-
-        _broker.RegisterEventHandler("browsingContext.navigationStarted", new BiDiEventHandler<NavigationInfoEventArgs>(callback));
+        return await _broker.SubscribeAsync("browsingContext.navigationStarted", callback, context).ConfigureAwait(false);
     }
 
-    public async Task OnNavigationStartedAsync(Action<NavigationInfoEventArgs> callback)
+    public async Task<Subscription> OnNavigationStartedAsync(Action<NavigationInfoEventArgs> callback, BrowsingContext? context = default)
     {
-        await _session.SubscribeAsync("browsingContext.navigationStarted").ConfigureAwait(false);
-
-        _broker.RegisterEventHandler("browsingContext.navigationStarted", new BiDiEventHandler<NavigationInfoEventArgs>(callback));
+        return await _broker.SubscribeAsync("browsingContext.navigationStarted", callback, context).ConfigureAwait(false);
     }
 
-    public async Task OnFragmentNavigatedAsync(Func<NavigationInfoEventArgs, Task> callback)
+    public async Task<Subscription> OnFragmentNavigatedAsync(Func<NavigationInfoEventArgs, Task> callback, BrowsingContext? context = default)
     {
-        await _session.SubscribeAsync("browsingContext.fragmentNavigated").ConfigureAwait(false);
-
-        _broker.RegisterEventHandler("browsingContext.fragmentNavigated", new BiDiEventHandler<NavigationInfoEventArgs>(callback));
+        return await _broker.SubscribeAsync("browsingContext.fragmentNavigated", callback, context).ConfigureAwait(false);
     }
 
-    public async Task OnFragmentNavigatedAsync(Action<NavigationInfoEventArgs> callback)
+    public async Task<Subscription> OnFragmentNavigatedAsync(Action<NavigationInfoEventArgs> callback, BrowsingContext? context = default)
     {
-        await _session.SubscribeAsync("browsingContext.fragmentNavigated").ConfigureAwait(false);
-
-        _broker.RegisterEventHandler("browsingContext.fragmentNavigated", new BiDiEventHandler<NavigationInfoEventArgs>(callback));
+        return await _broker.SubscribeAsync("browsingContext.fragmentNavigated", callback, context).ConfigureAwait(false);
     }
 
-    public async Task OnDomContentLoadedAsync(Func<NavigationInfoEventArgs, Task> callback)
+    public async Task<Subscription> OnDomContentLoadedAsync(Func<NavigationInfoEventArgs, Task> callback, BrowsingContext? context = default)
     {
-        await _session.SubscribeAsync("browsingContext.domContentLoaded").ConfigureAwait(false);
-
-        _broker.RegisterEventHandler("browsingContext.domContentLoaded", new BiDiEventHandler<NavigationInfoEventArgs>(callback));
+        return await _broker.SubscribeAsync("browsingContext.domContentLoaded", callback, context).ConfigureAwait(false);
     }
 
-    public async Task OnDomContentLoadedAsync(Action<NavigationInfoEventArgs> callback)
+    public async Task<Subscription> OnDomContentLoadedAsync(Action<NavigationInfoEventArgs> callback, BrowsingContext? context = default)
     {
-        await _session.SubscribeAsync("browsingContext.domContentLoaded").ConfigureAwait(false);
-
-        _broker.RegisterEventHandler("browsingContext.domContentLoaded", new BiDiEventHandler<NavigationInfoEventArgs>(callback));
+        return await _broker.SubscribeAsync("browsingContext.domContentLoaded", callback, context).ConfigureAwait(false);
     }
 
-    public async Task OnLoadAsync(Func<NavigationInfoEventArgs, Task> callback)
+    public async Task<Subscription> OnLoadAsync(Func<NavigationInfoEventArgs, Task> callback, BrowsingContext? context = default)
     {
-        await _session.SubscribeAsync("browsingContext.load").ConfigureAwait(false);
-
-        _broker.RegisterEventHandler("browsingContext.load", new BiDiEventHandler<NavigationInfoEventArgs>(callback));
+        return await _broker.SubscribeAsync("browsingContext.load", callback, context).ConfigureAwait(false);
     }
 
-    public async Task OnLoadAsync(Action<NavigationInfoEventArgs> callback)
+    public async Task<Subscription> OnLoadAsync(Action<NavigationInfoEventArgs> callback, BrowsingContext? context = default)
     {
-        await _session.SubscribeAsync("browsingContext.load").ConfigureAwait(false);
-
-        _broker.RegisterEventHandler("browsingContext.load", new BiDiEventHandler<NavigationInfoEventArgs>(callback));
+        return await _broker.SubscribeAsync("browsingContext.load", callback, context).ConfigureAwait(false);
     }
 
-    public async Task OnDownloadWillBeginAsync(Func<NavigationInfoEventArgs, Task> callback)
+    public async Task<Subscription> OnDownloadWillBeginAsync(Func<NavigationInfoEventArgs, Task> callback, BrowsingContext? context = default)
     {
-        await _session.SubscribeAsync("browsingContext.downloadWillBegin").ConfigureAwait(false);
-
-        _broker.RegisterEventHandler("browsingContext.downloadWillBegin", new BiDiEventHandler<NavigationInfoEventArgs>(callback));
+        return await _broker.SubscribeAsync("browsingContext.downloadWillBegin", callback, context).ConfigureAwait(false);
     }
 
-    public async Task OnDownloadWillBeginAsync(Action<NavigationInfoEventArgs> callback)
+    public async Task<Subscription> OnDownloadWillBeginAsync(Action<NavigationInfoEventArgs> callback, BrowsingContext? context = default)
     {
-        await _session.SubscribeAsync("browsingContext.downloadWillBegin").ConfigureAwait(false);
-
-        _broker.RegisterEventHandler("browsingContext.downloadWillBegin", new BiDiEventHandler<NavigationInfoEventArgs>(callback));
+        return await _broker.SubscribeAsync("browsingContext.downloadWillBegin", callback, context).ConfigureAwait(false);
     }
 
-    public async Task OnNavigationAbortedAsync(Func<NavigationInfoEventArgs, Task> callback)
+    public async Task<Subscription> OnNavigationAbortedAsync(Func<NavigationInfoEventArgs, Task> callback, BrowsingContext? context = default)
     {
-        await _session.SubscribeAsync("browsingContext.navigationAborted").ConfigureAwait(false);
-
-        _broker.RegisterEventHandler("browsingContext.navigationAborted", new BiDiEventHandler<NavigationInfoEventArgs>(callback));
+        return await _broker.SubscribeAsync("browsingContext.navigationAborted", callback, context).ConfigureAwait(false);
     }
 
-    public async Task OnNavigationAbortedAsync(Action<NavigationInfoEventArgs> callback)
+    public async Task<Subscription> OnNavigationAbortedAsync(Action<NavigationInfoEventArgs> callback, BrowsingContext? context = default)
     {
-        await _session.SubscribeAsync("browsingContext.navigationAborted").ConfigureAwait(false);
-
-        _broker.RegisterEventHandler("browsingContext.navigationAborted", new BiDiEventHandler<NavigationInfoEventArgs>(callback));
+        return await _broker.SubscribeAsync("browsingContext.navigationAborted", callback, context).ConfigureAwait(false);
     }
 
-    public async Task OnNavigationFailedAsync(Func<NavigationInfoEventArgs, Task> callback)
+    public async Task<Subscription> OnNavigationFailedAsync(Func<NavigationInfoEventArgs, Task> callback, BrowsingContext? context = default)
     {
-        await _session.SubscribeAsync("browsingContext.navigationFailed").ConfigureAwait(false);
-
-        _broker.RegisterEventHandler("browsingContext.navigationFailed", new BiDiEventHandler<NavigationInfoEventArgs>(callback));
+        return await _broker.SubscribeAsync("browsingContext.navigationFailed", callback, context).ConfigureAwait(false);
     }
 
-    public async Task OnNavigationFailedAsync(Action<NavigationInfoEventArgs> callback)
+    public async Task<Subscription> OnNavigationFailedAsync(Action<NavigationInfoEventArgs> callback, BrowsingContext? context = default)
     {
-        await _session.SubscribeAsync("browsingContext.navigationFailed").ConfigureAwait(false);
-
-        _broker.RegisterEventHandler("browsingContext.navigationFailed", new BiDiEventHandler<NavigationInfoEventArgs>(callback));
+        return await _broker.SubscribeAsync("browsingContext.navigationFailed", callback, context).ConfigureAwait(false);
     }
 
-    public async Task OnContextCreatedAsync(Func<BrowsingContextInfo, Task> callback)
+    public async Task<Subscription> OnContextCreatedAsync(Func<BrowsingContextInfo, Task> callback, BrowsingContext? context = default)
     {
-        await _session.SubscribeAsync("browsingContext.contextCreated").ConfigureAwait(false);
-
-        _broker.RegisterEventHandler("browsingContext.contextCreated", new BiDiEventHandler<BrowsingContextInfo>(callback));
+        return await _broker.SubscribeAsync("browsingContext.contextCreated", callback, context).ConfigureAwait(false);
     }
 
-    public async Task OnContextCreatedAsync(Action<BrowsingContextInfo> callback)
+    public async Task<Subscription> OnContextCreatedAsync(Action<BrowsingContextInfo> callback, BrowsingContext? context = default)
     {
-        await _session.SubscribeAsync("browsingContext.contextCreated").ConfigureAwait(false);
-
-        _broker.RegisterEventHandler("browsingContext.contextCreated", new BiDiEventHandler<BrowsingContextInfo>(callback));
+        return await _broker.SubscribeAsync("browsingContext.contextCreated", callback, context).ConfigureAwait(false);
     }
 
-    public async Task OnContextDestroyedAsync(Func<BrowsingContextInfo, Task> callback)
+    public async Task<Subscription> OnContextDestroyedAsync(Func<BrowsingContextInfo, Task> callback, BrowsingContext? context = default)
     {
-        await _session.SubscribeAsync("browsingContext.contextDestroyed").ConfigureAwait(false);
-
-        _broker.RegisterEventHandler("browsingContext.contextDestroyed", new BiDiEventHandler<BrowsingContextInfo>(callback));
+        return await _broker.SubscribeAsync("browsingContext.contextDestroyed", callback, context).ConfigureAwait(false);
     }
 
-    public async Task OnContextDestroyedAsync(Action<BrowsingContextInfo> callback)
+    public async Task<Subscription> OnContextDestroyedAsync(Action<BrowsingContextInfo> callback, BrowsingContext? context = default)
     {
-        await _session.SubscribeAsync("browsingContext.contextDestroyed").ConfigureAwait(false);
-
-        _broker.RegisterEventHandler("browsingContext.contextDestroyed", new BiDiEventHandler<BrowsingContextInfo>(callback));
+        return await _broker.SubscribeAsync("browsingContext.contextDestroyed", callback, context).ConfigureAwait(false);
     }
 
-    public async Task OnUserPromptOpenedAsync(Func<UserPromptOpenedEventArgs, Task> callback)
+    public async Task<Subscription> OnUserPromptOpenedAsync(Func<UserPromptOpenedEventArgs, Task> callback, BrowsingContext? context = default)
     {
-        await _session.SubscribeAsync("browsingContext.userPromptOpened").ConfigureAwait(false);
-
-        _broker.RegisterEventHandler("browsingContext.userPromptOpened", new BiDiEventHandler<UserPromptOpenedEventArgs>(callback));
+        return await _broker.SubscribeAsync("browsingContext.userPromptOpened", callback, context).ConfigureAwait(false);
     }
 
-    public async Task OnUserPromptOpenedAsync(Action<UserPromptOpenedEventArgs> callback)
+    public async Task<Subscription> OnUserPromptOpenedAsync(Action<UserPromptOpenedEventArgs> callback, BrowsingContext? context = default)
     {
-        await _session.SubscribeAsync("browsingContext.userPromptOpened").ConfigureAwait(false);
-
-        _broker.RegisterEventHandler("browsingContext.userPromptOpened", new BiDiEventHandler<UserPromptOpenedEventArgs>(callback));
+        return await _broker.SubscribeAsync("browsingContext.userPromptOpened", callback, context).ConfigureAwait(false);
     }
 
-    public async Task OnUserPromptClosedAsync(Func<UserPromptClosedEventArgs, Task> callback)
+    public async Task<Subscription> OnUserPromptClosedAsync(Func<UserPromptClosedEventArgs, Task> callback, BrowsingContext? context = default)
     {
-        await _session.SubscribeAsync("browsingContext.userPromptClosed").ConfigureAwait(false);
-
-        _broker.RegisterEventHandler("browsingContext.userPromptClosed", new BiDiEventHandler<UserPromptClosedEventArgs>(callback));
+        return await _broker.SubscribeAsync("browsingContext.userPromptClosed", callback, context).ConfigureAwait(false);
     }
 
-    public async Task OnUserPromptClosedAsync(Action<UserPromptClosedEventArgs> callback)
+    public async Task<Subscription> OnUserPromptClosedAsync(Action<UserPromptClosedEventArgs> callback, BrowsingContext? context = default)
     {
-        await _session.SubscribeAsync("browsingContext.userPromptClosed").ConfigureAwait(false);
-
-        _broker.RegisterEventHandler("browsingContext.userPromptClosed", new BiDiEventHandler<UserPromptClosedEventArgs>(callback));
+        return await _broker.SubscribeAsync("browsingContext.userPromptClosed", callback, context).ConfigureAwait(false);
     }
 }

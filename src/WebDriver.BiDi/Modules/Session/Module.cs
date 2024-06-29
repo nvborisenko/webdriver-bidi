@@ -24,6 +24,11 @@ internal sealed class Module
         await _broker.ExecuteCommandAsync(new SubscribeCommand(@params)).ConfigureAwait(false);
     }
 
+    public async Task UnsubscribeAsync(SubscribeCommand.Parameters @params)
+    {
+        await _broker.ExecuteCommandAsync(new UnsubscribeCommand(@params)).ConfigureAwait(false);
+    }
+
     public async Task<NewResult> NewAsync(NewCommand.Parameters @params)
     {
         return await _broker.ExecuteCommandAsync<NewResult>(new NewCommand(@params)).ConfigureAwait(false);

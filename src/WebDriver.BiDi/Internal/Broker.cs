@@ -1,8 +1,10 @@
 using OpenQA.Selenium.BiDi.Internal.Json;
+using OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
@@ -173,12 +175,68 @@ internal class Broker
         return await tcs.Task.ConfigureAwait(false);
     }
 
-    public void RegisterEventHandler<TEventArgs>(string name, BiDiEventHandler<TEventArgs> eventHandler)
+    public async Task<Subscription> SubscribeAsync<TEventArgs>(string eventName, Action<TEventArgs> action, BrowsingContext? context = default)
         where TEventArgs : EventArgs
     {
-        var handlers = _eventHandlers.GetOrAdd(name, (a) => []);
+        var handlers = _eventHandlers.GetOrAdd(eventName, (a) => []);
+
+        var @params = new Modules.Session.SubscribeCommand.Parameters([eventName]);
+
+        if (context is not null)
+        {
+            @params.Contexts = [context];
+        }
+
+        await _session.SessionModule.SubscribeAsync(@params);
+
+        var eventHandler = new BiDiEventHandler<TEventArgs>(eventName, action, context);
 
         handlers.Add(eventHandler);
+
+        return new Subscription(this, eventHandler);
+    }
+
+    public async Task<Subscription> SubscribeAsync<TEventArgs>(string eventName, Func<TEventArgs, Task> func, BrowsingContext? context = default)
+        where TEventArgs : EventArgs
+    {
+        var handlers = _eventHandlers.GetOrAdd(eventName, (a) => []);
+
+        var @params = new Modules.Session.SubscribeCommand.Parameters([eventName]);
+
+        if (context is not null)
+        {
+            @params.Contexts = [context];
+        }
+
+        await _session.SessionModule.SubscribeAsync(@params);
+
+        var eventHandler = new BiDiEventHandler<TEventArgs>(eventName, func, context);
+
+        handlers.Add(eventHandler);
+
+        return new Subscription(this, eventHandler);
+    }
+
+    public async Task UnsubscribeAsync(BiDiEventHandler eventHandler)
+    {
+        var eventHandlers = _eventHandlers[eventHandler.EventName];
+
+        eventHandlers.Remove(eventHandler);
+
+        if (eventHandler.Context is not null)
+        {
+            if (!eventHandlers.Any(h => eventHandler.Context.Equals(h.Context)) && !eventHandlers.Any(h => h.Context is null))
+            {
+                await _session.SessionModule.UnsubscribeAsync(new([eventHandler.EventName]) { Contexts = [eventHandler.Context] });
+            }
+        }
+        else
+        {
+            if (!eventHandlers.Any(h => h.Context is not null) && !eventHandlers.Any(h => h.Context is null))
+            {
+                await _session.SessionModule.UnsubscribeAsync(new([eventHandler.EventName]));
+            }
+        }
     }
 
     public async ValueTask DisposeAsync()

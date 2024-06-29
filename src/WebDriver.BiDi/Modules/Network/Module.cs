@@ -45,59 +45,43 @@ internal sealed class Module
         await _broker.ExecuteCommandAsync(new ProvideResponseCommand(@params)).ConfigureAwait(false);
     }
 
-    public async Task OnBeforeRequestSentAsync(Func<BeforeRequestSentEventArgs, Task> callback)
+    public async Task<Subscription> OnBeforeRequestSentAsync(Func<BeforeRequestSentEventArgs, Task> callback, BrowsingContext.BrowsingContext? context = default)
     {
-        await _session.SubscribeAsync("network.beforeRequestSent").ConfigureAwait(false);
-
-        _broker.RegisterEventHandler("network.beforeRequestSent", new BiDiEventHandler<BeforeRequestSentEventArgs>(callback));
+        return await _broker.SubscribeAsync("network.beforeRequestSent", callback, context).ConfigureAwait(false);
     }
 
-    public async Task OnBeforeRequestSentAsync(Action<BeforeRequestSentEventArgs> callback)
+    public async Task<Subscription> OnBeforeRequestSentAsync(Action<BeforeRequestSentEventArgs> callback, BrowsingContext.BrowsingContext? context = default)
     {
-        await _session.SubscribeAsync("network.beforeRequestSent").ConfigureAwait(false);
-
-        _broker.RegisterEventHandler("network.beforeRequestSent", new BiDiEventHandler<BeforeRequestSentEventArgs>(callback));
+        return await _broker.SubscribeAsync("network.beforeRequestSent", callback, context).ConfigureAwait(false);
     }
 
-    public async Task OnResponseStartedAsync(Func<ResponseStartedEventArgs, Task> callback)
+    public async Task<Subscription> OnResponseStartedAsync(Func<ResponseStartedEventArgs, Task> callback, BrowsingContext.BrowsingContext? context = default)
     {
-        await _session.SubscribeAsync("network.responseStarted").ConfigureAwait(false);
-
-        _broker.RegisterEventHandler("network.responseStarted", new BiDiEventHandler<ResponseStartedEventArgs>(callback));
+        return await _broker.SubscribeAsync("network.responseStarted", callback, context).ConfigureAwait(false);
     }
 
-    public async Task OnResponseStartedAsync(Action<ResponseStartedEventArgs> callback)
+    public async Task<Subscription> OnResponseStartedAsync(Action<ResponseStartedEventArgs> callback, BrowsingContext.BrowsingContext? context = default)
     {
-        await _session.SubscribeAsync("network.responseStarted").ConfigureAwait(false);
-
-        _broker.RegisterEventHandler("network.responseStarted", new BiDiEventHandler<ResponseStartedEventArgs>(callback));
+        return await _broker.SubscribeAsync("network.responseStarted", callback, context).ConfigureAwait(false);
     }
 
-    public async Task OnResponseCompletedAsync(Func<ResponseCompletedEventArgs, Task> callback)
+    public async Task<Subscription> OnResponseCompletedAsync(Func<ResponseCompletedEventArgs, Task> callback, BrowsingContext.BrowsingContext? context = default)
     {
-        await _session.SubscribeAsync("network.responseCompleted").ConfigureAwait(false);
-
-        _broker.RegisterEventHandler("network.responseCompleted", new BiDiEventHandler<ResponseCompletedEventArgs>(callback));
+        return await _broker.SubscribeAsync("network.responseCompleted", callback, context).ConfigureAwait(false);
     }
 
-    public async Task OnResponseCompletedAsync(Action<ResponseCompletedEventArgs> callback)
+    public async Task<Subscription> OnResponseCompletedAsync(Action<ResponseCompletedEventArgs> callback, BrowsingContext.BrowsingContext? context = default)
     {
-        await _session.SubscribeAsync("network.responseCompleted").ConfigureAwait(false);
-
-        _broker.RegisterEventHandler("network.responseCompleted", new BiDiEventHandler<ResponseCompletedEventArgs>(callback));
+        return await _broker.SubscribeAsync("network.responseCompleted", callback, context).ConfigureAwait(false);
     }
 
-    public async Task OnFetchErrorAsync(Func<FetchErrorEventArgs, Task> callback)
+    public async Task<Subscription> OnFetchErrorAsync(Func<FetchErrorEventArgs, Task> callback, BrowsingContext.BrowsingContext? context = default)
     {
-        await _session.SubscribeAsync("network.fetchError").ConfigureAwait(false);
-
-        _broker.RegisterEventHandler("network.fetchError", new BiDiEventHandler<FetchErrorEventArgs>(callback));
+        return await _broker.SubscribeAsync("network.fetchError", callback, context).ConfigureAwait(false);
     }
 
-    public async Task OnFetchErrorAsync(Action<FetchErrorEventArgs> callback)
+    public async Task<Subscription> OnFetchErrorAsync(Action<FetchErrorEventArgs> callback, BrowsingContext.BrowsingContext? context = default)
     {
-        await _session.SubscribeAsync("network.fetchError").ConfigureAwait(false);
-
-        _broker.RegisterEventHandler("network.fetchError", new BiDiEventHandler<FetchErrorEventArgs>(callback));
+        return await _broker.SubscribeAsync("network.fetchError", callback, context).ConfigureAwait(false);
     }
 }
