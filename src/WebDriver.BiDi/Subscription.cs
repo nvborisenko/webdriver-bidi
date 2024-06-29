@@ -8,9 +8,9 @@ public class Subscription
     : IAsyncDisposable
 {
     private readonly Broker _broker;
-    private readonly BiDiEventHandler _eventHandler;
+    private readonly Internal.EventHandler _eventHandler;
 
-    internal Subscription(Broker broker, BiDiEventHandler eventHandler)
+    internal Subscription(Broker broker, Internal.EventHandler eventHandler)
     {
         _broker = broker;
         _eventHandler = eventHandler;

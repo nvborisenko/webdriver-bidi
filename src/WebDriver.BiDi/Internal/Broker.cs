@@ -25,7 +25,7 @@ internal class Broker
 
     private CancellationTokenSource _receiveMessagesCancellationTokenSource;
 
-    private readonly ConcurrentDictionary<string, List<BiDiEventHandler>> _eventHandlers = new();
+    private readonly ConcurrentDictionary<string, List<EventHandler>> _eventHandlers = new();
 
     private int _currentCommandId;
 
@@ -217,7 +217,7 @@ internal class Broker
         return new Subscription(this, eventHandler);
     }
 
-    public async Task UnsubscribeAsync(BiDiEventHandler eventHandler)
+    public async Task UnsubscribeAsync(EventHandler eventHandler)
     {
         var eventHandlers = _eventHandlers[eventHandler.EventName];
 
