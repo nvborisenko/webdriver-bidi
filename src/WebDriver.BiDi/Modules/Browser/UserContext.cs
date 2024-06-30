@@ -1,8 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace OpenQA.Selenium.BiDi.Modules.Browser;
 
-public class UserContext
+public class UserContext : IAsyncDisposable
 {
     private readonly BiDi.Session _session;
 
@@ -19,5 +20,10 @@ public class UserContext
         var @params = new RemoveUserContextCommandParameters(this);
 
         await _session.BrowserModule.RemoveUserContextAsync(@params).ConfigureAwait(false);
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        await RemoveAsync().ConfigureAwait(false);
     }
 }

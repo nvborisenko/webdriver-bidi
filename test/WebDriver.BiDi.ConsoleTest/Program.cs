@@ -8,7 +8,7 @@ var options = new ChromeOptions
 
 using var driver = new ChromeDriver(options);
 
-await using var session = await driver.AsBiDiSessionAsync();
+await using var session = await driver.AsBidirectionalAsync();
 
 var context = await session.CreateBrowsingContextAsync();
 

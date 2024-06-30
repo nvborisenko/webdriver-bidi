@@ -39,7 +39,7 @@ namespace OpenQA.Selenium.BiDi.Tests
 
             driver = new ChromeDriver(options);
 
-            session = await driver.AsBiDiSessionAsync();
+            session = await driver.AsBidirectionalAsync();
         }
 
         [TearDown]
@@ -64,7 +64,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         [Test]
         public async Task CurrentBrowsingContext()
         {
-            var context = await driver.AsBiDiBrowsingContext();
+            var context = await driver.AsBidirectionalBrowsingContextAsync();
 
             var navigateResult = await context.NavigateAsync("https://google.com");
 
@@ -75,7 +75,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         [Test]
         public async Task GetTree()
         {
-            var session = await driver.AsBiDiSessionAsync();
+            var session = await driver.AsBidirectionalAsync();
 
             var contexts = await session.GetTreeAsync();
 
@@ -85,7 +85,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         [Test]
         public async Task Print()
         {
-            var context = await driver.AsBiDiBrowsingContext();
+            var context = await driver.AsBidirectionalBrowsingContextAsync();
 
             var res = await context.PrintAsync(background: true);
 
@@ -95,7 +95,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         [Test]
         public async Task BrowserUserContext()
         {
-            var session = await driver.AsBiDiSessionAsync();
+            var session = await driver.AsBidirectionalAsync();
 
             var userContextInfo = await session.CreateBrowserUserContextAsync();
 
@@ -109,7 +109,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         [Test]
         public async Task OnBrowsingContextCreated()
         {
-            var session = await driver.AsBiDiSessionAsync();
+            var session = await driver.AsBidirectionalAsync();
 
             await session.OnBrowsingContextCreatedAsync(async e => await e.Context.NavigateAsync("https://selenium.dev"));
 
@@ -125,7 +125,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         [Test]
         public async Task OnBrowsingContextDestroyed()
         {
-            var session = await driver.AsBiDiSessionAsync();
+            var session = await driver.AsBidirectionalAsync();
 
             var context = await session.CreateBrowsingContextAsync();
 
@@ -143,7 +143,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         [Test]
         public async Task OnUserPromptOpened()
         {
-            var session = await driver.AsBiDiSessionAsync();
+            var session = await driver.AsBidirectionalAsync();
 
             UserPromptClosedEventArgs args = null;
 
@@ -163,7 +163,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         [Test]
         public async Task SetViewport()
         {
-            var context = await driver.AsBiDiBrowsingContext();
+            var context = await driver.AsBidirectionalBrowsingContextAsync();
 
             await context.NavigateAsync("https://google.com");
 
@@ -281,13 +281,11 @@ namespace OpenQA.Selenium.BiDi.Tests
         {
             var context = await session.CreateBrowsingContextAsync();
 
-            var script = await context.AddPreloadScriptAsync("prompt()");
+            await using var script = await context.AddPreloadScriptAsync("prompt()");
 
             await context.NavigateAsync("https://selenium.dev", wait: ReadinessState.None);
 
             await context.HandleUserPromptAsync();
-
-            await script.RemoveAsync();
         }
 
         [Test]

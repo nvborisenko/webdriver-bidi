@@ -1,8 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace OpenQA.Selenium.BiDi.Modules.Script;
 
-public class PreloadScript
+public class PreloadScript : IAsyncDisposable
 {
     readonly BiDi.Session _session;
 
@@ -19,5 +20,10 @@ public class PreloadScript
         var @params = new RemovePreloadScriptCommandParameters(this);
 
         await _session.ScriptModule.RemovePreloadScriptAsync(@params).ConfigureAwait(false);
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        await RemoveAsync().ConfigureAwait(false);
     }
 }
