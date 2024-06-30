@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace OpenQA.Selenium.BiDi.Internal;
+namespace OpenQA.Selenium.BiDi.Communication;
 
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "method")]
 

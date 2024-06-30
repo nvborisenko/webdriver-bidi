@@ -2,7 +2,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace OpenQA.Selenium.BiDi.Internal.Json;
+namespace OpenQA.Selenium.BiDi.Communication.Json;
 
 internal class DateTimeConverter : JsonConverter<DateTime>
 {

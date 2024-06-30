@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using OpenQA.Selenium.BiDi.Internal;
+using OpenQA.Selenium.BiDi.Communication;
 
 namespace OpenQA.Selenium.BiDi;
 

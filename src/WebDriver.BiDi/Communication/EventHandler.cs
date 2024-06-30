@@ -2,7 +2,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace OpenQA.Selenium.BiDi.Internal;
+namespace OpenQA.Selenium.BiDi.Communication;
 
 internal abstract class EventHandler(string eventName, Type eventArgsType, BrowsingContext? context)
 {

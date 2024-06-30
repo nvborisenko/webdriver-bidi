@@ -1,4 +1,4 @@
-﻿using OpenQA.Selenium.BiDi.Internal;
+﻿using OpenQA.Selenium.BiDi.Communication;
 using System;
 using System.Threading.Tasks;
 
@@ -7,9 +7,9 @@ namespace OpenQA.Selenium.BiDi;
 public class Subscription : IAsyncDisposable
 {
     private readonly Broker _broker;
-    private readonly Internal.EventHandler _eventHandler;
+    private readonly Communication.EventHandler _eventHandler;
 
-    internal Subscription(Broker broker, Internal.EventHandler eventHandler)
+    internal Subscription(Broker broker, Communication.EventHandler eventHandler)
     {
         _broker = broker;
         _eventHandler = eventHandler;

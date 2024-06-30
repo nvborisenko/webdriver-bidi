@@ -1,4 +1,4 @@
-﻿using OpenQA.Selenium.BiDi.Internal;
+﻿using OpenQA.Selenium.BiDi.Communication;
 using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Modules.Script;

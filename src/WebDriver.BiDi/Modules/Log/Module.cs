@@ -1,6 +1,6 @@
-﻿using OpenQA.Selenium.BiDi.Internal;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System;
+using OpenQA.Selenium.BiDi.Communication;
 
 namespace OpenQA.Selenium.BiDi.Modules.Log;
 

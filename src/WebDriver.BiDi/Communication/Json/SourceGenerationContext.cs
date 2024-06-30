@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using OpenQA.Selenium.BiDi.Communication;
+using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Internal.Json
 {

@@ -2,7 +2,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace OpenQA.Selenium.BiDi.Internal;
+namespace OpenQA.Selenium.BiDi.Communication;
 
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
 [JsonDerivedType(typeof(MessageSuccess), "success")]

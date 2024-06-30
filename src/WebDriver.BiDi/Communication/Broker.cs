@@ -1,3 +1,4 @@
+using OpenQA.Selenium.BiDi.Communication.Json;
 using OpenQA.Selenium.BiDi.Internal.Json;
 using OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 using System;
@@ -10,7 +11,7 @@ using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace OpenQA.Selenium.BiDi.Internal;
+namespace OpenQA.Selenium.BiDi.Communication;
 
 internal class Broker : IAsyncDisposable
 {
@@ -123,7 +124,7 @@ internal class Broker : IAsyncDisposable
                     {
                         foreach (var handler in eventHandlers)
                         {
-                            var args = (EventArgs)((JsonElement)result.Params!).Deserialize(handler.EventArgsType, _jsonSourceGenerationContext)!;
+                            var args = (EventArgs)result.Params!.Deserialize(handler.EventArgsType, _jsonSourceGenerationContext)!;
 
                             args.Session = _session;
 
