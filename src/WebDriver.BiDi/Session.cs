@@ -64,8 +64,6 @@ public class Session : IAsyncDisposable
         return createResult.Context;
     }
 
-    
-
     public async Task<Modules.Network.Intercept> AddInterceptAsync(IEnumerable<Modules.Network.InterceptPhase> phases, IEnumerable<Modules.Network.UrlPattern>? urlPatterns = default)
     {
         var @params = new Modules.Network.AddInterceptCommandParameters(phases)

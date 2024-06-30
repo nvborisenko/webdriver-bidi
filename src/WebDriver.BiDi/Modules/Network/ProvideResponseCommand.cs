@@ -11,7 +11,7 @@ internal class ProvideResponseCommandParameters(Request request) : CommandParame
 
     public BytesValue? Body { get; set; }
 
-    public IEnumerable<SetCookieHeader>? Coookies { get; set; }
+    public IEnumerable<SetCookieHeader>? Cookies { get; set; }
 
     public IEnumerable<Header>? Headers { get; set; }
 

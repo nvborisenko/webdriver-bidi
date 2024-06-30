@@ -528,11 +528,22 @@ namespace OpenQA.Selenium.BiDi.Tests
         {
             var context = await session.CreateBrowsingContextAsync();
 
-            await using var intercept = await context.AddInterceptAsync([InterceptPhase.BeforeRequestSent], ["https://**"]);
-
-            await intercept.OnBeforeRequestSentAsync(async args =>
+            await using var intercept = await context.AddInterceptOnBeforeRequestSentAsync(async args =>
             {
                 await args.Request.ProvideResponseAsync();
+            });
+
+            await context.NavigateAsync("https://selenium.dev");
+        }
+
+        [Test]
+        public async Task InterceptTestProvideResponseBody()
+        {
+            var context = await session.CreateBrowsingContextAsync();
+
+            await using var intercept = await context.AddInterceptOnBeforeRequestSentAsync(async args =>
+            {
+                await args.Request.ProvideResponseAsync(body: $"<html><body><h1 id=\"id1\">Request to {args.Request.Url} has been hijacked!</h1></body></html>");
             });
 
             await context.NavigateAsync("https://selenium.dev");

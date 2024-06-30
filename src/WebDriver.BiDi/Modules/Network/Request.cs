@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace OpenQA.Selenium.BiDi.Modules.Network;
 
@@ -31,10 +32,14 @@ public class Request
         await _session.NetworkModule.FailRequestAsync(@params).ConfigureAwait(false);
     }
 
-    internal async Task ProvideResponseAsync(uint? statusCode = default)
+    internal async Task ProvideResponseAsync(BytesValue? body = default, IEnumerable<SetCookieHeader>? cookies = default, IEnumerable<Header>? headers = default, string? reasonPhrase = default, uint? statusCode = default)
     {
         var @params = new ProvideResponseCommandParameters(this)
         {
+            Body = body,
+            Cookies = cookies,
+            Headers = headers,
+            ReasonPhrase = reasonPhrase,
             StatusCode = statusCode
         };
 

@@ -55,9 +55,9 @@ public static class Extensions
         return requestData.Request.FailAsync();
     }
 
-    public static Task ProvideResponseAsync(this RequestData requestData, uint? statusCode = default)
+    public static Task ProvideResponseAsync(this RequestData requestData, BytesValue? body = default, IEnumerable<SetCookieHeader>? cookies = default, IEnumerable<Header>? headers = default, string? reasonPhrase = default, uint? statusCode = default)
     {
-        return requestData.Request.ProvideResponseAsync(statusCode);
+        return requestData.Request.ProvideResponseAsync(body, cookies, headers, reasonPhrase, statusCode);
     }
 
     public class InterceptBrowsingContext : Intercept

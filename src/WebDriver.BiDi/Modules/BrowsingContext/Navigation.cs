@@ -2,7 +2,7 @@
 
 public class Navigation
 {
-    public Navigation(string id)
+    internal Navigation(string id)
     {
         Id = id;
     }
