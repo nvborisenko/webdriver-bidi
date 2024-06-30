@@ -55,7 +55,7 @@ public static class Extensions
         return requestData.Request.FailAsync();
     }
 
-    public static Task ProvideAsync(this RequestData requestData, uint? statusCode = default)
+    public static Task ProvideResponseAsync(this RequestData requestData, uint? statusCode = default)
     {
         return requestData.Request.ProvideResponseAsync(statusCode);
     }

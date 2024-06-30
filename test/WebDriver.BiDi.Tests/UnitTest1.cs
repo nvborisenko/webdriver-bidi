@@ -534,7 +534,7 @@ namespace OpenQA.Selenium.BiDi.Tests
 
             await intercept.OnBeforeRequestSentAsync(async args =>
             {
-                await args.Request.ProvideAsync();
+                await args.Request.ProvideResponseAsync();
             });
 
             await context.NavigateAsync("https://selenium.dev");
@@ -547,7 +547,7 @@ namespace OpenQA.Selenium.BiDi.Tests
 
             await context.AddInterceptOnResponseStartedAsync(async args =>
             {
-                await args.Request.ProvideAsync(statusCode: 200);
+                await args.Request.ProvideResponseAsync(statusCode: 200);
             });
 
             await context.NavigateAsync("https://selenium.dev");
