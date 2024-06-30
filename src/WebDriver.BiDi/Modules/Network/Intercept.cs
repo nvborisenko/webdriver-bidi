@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace OpenQA.Selenium.BiDi.Modules.Network;
@@ -6,6 +8,9 @@ namespace OpenQA.Selenium.BiDi.Modules.Network;
 public class Intercept : IAsyncDisposable
 {
     private readonly BiDi.Session _session;
+
+    protected readonly IList<Subscription> _onBeforeRequestSentSubscriptions = [];
+    protected readonly IList<Subscription> _onResponseStartedSubscriptions = [];
 
     internal Intercept(BiDi.Session session, string id)
     {
@@ -15,11 +20,42 @@ public class Intercept : IAsyncDisposable
 
     public string Id { get; private set; }
 
-    public Task RemoveAsync()
+    public async Task RemoveAsync()
     {
         var @params = new RemoveInterceptCommandParameters(this);
 
-        return _session.NetworkModule.RemoveInterceptAsync(@params);
+        await _session.NetworkModule.RemoveInterceptAsync(@params).ConfigureAwait(false);
+
+        foreach (var subscription in _onBeforeRequestSentSubscriptions)
+        {
+            await subscription.UnsubscribeAsync().ConfigureAwait(false);
+        }
+    }
+
+    public virtual async Task OnBeforeRequestSentAsync(Func<BeforeRequestSentEventArgs, Task> callback)
+    {
+        var subscription = await _session.NetworkModule.OnBeforeRequestSentAsync(async args =>
+        {
+            if (args.Intercepts?.Contains(this) is true && args.IsBlocked)
+            {
+                await callback(args).ConfigureAwait(false);
+            }
+        }).ConfigureAwait(false);
+
+        _onBeforeRequestSentSubscriptions.Add(subscription);
+    }
+
+    public virtual async Task OnResponseStartedAsync(Func<ResponseStartedEventArgs, Task> callback)
+    {
+        var subscription = await _session.NetworkModule.OnResponseStartedAsync(async args =>
+        {
+            if (args.Intercepts?.Contains(this) is true && args.IsBlocked)
+            {
+                await callback(args).ConfigureAwait(false);
+            }
+        }).ConfigureAwait(false);
+
+        _onResponseStartedSubscriptions.Add(subscription);
     }
 
     public async ValueTask DisposeAsync()

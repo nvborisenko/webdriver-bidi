@@ -487,12 +487,9 @@ namespace OpenQA.Selenium.BiDi.Tests
 
             await using var intercept = await context.AddInterceptAsync([InterceptPhase.BeforeRequestSent], ["https://**"]);
 
-            await context.OnBeforeRequestSentAsync(async req =>
+            await intercept.OnBeforeRequestSentAsync(async req =>
             {
-                if (req.Intercepts?.Contains(intercept) is true)
-                {
-                    await req.ContinueAsync("POST");
-                }
+                await req.ContinueAsync("POST");
             });
 
             await context.NavigateAsync("https://selenium.dev");
@@ -505,12 +502,9 @@ namespace OpenQA.Selenium.BiDi.Tests
 
             await using var intercept = await context.AddInterceptAsync([InterceptPhase.ResponseStarted], ["https://**"]);
 
-            await context.OnResponseStartedAsync(async res =>
+            await intercept.OnResponseStartedAsync(async res =>
             {
-                if (res.Intercepts?.Contains(intercept) is true)
-                {
-                    await res.ContinueAsync();
-                }
+                await res.ContinueAsync();
             });
 
             await context.NavigateAsync("https://selenium.dev");
@@ -523,12 +517,9 @@ namespace OpenQA.Selenium.BiDi.Tests
 
             await using var intercept = await context.AddInterceptAsync([InterceptPhase.BeforeRequestSent], ["https://**"]);
 
-            await context.OnBeforeRequestSentAsync(async req =>
+            await intercept.OnBeforeRequestSentAsync(async req =>
             {
-                if (req.Intercepts?.Contains(intercept) is true)
-                {
-                    await req.FailAsync();
-                }
+                await req.FailAsync();
             });
 
             await context.NavigateAsync("https://selenium.dev");
@@ -541,12 +532,9 @@ namespace OpenQA.Selenium.BiDi.Tests
 
             await using var intercept = await context.AddInterceptAsync([InterceptPhase.BeforeRequestSent], ["https://**"]);
 
-            await context.OnBeforeRequestSentAsync(async req =>
+            await intercept.OnBeforeRequestSentAsync(async req =>
             {
-                if (req.Intercepts?.Contains(intercept) is true)
-                {
-                    await req.ProvideAsync();
-                }
+                await req.ProvideAsync();
             });
 
             await context.NavigateAsync("https://selenium.dev");
@@ -557,14 +545,9 @@ namespace OpenQA.Selenium.BiDi.Tests
         {
             var context = await session.CreateBrowsingContextAsync();
 
-            await using var intercept = await context.AddInterceptAsync(InterceptPhase.ResponseStarted);
-
-            await context.OnResponseStartedAsync(async res =>
+            await context.AddInterceptOnResponseStartedAsync(async res =>
             {
-                if (res.Intercepts?.Contains(intercept) is true)
-                {
-                    await res.ProvideAsync(statusCode: 200);
-                }
+                await res.ProvideAsync(statusCode: 200);
             });
 
             await context.NavigateAsync("https://selenium.dev");
@@ -573,9 +556,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         [Test]
         public async Task InterceptTestAll()
         {
-            await session.AddInterceptAsync(InterceptPhase.BeforeRequestSent);
-
-            await session.OnBeforeRequestSentAsync(async req =>
+            await session.AddInterceptOnBeforeRequestSentAsync(async req =>
             {
                 await req.ContinueAsync("POST");
             });
