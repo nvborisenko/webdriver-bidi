@@ -64,19 +64,21 @@ public class Session : IAsyncDisposable
         return createResult.Context;
     }
 
-    public Task<Modules.Network.AddInterceptResult> AddInterceptAsync(Modules.Network.InterceptPhase phase, IEnumerable<Modules.Network.UrlPattern>? urlPatterns = default)
+    public Task<Modules.Network.Intercept> AddInterceptAsync(Modules.Network.InterceptPhase phase, IEnumerable<Modules.Network.UrlPattern>? urlPatterns = default)
     {
         return AddInterceptAsync([phase], urlPatterns);
     }
 
-    public Task<Modules.Network.AddInterceptResult> AddInterceptAsync(IEnumerable<Modules.Network.InterceptPhase> phases, IEnumerable<Modules.Network.UrlPattern>? urlPatterns = default)
+    public async Task<Modules.Network.Intercept> AddInterceptAsync(IEnumerable<Modules.Network.InterceptPhase> phases, IEnumerable<Modules.Network.UrlPattern>? urlPatterns = default)
     {
         var @params = new Modules.Network.AddInterceptCommandParameters(phases)
         {
             UrlPatterns = urlPatterns
         };
 
-        return NetworkModule.AddInterceptAsync(@params);
+        var result = await NetworkModule.AddInterceptAsync(@params).ConfigureAwait(false);
+
+        return result.Intercept;
     }
 
     public Task<Modules.Browser.UserContextInfo> CreateBrowserUserContextAsync()
