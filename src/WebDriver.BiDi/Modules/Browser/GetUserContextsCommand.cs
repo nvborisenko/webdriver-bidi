@@ -3,10 +3,7 @@ using System.Collections.Generic;
 
 namespace OpenQA.Selenium.BiDi.Modules.Browser;
 
-internal class GetUserContextsCommand()
-    : Command<CommandParameters>("browser.getUserContexts", CommandParameters.Empty)
-{
-}
+internal class GetUserContextsCommand() : Command<CommandParameters>(CommandParameters.Empty);
 
 public class GetUserContextsResult(IReadOnlyList<UserContextInfo> userContexts)
 {

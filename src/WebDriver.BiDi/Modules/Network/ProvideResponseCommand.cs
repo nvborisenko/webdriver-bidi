@@ -3,11 +3,7 @@ using System.Collections.Generic;
 
 namespace OpenQA.Selenium.BiDi.Modules.Network;
 
-internal class ProvideResponseCommand(ProvideResponseCommandParameters @params)
-    : Command<ProvideResponseCommandParameters>("network.provideResponse", @params)
-{
-    
-}
+internal class ProvideResponseCommand(ProvideResponseCommandParameters @params) : Command<ProvideResponseCommandParameters>(@params);
 
 internal class ProvideResponseCommandParameters(Request request) : CommandParameters
 {

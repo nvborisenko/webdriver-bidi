@@ -2,11 +2,7 @@
 
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
-internal class NavigateCommand(NavigateCommandParameters @params)
-    : Command<NavigateCommandParameters>("browsingContext.navigate", @params)
-{
-
-}
+internal class NavigateCommand(NavigateCommandParameters @params) : Command<NavigateCommandParameters>(@params);
 
 internal class NavigateCommandParameters(BrowsingContext context, string url) : CommandParameters
 {

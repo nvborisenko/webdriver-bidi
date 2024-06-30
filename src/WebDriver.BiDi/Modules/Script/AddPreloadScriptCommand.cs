@@ -3,11 +3,7 @@ using System.Collections.Generic;
 
 namespace OpenQA.Selenium.BiDi.Modules.Script;
 
-internal class AddPreloadScriptCommand(AddPreloadScriptCommandParameters @params)
-    : Command<AddPreloadScriptCommandParameters>("script.addPreloadScript", @params)
-{
-    
-}
+internal class AddPreloadScriptCommand(AddPreloadScriptCommandParameters @params) : Command<AddPreloadScriptCommandParameters>(@params);
 
 internal class AddPreloadScriptCommandParameters(string functionDeclaration) : CommandParameters
 {

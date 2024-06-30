@@ -3,11 +3,7 @@ using System;
 
 namespace OpenQA.Selenium.BiDi.Modules.Storage;
 
-internal class SetCookieCommand(SetCookieCommandParameters @params)
-    : Command<SetCookieCommandParameters>("storage.setCookie", @params)
-{
-    
-}
+internal class SetCookieCommand(SetCookieCommandParameters @params) : Command<SetCookieCommandParameters>(@params);
 
 internal class SetCookieCommandParameters(PartialCookie partialCookie) : CommandParameters
 {

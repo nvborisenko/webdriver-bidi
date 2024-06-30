@@ -2,11 +2,7 @@
 
 namespace OpenQA.Selenium.BiDi.Modules.Storage;
 
-internal class DeleteCookiesCommand(DeleteCookiesCommandParameters @params)
-    : Command<DeleteCookiesCommandParameters>("storage.deleteCookies", @params)
-{
-    
-}
+internal class DeleteCookiesCommand(DeleteCookiesCommandParameters @params) : Command<DeleteCookiesCommandParameters>(@params);
 
 internal class DeleteCookiesCommandParameters : CommandParameters
 {

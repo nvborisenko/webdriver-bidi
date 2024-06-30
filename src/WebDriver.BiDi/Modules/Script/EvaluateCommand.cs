@@ -3,11 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Modules.Script;
 
-internal class EvaluateCommand(EvaluateCommandParameters @params)
-    : Command<EvaluateCommandParameters>("script.evaluate", @params)
-{
-    
-}
+internal class EvaluateCommand(EvaluateCommandParameters @params) : Command<EvaluateCommandParameters>(@params);
 
 internal class EvaluateCommandParameters(string expression, Target target, bool awaitPromise) : CommandParameters
 {

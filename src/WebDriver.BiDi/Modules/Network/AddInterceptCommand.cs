@@ -3,11 +3,7 @@ using OpenQA.Selenium.BiDi.Internal;
 
 namespace OpenQA.Selenium.BiDi.Modules.Network;
 
-internal class AddInterceptCommand(AddInterceptCommandParameters @params)
-    : Command<AddInterceptCommandParameters>("network.addIntercept", @params)
-{
-
-}
+internal class AddInterceptCommand(AddInterceptCommandParameters @params) : Command<AddInterceptCommandParameters>(@params);
 
 internal class AddInterceptCommandParameters(IEnumerable<InterceptPhase> phases) : CommandParameters
 {

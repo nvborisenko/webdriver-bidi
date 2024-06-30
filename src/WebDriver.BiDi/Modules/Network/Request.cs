@@ -26,7 +26,7 @@ public class Request
 
     internal async Task FailAsync()
     {
-        var @params = new FailRequestCommand.Parameters(this);
+        var @params = new FailRequestCommandParameters(this);
 
         await _session.NetworkModule.FailRequestAsync(@params).ConfigureAwait(false);
     }

@@ -35,7 +35,7 @@ internal sealed class Module
         await _broker.ExecuteCommandAsync(new ContinueResponseCommand(@params)).ConfigureAwait(false);
     }
 
-    public async Task FailRequestAsync(FailRequestCommand.Parameters @params)
+    public async Task FailRequestAsync(FailRequestCommandParameters @params)
     {
         await _broker.ExecuteCommandAsync(new FailRequestCommand(@params)).ConfigureAwait(false);
     }

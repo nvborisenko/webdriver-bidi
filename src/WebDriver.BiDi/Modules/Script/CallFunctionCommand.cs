@@ -3,11 +3,7 @@ using System.Collections.Generic;
 
 namespace OpenQA.Selenium.BiDi.Modules.Script;
 
-internal class CallFunctionCommand(CallFunctionCommandParameters @params)
-    : Command<CallFunctionCommandParameters>("script.callFunction", @params)
-{
-
-}
+internal class CallFunctionCommand(CallFunctionCommandParameters @params) : Command<CallFunctionCommandParameters>(@params);
 
 internal class CallFunctionCommandParameters(string functionDeclaration, bool awaitPromise, Target target) : CommandParameters
 {

@@ -2,11 +2,7 @@
 
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
-class HandleUserPromptCommand(HandleUserPromptCommandParameters @params)
-    : Command<HandleUserPromptCommandParameters>("browsingContext.handleUserPrompt", @params)
-{
-    
-}
+class HandleUserPromptCommand(HandleUserPromptCommandParameters @params) : Command<HandleUserPromptCommandParameters>(@params);
 
 internal class HandleUserPromptCommandParameters(BrowsingContext context) : CommandParameters
 {

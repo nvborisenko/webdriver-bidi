@@ -3,11 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
-internal class CaptureScreenshotCommand(CaptureScreenshotCommandParameters @params)
-    : Command<CaptureScreenshotCommandParameters>("browsingContext.captureScreenshot", @params)
-{
-    
-}
+internal class CaptureScreenshotCommand(CaptureScreenshotCommandParameters @params) : Command<CaptureScreenshotCommandParameters>(@params);
 
 internal class CaptureScreenshotCommandParameters(BrowsingContext context) : CommandParameters
 {

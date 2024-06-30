@@ -2,8 +2,4 @@
 
 namespace OpenQA.Selenium.BiDi.Modules.Session;
 
-internal class EndCommand()
-    : Command<CommandParameters>("session.end", CommandParameters.Empty)
-{
-
-}
+internal class EndCommand() : Command<CommandParameters>(CommandParameters.Empty);

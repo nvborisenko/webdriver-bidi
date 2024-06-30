@@ -3,11 +3,7 @@ using System.Collections.Generic;
 
 namespace OpenQA.Selenium.BiDi.Modules.Script;
 
-internal class GetRealmsCommand(GetRealmsCommandParameters @params)
-    : Command<GetRealmsCommandParameters>("script.getRealms", @params)
-{
-    
-}
+internal class GetRealmsCommand(GetRealmsCommandParameters @params) : Command<GetRealmsCommandParameters>(@params);
 
 internal class GetRealmsCommandParameters : CommandParameters
 {

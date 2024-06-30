@@ -2,11 +2,7 @@
 
 namespace OpenQA.Selenium.BiDi.Modules.Session;
 
-internal class NewCommand(NewCommandParameters @params)
-    : Command<NewCommandParameters>("session.new", @params)
-{
-    
-}
+internal class NewCommand(NewCommandParameters @params) : Command<NewCommandParameters>(@params);
 
 internal class NewCommandParameters(CapabilitiesRequest capabilities) : CommandParameters
 {

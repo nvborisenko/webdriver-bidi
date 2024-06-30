@@ -5,11 +5,7 @@ using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Modules.Input;
 
-internal class PerformActionsCommand(PerformActionsCommandParameters @params)
-    : Command<PerformActionsCommandParameters>("input.performActions", @params)
-{
-    
-}
+internal class PerformActionsCommand(PerformActionsCommandParameters @params) : Command<PerformActionsCommandParameters>(@params);
 
 internal class PerformActionsCommandParameters : CommandParameters
 {

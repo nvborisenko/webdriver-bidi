@@ -3,11 +3,7 @@ using System.Collections.Generic;
 
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
-internal class GetTreeCommand(GetTreeCommandParameters @params)
-    : Command<GetTreeCommandParameters>("browsingContext.getTree", @params)
-{
-    
-}
+internal class GetTreeCommand(GetTreeCommandParameters @params) : Command<GetTreeCommandParameters>(@params);
 
 internal class GetTreeCommandParameters : CommandParameters
 {

@@ -2,8 +2,4 @@
 
 namespace OpenQA.Selenium.BiDi.Modules.Session;
 
-internal class UnsubscribeCommand(SubscribeCommandParameters @params)
-    : Command<SubscribeCommandParameters>("session.unsubscribe", @params)
-{
-
-}
+internal class UnsubscribeCommand(SubscribeCommandParameters @params) : Command<SubscribeCommandParameters>(@params);

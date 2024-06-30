@@ -2,11 +2,7 @@
 
 namespace OpenQA.Selenium.BiDi.Modules.Session;
 
-internal class StatusCommand()
-    : Command<CommandParameters>("session.status", CommandParameters.Empty)
-{
-
-}
+internal class StatusCommand() : Command<CommandParameters>(CommandParameters.Empty);
 
 public class StatusResult(bool ready, string message)
 {

@@ -3,11 +3,7 @@ using System.Collections.Generic;
 
 namespace OpenQA.Selenium.BiDi.Modules.Session;
 
-internal class SubscribeCommand(SubscribeCommandParameters @params)
-    : Command<SubscribeCommandParameters>("session.subscribe", @params)
-{
-    
-}
+internal class SubscribeCommand(SubscribeCommandParameters @params) : Command<SubscribeCommandParameters>(@params);
 
 internal class SubscribeCommandParameters(IEnumerable<string> events) : CommandParameters
 {

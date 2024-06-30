@@ -5,11 +5,7 @@ using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Modules.Storage;
 
-internal class GetCookiesCommand(GetCookiesCommandParameters @params)
-    : Command<GetCookiesCommandParameters>("storage.getCookies", @params)
-{
-    
-}
+internal class GetCookiesCommand(GetCookiesCommandParameters @params) : Command<GetCookiesCommandParameters>(@params);
 
 internal class GetCookiesCommandParameters : CommandParameters
 {

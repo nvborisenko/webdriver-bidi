@@ -2,8 +2,4 @@
 
 namespace OpenQA.Selenium.BiDi.Modules.Browser;
 
-internal class CloseCommand()
-    : Command<CommandParameters>("browser.close", CommandParameters.Empty)
-{
-
-}
+internal class CloseCommand() : Command<CommandParameters>(CommandParameters.Empty);

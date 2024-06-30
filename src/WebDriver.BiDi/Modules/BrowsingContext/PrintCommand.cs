@@ -3,11 +3,7 @@ using System.Collections.Generic;
 
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
-internal class PrintCommand(PrintCommandParameters @params)
-    : Command<PrintCommandParameters>("browsingContext.print", @params)
-{
-    
-}
+internal class PrintCommand(PrintCommandParameters @params) : Command<PrintCommandParameters>(@params);
 
 internal class PrintCommandParameters(BrowsingContext context) : CommandParameters
 {
