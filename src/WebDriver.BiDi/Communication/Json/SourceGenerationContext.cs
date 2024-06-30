@@ -1,10 +1,9 @@
-﻿using OpenQA.Selenium.BiDi.Communication;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Internal.Json
 {
-    [JsonSerializable(typeof(Command))]
-    [JsonSerializable(typeof(Message))]
+    [JsonSerializable(typeof(Communication.Command))]
+    [JsonSerializable(typeof(Communication.Message))]
 
     [JsonSerializable(typeof(Modules.Session.StatusResult))]
     [JsonSerializable(typeof(Modules.Session.NewResult))]
