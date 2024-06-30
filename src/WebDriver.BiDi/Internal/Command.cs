@@ -60,7 +60,7 @@ internal abstract class Command<TCommandParameters>(TCommandParameters @params) 
     public TCommandParameters Params { get; } = @params;
 }
 
-public class CommandParameters
+internal class CommandParameters
 {
     public static CommandParameters Empty { get; } = new CommandParameters();
 }

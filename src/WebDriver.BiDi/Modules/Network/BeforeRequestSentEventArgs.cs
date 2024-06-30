@@ -1,7 +1,6 @@
 ﻿using OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 using System;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace OpenQA.Selenium.BiDi.Modules.Network;
 
@@ -19,20 +18,5 @@ public class BeforeRequestSentEventArgs : BaseParametersEventArgs
     public override string ToString()
     {
         return $"{Request.Method} {Request.Url}";
-    }
-
-    public Task ContinueAsync(string? method = default)
-    {
-        return Request.Request.ContinueAsync(method);
-    }
-
-    public Task FailAsync()
-    {
-        return Request.Request.FailAsync();
-    }
-
-    public Task ProvideAsync(uint? statusCode = default)
-    {
-        return Request.Request.ProvideResponseAsync(statusCode);
     }
 }

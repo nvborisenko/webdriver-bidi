@@ -45,6 +45,21 @@ public static class Extensions
         return new(context.Session, intercept.Id, context);
     }
 
+    public static Task ContinueAsync(this RequestData requestData, string? method = default)
+    {
+        return requestData.Request.ContinueAsync(method);
+    }
+
+    public static Task FailAsync(this RequestData requestData)
+    {
+        return requestData.Request.FailAsync();
+    }
+
+    public static Task ProvideAsync(this RequestData requestData, uint? statusCode = default)
+    {
+        return requestData.Request.ProvideResponseAsync(statusCode);
+    }
+
     public class InterceptBrowsingContext : Intercept
     {
         private readonly BrowsingContext _context;
