@@ -88,12 +88,12 @@ public class Session : IAsyncDisposable
         return result.UserContexts;
     }
 
-    public async Task<IReadOnlyList<Modules.BrowsingContext.BrowsingContextInfo>> GetTreeAsync(uint? maxDepth = default, Modules.BrowsingContext.BrowsingContext? context = default)
+    public async Task<IReadOnlyList<Modules.BrowsingContext.BrowsingContextInfo>> GetTreeAsync(uint? maxDepth = default, Modules.BrowsingContext.BrowsingContext? root = default)
     {
         var @params = new Modules.BrowsingContext.GetTreeCommandParameters
         {
             MaxDepth = maxDepth,
-            Root = context
+            Root = root
         };
 
         var result = await BrowsingContextModule.GetTreeAsync(@params).ConfigureAwait(false);
