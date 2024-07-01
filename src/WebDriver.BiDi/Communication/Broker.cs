@@ -60,7 +60,10 @@ internal class Broker : IAsyncDisposable
                 new RealmTypeConverter(),
                 new DateTimeConverter(),
                 new JsonStringEnumConverter(JsonNamingPolicy.CamelCase),
-                new MessageConverter()
+                
+                // https://github.com/dotnet/runtime/issues/72604
+                new MessageConverter(),
+                new EvaluateResultConverter(),
             },
         };
 

@@ -32,7 +32,8 @@ namespace OpenQA.Selenium.BiDi.Internal.Json
     [JsonSerializable(typeof(Modules.Network.FetchErrorEventArgs))]
 
     [JsonSerializable(typeof(Modules.Script.AddPreloadScriptResult))]
-    [JsonSerializable(typeof(Modules.Script.EvaluateResult))]
+    // https://github.com/dotnet/runtime/issues/72604
+     [JsonSerializable(typeof(Modules.Script.EvaluateResult))]
     [JsonSerializable(typeof(Modules.Script.GetRealmsResult))]
 
     [JsonSerializable(typeof(Modules.Log.BaseLogEntryEventArgs))]
