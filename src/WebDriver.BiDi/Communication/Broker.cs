@@ -59,9 +59,9 @@ internal class Broker : IAsyncDisposable
                 new RealmConverter(_session),
                 new RealmTypeConverter(),
                 new DateTimeConverter(),
-                new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)
+                new JsonStringEnumConverter(JsonNamingPolicy.CamelCase),
+                new MessageConverter()
             },
-            AllowOutOfOrderMetadataProperties = true
         };
 
         _jsonSourceGenerationContext = new SourceGenerationContext(jsonSerializerOptions);
