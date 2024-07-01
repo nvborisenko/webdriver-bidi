@@ -543,7 +543,13 @@ namespace OpenQA.Selenium.BiDi.Tests
 
             await using var intercept = await context.AddInterceptOnBeforeRequestSentAsync(async args =>
             {
-                await args.Request.ProvideResponseAsync(body: $"<html><body><h1 id=\"id1\">Request to {args.Request.Url} has been hijacked!</h1></body></html>");
+                await args.Request.ProvideResponseAsync(body: $"""
+                    <html>
+                        <body>
+                            <h1 id=\"id1\">Request to {args.Request.Url} has been hijacked!</h1>
+                        </body>
+                    </html>
+                    """);
             });
 
             await context.NavigateAsync("https://selenium.dev");
