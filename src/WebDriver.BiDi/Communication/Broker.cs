@@ -114,6 +114,7 @@ internal class Broker : IAsyncDisposable
             catch (Exception ex)
             {
                 Debug.WriteLine(ex);
+                throw;
             }
         }
     }
