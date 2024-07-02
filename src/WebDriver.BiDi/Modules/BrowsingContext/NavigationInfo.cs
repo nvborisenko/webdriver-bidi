@@ -2,7 +2,7 @@
 
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
-public class NavigationInfoEventArgs(BrowsingContext context, Navigation navigation, DateTime timestamp, string url) : EventArgs
+public class NavigationInfo(BrowsingContext context, Navigation navigation, DateTime timestamp, string url) : EventArgs
 {
     public BrowsingContext Context { get; } = context;
 

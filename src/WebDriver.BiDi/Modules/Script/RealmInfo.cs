@@ -3,20 +3,22 @@ using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Modules.Script;
 
-[JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
-[JsonDerivedType(typeof(WindowRealmInfo), "window")]
-[JsonDerivedType(typeof(DedicatedWorkerRealmInfo), "dedicated-worker")]
-[JsonDerivedType(typeof(SharedWorkerRealmInfo), "shared-worker")]
-[JsonDerivedType(typeof(ServiceWorkerRealmInfo), "service-worker")]
-[JsonDerivedType(typeof(WorkerRealmInfo), "worker")]
-[JsonDerivedType(typeof(PaintWorkletRealmInfo), "paint-worklet")]
-[JsonDerivedType(typeof(AudioWorkletRealmInfo), "audio-worklet")]
-[JsonDerivedType(typeof(WorkletRealmInfo), "worklet")]
-public abstract class RealmInfoEventArgs : EventArgs
+// https://github.com/dotnet/runtime/issues/72604
+//[JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
+//[JsonDerivedType(typeof(WindowRealmInfo), "window")]
+//[JsonDerivedType(typeof(DedicatedWorkerRealmInfo), "dedicated-worker")]
+//[JsonDerivedType(typeof(SharedWorkerRealmInfo), "shared-worker")]
+//[JsonDerivedType(typeof(ServiceWorkerRealmInfo), "service-worker")]
+//[JsonDerivedType(typeof(WorkerRealmInfo), "worker")]
+//[JsonDerivedType(typeof(PaintWorkletRealmInfo), "paint-worklet")]
+//[JsonDerivedType(typeof(AudioWorkletRealmInfo), "audio-worklet")]
+//[JsonDerivedType(typeof(WorkletRealmInfo), "worklet")]
+public abstract class RealmInfo : EventArgs
 {
+
 }
 
-public abstract class BaseRealmInfo(Realm realm, string origin) : RealmInfoEventArgs
+public abstract class BaseRealmInfo(Realm realm, string origin) : RealmInfo
 {
     public Realm Realm { get; } = realm;
 

@@ -253,7 +253,7 @@ public class BrowsingContext
         return res.Script;
     }
 
-    public async Task<IReadOnlyList<Script.RealmInfoEventArgs>> GetRealmsAsync()
+    public async Task<IReadOnlyList<Script.RealmInfo>> GetRealmsAsync()
     {
         var @params = new Script.GetRealmsCommandParameters { Context = this };
 
@@ -262,72 +262,72 @@ public class BrowsingContext
         return res.Realms;
     }
 
-    public Task<Subscription> OnNavigationStartedAsync(Func<NavigationInfoEventArgs, Task> callback)
+    public Task<Subscription> OnNavigationStartedAsync(Func<NavigationInfo, Task> callback)
     {
         return Session.BrowsingContextModule.OnNavigationStartedAsync(callback, this);
     }
 
-    public Task<Subscription> OnNavigationStartedAsync(Action<NavigationInfoEventArgs> callback)
+    public Task<Subscription> OnNavigationStartedAsync(Action<NavigationInfo> callback)
     {
         return Session.BrowsingContextModule.OnNavigationStartedAsync(callback, this);
     }
 
-    public Task<Subscription> OnFragmentNavigatedAsync(Func<NavigationInfoEventArgs, Task> callback)
+    public Task<Subscription> OnFragmentNavigatedAsync(Func<NavigationInfo, Task> callback)
     {
         return Session.BrowsingContextModule.OnFragmentNavigatedAsync(callback, this);
     }
 
-    public Task<Subscription> OnFragmentNavigatedAsync(Action<NavigationInfoEventArgs> callback)
+    public Task<Subscription> OnFragmentNavigatedAsync(Action<NavigationInfo> callback)
     {
         return Session.BrowsingContextModule.OnFragmentNavigatedAsync(callback, this);
     }
 
-    public Task<Subscription> OnDomContentLoadedAsync(Func<NavigationInfoEventArgs, Task> callback)
+    public Task<Subscription> OnDomContentLoadedAsync(Func<NavigationInfo, Task> callback)
     {
         return Session.BrowsingContextModule.OnDomContentLoadedAsync(callback, this);
     }
 
-    public Task<Subscription> OnLoadAsync(Action<NavigationInfoEventArgs> callback)
+    public Task<Subscription> OnLoadAsync(Action<NavigationInfo> callback)
     {
         return Session.BrowsingContextModule.OnLoadAsync(callback, this);
     }
 
-    public Task<Subscription> OnLoadAsync(Func<NavigationInfoEventArgs, Task> callback)
+    public Task<Subscription> OnLoadAsync(Func<NavigationInfo, Task> callback)
     {
         return Session.BrowsingContextModule.OnLoadAsync(callback, this);
     }
 
-    public Task<Subscription> OnDownloadWillBeginAsync(Action<NavigationInfoEventArgs> callback)
+    public Task<Subscription> OnDownloadWillBeginAsync(Action<NavigationInfo> callback)
     {
         return Session.BrowsingContextModule.OnDownloadWillBeginAsync(callback, this);
     }
 
-    public Task<Subscription> OnDownloadWillBeginAsync(Func<NavigationInfoEventArgs, Task> callback)
+    public Task<Subscription> OnDownloadWillBeginAsync(Func<NavigationInfo, Task> callback)
     {
         return Session.BrowsingContextModule.OnDownloadWillBeginAsync(callback, this);
     }
 
-    public Task<Subscription> OnNavigationAbortedAsync(Action<NavigationInfoEventArgs> callback)
+    public Task<Subscription> OnNavigationAbortedAsync(Action<NavigationInfo> callback)
     {
         return Session.BrowsingContextModule.OnNavigationAbortedAsync(callback, this);
     }
 
-    public Task<Subscription> OnNavigationAbortedAsync(Func<NavigationInfoEventArgs, Task> callback)
+    public Task<Subscription> OnNavigationAbortedAsync(Func<NavigationInfo, Task> callback)
     {
         return Session.BrowsingContextModule.OnNavigationAbortedAsync(callback, this);
     }
 
-    public Task<Subscription> OnNavigationFailedAsync(Action<NavigationInfoEventArgs> callback)
+    public Task<Subscription> OnNavigationFailedAsync(Action<NavigationInfo> callback)
     {
         return Session.BrowsingContextModule.OnNavigationFailedAsync(callback, this);
     }
 
-    public Task<Subscription> OnNavigationFailedAsync(Func<NavigationInfoEventArgs, Task> callback)
+    public Task<Subscription> OnNavigationFailedAsync(Func<NavigationInfo, Task> callback)
     {
         return Session.BrowsingContextModule.OnNavigationFailedAsync(callback, this);
     }
 
-    public Task<Subscription> OnDomContentLoadedAsync(Action<NavigationInfoEventArgs> callback)
+    public Task<Subscription> OnDomContentLoadedAsync(Action<NavigationInfo> callback)
     {
         return Session.BrowsingContextModule.OnDomContentLoadedAsync(callback, this);
     }
@@ -372,12 +372,12 @@ public class BrowsingContext
         return Session.NetworkModule.OnFetchErrorAsync(callback, this);
     }
 
-    public Task<Subscription> OnLogEntryAddedAsync(Func<Log.BaseLogEntryEventArgs, Task> callback)
+    public Task<Subscription> OnLogEntryAddedAsync(Func<Log.BaseLogEntry, Task> callback)
     {
         return Session.LogModule.OnEntryAddedAsync(callback, this);
     }
 
-    public Task<Subscription> OnLogEntryAddedAsync(Action<Log.BaseLogEntryEventArgs> callback)
+    public Task<Subscription> OnLogEntryAddedAsync(Action<Log.BaseLogEntry> callback)
     {
         return Session.LogModule.OnEntryAddedAsync(callback, this);
     }

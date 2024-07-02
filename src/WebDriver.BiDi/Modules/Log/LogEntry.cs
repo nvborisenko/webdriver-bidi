@@ -4,10 +4,11 @@ using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Modules.Log;
 
-[JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
-[JsonDerivedType(typeof(ConsoleLogEntry), "console")]
-[JsonDerivedType(typeof(JavascriptLogEntry), "javascript")]
-public abstract class BaseLogEntryEventArgs(Level level, string text, DateTime timestamp) : EventArgs
+// https://github.com/dotnet/runtime/issues/72604
+//[JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
+//[JsonDerivedType(typeof(ConsoleLogEntry), "console")]
+//[JsonDerivedType(typeof(JavascriptLogEntry), "javascript")]
+public abstract class BaseLogEntry(Level level, string text, DateTime timestamp) : EventArgs
 {
     public Level Level { get; } = level;
 
@@ -16,7 +17,7 @@ public abstract class BaseLogEntryEventArgs(Level level, string text, DateTime t
     public DateTime Timestamp { get; } = timestamp;
 }
 
-public class ConsoleLogEntry : BaseLogEntryEventArgs
+public class ConsoleLogEntry : BaseLogEntry
 {
     [JsonConstructor]
     internal ConsoleLogEntry(Level level, string text, DateTime timestamp, string method, IReadOnlyList<Script.RemoteValue> args)
@@ -31,7 +32,7 @@ public class ConsoleLogEntry : BaseLogEntryEventArgs
     public IReadOnlyList<Script.RemoteValue> Args { get; }
 }
 
-public class JavascriptLogEntry : BaseLogEntryEventArgs
+public class JavascriptLogEntry : BaseLogEntry
 {
     [JsonConstructor]
     internal JavascriptLogEntry(Level level, string text, DateTime timestamp)

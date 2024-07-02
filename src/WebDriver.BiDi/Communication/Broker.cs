@@ -1,5 +1,4 @@
 using OpenQA.Selenium.BiDi.Communication.Json;
-using OpenQA.Selenium.BiDi.Internal.Json;
 using OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 using System;
 using System.Collections.Concurrent;
@@ -59,9 +58,16 @@ internal class Broker : IAsyncDisposable
                 new RealmConverter(_session),
                 new RealmTypeConverter(),
                 new DateTimeConverter(),
-                new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)
+                new JsonStringEnumConverter(JsonNamingPolicy.CamelCase),
+                
+                // https://github.com/dotnet/runtime/issues/72604
+                new Json.Polymorphic.MessageConverter(),
+                new Json.Polymorphic.EvaluateResultConverter(),
+                new Json.Polymorphic.RemoteValueConverter(),
+                new Json.Polymorphic.RealmInfoConverter(),
+                new Json.Polymorphic.LogEntryConverter(),
+                //
             },
-            AllowOutOfOrderMetadataProperties = true
         };
 
         _jsonSourceGenerationContext = new SourceGenerationContext(jsonSerializerOptions);

@@ -12,7 +12,7 @@ internal class GetRealmsCommandParameters : CommandParameters
     public RealmType? Type { get; set; }
 }
 
-internal class GetRealmsResult(IReadOnlyList<RealmInfoEventArgs> realms)
+internal class GetRealmsResult(IReadOnlyList<RealmInfo> realms)
 {
-    public IReadOnlyList<RealmInfoEventArgs> Realms { get; } = realms;
+    public IReadOnlyList<RealmInfo> Realms { get; } = realms;
 }

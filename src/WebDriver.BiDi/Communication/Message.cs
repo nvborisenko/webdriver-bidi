@@ -1,13 +1,13 @@
-﻿using System;
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Communication;
 
-[JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
-[JsonDerivedType(typeof(MessageSuccess), "success")]
-[JsonDerivedType(typeof(MessageError), "error")]
-[JsonDerivedType(typeof(MessageEvent), "event")]
+// https://github.com/dotnet/runtime/issues/72604
+//[JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
+//[JsonDerivedType(typeof(MessageSuccess), "success")]
+//[JsonDerivedType(typeof(MessageError), "error")]
+//[JsonDerivedType(typeof(MessageEvent), "event")]
 internal abstract class Message
 {
 

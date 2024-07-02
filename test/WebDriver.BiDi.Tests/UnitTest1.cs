@@ -236,7 +236,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         {
             var context = await session.CreateBrowsingContextAsync();
 
-            NavigationInfoEventArgs info = null;
+            NavigationInfo info = null;
 
             await context.OnNavigationStartedAsync(args =>
             {
@@ -464,6 +464,16 @@ namespace OpenQA.Selenium.BiDi.Tests
             var context = await session.CreateBrowsingContextAsync();
 
             await context.OnBeforeRequestSentAsync(Console.WriteLine);
+
+            await context.NavigateAsync("https://selenium.dev");
+        }
+
+        [Test]
+        public async Task OnResponseCompleted()
+        {
+            var context = await session.CreateBrowsingContextAsync();
+
+            await context.OnResponseCompletedAsync(Console.WriteLine);
 
             await context.NavigateAsync("https://selenium.dev");
         }

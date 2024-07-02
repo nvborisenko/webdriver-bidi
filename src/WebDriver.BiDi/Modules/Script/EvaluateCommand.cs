@@ -14,17 +14,18 @@ internal class EvaluateCommandParameters(string expression, Target target, bool 
     public bool AwaitPromise { get; set; } = awaitPromise;
 }
 
-[JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
-[JsonDerivedType(typeof(EvaluateResultSuccess), "success")]
-[JsonDerivedType(typeof(EvaluateResultException), "exception")]
+// https://github.com/dotnet/runtime/issues/72604
+//[JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
+//[JsonDerivedType(typeof(EvaluateResultSuccess), "success")]
+//[JsonDerivedType(typeof(EvaluateResultException), "exception")]
 public abstract class EvaluateResult
 {
 
 }
 
-public class EvaluateResultSuccess : EvaluateResult
+public class EvaluateResultSuccess(RemoteValue result) : EvaluateResult
 {
-    public RemoteValue Result { get; set; }
+    public RemoteValue Result { get; } = result;
 
     public static implicit operator int(EvaluateResultSuccess r) => (int)(r.Result as NumberRemoteValue).Value;
     public static implicit operator long(EvaluateResultSuccess r) => (r.Result as NumberRemoteValue).Value;

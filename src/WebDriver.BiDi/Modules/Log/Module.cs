@@ -15,12 +15,12 @@ internal sealed class Module
         _broker = broker;
     }
 
-    public async Task<Subscription> OnEntryAddedAsync(Func<BaseLogEntryEventArgs, Task> callback, BrowsingContext.BrowsingContext? context = default)
+    public async Task<Subscription> OnEntryAddedAsync(Func<BaseLogEntry, Task> callback, BrowsingContext.BrowsingContext? context = default)
     {
         return await _broker.SubscribeAsync("log.entryAdded", callback, context).ConfigureAwait(false);
     }
 
-    public async Task<Subscription> OnEntryAddedAsync(Action<BaseLogEntryEventArgs> callback, BrowsingContext.BrowsingContext? context = default)
+    public async Task<Subscription> OnEntryAddedAsync(Action<BaseLogEntry> callback, BrowsingContext.BrowsingContext? context = default)
     {
         return await _broker.SubscribeAsync("log.entryAdded", callback, context).ConfigureAwait(false);
     }
