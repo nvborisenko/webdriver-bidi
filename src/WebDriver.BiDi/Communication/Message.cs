@@ -13,25 +13,25 @@ internal abstract class Message
 
 }
 
-internal class MessageSuccess : Message
+internal class MessageSuccess(int id, JsonElement result) : Message
 {
-    public int Id { get; set; }
+    public int Id { get; } = id;
 
-    public JsonElement Result { get; set; }
+    public JsonElement Result { get; } = result;
 }
 
-internal class MessageError : Message
+internal class MessageError(int id) : Message
 {
-    public int Id { get; set; }
+    public int Id { get; } = id;
 
     public string? Error { get; set; }
 
     public string? Message { get; set; }
 }
 
-internal class MessageEvent : Message
+internal class MessageEvent(string method, JsonElement @params) : Message
 {
-    public string Method { get; set; }
+    public string Method { get; } = method;
 
-    public JsonElement Params { get; set; }
+    public JsonElement Params { get; } = @params;
 }
