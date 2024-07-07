@@ -10,14 +10,14 @@ public class Session : IAsyncDisposable
     private readonly Transport _transport;
     private readonly Broker _broker;
 
-    private readonly Lazy<Modules.Session.Module> _sessionModule;
-    private readonly Lazy<Modules.BrowsingContext.Module> _browsingContextModule;
-    private readonly Lazy<Modules.Browser.Module> _browserModule;
-    private readonly Lazy<Modules.Network.Module> _networkModule;
-    private readonly Lazy<Modules.Input.Module> _inputModule;
-    private readonly Lazy<Modules.Script.Module> _scriptModule;
-    private readonly Lazy<Modules.Log.Module> _logModule;
-    private readonly Lazy<Modules.Storage.Module> _storageModule;
+    private readonly Lazy<Modules.Session.SessionModule> _sessionModule;
+    private readonly Lazy<Modules.BrowsingContext.BrowsingContextModule> _browsingContextModule;
+    private readonly Lazy<Modules.Browser.BrowserModule> _browserModule;
+    private readonly Lazy<Modules.Network.NetworkModule> _networkModule;
+    private readonly Lazy<Modules.Input.InputModule> _inputModule;
+    private readonly Lazy<Modules.Script.ScriptModule> _scriptModule;
+    private readonly Lazy<Modules.Log.LogModule> _logModule;
+    private readonly Lazy<Modules.Storage.StorageModule> _storageModule;
 
     internal Session(string url)
     {
@@ -26,24 +26,24 @@ public class Session : IAsyncDisposable
         _transport = new Transport(new Uri(url));
         _broker = new Broker(this, _transport);
 
-        _sessionModule = new Lazy<Modules.Session.Module>(() => new Modules.Session.Module(this, _broker));
-        _browsingContextModule = new Lazy<Modules.BrowsingContext.Module>(() => new Modules.BrowsingContext.Module(this, _broker));
-        _browserModule = new Lazy<Modules.Browser.Module>(() => new Modules.Browser.Module(_broker));
-        _networkModule = new Lazy<Modules.Network.Module>(() => new Modules.Network.Module(this, _broker));
-        _inputModule = new Lazy<Modules.Input.Module>(() => new Modules.Input.Module(_broker));
-        _scriptModule = new Lazy<Modules.Script.Module>(() => new Modules.Script.Module(_broker));
-        _logModule = new Lazy<Modules.Log.Module>(() => new Modules.Log.Module(this, _broker));
-        _storageModule = new Lazy<Modules.Storage.Module>(() => new Modules.Storage.Module(_broker));
+        _sessionModule = new Lazy<Modules.Session.SessionModule>(() => new Modules.Session.SessionModule(_broker));
+        _browsingContextModule = new Lazy<Modules.BrowsingContext.BrowsingContextModule>(() => new Modules.BrowsingContext.BrowsingContextModule(_broker));
+        _browserModule = new Lazy<Modules.Browser.BrowserModule>(() => new Modules.Browser.BrowserModule(_broker));
+        _networkModule = new Lazy<Modules.Network.NetworkModule>(() => new Modules.Network.NetworkModule(_broker));
+        _inputModule = new Lazy<Modules.Input.InputModule>(() => new Modules.Input.InputModule(_broker));
+        _scriptModule = new Lazy<Modules.Script.ScriptModule>(() => new Modules.Script.ScriptModule(_broker));
+        _logModule = new Lazy<Modules.Log.LogModule>(() => new Modules.Log.LogModule(_broker));
+        _storageModule = new Lazy<Modules.Storage.StorageModule>(() => new Modules.Storage.StorageModule(_broker));
     }
 
-    internal Modules.Session.Module SessionModule => _sessionModule.Value;
-    internal Modules.BrowsingContext.Module BrowsingContextModule => _browsingContextModule.Value;
-    internal Modules.Browser.Module BrowserModule => _browserModule.Value;
-    internal Modules.Network.Module NetworkModule => _networkModule.Value;
-    internal Modules.Input.Module InputModule => _inputModule.Value;
-    internal Modules.Script.Module ScriptModule => _scriptModule.Value;
-    internal Modules.Log.Module LogModule => _logModule.Value;
-    internal Modules.Storage.Module StorageModule => _storageModule.Value;
+    internal Modules.Session.SessionModule SessionModule => _sessionModule.Value;
+    internal Modules.BrowsingContext.BrowsingContextModule BrowsingContextModule => _browsingContextModule.Value;
+    internal Modules.Browser.BrowserModule BrowserModule => _browserModule.Value;
+    internal Modules.Network.NetworkModule NetworkModule => _networkModule.Value;
+    internal Modules.Input.InputModule InputModule => _inputModule.Value;
+    internal Modules.Script.ScriptModule ScriptModule => _scriptModule.Value;
+    internal Modules.Log.LogModule LogModule => _logModule.Value;
+    internal Modules.Storage.StorageModule StorageModule => _storageModule.Value;
 
     public Task<Modules.Session.StatusResult> StatusAsync()
     {
