@@ -171,25 +171,6 @@ public class BrowsingContext
         return result.Data;
     }
 
-    public Task<Network.Intercept> AddInterceptAsync(IEnumerable<Network.InterceptPhase> phases, IEnumerable<Network.UrlPattern>? urlPatterns = default)
-    {
-        var @params = new Network.AddInterceptCommandParameters(phases)
-        {
-            UrlPatterns = urlPatterns
-        };
-
-        return AddInterceptAsync(@params);
-    }
-
-    private async Task<Network.Intercept> AddInterceptAsync(Network.AddInterceptCommandParameters @params)
-    {
-        @params.Contexts = [this];
-
-        var result = await Session.NetworkModule.AddInterceptAsync(@params).ConfigureAwait(false);
-
-        return result.Intercept;
-    }
-
     public Task HandleUserPromptAsync(HandleUserPromptOptions? options = default)
     {
         var @params = new HandleUserPromptCommandParameters(this)

@@ -48,7 +48,15 @@ public static class Extensions
 
     public static async Task<InterceptBrowsingContext> AddInterceptOnBeforeRequestSentAsync(this BrowsingContext context, Func<BeforeRequestSentEventArgs, Task> callback, IEnumerable<UrlPattern>? urlPatterns = default)
     {
-        var intercept = await context.AddInterceptAsync([InterceptPhase.BeforeRequestSent], urlPatterns).ConfigureAwait(false);
+        var @params = new AddInterceptCommandParameters([InterceptPhase.BeforeRequestSent])
+        {
+            Contexts = [context],
+            UrlPatterns = urlPatterns
+        };
+
+        var result = await context.Session.NetworkModule.AddInterceptAsync(@params).ConfigureAwait(false);
+
+        var intercept = result.Intercept;
 
         await intercept.OnBeforeRequestSentAsync(callback).ConfigureAwait(false);
 
@@ -57,7 +65,15 @@ public static class Extensions
 
     public static async Task<InterceptBrowsingContext> AddInterceptOnResponseStartedAsync(this BrowsingContext context, Func<ResponseStartedEventArgs, Task> callback, IEnumerable<UrlPattern>? urlPatterns = default)
     {
-        var intercept = await context.AddInterceptAsync([InterceptPhase.ResponseStarted], urlPatterns).ConfigureAwait(false);
+        var @params = new AddInterceptCommandParameters([InterceptPhase.ResponseStarted])
+        {
+            Contexts = [context],
+            UrlPatterns = urlPatterns
+        };
+
+        var result = await context.Session.NetworkModule.AddInterceptAsync(@params).ConfigureAwait(false);
+
+        var intercept = result.Intercept;
 
         await intercept.OnResponseStartedAsync(callback).ConfigureAwait(false);
 
