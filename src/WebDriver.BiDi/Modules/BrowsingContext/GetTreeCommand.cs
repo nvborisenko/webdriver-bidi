@@ -12,6 +12,13 @@ internal class GetTreeCommandParameters : CommandParameters
     public BrowsingContext? Root { get; set; }
 }
 
+public class TreeOptions
+{
+    public uint? MaxDepth { get; set; }
+
+    public BrowsingContext? Root { get; set; }
+}
+
 public class GetTreeResult(IReadOnlyList<BrowsingContextInfo> contexts)
 {
     public IReadOnlyList<BrowsingContextInfo> Contexts { get; } = contexts;

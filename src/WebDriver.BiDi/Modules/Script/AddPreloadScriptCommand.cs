@@ -16,6 +16,15 @@ internal class AddPreloadScriptCommandParameters(string functionDeclaration) : C
     public string? Sandbox { get; set; }
 }
 
+public class PreloadScriptOptions
+{
+    public IEnumerable<ChannelValue>? Arguments { get; set; }
+
+    public IEnumerable<BrowsingContext.BrowsingContext>? Contexts { get; set; }
+
+    public string? Sandbox { get; set; }
+}
+
 internal class AddPreloadScriptResult(PreloadScript script)
 {
     public PreloadScript Script { get; } = script;

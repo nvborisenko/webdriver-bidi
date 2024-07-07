@@ -15,6 +15,15 @@ internal class CreateCommandParameters(BrowsingContextType type) : CommandParame
     public Browser.UserContext? UserContext { get; set; }
 }
 
+public class BrowsingContextOptions
+{
+    public BrowsingContext? ReferenceContext { get; set; }
+
+    public bool? Background { get; set; }
+
+    public Browser.UserContext? UserContext { get; set; }
+}
+
 public enum BrowsingContextType
 {
     Tab,

@@ -1,7 +1,6 @@
 ﻿using System;
-using OpenQA.Selenium.BiDi.Modules.Script;
 
-namespace OpenQA.Selenium.BiDi;
+namespace OpenQA.Selenium.BiDi.Modules.Script;
 
 public class ScriptEvaluateException(EvaluateResultException evaluateResultException) : Exception
 {

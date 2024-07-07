@@ -7,11 +7,26 @@ internal class EvaluateCommand(EvaluateCommandParameters @params) : Command<Eval
 
 internal class EvaluateCommandParameters(string expression, Target target, bool awaitPromise) : CommandParameters
 {
-    public string Expression { get; set; } = expression;
+    public string Expression { get; } = expression;
 
-    public Target Target { get; set; } = target;
+    public Target Target { get; } = target;
 
     public bool AwaitPromise { get; set; } = awaitPromise;
+
+    public ResultOwnership? ResultOwnership { get; set; }
+
+    public SerializationOptions? SerializationOptions { get; set; }
+
+    public bool? UserActivation { get; set; }
+}
+
+public class EvaluateOptions
+{
+    public ResultOwnership? ResultOwnership { get; set; }
+
+    public SerializationOptions? SerializationOptions { get; set; }
+
+    public bool? UserActivation { get; set; }
 }
 
 // https://github.com/dotnet/runtime/issues/72604

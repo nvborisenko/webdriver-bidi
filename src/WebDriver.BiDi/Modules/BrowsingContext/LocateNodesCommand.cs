@@ -18,6 +18,15 @@ internal class LocateNodesCommandParameters(BrowsingContext context, Locator loc
     public IEnumerable<Script.SharedReference>? StartNodes { get; set; }
 }
 
+public class NodesOptions
+{
+    public uint? MaxNodeCount { get; set; }
+
+    public Script.SerializationOptions? SerializationOptions { get; set; }
+
+    public IEnumerable<Script.SharedReference>? StartNodes { get; set; }
+}
+
 public class LocateNodesResult(IReadOnlyList<Script.NodeRemoteValue> nodes)
 {
     public IReadOnlyList<Script.NodeRemoteValue> Nodes { get; } = nodes;

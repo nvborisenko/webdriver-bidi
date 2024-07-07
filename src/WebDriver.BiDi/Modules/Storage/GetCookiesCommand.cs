@@ -14,6 +14,13 @@ internal class GetCookiesCommandParameters : CommandParameters
     public PartitionDescriptor? Partition { get; set; }
 }
 
+public class CookiesOptions
+{
+    public CookieFilter? Filter { get; set; }
+
+    public PartitionDescriptor? Partition { get; set; }
+}
+
 public class GetCookiesResult(IReadOnlyList<Network.Cookie> cookies, PartitionKey partitionKey)
 {
     public IReadOnlyList<Network.Cookie> Cookies { get; } = cookies;

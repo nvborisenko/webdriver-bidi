@@ -12,3 +12,10 @@ internal class ReloadCommandParameters(BrowsingContext context) : CommandParamet
 
     public ReadinessState? Wait { get; set; }
 }
+
+public class ReloadOptions
+{
+    public bool? IgnoreCache { get; set; }
+
+    public ReadinessState? Wait { get; set; }
+}

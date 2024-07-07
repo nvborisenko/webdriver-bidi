@@ -13,6 +13,13 @@ internal class SetViewportCommandParameters(BrowsingContext context) : CommandPa
     public double? DevicePixelRatio { get; set; }
 }
 
+public class SetViewportOptions
+{
+    public Viewport? Viewport { get; set; }
+
+    public double? DevicePixelRatio { get; set; }
+}
+
 public readonly struct Viewport(uint width, uint height)
 {
     public uint Width { get; } = width;

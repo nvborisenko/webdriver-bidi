@@ -28,19 +28,22 @@ public class BrowsingContext
         return Id.GetHashCode();
     }
 
-    public Task<NavigateResult> NavigateAsync(string url, ReadinessState wait = ReadinessState.Complete)
+    public Task<NavigateResult> NavigateAsync(string url, NavigateOptions? options = default)
     {
-        var @params = new NavigateCommandParameters(this, url) { Wait = wait };
+        var @params = new NavigateCommandParameters(this, url)
+        {
+            Wait = options?.Wait
+        };
 
         return Session.BrowsingContextModule.NavigateAsync(@params);
     }
 
-    public Task<NavigateResult> ReloadAsync(bool? ignoreCache = default, ReadinessState? wait = default)
+    public Task<NavigateResult> ReloadAsync(ReloadOptions? options = default)
     {
         var @params = new ReloadCommandParameters(this)
         {
-            IgnoreCache = ignoreCache,
-            Wait = wait
+            IgnoreCache = options?.IgnoreCache,
+            Wait = options?.Wait
         };
 
         return Session.BrowsingContextModule.ReloadAsync(@params);
@@ -53,56 +56,63 @@ public class BrowsingContext
         return Session.BrowsingContextModule.ActivateAsync(@params);
     }
 
-    public async Task<IReadOnlyList<Script.NodeRemoteValue>> LocateNodesAsync(Locator locator)
+    public async Task<IReadOnlyList<Script.NodeRemoteValue>> LocateNodesAsync(Locator locator, NodesOptions? options = default)
     {
-        var @params = new LocateNodesCommandParameters(this, locator);
+        var @params = new LocateNodesCommandParameters(this, locator)
+        {
+            MaxNodeCount = options?.MaxNodeCount,
+            SerializationOptions = options?.SerializationOptions,
+            StartNodes = options?.StartNodes,
+        };
 
         var result = await Session.BrowsingContextModule.LocateNodesAsync(@params).ConfigureAwait(false);
 
         return result.Nodes;
     }
 
-    public Task PerformActionsAsync(Input.SourceActions action)
+    public Task PerformActionsAsync(IEnumerable<Input.SourceActions> actions)
     {
-        return PerformActionsAsync([action]);
-    }
-
-    public Task PerformActionsAsync(List<Input.SourceActions> actions)
-    {
-        var @params = new Input.PerformActionsCommandParameters { Context = this, Actions = actions };
+        var @params = new Input.PerformActionsCommandParameters(this)
+        {
+            Actions = actions
+        };
 
         return Session.InputModule.PerformActionsAsync(@params);
     }
 
-    public Task<CaptureScreenshotResult> CaptureScreenshotAsync(Origin? origin = default, ImageFormat? imageFormat = default, ClipRectangle? clip = default)
+    public Task<CaptureScreenshotResult> CaptureScreenshotAsync(CaptureScreenshotOptions? options = default)
     {
         var @params = new CaptureScreenshotCommandParameters(this)
         {
-            Origin = origin,
-            Format = imageFormat,
-            Clip = clip
+            Origin = options?.Origin,
+            Format = options?.Format,
+            Clip = options?.Clip,
         };
 
         return Session.BrowsingContextModule.CaptureScreenshotAsync(@params);
     }
 
-    public Task<Script.EvaluateResultSuccess> EvaluateAsync(string expression, bool awaitPromise = true)
+    public Task<Script.EvaluateResultSuccess> EvaluateAsync(string expression, bool awaitPromise, Script.EvaluateOptions? options = default)
     {
-        var @params = new Script.EvaluateCommandParameters(expression, new Script.ContextTarget { Context = Id }, awaitPromise);
+        var @params = new Script.EvaluateCommandParameters(expression, new Script.ContextTarget { Context = Id }, awaitPromise)
+        {
+            ResultOwnership = options?.ResultOwnership,
+            SerializationOptions = options?.SerializationOptions,
+            UserActivation = options?.UserActivation,
+        };
 
         return Session.ScriptModule.EvaluateAsync(@params);
     }
 
-    public Task<Script.EvaluateResultSuccess> CallFunctionAsync(string functionDeclaration, params Script.LocalValue[] arguments)
-    {
-        return CallFunctionAsync(functionDeclaration, awaitPromise: true, arguments: arguments);
-    }
-
-    public Task<Script.EvaluateResultSuccess> CallFunctionAsync(string functionDeclaration, bool awaitPromise = true, IEnumerable<Script.LocalValue>? arguments = default)
+    public Task<Script.EvaluateResultSuccess> CallFunctionAsync(string functionDeclaration, bool awaitPromise = true, Script.CallFunctionOptions? options = default)
     {
         var @params = new Script.CallFunctionCommandParameters(functionDeclaration, awaitPromise, new Script.ContextTarget { Context = Id })
         {
-            Arguments = arguments
+            Arguments = options?.Arguments,
+            ResultOwnership = options?.ResultOwnership,
+            SerializationOptions = options?.SerializationOptions,
+            This = options?.This,
+            UserActivation = options?.UserActivation
         };
 
         return Session.ScriptModule.CallFunctionAsync(@params);
@@ -132,33 +142,28 @@ public class BrowsingContext
         return TraverseHistoryAsync(1);
     }
 
-    public Task SetViewportAsync(uint width, uint height, double? devicePixelRatio = default)
+    public Task SetViewportAsync(SetViewportOptions? options = default)
     {
         var @params = new SetViewportCommandParameters(this)
         {
-            Viewport = new(width, height),
-            DevicePixelRatio = devicePixelRatio
+            Viewport = options?.Viewport,
+            DevicePixelRatio = options?.DevicePixelRatio
         };
 
         return Session.BrowsingContextModule.SetViewportAsync(@params);
     }
 
-    public Task<IReadOnlyList<BrowsingContextInfo>> GetTreeAsync(uint? maxDepth = default)
-    {
-        return Session.GetTreeAsync(maxDepth, this);
-    }
-
-    public async Task<string> PrintAsync(bool? background = default, Margin? margin = default, Orientation? orientation = default, Page? page = default, IEnumerable<uint>? pageRanges = default, double? scale = default, bool? shrinkToFit = default)
+    public async Task<string> PrintAsync(PrintOptions? options = default)
     {
         var @params = new PrintCommandParameters(this)
         {
-            Background = background,
-            Margin = margin,
-            Orientation = orientation,
-            Page = page,
-            PageRanges = pageRanges,
-            Scale = scale,
-            ShrinkToFit = shrinkToFit
+            Background = options?.Background,
+            Margin = options?.Margin,
+            Orientation = options?.Orientation,
+            Page = options?.Page,
+            PageRanges = options?.PageRanges,
+            Scale = options?.Scale,
+            ShrinkToFit = options?.ShrinkToFit
         };
 
         var result = await Session.BrowsingContextModule.PrintAsync(@params).ConfigureAwait(false);
@@ -185,33 +190,33 @@ public class BrowsingContext
         return result.Intercept;
     }
 
-    public Task HandleUserPromptAsync(bool? accept = default, string? userText = default)
+    public Task HandleUserPromptAsync(HandleUserPromptOptions? options = default)
     {
         var @params = new HandleUserPromptCommandParameters(this)
         {
-            Accept = accept,
-            UserText = userText
+            Accept = options?.Accept,
+            UserText = options?.UserText
         };
 
         return Session.BrowsingContextModule.HandleUserPrompAsync(@params);
     }
 
-    public Task<Storage.GetCookiesResult> GetCookiesAsync(string? name = default, Network.BytesValue? value = default, string? domain = default, string? path = default, uint? size = default, bool? httpOnly = default, bool? secure = default, Network.SameSite sameSite = default, DateTime? expiry = default)
+    public Task<Storage.GetCookiesResult> GetCookiesAsync(Storage.CookiesOptions? options = default)
     {
         var @params = new Storage.GetCookiesCommandParameters()
         {
-            Filter = new() { Name = name, Value = value, Domain = domain, Path = path, Size = size, HttpOnly = httpOnly, Secure = secure, SameSite = sameSite, Expiry = expiry },
+            Filter = options?.Filter,
             Partition = new Storage.BrowsingContextPartitionDescriptor(this)
         };
 
         return Session.StorageModule.GetCookiesAsync(@params);
     }
 
-    public async Task<Storage.PartitionKey> DeleteCookiesAsync(string? name = default, Network.BytesValue? value = default, string? domain = default, string? path = default, uint? size = default, bool? httpOnly = default, bool? secure = default, Network.SameSite sameSite = default, DateTime? expiry = default)
+    public async Task<Storage.PartitionKey> DeleteCookiesAsync(Storage.CookiesOptions? options = default)
     {
         var @params = new Storage.DeleteCookiesCommandParameters()
         {
-            Filter = new() { Name = name, Value = value, Domain = domain, Path = path, Size = size, HttpOnly = httpOnly, Secure = secure, SameSite = sameSite, Expiry = expiry },
+            Filter = options?.Filter,
             Partition = new Storage.BrowsingContextPartitionDescriptor(this)
         };
 
@@ -220,18 +225,18 @@ public class BrowsingContext
         return res.PartitionKey;
     }
 
-    public async Task<Storage.PartitionKey> SetCookieAsync(string name, Network.BytesValue value, string domain, string? path = default, bool? httpOnly = default, bool? secure = default, Network.SameSite sameSite = default, DateTime? expiry = default)
+    public async Task<Storage.PartitionKey> SetCookieAsync(string name, Network.BytesValue value, string domain, Storage.PartialCookieOptions options = default)
     {
-        Storage.PartialCookie cookie = new(name, value, domain)
+        Storage.PartialCookie partialCookie = new(name, value, domain)
         {
-            Path = path,
-            HttpOnly = httpOnly,
-            Secure = secure,
-            SameSite = sameSite,
-            Expiry = expiry
+            Path = options?.Path,
+            HttpOnly = options?.HttpOnly,
+            Secure = options?.Secure,
+            SameSite = options?.SameSite,
+            Expiry = options?.Expiry
         };
 
-        var @params = new Storage.SetCookieCommandParameters(cookie)
+        var @params = new Storage.SetCookieCommandParameters(partialCookie)
         {
             Partition = new Storage.BrowsingContextPartitionDescriptor(this)
         };
@@ -241,11 +246,13 @@ public class BrowsingContext
         return res.PartitionKey;
     }
 
-    public async Task<Script.PreloadScript> AddPreloadScriptAsync(string functionDeclaration)
+    public async Task<Script.PreloadScript> AddPreloadScriptAsync(string functionDeclaration, Script.PreloadScriptOptions? options = default)
     {
         var @params = new Script.AddPreloadScriptCommandParameters(functionDeclaration)
         {
-            Contexts = [this]
+            Contexts = [this],
+            Arguments = options?.Arguments,
+            Sandbox = options?.Sandbox
         };
 
         var res = await Session.ScriptModule.AddPreloadScriptAsync(@params).ConfigureAwait(false);
@@ -253,9 +260,13 @@ public class BrowsingContext
         return res.Script;
     }
 
-    public async Task<IReadOnlyList<Script.RealmInfo>> GetRealmsAsync()
+    public async Task<IReadOnlyList<Script.RealmInfo>> GetRealmsAsync(Script.RealmsOptions? options = default)
     {
-        var @params = new Script.GetRealmsCommandParameters { Context = this };
+        var @params = new Script.GetRealmsCommandParameters
+        {
+            Context = this,
+            Type = options?.Type
+        };
 
         var res = await Session.ScriptModule.GetRealmAsync(@params).ConfigureAwait(false);
 

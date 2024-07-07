@@ -20,6 +20,11 @@ public enum ReadinessState
     Complete
 }
 
+public class NavigateOptions
+{
+    public ReadinessState? Wait { get; set; }
+}
+
 public class NavigateResult(Navigation navigation, string url)
 {
     public Navigation Navigation { get; } = navigation;

@@ -16,6 +16,15 @@ internal class CaptureScreenshotCommandParameters(BrowsingContext context) : Com
     public ClipRectangle? Clip { get; set; }
 }
 
+public class CaptureScreenshotOptions
+{
+    public Origin? Origin { get; set; }
+
+    public ImageFormat? Format { get; set; }
+
+    public ClipRectangle? Clip { get; set; }
+}
+
 public enum Origin
 {
     Viewport,

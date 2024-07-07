@@ -10,7 +10,7 @@ using var driver = new ChromeDriver(options);
 
 await using var session = await driver.AsBidirectionalAsync();
 
-var context = await session.CreateBrowsingContextAsync();
+var context = await session.CreateBrowsingContextAsync(OpenQA.Selenium.BiDi.Modules.BrowsingContext.BrowsingContextType.Tab);
 
 await context.OnNavigationStartedAsync(async e =>
 {

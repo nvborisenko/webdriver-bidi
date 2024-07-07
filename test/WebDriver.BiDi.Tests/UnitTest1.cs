@@ -79,7 +79,7 @@ namespace OpenQA.Selenium.BiDi.Tests
 
             var contexts = await session.GetTreeAsync();
 
-            await contexts[0].Context.GetTreeAsync();
+            await session.GetTreeAsync(new() { Root = contexts[0].Context });
         }
 
         [Test]
@@ -87,7 +87,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         {
             var context = await driver.AsBidirectionalBrowsingContextAsync();
 
-            var res = await context.PrintAsync(background: true);
+            var res = await context.PrintAsync(new() { Background = true });
 
             res.Should().NotBeNull();
         }
@@ -117,7 +117,7 @@ namespace OpenQA.Selenium.BiDi.Tests
 
             await Task.Delay(500);
 
-            string url = await context.EvaluateAsync("window.location.href");
+            string url = await context.EvaluateAsync("window.location.href", true);
 
             url.Should().Be("https://www.selenium.dev/");
         }
@@ -147,12 +147,12 @@ namespace OpenQA.Selenium.BiDi.Tests
 
             UserPromptClosedEventArgs args = null;
 
-            await session.OnUserPromptOpenedAsync(async e => await e.Context.HandleUserPromptAsync(accept: true, userText: "hi"));
+            await session.OnUserPromptOpenedAsync(async e => await e.Context.HandleUserPromptAsync(new() { Accept = true, UserText = "hi" }));
             await session.OnUserPromptClosedAsync(e => args = e);
 
             var context = await session.CreateBrowsingContextAsync();
 
-            await context.EvaluateAsync("prompt()");
+            await context.EvaluateAsync("prompt()", true);
 
             await Task.Delay(100);
 
@@ -167,7 +167,7 @@ namespace OpenQA.Selenium.BiDi.Tests
 
             await context.NavigateAsync("https://google.com");
 
-            await context.SetViewportAsync(500, 300);
+            await context.SetViewportAsync(new() { Viewport = new(500, 300) });
         }
 
         [Test]
@@ -208,12 +208,12 @@ namespace OpenQA.Selenium.BiDi.Tests
             screenshot.Data.Should().NotBeNullOrEmpty();
             screenshot.AsBytes().Should().NotBeNullOrEmpty();
 
-            var screenshot2 = await context.CaptureScreenshotAsync(Origin.Document);
+            var screenshot2 = await context.CaptureScreenshotAsync(new() { Origin = Origin.Document });
             screenshot2.Data.Should().NotBeNullOrEmpty();
             screenshot2.Data.Should().NotBe(screenshot.Data);
 
-            var screenshotPng = await context.CaptureScreenshotAsync(Origin.Document, new ImageFormat("image/png"));
-            var screenshotJpeg = await context.CaptureScreenshotAsync(Origin.Document, new ImageFormat("image/jpeg"));
+            var screenshotPng = await context.CaptureScreenshotAsync(new() { Origin = Origin.Document, Format = new ImageFormat("image/png") });
+            var screenshotJpeg = await context.CaptureScreenshotAsync(new() { Origin = Origin.Document, Format = new ImageFormat("image/jpeg") });
 
             screenshotPng.Data.Should().NotBe(screenshotJpeg.Data);
         }
@@ -283,7 +283,7 @@ namespace OpenQA.Selenium.BiDi.Tests
 
             await using var script = await context.AddPreloadScriptAsync("prompt()");
 
-            await context.NavigateAsync("https://selenium.dev", wait: ReadinessState.None);
+            await context.NavigateAsync("https://selenium.dev", new() { Wait = ReadinessState.None });
 
             await context.HandleUserPromptAsync();
         }
@@ -315,7 +315,7 @@ namespace OpenQA.Selenium.BiDi.Tests
 
             var tomorrow = DateTime.Now.AddDays(1);
 
-            var partitionKey = await context.SetCookieAsync("test", "value", "domain", expiry: tomorrow);
+            var partitionKey = await context.SetCookieAsync("test", "value", "domain", new() { Expiry = tomorrow });
 
             partitionKey.UserContext.Should().Be("default");
 
@@ -449,7 +449,7 @@ namespace OpenQA.Selenium.BiDi.Tests
 
             await using var subscription = await context.OnLogEntryAddedAsync(e => consoleLog = e as ConsoleLogEntry);
 
-            await context.EvaluateAsync("console.log('abc')");
+            await context.EvaluateAsync("console.log('abc')", true);
 
             // think about it
             await Task.Delay(100);
@@ -622,7 +622,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         {
             var context = await session.CreateBrowsingContextAsync();
 
-            await context.NavigateAsync("https://selenium.dev");
+            await context.NavigateAsync("https://selenium.dev", new() { Wait = ReadinessState.Complete });
 
             var nodes = await context.LocateNodesAsync(Locator.Css("div"));
 
@@ -643,7 +643,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         {
             var context = await session.CreateBrowsingContextAsync();
 
-            await context.NavigateAsync("https://nuget.org");
+            await context.NavigateAsync("https://nuget.org", new() { Wait = ReadinessState.Complete });
 
             //var searchInput = (await context.LocateNodesAsync(Locator.Css("#search"))).First();
 
@@ -654,23 +654,14 @@ namespace OpenQA.Selenium.BiDi.Tests
                     {
                         Actions =
                         {
-                            new KeyDownAction
-                            {
-                                Value = "H"
-                            },
-                            new KeyDownAction
-                            {
-                                Value = "i"
-                            },
-                            new KeyDownAction
-                            {
-                                Value = ","
-                            }
+                            new KeyDownAction("H"),
+                            new KeyDownAction("i"),
+                            new KeyDownAction(",")
                         }
                     }.Press("World").Pause(1000).Press("!").Pause(1000)
                  ]);
 
-            await context.PerformActionsAsync(SourceActions.Press("qwe").Pause(1000));
+            await context.PerformActionsAsync([SourceActions.Press("qwe").Pause(1000)]);
         }
 
         [Test]
@@ -695,13 +686,13 @@ namespace OpenQA.Selenium.BiDi.Tests
             var numberValue = evaluateResult.Result as NumberRemoteValue;
             numberValue.Value.Should().Be(4);
 
-            int nmb = await context.EvaluateAsync("2 + 3");
+            int nmb = await context.EvaluateAsync("2 + 3", true);
             nmb.Should().Be(5);
 
-            var str = (string)await context.EvaluateAsync("'qwe' + 'asd'");
+            var str = (string)await context.EvaluateAsync("'qwe' + 'asd'", true);
             str.Should().Be("qweasd");
 
-            var nullStr = (string)await context.EvaluateAsync("null");
+            var nullStr = (string)await context.EvaluateAsync("null", true);
             nullStr.Should().BeNull();
 
             var invalidStr = async () => (string)await context.EvaluateAsync("function A() { return 'a' }", true);
@@ -713,13 +704,13 @@ namespace OpenQA.Selenium.BiDi.Tests
         {
             var context = await session.CreateBrowsingContextAsync();
 
-            await context.NavigateAsync("https://selenium.dev");
+            await context.NavigateAsync("https://selenium.dev", new() { Wait = ReadinessState.Interactive });
 
-            int sum = await context.CallFunctionAsync("(a, b) => a + b", 2, 3);
+            int sum = await context.CallFunctionAsync("(a, b) => a + b", true, new() { Arguments = [2, 3] });
 
             sum.Should().Be(5);
 
-            string concat = await context.CallFunctionAsync("function hello(name) { return 'Hello, ' + name; }", "World");
+            string concat = await context.CallFunctionAsync("function hello(name) { return 'Hello, ' + name; }", true, new() { Arguments = ["World"] });
 
             concat.Should().Be("Hello, World");
 

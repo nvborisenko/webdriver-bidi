@@ -7,18 +7,17 @@ namespace OpenQA.Selenium.BiDi.Modules.Input;
 
 internal class PerformActionsCommand(PerformActionsCommandParameters @params) : Command<PerformActionsCommandParameters>(@params);
 
-internal class PerformActionsCommandParameters : CommandParameters
+internal class PerformActionsCommandParameters(BrowsingContext.BrowsingContext context) : CommandParameters
 {
-    public BrowsingContext.BrowsingContext Context { get; set; }
+    public BrowsingContext.BrowsingContext Context { get; } = context;
 
-    public List<SourceActions> Actions { get; set; } = [];
+    public IEnumerable<SourceActions> Actions { get; set; } = [];
 }
 
-[JsonDerivedType(typeof(KeySourceActions))]
+[JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
+[JsonDerivedType(typeof(KeySourceActions), "key")]
 public abstract class SourceActions
 {
-    public abstract string Type { get; }
-
     public static KeySourceActions Press(string text)
     {
         var keySourceActions = new KeySourceActions();
@@ -26,8 +25,8 @@ public abstract class SourceActions
         foreach (var character in text)
         {
             keySourceActions.Actions.AddRange([
-                new KeyDownAction { Value = character.ToString()},
-                new KeyUpAction { Value = character.ToString()}
+                new KeyDownAction(character.ToString()),
+                new KeyUpAction(character.ToString())
                 ]);
         }
 
@@ -37,8 +36,6 @@ public abstract class SourceActions
 
 public class KeySourceActions : SourceActions
 {
-    public override string Type => "key";
-
     public string Id { get; set; } = Guid.NewGuid().ToString();
 
     public List<KeySourceAction> Actions { get; set; } = [];
@@ -58,31 +55,23 @@ public class KeySourceActions : SourceActions
     }
 }
 
-[JsonDerivedType(typeof(KeyPauseAction))]
-[JsonDerivedType(typeof(KeyDownAction))]
-[JsonDerivedType(typeof(KeyUpAction))]
-public abstract class KeySourceAction
-{
-    public abstract string Type { get; }
-}
+[JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
+[JsonDerivedType(typeof(KeyPauseAction), "pause")]
+[JsonDerivedType(typeof(KeyDownAction), "keyDown")]
+[JsonDerivedType(typeof(KeyUpAction), "keyUp")]
+public abstract class KeySourceAction;
 
 public class KeyPauseAction : KeySourceAction
 {
-    public override string Type => "pause";
-
     public uint? Duration { get; set; }
 }
 
-public class KeyDownAction : KeySourceAction
+public class KeyDownAction(string value) : KeySourceAction
 {
-    public override string Type => "keyDown";
-
-    public string Value { get; set; }
+    public string Value { get; } = value;
 }
 
-public class KeyUpAction : KeySourceAction
+public class KeyUpAction(string value) : KeySourceAction
 {
-    public override string Type => "keyUp";
-
-    public string Value { get; set; }
+    public string Value { get; } = value;
 }

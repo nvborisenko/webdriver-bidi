@@ -25,6 +25,24 @@ internal class PrintCommandParameters(BrowsingContext context) : CommandParamete
     public bool? ShrinkToFit { get; set; }
 }
 
+public class PrintOptions
+{
+    public bool? Background { get; set; }
+
+    public Margin? Margin { get; set; }
+
+    public Orientation? Orientation { get; set; }
+
+    public Page? Page { get; set; }
+
+    // TODO: It also supports strings
+    public IEnumerable<uint>? PageRanges { get; set; }
+
+    public double? Scale { get; set; }
+
+    public bool? ShrinkToFit { get; set; }
+}
+
 public struct Margin
 {
     public double? Bottom { get; set; }

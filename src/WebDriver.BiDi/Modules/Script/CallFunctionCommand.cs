@@ -14,4 +14,25 @@ internal class CallFunctionCommandParameters(string functionDeclaration, bool aw
     public Target Target { get; } = target;
 
     public IEnumerable<LocalValue>? Arguments { get; set; }
+
+    public ResultOwnership? ResultOwnership { get; set; }
+
+    public SerializationOptions? SerializationOptions { get; set; }
+
+    public LocalValue? This { get; set; }
+
+    public bool? UserActivation { get; set; }
+}
+
+public class CallFunctionOptions
+{
+    public IEnumerable<LocalValue>? Arguments { get; set; }
+
+    public ResultOwnership? ResultOwnership { get; set; }
+
+    public SerializationOptions? SerializationOptions { get; set; }
+
+    public LocalValue? This { get; set; }
+
+    public bool? UserActivation { get; set; }
 }

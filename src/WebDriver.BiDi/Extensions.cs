@@ -9,9 +9,21 @@ namespace OpenQA.Selenium.BiDi;
 
 public static class Extensions
 {
+    public static async Task<BrowsingContext> CreateBrowsingContextAsync(this Session session, BrowsingContextOptions? options = default)
+    {
+        return await session.CreateBrowsingContextAsync(BrowsingContextType.Tab, options).ConfigureAwait(false);
+    }
+
     public static async Task<Intercept> AddInterceptOnBeforeRequestSentAsync(this Session session, Func<BeforeRequestSentEventArgs, Task> callback, IEnumerable<UrlPattern>? urlPatterns = default)
     {
-        var intercept = await session.AddInterceptAsync([InterceptPhase.BeforeRequestSent], urlPatterns).ConfigureAwait(false);
+        var @params = new AddInterceptCommandParameters([InterceptPhase.BeforeRequestSent])
+        {
+            UrlPatterns = urlPatterns
+        };
+
+        var result = await session.NetworkModule.AddInterceptAsync(@params).ConfigureAwait(false);
+
+        var intercept = result.Intercept;
 
         await intercept.OnBeforeRequestSentAsync(callback).ConfigureAwait(false);
 
@@ -20,7 +32,14 @@ public static class Extensions
 
     public static async Task<Intercept> AddInterceptOnResponseStartedAsync(this Session session, Func<ResponseStartedEventArgs, Task> callback, IEnumerable<UrlPattern>? urlPatterns = default)
     {
-        var intercept = await session.AddInterceptAsync([InterceptPhase.ResponseStarted], urlPatterns).ConfigureAwait(false);
+        var @params = new AddInterceptCommandParameters([InterceptPhase.ResponseStarted])
+        {
+            UrlPatterns = urlPatterns
+        };
+
+        var result = await session.NetworkModule.AddInterceptAsync(@params).ConfigureAwait(false);
+
+        var intercept = result.Intercept;
 
         await intercept.OnResponseStartedAsync(callback).ConfigureAwait(false);
 

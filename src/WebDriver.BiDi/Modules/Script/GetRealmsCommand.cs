@@ -12,6 +12,13 @@ internal class GetRealmsCommandParameters : CommandParameters
     public RealmType? Type { get; set; }
 }
 
+public class RealmsOptions
+{
+    public BrowsingContext.BrowsingContext? Context { get; set; }
+
+    public RealmType? Type { get; set; }
+}
+
 internal class GetRealmsResult(IReadOnlyList<RealmInfo> realms)
 {
     public IReadOnlyList<RealmInfo> Realms { get; } = realms;

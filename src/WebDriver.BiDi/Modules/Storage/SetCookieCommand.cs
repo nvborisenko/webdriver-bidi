@@ -31,6 +31,19 @@ public class PartialCookie(string name, Network.BytesValue value, string domain)
     public DateTime? Expiry { get; set; }
 }
 
+public class PartialCookieOptions
+{
+    public string? Path { get; set; }
+
+    public bool? HttpOnly { get; set; }
+
+    public bool? Secure { get; set; }
+
+    public Network.SameSite? SameSite { get; set; }
+
+    public DateTime? Expiry { get; set; }
+}
+
 public class SetCookieResult(PartitionKey partitionKey)
 {
     public PartitionKey PartitionKey { get; } = partitionKey;

@@ -1,6 +1,6 @@
 ﻿namespace OpenQA.Selenium.BiDi.Modules.Script;
 
-internal enum RealmType
+public enum RealmType
 {
     Window,
     DedicatedWorker,
