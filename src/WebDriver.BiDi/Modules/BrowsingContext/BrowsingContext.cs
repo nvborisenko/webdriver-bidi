@@ -171,7 +171,7 @@ public class BrowsingContext
         return result.Data;
     }
 
-    public Task HandleUserPromptAsync(HandleUserPromptOptions? options = default)
+    public Task HandleUserPromptAsync(UserPromptOptions? options = default)
     {
         var @params = new HandleUserPromptCommandParameters(this)
         {
