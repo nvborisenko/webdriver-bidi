@@ -13,7 +13,7 @@ internal class HandleUserPromptCommandParameters(BrowsingContext context) : Comm
     public string? UserText { get; set; }
 }
 
-public class UserPromptOptions
+public class UserPromptOptions : CommandOptions
 {
     public bool? Accept { get; set; }
 

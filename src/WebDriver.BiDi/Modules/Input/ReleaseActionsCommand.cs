@@ -8,3 +8,5 @@ internal class ReleaseActionsCommandParameters(BrowsingContext.BrowsingContext c
 {
     public BrowsingContext.BrowsingContext Context { get; } = context;
 }
+
+public class ReleaseActionsOptions : CommandOptions;

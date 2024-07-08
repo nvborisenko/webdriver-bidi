@@ -57,14 +57,14 @@ public class Session : IAsyncDisposable
         return createResult.Context;
     }
 
-    public Task<Modules.Browser.UserContextInfo> CreateBrowserUserContextAsync()
+    public Task<Modules.Browser.UserContextInfo> CreateBrowserUserContextAsync(Modules.Browser.CreateUserContextOptions? options = default)
     {
-        return BrowserModule.CreateUserContextAsync();
+        return BrowserModule.CreateUserContextAsync(options);
     }
 
-    public async Task<IReadOnlyList<Modules.Browser.UserContextInfo>> GetBrowserUserContextsAsync()
+    public async Task<IReadOnlyList<Modules.Browser.UserContextInfo>> GetBrowserUserContextsAsync(Modules.Browser.GetUserContextsOptions? options = default)
     {
-        var result = await BrowserModule.GetUserContextsAsync().ConfigureAwait(false);
+        var result = await BrowserModule.GetUserContextsAsync(options).ConfigureAwait(false);
 
         return result.UserContexts;
     }
@@ -150,9 +150,9 @@ public class Session : IAsyncDisposable
         await _broker.ConnectAsync(default).ConfigureAwait(false);
     }
 
-    public async Task EndAsync()
+    public async Task EndAsync(Modules.Session.EndOptions? options = default)
     {
-        await _broker.ExecuteCommandAsync(new Modules.Session.EndCommand()).ConfigureAwait(false);
+        await _broker.ExecuteCommandAsync(new Modules.Session.EndCommand(), options).ConfigureAwait(false);
 
         await _broker.DisposeAsync().ConfigureAwait(false);
 

@@ -31,7 +31,7 @@ public class PartialCookie(string name, Network.BytesValue value, string domain)
     public DateTime? Expiry { get; set; }
 }
 
-public class SetCookieOptions
+public class SetCookieOptions : CommandOptions
 {
     public PartitionDescriptor? Partition { get; set; }
 }

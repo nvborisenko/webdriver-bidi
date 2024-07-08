@@ -12,7 +12,7 @@ internal class GetRealmsCommandParameters : CommandParameters
     public RealmType? Type { get; set; }
 }
 
-public class RealmsOptions
+public class GetRealmsOptions : CommandOptions
 {
     public BrowsingContext.BrowsingContext? Context { get; set; }
 

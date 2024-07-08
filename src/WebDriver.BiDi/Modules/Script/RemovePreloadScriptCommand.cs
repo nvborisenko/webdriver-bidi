@@ -8,3 +8,5 @@ internal class RemovePreloadScriptCommandParameters(PreloadScript script) : Comm
 {
     public PreloadScript Script { get; } = script;
 }
+
+public class RemovePreloadScriptOptions : CommandOptions;

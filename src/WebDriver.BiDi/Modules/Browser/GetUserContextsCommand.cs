@@ -5,6 +5,8 @@ namespace OpenQA.Selenium.BiDi.Modules.Browser;
 
 internal class GetUserContextsCommand() : Command<CommandParameters>(CommandParameters.Empty);
 
+public class GetUserContextsOptions : CommandOptions;
+
 public class GetUserContextsResult(IReadOnlyList<UserContextInfo> userContexts)
 {
     public IReadOnlyList<UserContextInfo> UserContexts { get; } = userContexts;

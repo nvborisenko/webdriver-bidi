@@ -134,30 +134,34 @@ internal class Broker : IAsyncDisposable
         }
     }
 
-    public async Task<TResult> ExecuteCommandAsync<TResult>(Command command, CancellationToken cancellationToken = default)
+    public async Task<TResult> ExecuteCommandAsync<TResult>(Command command, CommandOptions? options)
     {
-        var result = await ExecuteCommandCoreAsync(command, cancellationToken).ConfigureAwait(false);
+        var result = await ExecuteCommandCoreAsync(command, options).ConfigureAwait(false);
 
         return (TResult)((JsonElement)result).Deserialize(typeof(TResult), _jsonSourceGenerationContext)!;
     }
 
-    public async Task ExecuteCommandAsync(Command command, CancellationToken cancellationToken = default)
+    public async Task ExecuteCommandAsync(Command command, CommandOptions? options)
     {
-        await ExecuteCommandCoreAsync(command, cancellationToken).ConfigureAwait(false);
+        await ExecuteCommandCoreAsync(command, options).ConfigureAwait(false);
     }
 
-    private async Task<object> ExecuteCommandCoreAsync(Command command, CancellationToken cancellationToken = default)
+    private async Task<object> ExecuteCommandCoreAsync(Command command, CommandOptions? options)
     {
         command.Id = Interlocked.Increment(ref _currentCommandId);
 
         var tcs = new TaskCompletionSource<object>(TaskCreationOptions.RunContinuationsAsynchronously);
 
         using var cts = new CancellationTokenSource();
-        cts.CancelAfter(TimeSpan.FromSeconds(30));
-        cts.Token.Register(() =>
+
+        if (options?.Timeout is not null)
         {
-            tcs.TrySetCanceled(cancellationToken);
-        });
+            cts.CancelAfter(options.Timeout.Value);
+        }
+        else
+        {
+            cts.CancelAfter(TimeSpan.FromSeconds(30));
+        }
 
         _pendingCommands[command.Id] = tcs;
 

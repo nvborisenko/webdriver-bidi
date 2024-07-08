@@ -12,7 +12,7 @@ internal class SubscribeCommandParameters(IEnumerable<string> events) : CommandP
     public IEnumerable<BrowsingContext.BrowsingContext>? Contexts { get; set; }
 }
 
-public class SubscribeOptions
+public class SubscribeOptions : CommandOptions
 {
     public IEnumerable<BrowsingContext.BrowsingContext>? Contexts { get; set; }
 }

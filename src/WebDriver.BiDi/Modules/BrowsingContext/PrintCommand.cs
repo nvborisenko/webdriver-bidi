@@ -25,7 +25,7 @@ internal class PrintCommandParameters(BrowsingContext context) : CommandParamete
     public bool? ShrinkToFit { get; set; }
 }
 
-public class PrintOptions
+public class PrintOptions : CommandOptions
 {
     public bool? Background { get; set; }
 

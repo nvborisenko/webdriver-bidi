@@ -18,7 +18,7 @@ internal class LocateNodesCommandParameters(BrowsingContext context, Locator loc
     public IEnumerable<Script.SharedReference>? StartNodes { get; set; }
 }
 
-public class NodesOptions
+public class NodesOptions : CommandOptions
 {
     public uint? MaxNodeCount { get; set; }
 

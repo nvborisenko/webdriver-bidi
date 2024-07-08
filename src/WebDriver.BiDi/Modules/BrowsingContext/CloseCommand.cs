@@ -8,3 +8,5 @@ internal class CloseCommandParameters(BrowsingContext context) : CommandParamete
 {
     public BrowsingContext Context { get; } = context;
 }
+
+public class CloseOptions : CommandOptions;

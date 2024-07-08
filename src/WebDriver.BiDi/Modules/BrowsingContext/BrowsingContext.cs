@@ -38,9 +38,9 @@ public class BrowsingContext
         return Session.BrowsingContextModule.ReloadAsync(this, options);
     }
 
-    public Task ActivateAsync()
+    public Task ActivateAsync(ActivateOptions? options = default)
     {
-        return Session.BrowsingContextModule.ActivateAsync(this);
+        return Session.BrowsingContextModule.ActivateAsync(this, options);
     }
 
     public async Task<IReadOnlyList<Script.NodeRemoteValue>> LocateNodesAsync(Locator locator, NodesOptions? options = default)
@@ -50,12 +50,11 @@ public class BrowsingContext
         return result.Nodes;
     }
 
-    public Task PerformActionsAsync(IEnumerable<Input.SourceActions> actions)
+    public Task PerformActionsAsync(IEnumerable<Input.SourceActions> actions, Input.PerformActionsOptions? options = default)
     {
-        var options = new Input.PerformActionsOptions
-        {
-            Actions = actions
-        };
+        options ??= new();
+
+        options.Actions = actions;
 
         return Session.InputModule.PerformActionsAsync(this, options);
     }
@@ -75,24 +74,24 @@ public class BrowsingContext
         return Session.ScriptModule.CallFunctionAsync(functionDeclaration, awaitPromise, new Script.ContextTarget { Context = Id }, options);
     }
 
-    public Task CloseAsync()
+    public Task CloseAsync(CloseOptions? options = default)
     {
-        return Session.BrowsingContextModule.CloseAsync(this);
+        return Session.BrowsingContextModule.CloseAsync(this, options);
     }
 
-    public Task TraverseHistoryAsync(int delta)
+    public Task TraverseHistoryAsync(int delta, TraverseHistoryOptions? options = default)
     {
-        return Session.BrowsingContextModule.TraverseHistoryAsync(this, delta);
+        return Session.BrowsingContextModule.TraverseHistoryAsync(this, delta, options);
     }
 
-    public Task NavigateBackAsync()
+    public Task NavigateBackAsync(TraverseHistoryOptions? options = default)
     {
-        return TraverseHistoryAsync(-1);
+        return TraverseHistoryAsync(-1, options);
     }
 
-    public Task NavigateForwardAsync()
+    public Task NavigateForwardAsync(TraverseHistoryOptions? options = default)
     {
-        return TraverseHistoryAsync(1);
+        return TraverseHistoryAsync(1, options);
     }
 
     public Task SetViewportAsync(ViewportOptions? options = default)
@@ -112,7 +111,7 @@ public class BrowsingContext
         return Session.BrowsingContextModule.HandleUserPrompAsync(this, options);
     }
 
-    public Task<Storage.GetCookiesResult> GetCookiesAsync(Storage.CookiesOptions? options = default)
+    public Task<Storage.GetCookiesResult> GetCookiesAsync(Storage.GetCookiesOptions? options = default)
     {
         options ??= new();
 
@@ -121,7 +120,7 @@ public class BrowsingContext
         return Session.StorageModule.GetCookiesAsync(options);
     }
 
-    public async Task<Storage.PartitionKey> DeleteCookiesAsync(Storage.CookiesOptions? options = default)
+    public async Task<Storage.PartitionKey> DeleteCookiesAsync(Storage.GetCookiesOptions? options = default)
     {
         options ??= new();
 
@@ -154,13 +153,13 @@ public class BrowsingContext
         return res.Script;
     }
 
-    public async Task<IReadOnlyList<Script.RealmInfo>> GetRealmsAsync(Script.RealmsOptions? options = default)
+    public async Task<IReadOnlyList<Script.RealmInfo>> GetRealmsAsync(Script.GetRealmsOptions? options = default)
     {
         options ??= new();
 
         options.Context = this;
 
-        var res = await Session.ScriptModule.GetRealmAsync(options).ConfigureAwait(false);
+        var res = await Session.ScriptModule.GetRealmsAsync(options).ConfigureAwait(false);
 
         return res.Realms;
     }

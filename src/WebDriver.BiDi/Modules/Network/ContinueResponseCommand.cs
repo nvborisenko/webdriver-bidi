@@ -20,7 +20,7 @@ internal class ContinueResponseCommandParameters(Request request) : CommandParam
     public uint? StatusCode { get; set; }
 }
 
-public class ContinueResponseOptions
+public class ContinueResponseOptions : CommandOptions
 {
     public IEnumerable<SetCookieHeader>? Cookies { get; set; }
 

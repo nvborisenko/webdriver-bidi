@@ -14,7 +14,7 @@ internal class GetCookiesCommandParameters : CommandParameters
     public PartitionDescriptor? Partition { get; set; }
 }
 
-public class CookiesOptions
+public class GetCookiesOptions : CommandOptions
 {
     public CookieFilter? Filter { get; set; }
 

@@ -12,7 +12,7 @@ internal class GetTreeCommandParameters : CommandParameters
     public BrowsingContext? Root { get; set; }
 }
 
-public class TreeOptions
+public class TreeOptions : CommandOptions
 {
     public uint? MaxDepth { get; set; }
 

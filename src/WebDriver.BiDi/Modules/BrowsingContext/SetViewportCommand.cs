@@ -13,7 +13,7 @@ internal class SetViewportCommandParameters(BrowsingContext context) : CommandPa
     public double? DevicePixelRatio { get; set; }
 }
 
-public class ViewportOptions
+public class ViewportOptions : CommandOptions
 {
     public Viewport? Viewport { get; set; }
 

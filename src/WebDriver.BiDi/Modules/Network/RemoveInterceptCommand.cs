@@ -8,3 +8,5 @@ internal class RemoveInterceptCommandParameters(Intercept intercept) : CommandPa
 {
     public Intercept Intercept { get; } = intercept;
 }
+
+public class RemoveInterceptOptions : CommandOptions;

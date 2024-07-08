@@ -8,3 +8,5 @@ internal class FailRequestCommandParameters(Request request) : CommandParameters
 {
     public Request Request { get; } = request;
 }
+
+public class FailRequestOptions : CommandOptions;

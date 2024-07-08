@@ -8,3 +8,5 @@ internal class ActivateCommandParameters(BrowsingContext context) : CommandParam
 {
     public BrowsingContext Context { get; } = context;
 }
+
+public class ActivateOptions : CommandOptions;

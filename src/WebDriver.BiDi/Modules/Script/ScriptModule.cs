@@ -16,7 +16,7 @@ internal sealed class ScriptModule(Broker broker) : Module(broker)
             @params.UserActivation = options.UserActivation;
         }
 
-        var result = await Broker.ExecuteCommandAsync<EvaluateResult>(new EvaluateCommand(@params)).ConfigureAwait(false);
+        var result = await Broker.ExecuteCommandAsync<EvaluateResult>(new EvaluateCommand(@params), options).ConfigureAwait(false);
 
         if (result is EvaluateResultException exp)
         {
@@ -39,7 +39,7 @@ internal sealed class ScriptModule(Broker broker) : Module(broker)
             @params.UserActivation = options.UserActivation;
         }
 
-        var result = await Broker.ExecuteCommandAsync<EvaluateResult>(new CallFunctionCommand(@params)).ConfigureAwait(false);
+        var result = await Broker.ExecuteCommandAsync<EvaluateResult>(new CallFunctionCommand(@params), options).ConfigureAwait(false);
 
         if (result is EvaluateResultException exp)
         {
@@ -49,7 +49,7 @@ internal sealed class ScriptModule(Broker broker) : Module(broker)
         return (EvaluateResultSuccess)result;
     }
 
-    public async Task<GetRealmsResult> GetRealmAsync(RealmsOptions? options = default)
+    public async Task<GetRealmsResult> GetRealmsAsync(GetRealmsOptions? options = default)
     {
         var @params = new GetRealmsCommandParameters();
 
@@ -59,7 +59,7 @@ internal sealed class ScriptModule(Broker broker) : Module(broker)
             @params.Type = options.Type;
         }
 
-        return await Broker.ExecuteCommandAsync<GetRealmsResult>(new GetRealmsCommand(@params)).ConfigureAwait(false);
+        return await Broker.ExecuteCommandAsync<GetRealmsResult>(new GetRealmsCommand(@params), options).ConfigureAwait(false);
     }
 
     public async Task<AddPreloadScriptResult> AddPreloadScriptAsync(string functionDeclaration, PreloadScriptOptions? options = default)
@@ -73,13 +73,13 @@ internal sealed class ScriptModule(Broker broker) : Module(broker)
             @params.Sandbox = options.Sandbox;
         }
 
-        return await Broker.ExecuteCommandAsync<AddPreloadScriptResult>(new AddPreloadScriptCommand(@params)).ConfigureAwait(false);
+        return await Broker.ExecuteCommandAsync<AddPreloadScriptResult>(new AddPreloadScriptCommand(@params), options).ConfigureAwait(false);
     }
 
-    public async Task RemovePreloadScriptAsync(PreloadScript script)
+    public async Task RemovePreloadScriptAsync(PreloadScript script, RemovePreloadScriptOptions? options = default)
     {
         var @params = new RemovePreloadScriptCommandParameters(script);
 
-        await Broker.ExecuteCommandAsync(new RemovePreloadScriptCommand(@params)).ConfigureAwait(false);
+        await Broker.ExecuteCommandAsync(new RemovePreloadScriptCommand(@params), options).ConfigureAwait(false);
     }
 }

@@ -24,7 +24,7 @@ internal class CallFunctionCommandParameters(string functionDeclaration, bool aw
     public bool? UserActivation { get; set; }
 }
 
-public class CallFunctionOptions
+public class CallFunctionOptions : CommandOptions
 {
     public IEnumerable<LocalValue>? Arguments { get; set; }
 

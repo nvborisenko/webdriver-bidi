@@ -20,7 +20,7 @@ internal class ProvideResponseCommandParameters(Request request) : CommandParame
     public uint? StatusCode { get; set; }
 }
 
-public class ProvideResponseOptions
+public class ProvideResponseOptions : CommandOptions
 {
     public BytesValue? Body { get; set; }
 

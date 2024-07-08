@@ -13,16 +13,16 @@ internal class NavigateCommandParameters(BrowsingContext context, string url) : 
     public ReadinessState? Wait { get; set; }
 }
 
+public class NavigateOptions : CommandOptions
+{
+    public ReadinessState? Wait { get; set; }
+}
+
 public enum ReadinessState
 {
     None,
     Interactive,
     Complete
-}
-
-public class NavigateOptions
-{
-    public ReadinessState? Wait { get; set; }
 }
 
 public class NavigateResult(Navigation navigation, string url)

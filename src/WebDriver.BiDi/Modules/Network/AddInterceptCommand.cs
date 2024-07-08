@@ -14,7 +14,7 @@ internal class AddInterceptCommandParameters(IEnumerable<InterceptPhase> phases)
     public IEnumerable<UrlPattern>? UrlPatterns { get; set; }
 }
 
-public class InterceptOptions
+public class InterceptOptions : CommandOptions
 {
     public IEnumerable<BrowsingContext.BrowsingContext>? Contexts { get; set; }
 

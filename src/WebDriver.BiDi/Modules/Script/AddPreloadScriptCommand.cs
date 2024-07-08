@@ -16,7 +16,7 @@ internal class AddPreloadScriptCommandParameters(string functionDeclaration) : C
     public string? Sandbox { get; set; }
 }
 
-public class PreloadScriptOptions
+public class PreloadScriptOptions : CommandOptions
 {
     public IEnumerable<ChannelValue>? Arguments { get; set; }
 

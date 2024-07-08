@@ -11,6 +11,8 @@ internal class TraverseHistoryCommandParameters(BrowsingContext context, int del
     public int Delta { get; } = delta;
 }
 
+public class TraverseHistoryOptions : CommandOptions;
+
 public class TraverseHistoryResult
 {
 

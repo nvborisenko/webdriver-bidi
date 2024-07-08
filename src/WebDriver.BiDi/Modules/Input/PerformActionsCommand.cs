@@ -14,7 +14,7 @@ internal class PerformActionsCommandParameters(BrowsingContext.BrowsingContext c
     public IEnumerable<SourceActions>? Actions { get; set; }
 }
 
-public class PerformActionsOptions
+public class PerformActionsOptions : CommandOptions
 {
     public IEnumerable<SourceActions>? Actions { get; set; } = [];
 }

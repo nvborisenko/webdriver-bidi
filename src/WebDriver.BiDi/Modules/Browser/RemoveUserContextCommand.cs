@@ -8,3 +8,5 @@ internal class RemoveUserContextCommandParameters(UserContext userContext) : Com
 {
     public UserContext UserContext { get; } = userContext;
 }
+
+public class RemoveUserContextOptions : CommandOptions;

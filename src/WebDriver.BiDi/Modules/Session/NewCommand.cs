@@ -9,6 +9,8 @@ internal class NewCommandParameters(CapabilitiesRequest capabilities) : CommandP
     public CapabilitiesRequest Capabilities { get; } = capabilities;
 }
 
+public class NewOptions : CommandOptions;
+
 public class NewResult(string sessionId, Capability capability)
 {
 public string SessionId { get; } = sessionId;

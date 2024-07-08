@@ -17,7 +17,7 @@ sealed class BrowsingContextModule(Broker broker) : Module(broker)
             @params.UserContext = options.UserContext;
         }
 
-        return await Broker.ExecuteCommandAsync<CreateResult>(new CreateCommand(@params)).ConfigureAwait(false);
+        return await Broker.ExecuteCommandAsync<CreateResult>(new CreateCommand(@params), options).ConfigureAwait(false);
     }
 
     public async Task<NavigateResult> NavigateAsync(BrowsingContext context, string url, NavigateOptions? options = default)
@@ -29,14 +29,14 @@ sealed class BrowsingContextModule(Broker broker) : Module(broker)
             @params.Wait = options.Wait;
         }
 
-        return await Broker.ExecuteCommandAsync<NavigateResult>(new NavigateCommand(@params)).ConfigureAwait(false);
+        return await Broker.ExecuteCommandAsync<NavigateResult>(new NavigateCommand(@params), options).ConfigureAwait(false);
     }
 
-    public async Task ActivateAsync(BrowsingContext context)
+    public async Task ActivateAsync(BrowsingContext context, ActivateOptions? options = default)
     {
         var @params = new ActivateCommandParameters(context);
 
-        await Broker.ExecuteCommandAsync(new ActivateCommand(@params)).ConfigureAwait(false);
+        await Broker.ExecuteCommandAsync(new ActivateCommand(@params), options).ConfigureAwait(false);
     }
 
     public async Task<LocateNodesResult> LocateNodesAsync(BrowsingContext context, Locator locator, NodesOptions? options = default)
@@ -50,7 +50,7 @@ sealed class BrowsingContextModule(Broker broker) : Module(broker)
             @params.StartNodes = options.StartNodes;
         }
 
-        return await Broker.ExecuteCommandAsync<LocateNodesResult>(new LocateNodesCommand(@params)).ConfigureAwait(false);
+        return await Broker.ExecuteCommandAsync<LocateNodesResult>(new LocateNodesCommand(@params), options).ConfigureAwait(false);
     }
 
     public async Task<CaptureScreenshotResult> CaptureScreenshotAsync(BrowsingContext context, CaptureScreenshotOptions? options = default)
@@ -64,21 +64,21 @@ sealed class BrowsingContextModule(Broker broker) : Module(broker)
             @params.Clip = options.Clip;
         }
 
-        return await Broker.ExecuteCommandAsync<CaptureScreenshotResult>(new CaptureScreenshotCommand(@params)).ConfigureAwait(false);
+        return await Broker.ExecuteCommandAsync<CaptureScreenshotResult>(new CaptureScreenshotCommand(@params), options).ConfigureAwait(false);
     }
 
-    public async Task CloseAsync(BrowsingContext context)
+    public async Task CloseAsync(BrowsingContext context, CloseOptions? options = default)
     {
         var @params = new CloseCommandParameters(context);
 
-        await Broker.ExecuteCommandAsync(new CloseCommand(@params)).ConfigureAwait(false);
+        await Broker.ExecuteCommandAsync(new CloseCommand(@params), options).ConfigureAwait(false);
     }
 
-    public async Task<TraverseHistoryResult> TraverseHistoryAsync(BrowsingContext context, int delta)
+    public async Task<TraverseHistoryResult> TraverseHistoryAsync(BrowsingContext context, int delta, TraverseHistoryOptions? options = default)
     {
         var @params = new TraverseHistoryCommandParameters(context, delta);
 
-        return await Broker.ExecuteCommandAsync<TraverseHistoryResult>(new TraverseHistoryCommand(@params)).ConfigureAwait(false);
+        return await Broker.ExecuteCommandAsync<TraverseHistoryResult>(new TraverseHistoryCommand(@params), options).ConfigureAwait(false);
     }
 
     public async Task<NavigateResult> ReloadAsync(BrowsingContext context, ReloadOptions? options = default)
@@ -91,7 +91,7 @@ sealed class BrowsingContextModule(Broker broker) : Module(broker)
             @params.Wait = options.Wait;
         }
 
-        return await Broker.ExecuteCommandAsync<NavigateResult>(new ReloadCommand(@params)).ConfigureAwait(false);
+        return await Broker.ExecuteCommandAsync<NavigateResult>(new ReloadCommand(@params), options).ConfigureAwait(false);
     }
 
     public async Task SetViewportAsync(BrowsingContext context, ViewportOptions? options = default)
@@ -104,7 +104,7 @@ sealed class BrowsingContextModule(Broker broker) : Module(broker)
             @params.DevicePixelRatio = options?.DevicePixelRatio;
         }
 
-        await Broker.ExecuteCommandAsync(new SetViewportCommand(@params)).ConfigureAwait(false);
+        await Broker.ExecuteCommandAsync(new SetViewportCommand(@params), options).ConfigureAwait(false);
     }
 
     public async Task<GetTreeResult> GetTreeAsync(TreeOptions? options = default)
@@ -117,7 +117,7 @@ sealed class BrowsingContextModule(Broker broker) : Module(broker)
             @params.Root = options.Root;
         }
 
-        return await Broker.ExecuteCommandAsync<GetTreeResult>(new GetTreeCommand(@params)).ConfigureAwait(false);
+        return await Broker.ExecuteCommandAsync<GetTreeResult>(new GetTreeCommand(@params), options).ConfigureAwait(false);
     }
 
     public async Task<PrintResult> PrintAsync(BrowsingContext context, PrintOptions? options = default)
@@ -135,7 +135,7 @@ sealed class BrowsingContextModule(Broker broker) : Module(broker)
             @params.ShrinkToFit = options.ShrinkToFit;
         }
 
-        return await Broker.ExecuteCommandAsync<PrintResult>(new PrintCommand(@params)).ConfigureAwait(false);
+        return await Broker.ExecuteCommandAsync<PrintResult>(new PrintCommand(@params), options).ConfigureAwait(false);
     }
 
     public async Task HandleUserPrompAsync(BrowsingContext context, UserPromptOptions? options = default)
@@ -148,7 +148,7 @@ sealed class BrowsingContextModule(Broker broker) : Module(broker)
             @params.UserText = options.UserText;
         }
 
-        await Broker.ExecuteCommandAsync(new HandleUserPromptCommand(@params)).ConfigureAwait(false);
+        await Broker.ExecuteCommandAsync(new HandleUserPromptCommand(@params), options).ConfigureAwait(false);
     }
 
     public async Task<Subscription> OnNavigationStartedAsync(Func<NavigationInfo, Task> callback, BrowsingContext? context = default)

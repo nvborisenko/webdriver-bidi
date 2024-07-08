@@ -10,3 +10,5 @@ public class StatusResult(bool ready, string message)
 
     public string Message { get; } = message;
 }
+
+public class StatusOptions : CommandOptions;

@@ -20,7 +20,7 @@ internal class ContinueRequestCommandParameters(Request request) : CommandParame
     public string? Url { get; set; }
 }
 
-public class RequestOptions
+public class RequestOptions : CommandOptions
 {
     public BytesValue? Body { get; set; }
 

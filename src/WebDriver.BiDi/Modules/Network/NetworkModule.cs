@@ -17,14 +17,14 @@ internal sealed class NetworkModule(Broker broker) : Module(broker)
             @params.UrlPatterns = options.UrlPatterns;
         }
 
-        return await Broker.ExecuteCommandAsync<AddInterceptResult>(new AddInterceptCommand(@params)).ConfigureAwait(false);
+        return await Broker.ExecuteCommandAsync<AddInterceptResult>(new AddInterceptCommand(@params), options).ConfigureAwait(false);
     }
 
-    public async Task RemoveInterceptAsync(Intercept intercept)
+    public async Task RemoveInterceptAsync(Intercept intercept, RemoveInterceptOptions? options = default)
     {
         var @params = new RemoveInterceptCommandParameters(intercept);
 
-        await Broker.ExecuteCommandAsync(new RemoveInterceptCommand(@params)).ConfigureAwait(!false);
+        await Broker.ExecuteCommandAsync(new RemoveInterceptCommand(@params), options).ConfigureAwait(!false);
     }
 
     public async Task ContinueRequestAsync(Request request, RequestOptions? options = default)
@@ -40,7 +40,7 @@ internal sealed class NetworkModule(Broker broker) : Module(broker)
             @params.Url = options.Url;
         }
 
-        await Broker.ExecuteCommandAsync(new ContinueRequestCommand(@params)).ConfigureAwait(false);
+        await Broker.ExecuteCommandAsync(new ContinueRequestCommand(@params), options).ConfigureAwait(false);
     }
 
     public async Task ContinueResponseAsync(Request request, ContinueResponseOptions? options = default)
@@ -56,14 +56,14 @@ internal sealed class NetworkModule(Broker broker) : Module(broker)
             @params.StatusCode = options.StatusCode;
         }
 
-        await Broker.ExecuteCommandAsync(new ContinueResponseCommand(@params)).ConfigureAwait(false);
+        await Broker.ExecuteCommandAsync(new ContinueResponseCommand(@params), options).ConfigureAwait(false);
     }
 
-    public async Task FailRequestAsync(Request request)
+    public async Task FailRequestAsync(Request request, FailRequestOptions? options = default)
     {
         var @params = new FailRequestCommandParameters(request);
 
-        await Broker.ExecuteCommandAsync(new FailRequestCommand(@params)).ConfigureAwait(false);
+        await Broker.ExecuteCommandAsync(new FailRequestCommand(@params), options).ConfigureAwait(false);
     }
 
     public async Task ProvideResponseAsync(Request request, ProvideResponseOptions? options = default)
@@ -79,7 +79,7 @@ internal sealed class NetworkModule(Broker broker) : Module(broker)
             @params.StatusCode = options.StatusCode;
         }
 
-        await Broker.ExecuteCommandAsync(new ProvideResponseCommand(@params)).ConfigureAwait(false);
+        await Broker.ExecuteCommandAsync(new ProvideResponseCommand(@params), options).ConfigureAwait(false);
     }
 
     public async Task<Subscription> OnBeforeRequestSentAsync(Func<BeforeRequestSentEventArgs, Task> callback, BrowsingContext.BrowsingContext? context = default)

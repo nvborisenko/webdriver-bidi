@@ -5,7 +5,7 @@ namespace OpenQA.Selenium.BiDi.Modules.Storage;
 
 internal class StorageModule(Broker broker) : Module(broker)
 {
-    public async Task<GetCookiesResult> GetCookiesAsync(CookiesOptions? options = default)
+    public async Task<GetCookiesResult> GetCookiesAsync(GetCookiesOptions? options = default)
     {
         var @params = new GetCookiesCommandParameters();
 
@@ -15,10 +15,10 @@ internal class StorageModule(Broker broker) : Module(broker)
             @params.Partition = options.Partition;
         }
 
-        return await Broker.ExecuteCommandAsync<GetCookiesResult>(new GetCookiesCommand(@params)).ConfigureAwait(false);
+        return await Broker.ExecuteCommandAsync<GetCookiesResult>(new GetCookiesCommand(@params), options).ConfigureAwait(false);
     }
 
-    public async Task<DeleteCookiesResult> DeleteCookiesAsync(CookiesOptions? options = default)
+    public async Task<DeleteCookiesResult> DeleteCookiesAsync(GetCookiesOptions? options = default)
     {
         var @params = new DeleteCookiesCommandParameters();
 
@@ -28,7 +28,7 @@ internal class StorageModule(Broker broker) : Module(broker)
             @params.Partition = options.Partition;
         }
 
-        return await Broker.ExecuteCommandAsync<DeleteCookiesResult>(new DeleteCookiesCommand(@params)).ConfigureAwait(false);
+        return await Broker.ExecuteCommandAsync<DeleteCookiesResult>(new DeleteCookiesCommand(@params), options).ConfigureAwait(false);
     }
 
     public async Task<SetCookieResult> SetCookieAsync(PartialCookie cookie, SetCookieOptions? options = default)
@@ -40,6 +40,6 @@ internal class StorageModule(Broker broker) : Module(broker)
             @params.Partition = options.Partition;
         }
 
-        return await Broker.ExecuteCommandAsync<SetCookieResult>(new SetCookieCommand(@params)).ConfigureAwait(false);
+        return await Broker.ExecuteCommandAsync<SetCookieResult>(new SetCookieCommand(@params), options).ConfigureAwait(false);
     }
 }

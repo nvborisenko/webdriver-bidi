@@ -14,13 +14,13 @@ internal sealed class InputModule(Broker broker) : Module(broker)
             @params.Actions = options.Actions;
         }
 
-        await Broker.ExecuteCommandAsync(new PerformActionsCommand(@params)).ConfigureAwait(false);
+        await Broker.ExecuteCommandAsync(new PerformActionsCommand(@params), options).ConfigureAwait(false);
     }
 
-    public async Task ReleaseActionsAsync(BrowsingContext.BrowsingContext context)
+    public async Task ReleaseActionsAsync(BrowsingContext.BrowsingContext context, ReleaseActionsOptions? options = default)
     {
         var @params = new ReleaseActionsCommandParameters(context);
 
-        await Broker.ExecuteCommandAsync(new ReleaseActionsCommand(@params));
+        await Broker.ExecuteCommandAsync(new ReleaseActionsCommand(@params), options);
     }
 }

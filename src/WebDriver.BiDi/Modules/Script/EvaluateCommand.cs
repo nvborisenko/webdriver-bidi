@@ -20,7 +20,7 @@ internal class EvaluateCommandParameters(string expression, Target target, bool 
     public bool? UserActivation { get; set; }
 }
 
-public class EvaluateOptions
+public class EvaluateOptions : CommandOptions
 {
     public ResultOwnership? ResultOwnership { get; set; }
 
