@@ -1,7 +1,6 @@
 ﻿using OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 using OpenQA.Selenium.BiDi.Modules.Network;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -9,11 +8,6 @@ namespace OpenQA.Selenium.BiDi;
 
 public static class Extensions
 {
-    public static async Task<BrowsingContext> CreateBrowsingContextAsync(this Session session, BrowsingContextOptions? options = default)
-    {
-        return await session.CreateBrowsingContextAsync(BrowsingContextType.Tab, options).ConfigureAwait(false);
-    }
-
     public static async Task<Intercept> AddInterceptOnBeforeRequestSentAsync(this Session session, Func<BeforeRequestSentEventArgs, Task> callback, InterceptOptions? options = default)
     {
         var result = await session.NetworkModule.AddInterceptAsync([InterceptPhase.BeforeRequestSent], options).ConfigureAwait(false);

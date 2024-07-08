@@ -113,7 +113,7 @@ namespace OpenQA.Selenium.BiDi.Tests
 
             await session.OnBrowsingContextCreatedAsync(async e => await e.Context.NavigateAsync("https://selenium.dev"));
 
-            var context = await session.CreateBrowsingContextAsync();
+            var context = await session.CreateBrowsingContextAsync(BrowsingContextType.Tab);
 
             await Task.Delay(500);
 
@@ -127,7 +127,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         {
             var session = await driver.AsBidirectionalAsync();
 
-            var context = await session.CreateBrowsingContextAsync();
+            var context = await session.CreateBrowsingContextAsync(BrowsingContextType.Tab);
 
             BrowsingContext destroyedContext = null;
 
@@ -150,7 +150,7 @@ namespace OpenQA.Selenium.BiDi.Tests
             await session.OnUserPromptOpenedAsync(async e => await e.Context.HandleUserPromptAsync(new() { Accept = true, UserText = "hi" }));
             await session.OnUserPromptClosedAsync(e => args = e);
 
-            var context = await session.CreateBrowsingContextAsync();
+            var context = await session.CreateBrowsingContextAsync(BrowsingContextType.Tab);
 
             await context.EvaluateAsync("prompt()", true);
 
@@ -173,7 +173,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         [Test]
         public async Task BrowsingContextTraverseHistory()
         {
-            var context = await session.CreateBrowsingContextAsync();
+            var context = await session.CreateBrowsingContextAsync(BrowsingContextType.Tab);
 
             await context.NavigateAsync("https://google.com");
 
@@ -189,7 +189,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         [Test]
         public async Task BrowsingContextTest()
         {
-            var context = await session.CreateBrowsingContextAsync();
+            var context = await session.CreateBrowsingContextAsync(BrowsingContextType.Tab);
 
             await context.ActivateAsync();
 
@@ -199,7 +199,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         [Test]
         public async Task Screenshot()
         {
-            var context = await session.CreateBrowsingContextAsync();
+            var context = await session.CreateBrowsingContextAsync(BrowsingContextType.Tab);
 
             await context.NavigateAsync("https://selenium.dev");
 
@@ -226,7 +226,7 @@ namespace OpenQA.Selenium.BiDi.Tests
                 Console.WriteLine(e.Request.Url);
             });
 
-            var context = await session.CreateBrowsingContextAsync();
+            var context = await session.CreateBrowsingContextAsync(BrowsingContextType.Tab);
 
             await context.NavigateAsync("https://selenium.dev");
         }
@@ -234,7 +234,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         [Test]
         public async Task Navigate()
         {
-            var context = await session.CreateBrowsingContextAsync();
+            var context = await session.CreateBrowsingContextAsync(BrowsingContextType.Tab);
 
             NavigationInfo info = null;
 
@@ -254,7 +254,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         [Test]
         public async Task Reload()
         {
-            var context = await session.CreateBrowsingContextAsync();
+            var context = await session.CreateBrowsingContextAsync(BrowsingContextType.Tab);
 
             await context.NavigateAsync("https://selenium.dev");
 
@@ -267,7 +267,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         [Test]
         public async Task GetRealms()
         {
-            var context = await session.CreateBrowsingContextAsync();
+            var context = await session.CreateBrowsingContextAsync(BrowsingContextType.Tab);
 
             await context.NavigateAsync("https://selenium.dev");
 
@@ -279,7 +279,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         [Test]
         public async Task AddPreloadScript()
         {
-            var context = await session.CreateBrowsingContextAsync();
+            var context = await session.CreateBrowsingContextAsync(BrowsingContextType.Tab);
 
             await using var script = await context.AddPreloadScriptAsync("prompt()");
 
@@ -291,7 +291,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         [Test]
         public async Task GetCookies()
         {
-            var context = await session.CreateBrowsingContextAsync();
+            var context = await session.CreateBrowsingContextAsync(BrowsingContextType.Tab);
 
             var res = await context.GetCookiesAsync();
 
@@ -301,7 +301,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         [Test]
         public async Task DeleteCookies()
         {
-            var context = await session.CreateBrowsingContextAsync();
+            var context = await session.CreateBrowsingContextAsync(BrowsingContextType.Tab);
 
             var partitionKey = await context.DeleteCookiesAsync();
 
@@ -311,7 +311,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         [Test]
         public async Task SetCookie()
         {
-            var context = await session.CreateBrowsingContextAsync();
+            var context = await session.CreateBrowsingContextAsync(BrowsingContextType.Tab);
 
             var tomorrow = DateTime.Now.AddDays(1);
 
@@ -331,7 +331,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         [Test]
         public async Task SubscribeInHandlerTest()
         {
-            var context = await session.CreateBrowsingContextAsync();
+            var context = await session.CreateBrowsingContextAsync(BrowsingContextType.Tab);
 
             await context.OnNavigationStartedAsync(async args =>
             {
@@ -347,7 +347,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         [Test]
         public async Task OnNavigationStarted()
         {
-            var context = await session.CreateBrowsingContextAsync();
+            var context = await session.CreateBrowsingContextAsync(BrowsingContextType.Tab);
 
             await context.OnNavigationStartedAsync(async args =>
             {
@@ -365,7 +365,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         [Test]
         public async Task OnFragmentNavigated()
         {
-            var context = await session.CreateBrowsingContextAsync();
+            var context = await session.CreateBrowsingContextAsync(BrowsingContextType.Tab);
 
             await context.OnFragmentNavigatedAsync(args =>
             {
@@ -378,7 +378,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         [Test]
         public async Task OnDomContentLoaded()
         {
-            var context = await session.CreateBrowsingContextAsync();
+            var context = await session.CreateBrowsingContextAsync(BrowsingContextType.Tab);
 
             await context.OnDomContentLoadedAsync(args =>
             {
@@ -391,7 +391,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         [Test]
         public async Task OnLoad()
         {
-            var context = await session.CreateBrowsingContextAsync();
+            var context = await session.CreateBrowsingContextAsync(BrowsingContextType.Tab);
 
             await context.OnLoadAsync(args =>
             {
@@ -404,7 +404,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         [Test]
         public async Task OnDownloadWillBegin()
         {
-            var context = await session.CreateBrowsingContextAsync();
+            var context = await session.CreateBrowsingContextAsync(BrowsingContextType.Tab);
 
             await context.OnDownloadWillBeginAsync(args =>
             {
@@ -417,7 +417,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         [Test]
         public async Task OnNavigationAborted()
         {
-            var context = await session.CreateBrowsingContextAsync();
+            var context = await session.CreateBrowsingContextAsync(BrowsingContextType.Tab);
 
             await context.OnNavigationAbortedAsync(args =>
             {
@@ -430,7 +430,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         [Test]
         public async Task OnNavigationFailed()
         {
-            var context = await session.CreateBrowsingContextAsync();
+            var context = await session.CreateBrowsingContextAsync(BrowsingContextType.Tab);
 
             await context.OnNavigationFailedAsync(args =>
             {
@@ -443,7 +443,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         [Test]
         public async Task OnLogEntryAdded()
         {
-            var context = await session.CreateBrowsingContextAsync();
+            var context = await session.CreateBrowsingContextAsync(BrowsingContextType.Tab);
 
             ConsoleLogEntry consoleLog = null;
 
@@ -461,7 +461,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         [Test]
         public async Task OnBeforeRequestSent()
         {
-            var context = await session.CreateBrowsingContextAsync();
+            var context = await session.CreateBrowsingContextAsync(BrowsingContextType.Tab);
 
             await context.OnBeforeRequestSentAsync(Console.WriteLine);
 
@@ -471,7 +471,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         [Test]
         public async Task OnResponseCompleted()
         {
-            var context = await session.CreateBrowsingContextAsync();
+            var context = await session.CreateBrowsingContextAsync(BrowsingContextType.Tab);
 
             await context.OnResponseCompletedAsync(Console.WriteLine);
 
@@ -481,7 +481,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         [Test]
         public async Task OnResponseStartedSent()
         {
-            var context = await session.CreateBrowsingContextAsync();
+            var context = await session.CreateBrowsingContextAsync(BrowsingContextType.Tab);
 
             await context.OnResponseStartedAsync(Console.WriteLine);
 
@@ -491,7 +491,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         [Test]
         public async Task InterceptTestContinueRequest()
         {
-            var context = await session.CreateBrowsingContextAsync();
+            var context = await session.CreateBrowsingContextAsync(BrowsingContextType.Tab);
 
             await using var intercept = await context.AddInterceptOnBeforeRequestSentAsync(async args =>
             {
@@ -504,7 +504,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         [Test]
         public async Task InterceptTestContinueResponse()
         {
-            var context = await session.CreateBrowsingContextAsync();
+            var context = await session.CreateBrowsingContextAsync(BrowsingContextType.Tab);
 
             await using var intercept = await context.AddInterceptOnResponseStartedAsync(async args =>
             {
@@ -517,7 +517,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         [Test]
         public async Task InterceptTestFailRequest()
         {
-            var context = await session.CreateBrowsingContextAsync();
+            var context = await session.CreateBrowsingContextAsync(BrowsingContextType.Tab);
 
             await using var intercept = await context.AddInterceptOnBeforeRequestSentAsync(async args =>
             {
@@ -531,7 +531,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         [Test]
         public async Task InterceptTestProvideResponse()
         {
-            var context = await session.CreateBrowsingContextAsync();
+            var context = await session.CreateBrowsingContextAsync(BrowsingContextType.Tab);
 
             await using var intercept = await context.AddInterceptOnBeforeRequestSentAsync(async args =>
             {
@@ -544,7 +544,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         [Test]
         public async Task InterceptTestProvideResponseBody()
         {
-            var context = await session.CreateBrowsingContextAsync();
+            var context = await session.CreateBrowsingContextAsync(BrowsingContextType.Tab);
 
             await using var intercept = await context.AddInterceptOnBeforeRequestSentAsync(async args =>
             {
@@ -563,7 +563,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         [Test]
         public async Task InterceptTestProvideResponse2()
         {
-            var context = await session.CreateBrowsingContextAsync();
+            var context = await session.CreateBrowsingContextAsync(BrowsingContextType.Tab);
 
             await context.AddInterceptOnResponseStartedAsync(async args =>
             {
@@ -581,7 +581,7 @@ namespace OpenQA.Selenium.BiDi.Tests
                 await args.Request.ContinueAsync(new() { Method = "POST" });
             });
 
-            var context = await session.CreateBrowsingContextAsync();
+            var context = await session.CreateBrowsingContextAsync(BrowsingContextType.Tab);
 
             await context.NavigateAsync("https://selenium.dev");
         }
@@ -589,7 +589,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         [Test]
         public async Task UseClosedBrowserContext()
         {
-            var context = await session.CreateBrowsingContextAsync();
+            var context = await session.CreateBrowsingContextAsync(BrowsingContextType.Tab);
 
             await context.CloseAsync();
 
@@ -605,7 +605,7 @@ namespace OpenQA.Selenium.BiDi.Tests
             //TODO: await event handler to be invoked
             await session.OnBrowsingContextCreatedAsync(e => args = e);
 
-            var context = await session.CreateBrowsingContextAsync();
+            var context = await session.CreateBrowsingContextAsync(BrowsingContextType.Tab);
 
             args.Should().NotBeNull();
             args.Url.Should().NotBeEmpty();
@@ -615,7 +615,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         [Test]
         public async Task LocateNodes()
         {
-            var context = await session.CreateBrowsingContextAsync();
+            var context = await session.CreateBrowsingContextAsync(BrowsingContextType.Tab);
 
             await context.NavigateAsync("https://selenium.dev", new() { Wait = ReadinessState.Complete });
 
@@ -636,7 +636,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         [Test]
         public async Task InputActions()
         {
-            var context = await session.CreateBrowsingContextAsync();
+            var context = await session.CreateBrowsingContextAsync(BrowsingContextType.Tab);
 
             await context.NavigateAsync("https://nuget.org", new() { Wait = ReadinessState.Complete });
 
@@ -662,7 +662,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         [Test]
         public async Task EvaluateException()
         {
-            var context = await session.CreateBrowsingContextAsync();
+            var context = await session.CreateBrowsingContextAsync(BrowsingContextType.Tab);
 
             var func = async () => await context.EvaluateAsync("abc;", true);
 
@@ -674,7 +674,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         [Test]
         public async Task EvaluateSuccess()
         {
-            var context = await session.CreateBrowsingContextAsync();
+            var context = await session.CreateBrowsingContextAsync(BrowsingContextType.Tab);
 
             var evaluateResult = await context.EvaluateAsync("2 + 2", true);
 
@@ -697,7 +697,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         [Test]
         public async Task CallFunction()
         {
-            var context = await session.CreateBrowsingContextAsync();
+            var context = await session.CreateBrowsingContextAsync(BrowsingContextType.Tab);
 
             await context.NavigateAsync("https://selenium.dev", new() { Wait = ReadinessState.Interactive });
 
