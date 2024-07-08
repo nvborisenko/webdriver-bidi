@@ -341,7 +341,7 @@ namespace OpenQA.Selenium.BiDi.Tests
                 });
             });
 
-            await context.NavigateAsync("https://selenium.dev");
+            await context.NavigateAsync("https://selenium.dev", new() { Wait = ReadinessState.Complete });
         }
 
         [Test]
