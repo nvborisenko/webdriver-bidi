@@ -52,14 +52,9 @@ public class Session : IAsyncDisposable
 
     public async Task<Modules.BrowsingContext.BrowsingContext> CreateBrowsingContextAsync(Modules.BrowsingContext.BrowsingContextType type, Modules.BrowsingContext.BrowsingContextOptions? options = default)
     {
-        var @params = new Modules.BrowsingContext.CreateCommandParameters(type)
-        {
-            ReferenceContext = options?.ReferenceContext,
-            Background = options?.Background,
-            UserContext = options?.UserContext
-        };
+        var @params = new Modules.BrowsingContext.CreateCommandParameters(type);
 
-        var createResult = await BrowsingContextModule.CreateAsync(@params).ConfigureAwait(false);
+        var createResult = await BrowsingContextModule.CreateAsync(@params, options).ConfigureAwait(false);
 
         return createResult.Context;
     }
@@ -78,13 +73,9 @@ public class Session : IAsyncDisposable
 
     public async Task<IReadOnlyList<Modules.BrowsingContext.BrowsingContextInfo>> GetTreeAsync(Modules.BrowsingContext.TreeOptions? options = default)
     {
-        var @params = new Modules.BrowsingContext.GetTreeCommandParameters
-        {
-            MaxDepth = options?.MaxDepth,
-            Root = options?.Root
-        };
+        var @params = new Modules.BrowsingContext.GetTreeCommandParameters();
 
-        var result = await BrowsingContextModule.GetTreeAsync(@params).ConfigureAwait(false);
+        var result = await BrowsingContextModule.GetTreeAsync(@params, options).ConfigureAwait(false);
 
         return result.Contexts;
     }
