@@ -2,10 +2,9 @@
 
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
-public class UserPromptOpenedEventArgs(BrowsingContext context, UserPromptType type, string message) : EventArgs
+public class UserPromptOpenedEventArgs(BrowsingContext context, UserPromptType type, string message)
+    : BrowsingContextEventArgs(context)
 {
-    public BrowsingContext Context { get; } = context;
-
     public UserPromptType Type { get; } = type;
 
     public string Message { get; } = message;

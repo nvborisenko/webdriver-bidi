@@ -121,7 +121,16 @@ internal class Broker : IAsyncDisposable
 
                             args.Session = _session;
 
-                            await handler.InvokeAsync(args).ConfigureAwait(false);
+                            // handle browsing context subscriber
+                            if (args is BrowsingContextEventArgs browsingContextEventArgs && browsingContextEventArgs.Equals(handler.Context))
+                            {
+                                await handler.InvokeAsync(args).ConfigureAwait(false);
+                            }
+                            // handle only session subscriber
+                            else if (handler.Context is null)
+                            {
+                                await handler.InvokeAsync(args).ConfigureAwait(false);
+                            }
                         }
                     }
                 }

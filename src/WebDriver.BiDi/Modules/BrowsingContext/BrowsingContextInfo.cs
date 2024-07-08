@@ -4,11 +4,9 @@ using System.Text.Json.Serialization;
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
 public class BrowsingContextInfo(IReadOnlyList<BrowsingContextInfo> children, BrowsingContext context, string url, Browser.UserContext userContext)
-    : EventArgs
+    : BrowsingContextEventArgs(context)
 {
     public IReadOnlyList<BrowsingContextInfo> Children { get; } = children;
-
-    public BrowsingContext Context { get; } = context;
 
     public string Url { get; } = url;
 
