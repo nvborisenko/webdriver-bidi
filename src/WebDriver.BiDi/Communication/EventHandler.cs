@@ -10,7 +10,7 @@ internal abstract class EventHandler(string eventName, Type eventArgsType, Brows
     public Type EventArgsType { get; set; } = eventArgsType;
     public BrowsingContext? Context { get; } = context;
 
-    public abstract Task InvokeAsync(object args);
+    public abstract ValueTask InvokeAsync(object args);
 }
 
 internal class AsyncEventHandler<TEventArgs>(string eventName, Func<TEventArgs, Task> func, BrowsingContext? context)
@@ -18,7 +18,7 @@ internal class AsyncEventHandler<TEventArgs>(string eventName, Func<TEventArgs, 
 {
     private readonly Func<TEventArgs, Task> _func = func;
 
-    public override async Task InvokeAsync(object args)
+    public override async ValueTask InvokeAsync(object args)
     {
         await _func((TEventArgs)args).ConfigureAwait(false);
     }
@@ -29,10 +29,10 @@ internal class SyncEventHandler<TEventArgs>(string eventName, Action<TEventArgs>
 {
     private readonly Action<TEventArgs> _action = action;
 
-    public override Task InvokeAsync(object args)
+    public override ValueTask InvokeAsync(object args)
     {
         _action((TEventArgs)args);
 
-        return Task.CompletedTask;
+        return default;
     }
 }
