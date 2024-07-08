@@ -8,9 +8,11 @@ namespace OpenQA.Selenium.BiDi.Modules.Log;
 //[JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
 //[JsonDerivedType(typeof(ConsoleLogEntry), "console")]
 //[JsonDerivedType(typeof(JavascriptLogEntry), "javascript")]
-public abstract class BaseLogEntry(Level level, string text, DateTime timestamp) : EventArgs
+public abstract class BaseLogEntry(Level level, Script.Source source, string text, DateTime timestamp) : EventArgs
 {
     public Level Level { get; } = level;
+
+    public Script.Source Source { get; } = source;
 
     public string Text { get; } = text;
 
@@ -20,8 +22,8 @@ public abstract class BaseLogEntry(Level level, string text, DateTime timestamp)
 public class ConsoleLogEntry : BaseLogEntry
 {
     [JsonConstructor]
-    internal ConsoleLogEntry(Level level, string text, DateTime timestamp, string method, IReadOnlyList<Script.RemoteValue> args)
-        : base(level, text, timestamp)
+    internal ConsoleLogEntry(Level level, Script.Source source, string text, DateTime timestamp, string method, IReadOnlyList<Script.RemoteValue> args)
+        : base(level, source, text, timestamp)
     {
         Method = method;
         Args = args;
@@ -35,8 +37,8 @@ public class ConsoleLogEntry : BaseLogEntry
 public class JavascriptLogEntry : BaseLogEntry
 {
     [JsonConstructor]
-    internal JavascriptLogEntry(Level level, string text, DateTime timestamp)
-        : base(level, text, timestamp)
+    internal JavascriptLogEntry(Level level, Script.Source source, string text, DateTime timestamp)
+        : base(level, source, text, timestamp)
     {
     }
 }

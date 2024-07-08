@@ -276,11 +276,23 @@ public class BrowsingContext
 
     public Task<Subscription> OnLogEntryAddedAsync(Func<Log.BaseLogEntry, Task> callback)
     {
-        return Session.LogModule.OnEntryAddedAsync(callback, this);
+        return Session.LogModule.OnEntryAddedAsync(async args =>
+        {
+            if (Equals(args.Source.Context))
+            {
+                await callback(args).ConfigureAwait(false);
+            }
+        });
     }
 
     public Task<Subscription> OnLogEntryAddedAsync(Action<Log.BaseLogEntry> callback)
     {
-        return Session.LogModule.OnEntryAddedAsync(callback, this);
+        return Session.LogModule.OnEntryAddedAsync(args =>
+        {
+            if (Equals(args.Source.Context))
+            {
+                callback(args);
+            }
+        });
     }
 }
