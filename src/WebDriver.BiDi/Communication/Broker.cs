@@ -152,16 +152,11 @@ internal class Broker : IAsyncDisposable
 
         var tcs = new TaskCompletionSource<object>(TaskCreationOptions.RunContinuationsAsynchronously);
 
-        using var cts = new CancellationTokenSource();
+        var timeout = options?.Timeout ?? TimeSpan.FromSeconds(30);
 
-        if (options?.Timeout is not null)
-        {
-            cts.CancelAfter(options.Timeout.Value);
-        }
-        else
-        {
-            cts.CancelAfter(TimeSpan.FromSeconds(30));
-        }
+        using var cts = new CancellationTokenSource(timeout);
+
+        cts.Token.Register(() => tcs.TrySetCanceled(cts.Token));
 
         _pendingCommands[command.Id] = tcs;
 
