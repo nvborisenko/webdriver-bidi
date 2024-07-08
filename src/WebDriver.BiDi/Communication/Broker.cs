@@ -86,35 +86,21 @@ internal class Broker : IAsyncDisposable
     {
         while (!cancellationToken.IsCancellationRequested)
         {
-            try
-            {
-                var message = await _transport.ReceiveAsJsonAsync<Message>(_jsonSourceGenerationContext, cancellationToken);
+            var message = await _transport.ReceiveAsJsonAsync<Message>(_jsonSourceGenerationContext, cancellationToken);
 
-                if (message is MessageSuccess messageSuccess)
-                {
+            switch (message)
+            {
+                case MessageSuccess messageSuccess:
                     _pendingCommands[messageSuccess.Id].SetResult(messageSuccess.Result);
-
                     _pendingCommands.TryRemove(messageSuccess.Id, out _);
-                }
-                else if (message is MessageEvent messageEvent)
-                {
+                    break;
+                case MessageEvent messageEvent:
                     _pendingEvents.Add(messageEvent);
-                }
-                else if (message is MessageError mesageError)
-                {
+                    break;
+                case MessageError mesageError:
                     _pendingCommands[mesageError.Id].SetException(new BiDiException($"{mesageError.Error}: {mesageError.Message}"));
-
                     _pendingCommands.TryRemove(mesageError.Id, out _);
-                }
-                else
-                {
-                    throw new Exception("Unknown type");
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-                throw;
+                    break;
             }
         }
     }
@@ -125,13 +111,13 @@ internal class Broker : IAsyncDisposable
         {
             try
             {
-                if (_eventHandlers.TryGetValue(result.Method!, out var eventHandlers))
+                if (_eventHandlers.TryGetValue(result.Method, out var eventHandlers))
                 {
                     if (eventHandlers is not null)
                     {
                         foreach (var handler in eventHandlers)
                         {
-                            var args = (EventArgs)result.Params!.Deserialize(handler.EventArgsType, _jsonSourceGenerationContext)!;
+                            var args = (EventArgs)result.Params.Deserialize(handler.EventArgsType, _jsonSourceGenerationContext)!;
 
                             args.Session = _session;
 
