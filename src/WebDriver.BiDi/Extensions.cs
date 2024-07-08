@@ -73,6 +73,7 @@ public static class Extensions
         return requestData.Request.ProvideResponseAsync(options);
     }
 
+    // TODO: Remove it when events become contextual
     public class InterceptBrowsingContext : Intercept
     {
         private readonly BrowsingContext _context;
