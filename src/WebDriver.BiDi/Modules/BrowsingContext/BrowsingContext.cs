@@ -278,7 +278,7 @@ public class BrowsingContext
     {
         return Session.LogModule.OnEntryAddedAsync(async args =>
         {
-            if (Equals(args.Source.Context))
+            if (args.Source.Context is not null && Equals(args.Source.Context))
             {
                 await callback(args).ConfigureAwait(false);
             }
@@ -289,7 +289,7 @@ public class BrowsingContext
     {
         return Session.LogModule.OnEntryAddedAsync(args =>
         {
-            if (Equals(args.Source.Context))
+            if (args.Source.Context is not null && Equals(args.Source.Context))
             {
                 callback(args);
             }

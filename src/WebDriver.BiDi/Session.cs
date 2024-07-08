@@ -136,6 +136,16 @@ public class Session : IAsyncDisposable
         return BrowsingContextModule.OnUserPromptClosedAsync(callback);
     }
 
+    public Task<Subscription> OnLogEntryAddedAsync(Func<Modules.Log.BaseLogEntry, Task> callback)
+    {
+        return LogModule.OnEntryAddedAsync(callback);
+    }
+
+    public Task<Subscription> OnLogEntryAddedAsync(Action<Modules.Log.BaseLogEntry> callback)
+    {
+        return LogModule.OnEntryAddedAsync(callback);
+    }
+
     public static async Task<Session> ConnectAsync(string url)
     {
         var session = new Session(url);
