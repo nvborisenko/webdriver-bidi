@@ -496,8 +496,7 @@ namespace OpenQA.Selenium.BiDi.Tests
             await using var intercept = await context.AddInterceptOnBeforeRequestSentAsync(async args =>
             {
                 await args.Request.ContinueAsync(new() { Method = "POST" });
-            },
-            ["https://**"]);
+            });
 
             await context.NavigateAsync("https://selenium.dev");
         }
@@ -510,8 +509,7 @@ namespace OpenQA.Selenium.BiDi.Tests
             await using var intercept = await context.AddInterceptOnResponseStartedAsync(async args =>
             {
                 await args.Request.ContinueAsync();
-            },
-            ["https://**"]);
+            });
 
             await context.NavigateAsync("https://selenium.dev");
         }
@@ -525,7 +523,7 @@ namespace OpenQA.Selenium.BiDi.Tests
             {
                 await args.Request.FailAsync();
             },
-            ["https://**"]);
+            new() { UrlPatterns = ["https://**"] });
 
             await context.NavigateAsync("https://selenium.dev");
         }
