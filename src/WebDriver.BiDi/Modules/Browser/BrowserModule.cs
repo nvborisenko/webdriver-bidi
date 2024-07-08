@@ -20,8 +20,10 @@ internal sealed class BrowserModule(Broker broker) : Module(broker)
         return await Broker.ExecuteCommandAsync<GetUserContextsResult>(new GetUserContextsCommand()).ConfigureAwait(false);
     }
 
-    public async Task RemoveUserContextAsync(RemoveUserContextCommandParameters @params)
+    public async Task RemoveUserContextAsync(UserContext userContext)
     {
+        var @params = new RemoveUserContextCommandParameters(userContext);
+
         await Broker.ExecuteCommandAsync(new RemoveUserContextCommand(@params)).ConfigureAwait(false);
     }
 }

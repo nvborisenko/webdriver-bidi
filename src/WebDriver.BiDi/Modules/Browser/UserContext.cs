@@ -15,11 +15,9 @@ public class UserContext : IAsyncDisposable
 
     public string Id { get; }
 
-    public async Task RemoveAsync()
+    public Task RemoveAsync()
     {
-        var @params = new RemoveUserContextCommandParameters(this);
-
-        await _session.BrowserModule.RemoveUserContextAsync(@params).ConfigureAwait(false);
+        return _session.BrowserModule.RemoveUserContextAsync(this);
     }
 
     public async ValueTask DisposeAsync()

@@ -6,8 +6,10 @@ namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
 sealed class BrowsingContextModule(Broker broker) : Module(broker)
 {
-    public async Task<CreateResult> CreateAsync(CreateCommandParameters @params, BrowsingContextOptions? options = default)
+    public async Task<CreateResult> CreateAsync(BrowsingContextType type, BrowsingContextOptions? options = default)
     {
+        var @params = new CreateCommandParameters(type);
+
         if (options is not null)
         {
             @params.ReferenceContext = options.ReferenceContext;
@@ -18,8 +20,10 @@ sealed class BrowsingContextModule(Broker broker) : Module(broker)
         return await Broker.ExecuteCommandAsync<CreateResult>(new CreateCommand(@params)).ConfigureAwait(false);
     }
 
-    public async Task<NavigateResult> NavigateAsync(NavigateCommandParameters @params, NavigateOptions? options = default)
+    public async Task<NavigateResult> NavigateAsync(BrowsingContext context, string url, NavigateOptions? options = default)
     {
+        var @params = new NavigateCommandParameters(context, url);
+
         if (options is not null)
         {
             @params.Wait = options.Wait;
@@ -28,13 +32,17 @@ sealed class BrowsingContextModule(Broker broker) : Module(broker)
         return await Broker.ExecuteCommandAsync<NavigateResult>(new NavigateCommand(@params)).ConfigureAwait(false);
     }
 
-    public async Task ActivateAsync(ActivateCommandParameters @params)
+    public async Task ActivateAsync(BrowsingContext context)
     {
+        var @params = new ActivateCommandParameters(context);
+
         await Broker.ExecuteCommandAsync(new ActivateCommand(@params)).ConfigureAwait(false);
     }
 
-    public async Task<LocateNodesResult> LocateNodesAsync(LocateNodesCommandParameters @params, NodesOptions? options = default)
+    public async Task<LocateNodesResult> LocateNodesAsync(BrowsingContext context, Locator locator, NodesOptions? options = default)
     {
+        var @params = new LocateNodesCommandParameters(context, locator);
+
         if (options is not null)
         {
             @params.MaxNodeCount = options.MaxNodeCount;
@@ -45,8 +53,10 @@ sealed class BrowsingContextModule(Broker broker) : Module(broker)
         return await Broker.ExecuteCommandAsync<LocateNodesResult>(new LocateNodesCommand(@params)).ConfigureAwait(false);
     }
 
-    public async Task<CaptureScreenshotResult> CaptureScreenshotAsync(CaptureScreenshotCommandParameters @params, CaptureScreenshotOptions? options = default)
+    public async Task<CaptureScreenshotResult> CaptureScreenshotAsync(BrowsingContext context, CaptureScreenshotOptions? options = default)
     {
+        var @params = new CaptureScreenshotCommandParameters(context);
+
         if (options is not null)
         {
             @params.Origin = options.Origin;
@@ -57,18 +67,24 @@ sealed class BrowsingContextModule(Broker broker) : Module(broker)
         return await Broker.ExecuteCommandAsync<CaptureScreenshotResult>(new CaptureScreenshotCommand(@params)).ConfigureAwait(false);
     }
 
-    public async Task CloseAsync(CloseCommandParameters @params)
+    public async Task CloseAsync(BrowsingContext context)
     {
+        var @params = new CloseCommandParameters(context);
+
         await Broker.ExecuteCommandAsync(new CloseCommand(@params)).ConfigureAwait(false);
     }
 
-    public async Task<TraverseHistoryResult> TraverseHistoryAsync(TraverseHistoryCommandParameters @params)
+    public async Task<TraverseHistoryResult> TraverseHistoryAsync(BrowsingContext context, int delta)
     {
+        var @params = new TraverseHistoryCommandParameters(context, delta);
+
         return await Broker.ExecuteCommandAsync<TraverseHistoryResult>(new TraverseHistoryCommand(@params)).ConfigureAwait(false);
     }
 
-    public async Task<NavigateResult> ReloadAsync(ReloadCommandParameters @params, ReloadOptions? options = default)
+    public async Task<NavigateResult> ReloadAsync(BrowsingContext context, ReloadOptions? options = default)
     {
+        var @params = new ReloadCommandParameters(context);
+
         if (options is not null)
         {
             @params.IgnoreCache = options.IgnoreCache;
@@ -78,8 +94,10 @@ sealed class BrowsingContextModule(Broker broker) : Module(broker)
         return await Broker.ExecuteCommandAsync<NavigateResult>(new ReloadCommand(@params)).ConfigureAwait(false);
     }
 
-    public async Task SetViewportAsync(SetViewportCommandParameters @params, ViewportOptions? options = default)
+    public async Task SetViewportAsync(BrowsingContext context, ViewportOptions? options = default)
     {
+        var @params = new SetViewportCommandParameters(context);
+
         if (options is not null)
         {
             @params.Viewport = options.Viewport;
@@ -89,8 +107,10 @@ sealed class BrowsingContextModule(Broker broker) : Module(broker)
         await Broker.ExecuteCommandAsync(new SetViewportCommand(@params)).ConfigureAwait(false);
     }
 
-    public async Task<GetTreeResult> GetTreeAsync(GetTreeCommandParameters @params, TreeOptions? options = default)
+    public async Task<GetTreeResult> GetTreeAsync(TreeOptions? options = default)
     {
+        var @params = new GetTreeCommandParameters();
+
         if (options is not null)
         {
             @params.MaxDepth = options.MaxDepth;
@@ -100,8 +120,10 @@ sealed class BrowsingContextModule(Broker broker) : Module(broker)
         return await Broker.ExecuteCommandAsync<GetTreeResult>(new GetTreeCommand(@params)).ConfigureAwait(false);
     }
 
-    public async Task<PrintResult> PrintAsync(PrintCommandParameters @params, PrintOptions? options = default)
+    public async Task<PrintResult> PrintAsync(BrowsingContext context, PrintOptions? options = default)
     {
+        var @params = new PrintCommandParameters(context);
+
         if (options is not null)
         {
             @params.Background = options.Background;
@@ -116,8 +138,10 @@ sealed class BrowsingContextModule(Broker broker) : Module(broker)
         return await Broker.ExecuteCommandAsync<PrintResult>(new PrintCommand(@params)).ConfigureAwait(false);
     }
 
-    public async Task HandleUserPrompAsync(HandleUserPromptCommandParameters @params, UserPromptOptions? options = default)
+    public async Task HandleUserPrompAsync(BrowsingContext context, UserPromptOptions? options = default)
     {
+        var @params = new HandleUserPromptCommandParameters(context);
+
         if (options is not null)
         {
             @params.Accept = options.Accept;

@@ -1,13 +1,14 @@
 ﻿using OpenQA.Selenium.BiDi.Communication;
-using System;
 using System.Threading.Tasks;
 
 namespace OpenQA.Selenium.BiDi.Modules.Script;
 
 internal sealed class ScriptModule(Broker broker) : Module(broker)
 {
-    public async Task<EvaluateResultSuccess> EvaluateAsync(EvaluateCommandParameters @params, EvaluateOptions? options = default)
+    public async Task<EvaluateResultSuccess> EvaluateAsync(string expression, bool awaitPromise, Target target, EvaluateOptions? options = default)
     {
+        var @params = new EvaluateCommandParameters(expression, target, awaitPromise);
+
         if (options is not null)
         {
             @params.ResultOwnership = options.ResultOwnership;
@@ -25,8 +26,10 @@ internal sealed class ScriptModule(Broker broker) : Module(broker)
         return (EvaluateResultSuccess)result;
     }
 
-    public async Task<EvaluateResultSuccess> CallFunctionAsync(CallFunctionCommandParameters @params, CallFunctionOptions? options = default)
+    public async Task<EvaluateResultSuccess> CallFunctionAsync(string functionDeclaration, bool awaitPromise, Target target, CallFunctionOptions? options = default)
     {
+        var @params = new CallFunctionCommandParameters(functionDeclaration, awaitPromise, target);
+
         if (options is not null)
         {
             @params.Arguments = options.Arguments;
@@ -46,8 +49,10 @@ internal sealed class ScriptModule(Broker broker) : Module(broker)
         return (EvaluateResultSuccess)result;
     }
 
-    public async Task<GetRealmsResult> GetRealmAsync(GetRealmsCommandParameters @params, RealmsOptions? options = default)
+    public async Task<GetRealmsResult> GetRealmAsync(RealmsOptions? options = default)
     {
+        var @params = new GetRealmsCommandParameters();
+
         if (options is not null)
         {
             @params.Context = options.Context;
@@ -57,8 +62,10 @@ internal sealed class ScriptModule(Broker broker) : Module(broker)
         return await Broker.ExecuteCommandAsync<GetRealmsResult>(new GetRealmsCommand(@params)).ConfigureAwait(false);
     }
 
-    public async Task<AddPreloadScriptResult> AddPreloadScriptAsync(AddPreloadScriptCommandParameters @params, PreloadScriptOptions? options = default)
+    public async Task<AddPreloadScriptResult> AddPreloadScriptAsync(string functionDeclaration, PreloadScriptOptions? options = default)
     {
+        var @params = new AddPreloadScriptCommandParameters(functionDeclaration);
+
         if (options is not null)
         {
             @params.Contexts = options.Contexts;
@@ -69,8 +76,10 @@ internal sealed class ScriptModule(Broker broker) : Module(broker)
         return await Broker.ExecuteCommandAsync<AddPreloadScriptResult>(new AddPreloadScriptCommand(@params)).ConfigureAwait(false);
     }
 
-    public async Task RemovePreloadScriptAsync(RemovePreloadScriptCommandParameters @params)
+    public async Task RemovePreloadScriptAsync(PreloadScript script)
     {
+        var @params = new RemovePreloadScriptCommandParameters(script);
+
         await Broker.ExecuteCommandAsync(new RemovePreloadScriptCommand(@params)).ConfigureAwait(false);
     }
 }

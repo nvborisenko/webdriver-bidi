@@ -11,3 +11,8 @@ internal class SubscribeCommandParameters(IEnumerable<string> events) : CommandP
 
     public IEnumerable<BrowsingContext.BrowsingContext>? Contexts { get; set; }
 }
+
+public class SubscribeOptions
+{
+    public IEnumerable<BrowsingContext.BrowsingContext>? Contexts { get; set; }
+}

@@ -30,77 +30,59 @@ public class BrowsingContext
 
     public Task<NavigateResult> NavigateAsync(string url, NavigateOptions? options = default)
     {
-        var @params = new NavigateCommandParameters(this, url);
-
-        return Session.BrowsingContextModule.NavigateAsync(@params, options);
+        return Session.BrowsingContextModule.NavigateAsync(this, url, options);
     }
 
     public Task<NavigateResult> ReloadAsync(ReloadOptions? options = default)
     {
-        var @params = new ReloadCommandParameters(this);
-
-        return Session.BrowsingContextModule.ReloadAsync(@params, options);
+        return Session.BrowsingContextModule.ReloadAsync(this, options);
     }
 
     public Task ActivateAsync()
     {
-        var @params = new ActivateCommandParameters(this);
-
-        return Session.BrowsingContextModule.ActivateAsync(@params);
+        return Session.BrowsingContextModule.ActivateAsync(this);
     }
 
     public async Task<IReadOnlyList<Script.NodeRemoteValue>> LocateNodesAsync(Locator locator, NodesOptions? options = default)
     {
-        var @params = new LocateNodesCommandParameters(this, locator);
-
-        var result = await Session.BrowsingContextModule.LocateNodesAsync(@params, options).ConfigureAwait(false);
+        var result = await Session.BrowsingContextModule.LocateNodesAsync(this, locator, options).ConfigureAwait(false);
 
         return result.Nodes;
     }
 
     public Task PerformActionsAsync(IEnumerable<Input.SourceActions> actions)
     {
-        var @params = new Input.PerformActionsCommandParameters(this)
+        var options = new Input.PerformActionsOptions
         {
             Actions = actions
         };
 
-        return Session.InputModule.PerformActionsAsync(@params);
+        return Session.InputModule.PerformActionsAsync(this, options);
     }
 
     public Task<CaptureScreenshotResult> CaptureScreenshotAsync(CaptureScreenshotOptions? options = default)
     {
-        var @params = new CaptureScreenshotCommandParameters(this);
-
-        return Session.BrowsingContextModule.CaptureScreenshotAsync(@params, options);
+        return Session.BrowsingContextModule.CaptureScreenshotAsync(this, options);
     }
 
     public Task<Script.EvaluateResultSuccess> EvaluateAsync(string expression, bool awaitPromise, Script.EvaluateOptions? options = default)
     {
-        var @params = new Script.EvaluateCommandParameters(expression, new Script.ContextTarget { Context = Id }, awaitPromise);
-
-        return Session.ScriptModule.EvaluateAsync(@params, options);
+        return Session.ScriptModule.EvaluateAsync(expression, awaitPromise, new Script.ContextTarget { Context = Id }, options);
     }
 
-    public Task<Script.EvaluateResultSuccess> CallFunctionAsync(string functionDeclaration, bool awaitPromise = true, Script.CallFunctionOptions? options = default)
+    public Task<Script.EvaluateResultSuccess> CallFunctionAsync(string functionDeclaration, bool awaitPromise, Script.CallFunctionOptions? options = default)
     {
-        var @params = new Script.CallFunctionCommandParameters(functionDeclaration, awaitPromise, new Script.ContextTarget { Context = Id });
-
-        return Session.ScriptModule.CallFunctionAsync(@params, options);
+        return Session.ScriptModule.CallFunctionAsync(functionDeclaration, awaitPromise, new Script.ContextTarget { Context = Id }, options);
     }
 
     public Task CloseAsync()
     {
-        var @params = new CloseCommandParameters(this);
-
-        return Session.BrowsingContextModule.CloseAsync(@params);
+        return Session.BrowsingContextModule.CloseAsync(this);
     }
 
     public Task TraverseHistoryAsync(int delta)
     {
-        var @params = new TraverseHistoryCommandParameters(this, delta);
-
-        return Session.BrowsingContextModule.TraverseHistoryAsync(@params);
+        return Session.BrowsingContextModule.TraverseHistoryAsync(this, delta);
     }
 
     public Task NavigateBackAsync()
@@ -115,87 +97,70 @@ public class BrowsingContext
 
     public Task SetViewportAsync(ViewportOptions? options = default)
     {
-        var @params = new SetViewportCommandParameters(this);
-
-        return Session.BrowsingContextModule.SetViewportAsync(@params, options);
+        return Session.BrowsingContextModule.SetViewportAsync(this, options);
     }
 
     public async Task<string> PrintAsync(PrintOptions? options = default)
     {
-        var @params = new PrintCommandParameters(this);
-
-        var result = await Session.BrowsingContextModule.PrintAsync(@params, options).ConfigureAwait(false);
+        var result = await Session.BrowsingContextModule.PrintAsync(this, options).ConfigureAwait(false);
 
         return result.Data;
     }
 
     public Task HandleUserPromptAsync(UserPromptOptions? options = default)
     {
-        var @params = new HandleUserPromptCommandParameters(this);
-
-        return Session.BrowsingContextModule.HandleUserPrompAsync(@params, options);
+        return Session.BrowsingContextModule.HandleUserPrompAsync(this, options);
     }
 
     public Task<Storage.GetCookiesResult> GetCookiesAsync(Storage.CookiesOptions? options = default)
     {
-        var @params = new Storage.GetCookiesCommandParameters();
-
         options ??= new();
 
         options.Partition = new Storage.BrowsingContextPartitionDescriptor(this);
 
-        return Session.StorageModule.GetCookiesAsync(@params, options);
+        return Session.StorageModule.GetCookiesAsync(options);
     }
 
     public async Task<Storage.PartitionKey> DeleteCookiesAsync(Storage.CookiesOptions? options = default)
     {
-        var @params = new Storage.DeleteCookiesCommandParameters();
-
         options ??= new();
 
         options.Partition = new Storage.BrowsingContextPartitionDescriptor(this);
 
-        var res = await Session.StorageModule.DeleteCookiesAsync(@params, options).ConfigureAwait(false);
+        var res = await Session.StorageModule.DeleteCookiesAsync(options).ConfigureAwait(false);
 
         return res.PartitionKey;
     }
 
-    public async Task<Storage.PartitionKey> SetCookieAsync(string name, Network.BytesValue value, string domain, Storage.PartialCookieOptions? options = default)
+    public async Task<Storage.PartitionKey> SetCookieAsync(Storage.PartialCookie cookie, Storage.SetCookieOptions? options = default)
     {
-        Storage.PartialCookie partialCookie = new(name, value, domain);
+        options ??= new();
 
-        var @params = new Storage.SetCookieCommandParameters(partialCookie)
-        {
-            Partition = new Storage.BrowsingContextPartitionDescriptor(this)
-        };
+        options.Partition = new Storage.BrowsingContextPartitionDescriptor(this);
 
-        var res = await Session.StorageModule.SetCookieAsync(@params, options).ConfigureAwait(false);
+        var res = await Session.StorageModule.SetCookieAsync(cookie, options).ConfigureAwait(false);
 
         return res.PartitionKey;
     }
 
     public async Task<Script.PreloadScript> AddPreloadScriptAsync(string functionDeclaration, Script.PreloadScriptOptions? options = default)
     {
-        var @params = new Script.AddPreloadScriptCommandParameters(functionDeclaration);
-
         options ??= new();
 
         options.Contexts = [this];
 
-        var res = await Session.ScriptModule.AddPreloadScriptAsync(@params, options).ConfigureAwait(false);
+        var res = await Session.ScriptModule.AddPreloadScriptAsync(functionDeclaration, options).ConfigureAwait(false);
 
         return res.Script;
     }
 
     public async Task<IReadOnlyList<Script.RealmInfo>> GetRealmsAsync(Script.RealmsOptions? options = default)
     {
-        var @params = new Script.GetRealmsCommandParameters();
-
         options ??= new();
 
         options.Context = this;
 
-        var res = await Session.ScriptModule.GetRealmAsync(@params, options).ConfigureAwait(false);
+        var res = await Session.ScriptModule.GetRealmAsync(options).ConfigureAwait(false);
 
         return res.Realms;
     }

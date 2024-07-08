@@ -185,14 +185,14 @@ internal class Broker : IAsyncDisposable
     {
         var handlers = _eventHandlers.GetOrAdd(eventName, (a) => []);
 
-        var @params = new Modules.Session.SubscribeCommandParameters([eventName]);
-
         if (context is not null)
         {
-            @params.Contexts = [context];
+            await _session.SessionModule.SubscribeAsync([eventName], new() { Contexts = [context] }).ConfigureAwait(false);
         }
-
-        await _session.SessionModule.SubscribeAsync(@params);
+        else
+        {
+            await _session.SessionModule.SubscribeAsync([eventName]).ConfigureAwait(false);
+        }
 
         var eventHandler = new SyncEventHandler<TEventArgs>(eventName, action, context);
 
@@ -206,14 +206,14 @@ internal class Broker : IAsyncDisposable
     {
         var handlers = _eventHandlers.GetOrAdd(eventName, (a) => []);
 
-        var @params = new Modules.Session.SubscribeCommandParameters([eventName]);
-
         if (context is not null)
         {
-            @params.Contexts = [context];
+            await _session.SessionModule.SubscribeAsync([eventName], new() { Contexts = [context] }).ConfigureAwait(false);
         }
-
-        await _session.SessionModule.SubscribeAsync(@params);
+        else
+        {
+            await _session.SessionModule.SubscribeAsync([eventName]).ConfigureAwait(false);
+        }
 
         var eventHandler = new AsyncEventHandler<TEventArgs>(eventName, func, context);
 
@@ -232,14 +232,14 @@ internal class Broker : IAsyncDisposable
         {
             if (!eventHandlers.Any(h => eventHandler.Context.Equals(h.Context)) && !eventHandlers.Any(h => h.Context is null))
             {
-                await _session.SessionModule.UnsubscribeAsync(new([eventHandler.EventName]) { Contexts = [eventHandler.Context] });
+                await _session.SessionModule.UnsubscribeAsync([eventHandler.EventName], new() { Contexts = [eventHandler.Context] }).ConfigureAwait(false);
             }
         }
         else
         {
             if (!eventHandlers.Any(h => h.Context is not null) && !eventHandlers.Any(h => h.Context is null))
             {
-                await _session.SessionModule.UnsubscribeAsync(new([eventHandler.EventName]));
+                await _session.SessionModule.UnsubscribeAsync([eventHandler.EventName]).ConfigureAwait(false);
             }
         }
     }

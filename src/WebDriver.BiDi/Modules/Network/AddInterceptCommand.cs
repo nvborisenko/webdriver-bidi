@@ -7,8 +7,15 @@ internal class AddInterceptCommand(AddInterceptCommandParameters @params) : Comm
 
 internal class AddInterceptCommandParameters(IEnumerable<InterceptPhase> phases) : CommandParameters
 {
-    public IEnumerable<InterceptPhase> Phases { get; set; } = phases;
+    public IEnumerable<InterceptPhase> Phases { get; } = phases;
 
+    public IEnumerable<BrowsingContext.BrowsingContext>? Contexts { get; set; }
+
+    public IEnumerable<UrlPattern>? UrlPatterns { get; set; }
+}
+
+public class InterceptOptions
+{
     public IEnumerable<BrowsingContext.BrowsingContext>? Contexts { get; set; }
 
     public IEnumerable<UrlPattern>? UrlPatterns { get; set; }

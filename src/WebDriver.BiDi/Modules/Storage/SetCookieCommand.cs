@@ -5,9 +5,9 @@ namespace OpenQA.Selenium.BiDi.Modules.Storage;
 
 internal class SetCookieCommand(SetCookieCommandParameters @params) : Command<SetCookieCommandParameters>(@params);
 
-internal class SetCookieCommandParameters(PartialCookie partialCookie) : CommandParameters
+internal class SetCookieCommandParameters(PartialCookie cookie) : CommandParameters
 {
-    public PartialCookie Cookie { get; } = partialCookie;
+    public PartialCookie Cookie { get; } = cookie;
 
     public PartitionDescriptor? Partition { get; set; }
 }
@@ -31,17 +31,9 @@ public class PartialCookie(string name, Network.BytesValue value, string domain)
     public DateTime? Expiry { get; set; }
 }
 
-public class PartialCookieOptions
+public class SetCookieOptions
 {
-    public string? Path { get; set; }
-
-    public bool? HttpOnly { get; set; }
-
-    public bool? Secure { get; set; }
-
-    public Network.SameSite? SameSite { get; set; }
-
-    public DateTime? Expiry { get; set; }
+    public PartitionDescriptor? Partition { get; set; }
 }
 
 public class SetCookieResult(PartitionKey partitionKey)

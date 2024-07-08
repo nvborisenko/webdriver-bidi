@@ -15,44 +15,23 @@ public class Request
 
     public string Id { get; private set; }
 
-    internal async Task ContinueAsync(string? method = default)
+    internal Task ContinueAsync(RequestOptions? options = default)
     {
-        var @params = new ContinueRequestCommandParameters(this)
-        {
-            Method = method,
-        };
-
-        await _session.NetworkModule.ContinueRequestAsync(@params).ConfigureAwait(false);
+        return _session.NetworkModule.ContinueRequestAsync(this, options);
     }
 
-    internal async Task FailAsync()
+    internal Task FailAsync()
     {
-        var @params = new FailRequestCommandParameters(this);
-
-        await _session.NetworkModule.FailRequestAsync(@params).ConfigureAwait(false);
+        return _session.NetworkModule.FailRequestAsync(this);
     }
 
-    internal async Task ProvideResponseAsync(BytesValue? body = default, IEnumerable<SetCookieHeader>? cookies = default, IEnumerable<Header>? headers = default, string? reasonPhrase = default, uint? statusCode = default)
+    internal Task ProvideResponseAsync(ProvideResponseOptions? options = default)
     {
-        var @params = new ProvideResponseCommandParameters(this)
-        {
-            Body = body,
-            Cookies = cookies,
-            Headers = headers,
-            ReasonPhrase = reasonPhrase,
-            StatusCode = statusCode
-        };
-
-        await _session.NetworkModule.ProvideResponseAsync(@params).ConfigureAwait(false);
+        return _session.NetworkModule.ProvideResponseAsync(this, options);
     }
 
-    internal async Task ContinueResponseAsync(uint? statusCode = default)
+    internal Task ContinueResponseAsync(ContinueResponseOptions? options = default)
     {
-        var @params = new ContinueResponseCommandParameters(this)
-        {
-            StatusCode = statusCode
-        };
-
-        await _session.NetworkModule.ContinueResponseAsync(@params).ConfigureAwait(false);
+        return _session.NetworkModule.ContinueResponseAsync(this, options);
     }
 }

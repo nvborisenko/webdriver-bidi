@@ -11,7 +11,12 @@ internal class PerformActionsCommandParameters(BrowsingContext.BrowsingContext c
 {
     public BrowsingContext.BrowsingContext Context { get; } = context;
 
-    public IEnumerable<SourceActions> Actions { get; set; } = [];
+    public IEnumerable<SourceActions>? Actions { get; set; }
+}
+
+public class PerformActionsOptions
+{
+    public IEnumerable<SourceActions>? Actions { get; set; } = [];
 }
 
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]

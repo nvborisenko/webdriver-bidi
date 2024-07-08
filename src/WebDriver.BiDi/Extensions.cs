@@ -16,12 +16,7 @@ public static class Extensions
 
     public static async Task<Intercept> AddInterceptOnBeforeRequestSentAsync(this Session session, Func<BeforeRequestSentEventArgs, Task> callback, IEnumerable<UrlPattern>? urlPatterns = default)
     {
-        var @params = new AddInterceptCommandParameters([InterceptPhase.BeforeRequestSent])
-        {
-            UrlPatterns = urlPatterns
-        };
-
-        var result = await session.NetworkModule.AddInterceptAsync(@params).ConfigureAwait(false);
+        var result = await session.NetworkModule.AddInterceptAsync([InterceptPhase.BeforeRequestSent], new() { UrlPatterns = urlPatterns }).ConfigureAwait(false);
 
         var intercept = result.Intercept;
 
@@ -32,12 +27,7 @@ public static class Extensions
 
     public static async Task<Intercept> AddInterceptOnResponseStartedAsync(this Session session, Func<ResponseStartedEventArgs, Task> callback, IEnumerable<UrlPattern>? urlPatterns = default)
     {
-        var @params = new AddInterceptCommandParameters([InterceptPhase.ResponseStarted])
-        {
-            UrlPatterns = urlPatterns
-        };
-
-        var result = await session.NetworkModule.AddInterceptAsync(@params).ConfigureAwait(false);
+        var result = await session.NetworkModule.AddInterceptAsync([InterceptPhase.ResponseStarted], new() { UrlPatterns = urlPatterns }).ConfigureAwait(false);
 
         var intercept = result.Intercept;
 
@@ -48,13 +38,7 @@ public static class Extensions
 
     public static async Task<InterceptBrowsingContext> AddInterceptOnBeforeRequestSentAsync(this BrowsingContext context, Func<BeforeRequestSentEventArgs, Task> callback, IEnumerable<UrlPattern>? urlPatterns = default)
     {
-        var @params = new AddInterceptCommandParameters([InterceptPhase.BeforeRequestSent])
-        {
-            Contexts = [context],
-            UrlPatterns = urlPatterns
-        };
-
-        var result = await context.Session.NetworkModule.AddInterceptAsync(@params).ConfigureAwait(false);
+        var result = await context.Session.NetworkModule.AddInterceptAsync([InterceptPhase.BeforeRequestSent], new() { Contexts = [context], UrlPatterns = urlPatterns }).ConfigureAwait(false);
 
         var intercept = result.Intercept;
 
@@ -65,13 +49,7 @@ public static class Extensions
 
     public static async Task<InterceptBrowsingContext> AddInterceptOnResponseStartedAsync(this BrowsingContext context, Func<ResponseStartedEventArgs, Task> callback, IEnumerable<UrlPattern>? urlPatterns = default)
     {
-        var @params = new AddInterceptCommandParameters([InterceptPhase.ResponseStarted])
-        {
-            Contexts = [context],
-            UrlPatterns = urlPatterns
-        };
-
-        var result = await context.Session.NetworkModule.AddInterceptAsync(@params).ConfigureAwait(false);
+        var result = await context.Session.NetworkModule.AddInterceptAsync([InterceptPhase.ResponseStarted], new() { Contexts = [context], UrlPatterns = urlPatterns }).ConfigureAwait(false);
 
         var intercept = result.Intercept;
 
@@ -80,9 +58,9 @@ public static class Extensions
         return new(context.Session, intercept.Id, context);
     }
 
-    public static Task ContinueAsync(this RequestData requestData, string? method = default)
+    public static Task ContinueAsync(this RequestData requestData, RequestOptions? options = default)
     {
-        return requestData.Request.ContinueAsync(method);
+        return requestData.Request.ContinueAsync(options);
     }
 
     public static Task FailAsync(this RequestData requestData)
@@ -90,9 +68,9 @@ public static class Extensions
         return requestData.Request.FailAsync();
     }
 
-    public static Task ProvideResponseAsync(this RequestData requestData, BytesValue? body = default, IEnumerable<SetCookieHeader>? cookies = default, IEnumerable<Header>? headers = default, string? reasonPhrase = default, uint? statusCode = default)
+    public static Task ProvideResponseAsync(this RequestData requestData, ProvideResponseOptions? options = default)
     {
-        return requestData.Request.ProvideResponseAsync(body, cookies, headers, reasonPhrase, statusCode);
+        return requestData.Request.ProvideResponseAsync(options);
     }
 
     public class InterceptBrowsingContext : Intercept

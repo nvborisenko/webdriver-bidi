@@ -22,9 +22,7 @@ public class Intercept : IAsyncDisposable
 
     public async Task RemoveAsync()
     {
-        var @params = new RemoveInterceptCommandParameters(this);
-
-        await _session.NetworkModule.RemoveInterceptAsync(@params).ConfigureAwait(false);
+        await _session.NetworkModule.RemoveInterceptAsync(this).ConfigureAwait(false);
 
         foreach (var subscription in _onBeforeRequestSentSubscriptions)
         {

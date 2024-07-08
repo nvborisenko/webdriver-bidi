@@ -315,7 +315,7 @@ namespace OpenQA.Selenium.BiDi.Tests
 
             var tomorrow = DateTime.Now.AddDays(1);
 
-            var partitionKey = await context.SetCookieAsync("test", "value", "domain", new() { Expiry = tomorrow });
+            var partitionKey = await context.SetCookieAsync(new("test", "value", "domain") { Expiry = tomorrow });
 
             partitionKey.UserContext.Should().Be("default");
 
@@ -495,7 +495,7 @@ namespace OpenQA.Selenium.BiDi.Tests
 
             await using var intercept = await context.AddInterceptOnBeforeRequestSentAsync(async args =>
             {
-                await args.Request.ContinueAsync("POST");
+                await args.Request.ContinueAsync(new() { Method = "POST" });
             },
             ["https://**"]);
 
@@ -550,13 +550,13 @@ namespace OpenQA.Selenium.BiDi.Tests
 
             await using var intercept = await context.AddInterceptOnBeforeRequestSentAsync(async args =>
             {
-                await args.Request.ProvideResponseAsync(body: $"""
+                await args.Request.ProvideResponseAsync(new() { Body = $"""
                     <html>
                         <body>
                             <h1 id=\"id1\">Request to {args.Request.Url} has been hijacked!</h1>
                         </body>
                     </html>
-                    """);
+                    """ });
             });
 
             await context.NavigateAsync("https://selenium.dev");
@@ -569,7 +569,7 @@ namespace OpenQA.Selenium.BiDi.Tests
 
             await context.AddInterceptOnResponseStartedAsync(async args =>
             {
-                await args.Request.ProvideResponseAsync(statusCode: 200);
+                await args.Request.ProvideResponseAsync(new() { StatusCode = 200 });
             });
 
             await context.NavigateAsync("https://selenium.dev");
@@ -580,7 +580,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         {
             await session.AddInterceptOnBeforeRequestSentAsync(async args =>
             {
-                await args.Request.ContinueAsync("POST");
+                await args.Request.ContinueAsync(new() { Method = "POST" });
             });
 
             var context = await session.CreateBrowsingContextAsync();
@@ -711,7 +711,7 @@ namespace OpenQA.Selenium.BiDi.Tests
 
             concat.Should().Be("Hello, World");
 
-            NodeRemoteValue el = await context.CallFunctionAsync("() => document.querySelector('div')");
+            NodeRemoteValue el = await context.CallFunctionAsync("() => document.querySelector('div')", true);
             Console.WriteLine(el.Value.LocalName);
         }
     }

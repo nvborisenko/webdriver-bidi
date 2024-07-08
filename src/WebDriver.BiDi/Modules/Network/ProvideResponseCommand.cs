@@ -19,3 +19,16 @@ internal class ProvideResponseCommandParameters(Request request) : CommandParame
 
     public uint? StatusCode { get; set; }
 }
+
+public class ProvideResponseOptions
+{
+    public BytesValue? Body { get; set; }
+
+    public IEnumerable<SetCookieHeader>? Cookies { get; set; }
+
+    public IEnumerable<Header>? Headers { get; set; }
+
+    public string? ReasonPhrase { get; set; }
+
+    public uint? StatusCode { get; set; }
+}

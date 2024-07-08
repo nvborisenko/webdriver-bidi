@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using OpenQA.Selenium.BiDi.Communication;
 
@@ -6,33 +7,78 @@ namespace OpenQA.Selenium.BiDi.Modules.Network;
 
 internal sealed class NetworkModule(Broker broker) : Module(broker)
 {
-    public async Task<AddInterceptResult> AddInterceptAsync(AddInterceptCommandParameters @params)
+    public async Task<AddInterceptResult> AddInterceptAsync(IEnumerable<InterceptPhase> phases, InterceptOptions? options = default)
     {
+        var @params = new AddInterceptCommandParameters(phases);
+
+        if (options is not null)
+        {
+            @params.Contexts = options.Contexts;
+            @params.UrlPatterns = options.UrlPatterns;
+        }
+
         return await Broker.ExecuteCommandAsync<AddInterceptResult>(new AddInterceptCommand(@params)).ConfigureAwait(false);
     }
 
-    public async Task RemoveInterceptAsync(RemoveInterceptCommandParameters @params)
+    public async Task RemoveInterceptAsync(Intercept intercept)
     {
+        var @params = new RemoveInterceptCommandParameters(intercept);
+
         await Broker.ExecuteCommandAsync(new RemoveInterceptCommand(@params)).ConfigureAwait(!false);
     }
 
-    public async Task ContinueRequestAsync(ContinueRequestCommandParameters @params)
+    public async Task ContinueRequestAsync(Request request, RequestOptions? options = default)
     {
+        var @params = new ContinueRequestCommandParameters(request);
+
+        if (options is not null)
+        {
+            @params.Body = options.Body;
+            @params.Cookies = options.Cookies;
+            @params.Headers = options.Headers;
+            @params.Method = options.Method;
+            @params.Url = options.Url;
+        }
+
         await Broker.ExecuteCommandAsync(new ContinueRequestCommand(@params)).ConfigureAwait(false);
     }
 
-    public async Task ContinueResponseAsync(ContinueResponseCommandParameters @params)
+    public async Task ContinueResponseAsync(Request request, ContinueResponseOptions? options = default)
     {
+        var @params = new ContinueResponseCommandParameters(request);
+
+        if (options is not null)
+        {
+            @params.Cookies = options.Cookies;
+            @params.Credentials = options.Credentials;
+            @params.Headers = options.Headers;
+            @params.ReasonPhrase = options.ReasonPhrase;
+            @params.StatusCode = options.StatusCode;
+        }
+
         await Broker.ExecuteCommandAsync(new ContinueResponseCommand(@params)).ConfigureAwait(false);
     }
 
-    public async Task FailRequestAsync(FailRequestCommandParameters @params)
+    public async Task FailRequestAsync(Request request)
     {
+        var @params = new FailRequestCommandParameters(request);
+
         await Broker.ExecuteCommandAsync(new FailRequestCommand(@params)).ConfigureAwait(false);
     }
 
-    public async Task ProvideResponseAsync(ProvideResponseCommandParameters @params)
+    public async Task ProvideResponseAsync(Request request, ProvideResponseOptions? options = default)
     {
+        var @params = new ProvideResponseCommandParameters(request);
+
+        if (options is not null)
+        {
+            @params.Body = options.Body;
+            @params.Cookies = options.Cookies;
+            @params.Headers = options.Headers;
+            @params.ReasonPhrase = options.ReasonPhrase;
+            @params.StatusCode = options.StatusCode;
+        }
+
         await Broker.ExecuteCommandAsync(new ProvideResponseCommand(@params)).ConfigureAwait(false);
     }
 

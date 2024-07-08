@@ -15,11 +15,9 @@ public class PreloadScript : IAsyncDisposable
 
     public string Id { get; }
 
-    public async Task RemoveAsync()
+    public Task RemoveAsync()
     {
-        var @params = new RemovePreloadScriptCommandParameters(this);
-
-        await _session.ScriptModule.RemovePreloadScriptAsync(@params).ConfigureAwait(false);
+        return _session.ScriptModule.RemovePreloadScriptAsync(this);
     }
 
     public async ValueTask DisposeAsync()

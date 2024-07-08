@@ -19,3 +19,16 @@ internal class ContinueRequestCommandParameters(Request request) : CommandParame
 
     public string? Url { get; set; }
 }
+
+public class RequestOptions
+{
+    public BytesValue? Body { get; set; }
+
+    public IEnumerable<CookieHeader>? Cookies { get; set; }
+
+    public IEnumerable<Header>? Headers { get; set; }
+
+    public string? Method { get; set; }
+
+    public string? Url { get; set; }
+}

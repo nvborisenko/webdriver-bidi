@@ -13,7 +13,20 @@ internal class ContinueResponseCommandParameters(Request request) : CommandParam
 
     public IEnumerable<AuthCredentials>? Credentials { get; set; }
 
-    public IEnumerable<Header> Headers { get; set; }
+    public IEnumerable<Header>? Headers { get; set; }
+
+    public string? ReasonPhrase { get; set; }
+
+    public uint? StatusCode { get; set; }
+}
+
+public class ContinueResponseOptions
+{
+    public IEnumerable<SetCookieHeader>? Cookies { get; set; }
+
+    public IEnumerable<AuthCredentials>? Credentials { get; set; }
+
+    public IEnumerable<Header>? Headers { get; set; }
 
     public string? ReasonPhrase { get; set; }
 
