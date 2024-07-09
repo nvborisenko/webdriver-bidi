@@ -239,6 +239,19 @@ public class BrowsingContext
         return Session.NetworkModule.OnBeforeRequestSentAsync(callback, this);
     }
 
+    public async Task<Network.Intercept> OnBeforeRequestSentAsync(Network.InterceptOptions? options, Func<Network.BeforeRequestSentEventArgs, Task> callback)
+    {
+        options ??= new();
+
+        options.Contexts = [this];
+
+        var interceptResult = await Session.NetworkModule.AddInterceptAsync([Network.InterceptPhase.BeforeRequestSent], options).ConfigureAwait(false);
+
+        await interceptResult.Intercept.OnBeforeRequestSentAsync(this, callback).ConfigureAwait(false);
+
+        return interceptResult.Intercept;
+    }
+
     public Task<Subscription> OnBeforeRequestSentAsync(Action<Network.BeforeRequestSentEventArgs> callback)
     {
         return Session.NetworkModule.OnBeforeRequestSentAsync(callback, this);
@@ -247,6 +260,19 @@ public class BrowsingContext
     public Task<Subscription> OnResponseStartedAsync(Func<Network.ResponseStartedEventArgs, Task> callback)
     {
         return Session.NetworkModule.OnResponseStartedAsync(callback, this);
+    }
+
+    public async Task<Network.Intercept> OnResponseStartedAsync(Network.InterceptOptions? options, Func<Network.ResponseStartedEventArgs, Task> callback)
+    {
+        options ??= new();
+
+        options.Contexts = [this];
+
+        var interceptResult = await Session.NetworkModule.AddInterceptAsync([Network.InterceptPhase.ResponseStarted], options).ConfigureAwait(false);
+
+        await interceptResult.Intercept.OnResponseStartedAsync(this, callback).ConfigureAwait(false);
+
+        return interceptResult.Intercept;
     }
 
     public Task<Subscription> OnResponseStartedAsync(Action<Network.ResponseStartedEventArgs> callback)

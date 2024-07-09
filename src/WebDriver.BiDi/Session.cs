@@ -76,62 +76,80 @@ public class Session : IAsyncDisposable
         return result.Contexts;
     }
 
-    public Task OnBrowsingContextCreatedAsync(Action<Modules.BrowsingContext.BrowsingContextInfo> callback)
+    public Task<Subscription> OnBrowsingContextCreatedAsync(Action<Modules.BrowsingContext.BrowsingContextInfo> callback)
     {
         return BrowsingContextModule.OnContextCreatedAsync(callback);
     }
 
-    public Task OnBrowsingContextCreatedAsync(Func<Modules.BrowsingContext.BrowsingContextInfo, Task> callback)
+    public Task<Subscription> OnBrowsingContextCreatedAsync(Func<Modules.BrowsingContext.BrowsingContextInfo, Task> callback)
     {
         return BrowsingContextModule.OnContextCreatedAsync(callback);
     }
 
-    public Task OnBrowsingContextDestroyedAsync(Action<Modules.BrowsingContext.BrowsingContextInfo> callback)
+    public Task<Subscription> OnBrowsingContextDestroyedAsync(Action<Modules.BrowsingContext.BrowsingContextInfo> callback)
     {
         return BrowsingContextModule.OnContextDestroyedAsync(callback);
     }
 
-    public Task OnBrowsingContextDestroyedAsync(Func<Modules.BrowsingContext.BrowsingContextInfo, Task> callback)
+    public Task<Subscription> OnBrowsingContextDestroyedAsync(Func<Modules.BrowsingContext.BrowsingContextInfo, Task> callback)
     {
         return BrowsingContextModule.OnContextDestroyedAsync(callback);
     }
 
-    public Task OnBeforeRequestSentAsync(Func<Modules.Network.BeforeRequestSentEventArgs, Task> callback)
+    public Task<Subscription> OnBeforeRequestSentAsync(Func<Modules.Network.BeforeRequestSentEventArgs, Task> callback)
     {
         return NetworkModule.OnBeforeRequestSentAsync(callback);
     }
 
-    public Task OnBeforeRequestSentAsync(Action<Modules.Network.BeforeRequestSentEventArgs> callback)
+    public async Task<Modules.Network.Intercept> OnBeforeRequestSentAsync(Modules.Network.InterceptOptions? options, Func<Modules.Network.BeforeRequestSentEventArgs, Task> callback)
+    {
+        var interceptResult = await NetworkModule.AddInterceptAsync([Modules.Network.InterceptPhase.BeforeRequestSent], options).ConfigureAwait(false);
+
+        await interceptResult.Intercept.OnBeforeRequestSentAsync(callback).ConfigureAwait(false);
+
+        return interceptResult.Intercept;
+    }
+
+    public Task<Subscription> OnBeforeRequestSentAsync(Action<Modules.Network.BeforeRequestSentEventArgs> callback)
     {
         return NetworkModule.OnBeforeRequestSentAsync(callback);
     }
 
-    public Task OnResponseStartedAsync(Func<Modules.Network.ResponseStartedEventArgs, Task> callback)
+    public Task<Subscription> OnResponseStartedAsync(Func<Modules.Network.ResponseStartedEventArgs, Task> callback)
     {
         return NetworkModule.OnResponseStartedAsync(callback);
     }
 
-    public Task OnResponseStartedAsync(Action<Modules.Network.ResponseStartedEventArgs> callback)
+    public async Task<Modules.Network.Intercept> OnResponseStartedAsync(Modules.Network.InterceptOptions? options, Func<Modules.Network.ResponseStartedEventArgs, Task> callback)
+    {
+        var interceptResult = await NetworkModule.AddInterceptAsync([Modules.Network.InterceptPhase.ResponseStarted], options).ConfigureAwait(false);
+
+        await interceptResult.Intercept.OnResponseStartedAsync(callback).ConfigureAwait(false);
+
+        return interceptResult.Intercept;
+    }
+
+    public Task<Subscription> OnResponseStartedAsync(Action<Modules.Network.ResponseStartedEventArgs> callback)
     {
         return NetworkModule.OnResponseStartedAsync(callback);
     }
 
-    public Task OnUserPromptOpenedAsync(Func<Modules.BrowsingContext.UserPromptOpenedEventArgs, Task> callback)
+    public Task<Subscription> OnUserPromptOpenedAsync(Func<Modules.BrowsingContext.UserPromptOpenedEventArgs, Task> callback)
     {
         return BrowsingContextModule.OnUserPromptOpenedAsync(callback);
     }
 
-    public Task OnUserPromptOpenedAsync(Action<Modules.BrowsingContext.UserPromptOpenedEventArgs> callback)
+    public Task<Subscription> OnUserPromptOpenedAsync(Action<Modules.BrowsingContext.UserPromptOpenedEventArgs> callback)
     {
         return BrowsingContextModule.OnUserPromptOpenedAsync(callback);
     }
 
-    public Task OnUserPromptClosedAsync(Func<Modules.BrowsingContext.UserPromptClosedEventArgs, Task> callback)
+    public Task<Subscription> OnUserPromptClosedAsync(Func<Modules.BrowsingContext.UserPromptClosedEventArgs, Task> callback)
     {
         return BrowsingContextModule.OnUserPromptClosedAsync(callback);
     }
 
-    public Task OnUserPromptClosedAsync(Action<Modules.BrowsingContext.UserPromptClosedEventArgs> callback)
+    public Task<Subscription> OnUserPromptClosedAsync(Action<Modules.BrowsingContext.UserPromptClosedEventArgs> callback)
     {
         return BrowsingContextModule.OnUserPromptClosedAsync(callback);
     }

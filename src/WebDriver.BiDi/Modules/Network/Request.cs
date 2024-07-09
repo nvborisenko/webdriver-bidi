@@ -14,22 +14,22 @@ public class Request
 
     public string Id { get; private set; }
 
-    internal Task ContinueAsync(RequestOptions? options = default)
+    public Task ContinueAsync(RequestOptions? options = default)
     {
         return _session.NetworkModule.ContinueRequestAsync(this, options);
     }
 
-    internal Task FailAsync()
+    public Task FailAsync()
     {
         return _session.NetworkModule.FailRequestAsync(this);
     }
 
-    internal Task ProvideResponseAsync(ProvideResponseOptions? options = default)
+    public Task ProvideResponseAsync(ProvideResponseOptions? options = default)
     {
         return _session.NetworkModule.ProvideResponseAsync(this, options);
     }
 
-    internal Task ContinueResponseAsync(ContinueResponseOptions? options = default)
+    public Task ContinueResponseAsync(ContinueResponseOptions? options = default)
     {
         return _session.NetworkModule.ContinueResponseAsync(this, options);
     }

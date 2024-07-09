@@ -493,9 +493,9 @@ namespace OpenQA.Selenium.BiDi.Tests
         {
             var context = await session.CreateBrowsingContextAsync(BrowsingContextType.Tab);
 
-            await using var intercept = await context.AddInterceptOnBeforeRequestSentAsync(async args =>
+            await using var intercept = await context.OnBeforeRequestSentAsync(new(), async args =>
             {
-                await args.Request.ContinueAsync(new() { Method = "POST" });
+                await args.Request.Request.ContinueAsync(new() { Method = "POST" });
             });
 
             await context.NavigateAsync("https://selenium.dev");
@@ -506,9 +506,9 @@ namespace OpenQA.Selenium.BiDi.Tests
         {
             var context = await session.CreateBrowsingContextAsync(BrowsingContextType.Tab);
 
-            await using var intercept = await context.AddInterceptOnResponseStartedAsync(async args =>
+            await using var intercept = await context.OnResponseStartedAsync(new(), async args =>
             {
-                await args.Request.ContinueAsync();
+                await args.Request.Request.ContinueAsync();
             });
 
             await context.NavigateAsync("https://selenium.dev");
@@ -519,11 +519,10 @@ namespace OpenQA.Selenium.BiDi.Tests
         {
             var context = await session.CreateBrowsingContextAsync(BrowsingContextType.Tab);
 
-            await using var intercept = await context.AddInterceptOnBeforeRequestSentAsync(async args =>
+            await using var intercept = await context.OnBeforeRequestSentAsync(new() { UrlPatterns = ["https://**"] }, async args =>
             {
-                await args.Request.FailAsync();
-            },
-            new() { UrlPatterns = ["https://**"] });
+                await args.Request.Request.FailAsync();
+            });
 
             await context.NavigateAsync("https://selenium.dev");
         }
@@ -533,9 +532,9 @@ namespace OpenQA.Selenium.BiDi.Tests
         {
             var context = await session.CreateBrowsingContextAsync(BrowsingContextType.Tab);
 
-            await using var intercept = await context.AddInterceptOnBeforeRequestSentAsync(async args =>
+            await using var intercept = await context.OnBeforeRequestSentAsync(null, async args =>
             {
-                await args.Request.ProvideResponseAsync();
+                await args.Request.Request.ProvideResponseAsync();
             });
 
             await context.NavigateAsync("https://selenium.dev");
@@ -546,9 +545,9 @@ namespace OpenQA.Selenium.BiDi.Tests
         {
             var context = await session.CreateBrowsingContextAsync(BrowsingContextType.Tab);
 
-            await using var intercept = await context.AddInterceptOnBeforeRequestSentAsync(async args =>
+            await using var intercept = await context.OnBeforeRequestSentAsync(null, async args =>
             {
-                await args.Request.ProvideResponseAsync(new() { Body = $"""
+                await args.Request.Request.ProvideResponseAsync(new() { Body = $"""
                     <html>
                         <body>
                             <h1 id=\"id1\">Request to {args.Request.Url} has been hijacked!</h1>
@@ -565,9 +564,9 @@ namespace OpenQA.Selenium.BiDi.Tests
         {
             var context = await session.CreateBrowsingContextAsync(BrowsingContextType.Tab);
 
-            await context.AddInterceptOnResponseStartedAsync(async args =>
+            await context.OnResponseStartedAsync(new(), async args =>
             {
-                await args.Request.ProvideResponseAsync(new() { StatusCode = 200 });
+                await args.Request.Request.ProvideResponseAsync(new() { StatusCode = 200 });
             });
 
             await context.NavigateAsync("https://selenium.dev");
@@ -576,9 +575,9 @@ namespace OpenQA.Selenium.BiDi.Tests
         [Test]
         public async Task InterceptTestAll()
         {
-            await session.AddInterceptOnBeforeRequestSentAsync(async args =>
+            await session.OnBeforeRequestSentAsync(new InterceptOptions(), async args =>
             {
-                await args.Request.ContinueAsync(new() { Method = "POST" });
+                await args.Request.Request.ContinueAsync(new() { Method = "POST" });
             });
 
             var context = await session.CreateBrowsingContextAsync(BrowsingContextType.Tab);

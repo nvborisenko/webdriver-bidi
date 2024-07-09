@@ -18,7 +18,7 @@ public class Intercept : IAsyncDisposable
         Id = id;
     }
 
-    public string Id { get; private set; }
+    public string Id { get; }
 
     public async Task RemoveAsync()
     {
@@ -32,26 +32,44 @@ public class Intercept : IAsyncDisposable
 
     public virtual async Task OnBeforeRequestSentAsync(Func<BeforeRequestSentEventArgs, Task> callback)
     {
-        var subscription = await _session.NetworkModule.OnBeforeRequestSentAsync(async args =>
-        {
-            if (args.Intercepts?.Contains(this) is true && args.IsBlocked)
-            {
-                await callback(args).ConfigureAwait(false);
-            }
-        }).ConfigureAwait(false);
+        var subscription = await _session.OnBeforeRequestSentAsync(async args => await Filter(args, callback)).ConfigureAwait(false);
 
         _onBeforeRequestSentSubscriptions.Add(subscription);
     }
 
+    public virtual async Task OnBeforeRequestSentAsync(BrowsingContext.BrowsingContext context, Func<BeforeRequestSentEventArgs, Task> callback)
+    {
+        var subscription = await context.OnBeforeRequestSentAsync(async args => await Filter(args, callback)).ConfigureAwait(false);
+
+        _onBeforeRequestSentSubscriptions.Add(subscription);
+    }
+
+    public async Task Filter(BeforeRequestSentEventArgs args, Func<BeforeRequestSentEventArgs, Task> callback)
+    {
+        if (args.Intercepts?.Contains(this) is true && args.IsBlocked)
+        {
+            await callback(args).ConfigureAwait(false);
+        }
+    }
+
+    public async Task Filter(ResponseStartedEventArgs args, Func<ResponseStartedEventArgs, Task> callback)
+    {
+        if (args.Intercepts?.Contains(this) is true && args.IsBlocked)
+        {
+            await callback(args).ConfigureAwait(false);
+        }
+    }
+
     public virtual async Task OnResponseStartedAsync(Func<ResponseStartedEventArgs, Task> callback)
     {
-        var subscription = await _session.NetworkModule.OnResponseStartedAsync(async args =>
-        {
-            if (args.Intercepts?.Contains(this) is true && args.IsBlocked)
-            {
-                await callback(args).ConfigureAwait(false);
-            }
-        }).ConfigureAwait(false);
+        var subscription = await _session.OnResponseStartedAsync(async args => await Filter(args, callback)).ConfigureAwait(false);
+
+        _onResponseStartedSubscriptions.Add(subscription);
+    }
+
+    public virtual async Task OnResponseStartedAsync(BrowsingContext.BrowsingContext context, Func<ResponseStartedEventArgs, Task> callback)
+    {
+        var subscription = await context.OnResponseStartedAsync(async args => await Filter(args, callback)).ConfigureAwait(false);
 
         _onResponseStartedSubscriptions.Add(subscription);
     }
