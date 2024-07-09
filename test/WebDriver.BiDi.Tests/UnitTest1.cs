@@ -232,6 +232,33 @@ namespace OpenQA.Selenium.BiDi.Tests
         }
 
         [Test]
+        public async Task UnsubscribeTest()
+        {
+            string url1 = null;
+
+            var subscription1 = await session.OnBeforeRequestSentAsync(e =>
+            {
+                url1 = e.Request.Url;
+            });
+
+            string url2 = null;
+
+            var subscription2 = await session.OnBeforeRequestSentAsync(e =>
+            {
+                url2 = e.Request.Url;
+            });
+
+            await subscription2.UnsubscribeAsync();
+
+            var context = await session.CreateBrowsingContextAsync(BrowsingContextType.Tab);
+
+            await context.NavigateAsync("https://selenium.dev");
+
+            url1.Should().NotBeNull();
+            url2.Should().BeNull();
+        }
+
+        [Test]
         public async Task Navigate()
         {
             var context = await session.CreateBrowsingContextAsync(BrowsingContextType.Tab);
