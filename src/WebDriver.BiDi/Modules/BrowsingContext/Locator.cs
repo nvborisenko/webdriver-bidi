@@ -1,8 +1,10 @@
 ﻿using System.Text.Json.Serialization;
+using static OpenQA.Selenium.BiDi.Modules.BrowsingContext.AccessibilityLocator;
 
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
+[JsonDerivedType(typeof(AccessibilityLocator), "accessibility")]
 [JsonDerivedType(typeof(CssLocator), "css")]
 [JsonDerivedType(typeof(InnerTextLocator), "innerText")]
 [JsonDerivedType(typeof(XPathLocator), "xpath")]
@@ -16,6 +18,15 @@ public abstract record Locator
 
     public static XPathLocator XPath(string value)
         => new(value);
+}
+
+public record AccessibilityLocator(AccessibilityValue Value) : Locator
+{
+    public record AccessibilityValue
+    {
+        public string? Name { get; set; }
+        public string? Role { get; set; }
+    }
 }
 
 public record CssLocator(string Value) : Locator;
