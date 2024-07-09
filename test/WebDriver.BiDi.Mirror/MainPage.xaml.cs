@@ -31,11 +31,11 @@ namespace WebDriver.BiDi.Mirror
 
             using var driver = new ChromeDriver(options);
 
-            await using var session = await driver.AsBiDiSessionAsync();
+            await using var session = await driver.AsBidirectionalAsync();
 
             for (int i = 0; i < 5; i++)
             {
-                var context = await session.CreateBrowsingContextAsync();
+                var context = await session.CreateBrowsingContextAsync(OpenQA.Selenium.BiDi.Modules.BrowsingContext.BrowsingContextType.Tab);
 
                 CounterBtn.Text = "Started";
 
