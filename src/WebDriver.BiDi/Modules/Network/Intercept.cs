@@ -61,7 +61,7 @@ public class Intercept : IAsyncDisposable
         await RemoveAsync();
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (obj is Intercept interceptObj) return interceptObj.Id == Id;
 

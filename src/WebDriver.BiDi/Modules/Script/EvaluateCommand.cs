@@ -47,32 +47,27 @@ public class EvaluateResultSuccess(RemoteValue result) : EvaluateResult
     public static implicit operator NodeRemoteValue(EvaluateResultSuccess r) => r.Result as NodeRemoteValue;
     public static implicit operator string(EvaluateResultSuccess r)
     {
-        if (r.Result is StringRemoteValue stringValue)
+        return r.Result switch
         {
-            return stringValue.Value;
-        }
-
-        if (r.Result is NullRemoteValue)
-        {
-            return null;
-        }
-
-        throw new System.Exception($"Cannot convert {r.Result} to string");
+            StringRemoteValue stringValue => stringValue.Value,
+            NullRemoteValue => null,
+            _ => throw new System.Exception($"Cannot convert {r.Result} to string")
+        };
     }
 }
 
-public class EvaluateResultException : EvaluateResult
+public class EvaluateResultException(ExceptionDetails exceptionDetails) : EvaluateResult
 {
-    public ExceptionDetails ExceptionDetails { get; set; }
+    public ExceptionDetails ExceptionDetails { get; } = exceptionDetails;
 }
 
-public class ExceptionDetails
+public class ExceptionDetails(uint columnNumber, uint lineNumber, StackTrace stackTrace, string text)
 {
-    public uint ColumnNumber { get; set; }
+    public uint ColumnNumber { get; } = columnNumber;
 
-    public uint LineNumber { get; set; }
+    public uint LineNumber { get; } = lineNumber;
 
-    public StackTrace StackTrace { get; set; }
+    public StackTrace StackTrace { get; } = stackTrace;
 
-    public string Text { get; set; }
+    public string Text { get; } = text;
 }

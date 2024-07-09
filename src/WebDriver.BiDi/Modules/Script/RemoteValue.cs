@@ -43,9 +43,9 @@ public class NumberRemoteValue : PrimitiveProtocolRemoteValue
     public long Value { get; set; }
 }
 
-public class StringRemoteValue : PrimitiveProtocolRemoteValue
+public class StringRemoteValue(string value) : PrimitiveProtocolRemoteValue
 {
-    public string Value { get; set; }
+    public string Value { get; } = value;
 }
 
 public class NullRemoteValue : PrimitiveProtocolRemoteValue
@@ -90,18 +90,18 @@ public class FunctionRemoteValue : RemoteValue
     public InternalId? InternalId { get; set; }
 }
 
-public class RegExpRemoteValue : RemoteValue
+public class RegExpRemoteValue(RegExpValue value) : RemoteValue
 {
-    public RegExpValue Value { get; set; }
+    public RegExpValue Value { get; } = value;
 
     public Handle? Handle { get; set; }
 
     public InternalId? InternalId { get; set; }
 }
 
-public class DateRemoteValue : RemoteValue
+public class DateRemoteValue(string value) : RemoteValue
 {
-    public string Value { get; set; }
+    public string Value { get; } = value;
 
     public Handle? Handle { get; set; }
 
@@ -243,20 +243,18 @@ public class NodeProperties
     public NodeRemoteValue? ShadowRoot { get; internal set; }
 }
 
-public class WindowProxyRemoteValue : RemoteValue
+public class WindowProxyRemoteValue(WindowProxyProperties value) : RemoteValue
 {
+    public WindowProxyProperties Value { get; } = value;
 
     public Handle? Handle { get; set; }
 
     public InternalId? InternalId { get; set; }
-
-    [JsonInclude]
-    public WindowProxyProperties Value { get; internal set; }
 }
 
-public class WindowProxyProperties
+public class WindowProxyProperties(BrowsingContext.BrowsingContext context)
 {
-    public BrowsingContext.BrowsingContext Context { get; set; }
+    public BrowsingContext.BrowsingContext Context { get; } = context;
 }
 
 public enum Mode

@@ -18,7 +18,7 @@ internal class InternalIdConverter : JsonConverter<InternalId>
     {
         var id = reader.GetString();
 
-        return new InternalId(_session, id);
+        return new InternalId(_session, id!);
     }
 
     public override void Write(Utf8JsonWriter writer, InternalId value, JsonSerializerOptions options)

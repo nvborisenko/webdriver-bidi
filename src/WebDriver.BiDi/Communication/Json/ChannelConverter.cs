@@ -18,7 +18,7 @@ internal class ChannelConverter : JsonConverter<Channel>
     {
         var id = reader.GetString();
 
-        return new Channel(_session, id);
+        return new Channel(_session, id!);
     }
 
     public override void Write(Utf8JsonWriter writer, Channel value, JsonSerializerOptions options)

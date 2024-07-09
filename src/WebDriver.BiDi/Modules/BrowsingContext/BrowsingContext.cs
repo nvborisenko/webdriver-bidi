@@ -16,7 +16,7 @@ public class BrowsingContext
 
     internal string Id { get; }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (obj is BrowsingContext browsingContextObj) return browsingContextObj.Id == Id;
 
@@ -66,12 +66,12 @@ public class BrowsingContext
 
     public Task<Script.EvaluateResultSuccess> EvaluateAsync(string expression, bool awaitPromise, Script.EvaluateOptions? options = default)
     {
-        return Session.ScriptModule.EvaluateAsync(expression, awaitPromise, new Script.ContextTarget { Context = Id }, options);
+        return Session.ScriptModule.EvaluateAsync(expression, awaitPromise, new Script.ContextTarget(this), options);
     }
 
     public Task<Script.EvaluateResultSuccess> CallFunctionAsync(string functionDeclaration, bool awaitPromise, Script.CallFunctionOptions? options = default)
     {
-        return Session.ScriptModule.CallFunctionAsync(functionDeclaration, awaitPromise, new Script.ContextTarget { Context = Id }, options);
+        return Session.ScriptModule.CallFunctionAsync(functionDeclaration, awaitPromise, new Script.ContextTarget(this), options);
     }
 
     public Task CloseAsync(CloseOptions? options = default)

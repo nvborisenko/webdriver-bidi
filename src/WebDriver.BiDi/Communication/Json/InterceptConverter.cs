@@ -18,7 +18,7 @@ internal class InterceptConverter : JsonConverter<Intercept>
     {
         var id = reader.GetString();
 
-        return new Intercept(_session, id);
+        return new Intercept(_session, id!);
     }
 
     public override void Write(Utf8JsonWriter writer, Intercept value, JsonSerializerOptions options)

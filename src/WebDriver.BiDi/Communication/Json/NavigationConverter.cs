@@ -11,7 +11,7 @@ internal class NavigationConverter : JsonConverter<Navigation>
     {
         var id = reader.GetString();
 
-        return new Navigation(id);
+        return new Navigation(id!);
     }
 
     public override void Write(Utf8JsonWriter writer, Navigation value, JsonSerializerOptions options)

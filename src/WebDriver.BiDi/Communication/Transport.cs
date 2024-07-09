@@ -39,7 +39,7 @@ internal class Transport : IDisposable
         {
             result = await _webSocket.ReceiveAsync(_receiveBuffer, cancellationToken).ConfigureAwait(false);
 
-            ms.Write(_receiveBuffer.Array, _receiveBuffer.Offset, result.Count);
+            ms.Write(_receiveBuffer.Array!, _receiveBuffer.Offset, result.Count);
         } while (!result.EndOfMessage);
 
         ms.Seek(0, SeekOrigin.Begin);

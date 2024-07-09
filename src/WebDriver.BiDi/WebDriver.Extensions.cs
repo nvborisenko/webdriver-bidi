@@ -11,7 +11,7 @@ public static class WebDriverExtensions
 
         if (webSocketUrl is null) throw new System.Exception("The driver is not compatible with bidirectional protocol.");
 
-        var session = await Session.ConnectAsync(webSocketUrl.ToString()).ConfigureAwait(false);
+        var session = await Session.ConnectAsync(webSocketUrl.ToString()!).ConfigureAwait(false);
 
         return session;
     }

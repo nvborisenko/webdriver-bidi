@@ -14,8 +14,8 @@ namespace OpenQA.Selenium.BiDi.Modules.Script
 
     }
 
-    public class ContextTarget : Target
+    public class ContextTarget(BrowsingContext.BrowsingContext context) : Target
     {
-        public string Context { get; set; }
+        public BrowsingContext.BrowsingContext Context { get; } = context;
     }
 }

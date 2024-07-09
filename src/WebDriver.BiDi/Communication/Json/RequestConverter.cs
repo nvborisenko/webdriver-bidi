@@ -18,7 +18,7 @@ internal class RequestConverter : JsonConverter<Request>
     {
         var id = reader.GetString();
 
-        return new Request(_session, id);
+        return new Request(_session, id!);
     }
 
     public override void Write(Utf8JsonWriter writer, Request value, JsonSerializerOptions options)

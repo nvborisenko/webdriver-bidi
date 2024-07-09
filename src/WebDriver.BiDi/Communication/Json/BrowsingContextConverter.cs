@@ -18,7 +18,7 @@ internal class BrowsingContextConverter : JsonConverter<BrowsingContext>
     {
         var id = reader.GetString();
 
-        return new BrowsingContext(_session, id);
+        return new BrowsingContext(_session, id!);
     }
 
     public override void Write(Utf8JsonWriter writer, BrowsingContext value, JsonSerializerOptions options)

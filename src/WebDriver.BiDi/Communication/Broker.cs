@@ -17,10 +17,10 @@ internal class Broker : IAsyncDisposable
     private readonly Session _session;
     private readonly Transport _transport;
 
-    private readonly ConcurrentDictionary<int?, TaskCompletionSource<object>> _pendingCommands = new();
+    private readonly ConcurrentDictionary<int, TaskCompletionSource<object>> _pendingCommands = new();
     private readonly BlockingCollection<MessageEvent> _pendingEvents = [];
 
-    private CancellationTokenSource _receiveMessagesCancellationTokenSource;
+    
 
     private readonly ConcurrentDictionary<string, List<EventHandler>> _eventHandlers = new();
 
@@ -31,6 +31,7 @@ internal class Broker : IAsyncDisposable
     private readonly Task? _commandQueueTask;
     private Task? _receivingMessageTask;
     private Task? _eventEmitterTask;
+    private CancellationTokenSource? _receiveMessagesCancellationTokenSource;
 
     private readonly SourceGenerationContext _jsonSourceGenerationContext;
 
@@ -242,7 +243,7 @@ internal class Broker : IAsyncDisposable
     {
         _pendingEvents.CompleteAdding();
 
-        _receiveMessagesCancellationTokenSource.Cancel();
+        _receiveMessagesCancellationTokenSource?.Cancel();
 
         if (_eventEmitterTask is not null)
         {
