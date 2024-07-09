@@ -1,5 +1,4 @@
 ﻿using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Communication;
 
@@ -8,30 +7,15 @@ namespace OpenQA.Selenium.BiDi.Communication;
 //[JsonDerivedType(typeof(MessageSuccess), "success")]
 //[JsonDerivedType(typeof(MessageError), "error")]
 //[JsonDerivedType(typeof(MessageEvent), "event")]
-internal abstract class Message
+internal abstract record Message;
+
+internal record MessageSuccess(int Id, JsonElement Result) : Message;
+
+internal record MessageError(int Id) : Message
 {
-
-}
-
-internal class MessageSuccess(int id, JsonElement result) : Message
-{
-    public int Id { get; } = id;
-
-    public JsonElement Result { get; } = result;
-}
-
-internal class MessageError(int id) : Message
-{
-    public int Id { get; } = id;
-
     public string? Error { get; set; }
 
     public string? Message { get; set; }
 }
 
-internal class MessageEvent(string method, JsonElement @params) : Message
-{
-    public string Method { get; } = method;
-
-    public JsonElement Params { get; } = @params;
-}
+internal record MessageEvent(string Method, JsonElement Params) : Message;

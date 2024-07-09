@@ -1,14 +1,12 @@
 ﻿namespace OpenQA.Selenium.BiDi.Modules.Script;
 
-public class ChannelValue : LocalValue
+public record ChannelValue : LocalValue
 {
     public string Type => "channel";
 }
 
-public class ChannelProperties(Channel channel)
+public record ChannelProperties(Channel Channel)
 {
-    public Channel Channel { get; } = channel;
-
     public SerializationOptions? SerializationOptions { get; set; }
 
     public ResultOwnership? Ownership { get; set; }

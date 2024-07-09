@@ -1,11 +1,7 @@
 ﻿namespace OpenQA.Selenium.BiDi.Modules.Network;
 
-public class SetCookieHeader(string name, BytesValue value)
+public record SetCookieHeader(string Name, BytesValue Value)
 {
-    public string Name { get; } = name;
-
-    public BytesValue Value { get; } = value;
-
     public string? Domain { get; set; }
 
     public bool? HttpOnly { get; set; }

@@ -5,10 +5,8 @@ namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
 internal class PrintCommand(PrintCommandParameters @params) : Command<PrintCommandParameters>(@params);
 
-internal class PrintCommandParameters(BrowsingContext context) : CommandParameters
+internal record PrintCommandParameters(BrowsingContext Context) : CommandParameters
 {
-    public BrowsingContext Context { get; } = context;
-
     public bool? Background { get; set; }
 
     public Margin? Margin { get; set; }
@@ -25,7 +23,7 @@ internal class PrintCommandParameters(BrowsingContext context) : CommandParamete
     public bool? ShrinkToFit { get; set; }
 }
 
-public class PrintOptions : CommandOptions
+public record PrintOptions : CommandOptions
 {
     public bool? Background { get; set; }
 
@@ -67,7 +65,4 @@ public struct Page
     public double? Width { get; set; }
 }
 
-internal class PrintResult(string data)
-{
-    public string Data { get; } = data;
-}
+internal record PrintResult(string Data);

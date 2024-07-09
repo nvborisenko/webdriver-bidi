@@ -5,20 +5,7 @@ namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
 internal class LocateNodesCommand(LocateNodesCommandParameters @params) : Command<LocateNodesCommandParameters>(@params);
 
-internal class LocateNodesCommandParameters(BrowsingContext context, Locator locator) : CommandParameters
-{
-    public BrowsingContext Context { get; } = context;
-
-    public Locator Locator { get; } = locator;
-
-    public uint? MaxNodeCount { get; set; }
-
-    public Script.SerializationOptions? SerializationOptions { get; set; }
-
-    public IEnumerable<Script.SharedReference>? StartNodes { get; set; }
-}
-
-public class NodesOptions : CommandOptions
+internal record LocateNodesCommandParameters(BrowsingContext Context, Locator Locator) : CommandParameters
 {
     public uint? MaxNodeCount { get; set; }
 
@@ -27,7 +14,13 @@ public class NodesOptions : CommandOptions
     public IEnumerable<Script.SharedReference>? StartNodes { get; set; }
 }
 
-public class LocateNodesResult(IReadOnlyList<Script.NodeRemoteValue> nodes)
+public record NodesOptions : CommandOptions
 {
-    public IReadOnlyList<Script.NodeRemoteValue> Nodes { get; } = nodes;
+    public uint? MaxNodeCount { get; set; }
+
+    public Script.SerializationOptions? SerializationOptions { get; set; }
+
+    public IEnumerable<Script.SharedReference>? StartNodes { get; set; }
 }
+
+public record LocateNodesResult(IReadOnlyList<Script.NodeRemoteValue> Nodes);

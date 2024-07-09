@@ -2,11 +2,9 @@
 
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
-public class UserPromptClosedEventArgs(BrowsingContext context, bool accepted) 
-    : BrowsingContextEventArgs(context)
+public record UserPromptClosedEventArgs(BrowsingContext Context, bool Accepted)
+    : BrowsingContextEventArgs(Context)
 {
-    public bool Accepted { get; } = accepted;
-
     [JsonInclude]
     public string? UserText { get; internal set; }
 }

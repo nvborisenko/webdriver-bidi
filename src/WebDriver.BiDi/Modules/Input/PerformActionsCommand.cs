@@ -7,21 +7,19 @@ namespace OpenQA.Selenium.BiDi.Modules.Input;
 
 internal class PerformActionsCommand(PerformActionsCommandParameters @params) : Command<PerformActionsCommandParameters>(@params);
 
-internal class PerformActionsCommandParameters(BrowsingContext.BrowsingContext context) : CommandParameters
+internal record PerformActionsCommandParameters(BrowsingContext.BrowsingContext Context) : CommandParameters
 {
-    public BrowsingContext.BrowsingContext Context { get; } = context;
-
     public IEnumerable<SourceActions>? Actions { get; set; }
 }
 
-public class PerformActionsOptions : CommandOptions
+public record PerformActionsOptions : CommandOptions
 {
     public IEnumerable<SourceActions>? Actions { get; set; } = [];
 }
 
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
 [JsonDerivedType(typeof(KeySourceActions), "key")]
-public abstract class SourceActions
+public abstract record SourceActions
 {
     public static KeySourceActions Press(string text)
     {
@@ -39,7 +37,7 @@ public abstract class SourceActions
     }
 }
 
-public class KeySourceActions : SourceActions
+public record KeySourceActions : SourceActions
 {
     public string Id { get; set; } = Guid.NewGuid().ToString();
 
@@ -64,19 +62,13 @@ public class KeySourceActions : SourceActions
 [JsonDerivedType(typeof(KeyPauseAction), "pause")]
 [JsonDerivedType(typeof(KeyDownAction), "keyDown")]
 [JsonDerivedType(typeof(KeyUpAction), "keyUp")]
-public abstract class KeySourceAction;
+public abstract record KeySourceAction;
 
-public class KeyPauseAction : KeySourceAction
+public record KeyPauseAction : KeySourceAction
 {
     public uint? Duration { get; set; }
 }
 
-public class KeyDownAction(string value) : KeySourceAction
-{
-    public string Value { get; } = value;
-}
+public record KeyDownAction(string Value) : KeySourceAction;
 
-public class KeyUpAction(string value) : KeySourceAction
-{
-    public string Value { get; } = value;
-}
+public record KeyUpAction(string Value) : KeySourceAction;

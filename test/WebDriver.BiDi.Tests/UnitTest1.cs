@@ -221,14 +221,11 @@ namespace OpenQA.Selenium.BiDi.Tests
         [Test]
         public async Task SubscribeTest()
         {
-            await session.OnBeforeRequestSentAsync(e =>
-            {
-                Console.WriteLine(e.Request.Url);
-            });
+            await session.OnBeforeRequestSentAsync(Console.WriteLine);
 
             var context = await session.CreateBrowsingContextAsync(BrowsingContextType.Tab);
 
-            await context.NavigateAsync("https://selenium.dev");
+            await context.NavigateAsync("https://selenium.dev", new() { Wait = ReadinessState.Complete });
         }
 
         [Test]
@@ -649,13 +646,7 @@ namespace OpenQA.Selenium.BiDi.Tests
 
             foreach (var node in nodes)
             {
-                Console.WriteLine(node.SharedId);
-                Console.WriteLine($"Namespace: {node.Value.NamespaceUri}");
-
-                foreach (var attr in node.Value.Attributes)
-                {
-                    Console.WriteLine($"{attr.Key}: {attr.Value}");
-                }
+                Console.WriteLine(node);
             }
         }
 

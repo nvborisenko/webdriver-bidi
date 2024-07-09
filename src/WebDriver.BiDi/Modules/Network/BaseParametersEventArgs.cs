@@ -4,19 +4,9 @@ using System;
 
 namespace OpenQA.Selenium.BiDi.Modules.Network;
 
-public abstract class BaseParametersEventArgs(BrowsingContext.BrowsingContext context, bool isBlocked, BrowsingContext.Navigation navigation, uint redirectCount, RequestData request, DateTime timestamp)
-    : BrowsingContextEventArgs(context)
+public abstract record BaseParametersEventArgs(BrowsingContext.BrowsingContext Context, bool IsBlocked, BrowsingContext.Navigation Navigation, uint RedirectCount, RequestData Request, DateTime Timestamp)
+    : BrowsingContextEventArgs(Context)
 {
-    public bool IsBlocked { get; } = isBlocked;
-
-    public BrowsingContext.Navigation Navigation { get; } = navigation;
-
-    public uint RedirectCount { get; } = redirectCount;
-
-    public RequestData Request { get; } = request;
-
-    public DateTime Timestamp { get; } = timestamp;
-
     [JsonInclude]
     public IReadOnlyList<Intercept>? Intercepts { get; internal set; }
 }

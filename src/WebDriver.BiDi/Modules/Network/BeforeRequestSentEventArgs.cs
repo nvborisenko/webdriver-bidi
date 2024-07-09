@@ -1,22 +1,7 @@
 ﻿using OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 using System;
-using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Modules.Network;
 
-public class BeforeRequestSentEventArgs : BaseParametersEventArgs
-{
-    [JsonConstructor]
-    internal BeforeRequestSentEventArgs(BrowsingContext.BrowsingContext context, bool isBlocked, Navigation navigation, uint redirectCount, RequestData request, DateTime timestamp, Initiator initiator)
-        : base(context, isBlocked, navigation, redirectCount, request, timestamp)
-    {
-        Initiator = initiator;
-    }
-
-    public Initiator Initiator { get; }
-
-    public override string ToString()
-    {
-        return $"{Request.Method} {Request.Url}";
-    }
-}
+public record BeforeRequestSentEventArgs(BrowsingContext.BrowsingContext Context, bool IsBlocked, Navigation Navigation, uint RedirectCount, RequestData Request, DateTime Timestamp, Initiator Initiator)
+    : BaseParametersEventArgs(Context, IsBlocked, Navigation, RedirectCount, Request, Timestamp);

@@ -5,10 +5,8 @@ namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
 internal class CaptureScreenshotCommand(CaptureScreenshotCommandParameters @params) : Command<CaptureScreenshotCommandParameters>(@params);
 
-internal class CaptureScreenshotCommandParameters(BrowsingContext context) : CommandParameters
+internal record CaptureScreenshotCommandParameters(BrowsingContext Context) : CommandParameters
 {
-    public BrowsingContext Context { get; } = context;
-
     public Origin? Origin { get; set; }
 
     public ImageFormat? Format { get; set; }
@@ -16,7 +14,7 @@ internal class CaptureScreenshotCommandParameters(BrowsingContext context) : Com
     public ClipRectangle? Clip { get; set; }
 }
 
-public class CaptureScreenshotOptions : CommandOptions
+public record CaptureScreenshotOptions : CommandOptions
 {
     public Origin? Origin { get; set; }
 
@@ -31,43 +29,22 @@ public enum Origin
     Document
 }
 
-public class ImageFormat(string type)
+public record struct ImageFormat(string Type)
 {
-    public string Type { get; set; } = type;
-
     public double? Quality { get; set; }
 }
 
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
 [JsonDerivedType(typeof(BoxClipRectangle), "box")]
 [JsonDerivedType(typeof(ElementClipRectangle), "element")]
-public abstract class ClipRectangle
+public abstract record ClipRectangle;
+
+public record BoxClipRectangle(double X, double Y, double Width, double Height) : ClipRectangle;
+
+public record ElementClipRectangle(Script.SharedReference Element) : ClipRectangle;
+
+public record CaptureScreenshotResult(string Data)
 {
-
-}
-
-public class BoxClipRectangle(double x, double y, double width, double height)
-    : ClipRectangle
-{
-    public double X { get; } = x;
-
-    public double Y { get; } = y;
-
-    public double Width { get; } = width;
-
-    public double Height { get; } = height;
-}
-
-public class ElementClipRectangle(Script.SharedReference element)
-    : ClipRectangle
-{
-    public Script.SharedReference Element { get; } = element;
-}
-
-public class CaptureScreenshotResult(string data)
-{
-    public string Data { get; } = data;
-
     public byte[] AsBytes()
     {
         return System.Convert.FromBase64String(Data);

@@ -4,9 +4,6 @@ namespace OpenQA.Selenium.BiDi.Modules.Script;
 
 internal class RemovePreloadScriptCommand(RemovePreloadScriptCommandParameters @params) : Command<RemovePreloadScriptCommandParameters>(@params);
 
-internal class RemovePreloadScriptCommandParameters(PreloadScript script) : CommandParameters
-{
-    public PreloadScript Script { get; } = script;
-}
+internal record RemovePreloadScriptCommandParameters(PreloadScript Script) : CommandParameters;
 
-public class RemovePreloadScriptOptions : CommandOptions;
+public record RemovePreloadScriptOptions : CommandOptions;

@@ -7,26 +7,21 @@ namespace OpenQA.Selenium.BiDi.Modules.Storage;
 
 internal class GetCookiesCommand(GetCookiesCommandParameters @params) : Command<GetCookiesCommandParameters>(@params);
 
-internal class GetCookiesCommandParameters : CommandParameters
+internal record GetCookiesCommandParameters : CommandParameters
 {
     public CookieFilter? Filter { get; set; }
 
     public PartitionDescriptor? Partition { get; set; }
 }
 
-public class GetCookiesOptions : CommandOptions
+public record GetCookiesOptions : CommandOptions
 {
     public CookieFilter? Filter { get; set; }
 
     public PartitionDescriptor? Partition { get; set; }
 }
 
-public class GetCookiesResult(IReadOnlyList<Network.Cookie> cookies, PartitionKey partitionKey)
-{
-    public IReadOnlyList<Network.Cookie> Cookies { get; } = cookies;
-
-    public PartitionKey PartitionKey { get; } = partitionKey;
-}
+public record GetCookiesResult(IReadOnlyList<Network.Cookie> Cookies, PartitionKey PartitionKey);
 
 public class CookieFilter
 {
@@ -52,17 +47,11 @@ public class CookieFilter
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
 [JsonDerivedType(typeof(BrowsingContextPartitionDescriptor), "context")]
 [JsonDerivedType(typeof(StorageKeyPartitionDescriptor), "storageKey")]
-public abstract class PartitionDescriptor
-{
+public abstract record PartitionDescriptor;
 
-}
+public record BrowsingContextPartitionDescriptor(BrowsingContext.BrowsingContext Context) : PartitionDescriptor;
 
-public class BrowsingContextPartitionDescriptor(BrowsingContext.BrowsingContext context) : PartitionDescriptor
-{
-    public BrowsingContext.BrowsingContext Context { get; } = context;
-}
-
-public class StorageKeyPartitionDescriptor : PartitionDescriptor
+public record StorageKeyPartitionDescriptor : PartitionDescriptor
 {
     public string? UserContext { get; set; }
 

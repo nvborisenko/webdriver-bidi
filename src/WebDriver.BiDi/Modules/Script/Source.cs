@@ -1,8 +1,6 @@
 ﻿namespace OpenQA.Selenium.BiDi.Modules.Script;
 
-public class Source(Realm realm)
+public record Source(Realm Realm)
 {
-    public Realm Realm { get; } = realm;
-
     public BrowsingContext.BrowsingContext? Context { get; set; }
 }

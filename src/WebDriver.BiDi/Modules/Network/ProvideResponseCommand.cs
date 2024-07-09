@@ -5,10 +5,8 @@ namespace OpenQA.Selenium.BiDi.Modules.Network;
 
 internal class ProvideResponseCommand(ProvideResponseCommandParameters @params) : Command<ProvideResponseCommandParameters>(@params);
 
-internal class ProvideResponseCommandParameters(Request request) : CommandParameters
+internal record ProvideResponseCommandParameters(Request Request) : CommandParameters
 {
-    public Request Request { get; } = request;
-
     public BytesValue? Body { get; set; }
 
     public IEnumerable<SetCookieHeader>? Cookies { get; set; }
@@ -20,7 +18,7 @@ internal class ProvideResponseCommandParameters(Request request) : CommandParame
     public uint? StatusCode { get; set; }
 }
 
-public class ProvideResponseOptions : CommandOptions
+public record ProvideResponseOptions : CommandOptions
 {
     public BytesValue? Body { get; set; }
 

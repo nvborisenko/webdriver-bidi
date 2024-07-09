@@ -1,18 +1,11 @@
 ﻿using OpenQA.Selenium.BiDi.Communication;
-using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Modules.Script;
 
 internal class EvaluateCommand(EvaluateCommandParameters @params) : Command<EvaluateCommandParameters>(@params);
 
-internal class EvaluateCommandParameters(string expression, Target target, bool awaitPromise) : CommandParameters
+internal record EvaluateCommandParameters(string Expression, Target Target, bool AwaitPromise) : CommandParameters
 {
-    public string Expression { get; } = expression;
-
-    public Target Target { get; } = target;
-
-    public bool AwaitPromise { get; set; } = awaitPromise;
-
     public ResultOwnership? ResultOwnership { get; set; }
 
     public SerializationOptions? SerializationOptions { get; set; }
@@ -20,7 +13,7 @@ internal class EvaluateCommandParameters(string expression, Target target, bool 
     public bool? UserActivation { get; set; }
 }
 
-public class EvaluateOptions : CommandOptions
+public record EvaluateOptions : CommandOptions
 {
     public ResultOwnership? ResultOwnership { get; set; }
 
@@ -33,15 +26,10 @@ public class EvaluateOptions : CommandOptions
 //[JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
 //[JsonDerivedType(typeof(EvaluateResultSuccess), "success")]
 //[JsonDerivedType(typeof(EvaluateResultException), "exception")]
-public abstract class EvaluateResult
+public abstract record EvaluateResult;
+
+public record EvaluateResultSuccess(RemoteValue Result) : EvaluateResult
 {
-
-}
-
-public class EvaluateResultSuccess(RemoteValue result) : EvaluateResult
-{
-    public RemoteValue Result { get; } = result;
-
     public static implicit operator int(EvaluateResultSuccess r) => (int)((NumberRemoteValue)r.Result).Value;
     public static implicit operator long(EvaluateResultSuccess r) => ((NumberRemoteValue)r.Result).Value;
     public static implicit operator NodeRemoteValue(EvaluateResultSuccess r) => (NodeRemoteValue)r.Result;
@@ -56,18 +44,6 @@ public class EvaluateResultSuccess(RemoteValue result) : EvaluateResult
     }
 }
 
-public class EvaluateResultException(ExceptionDetails exceptionDetails) : EvaluateResult
-{
-    public ExceptionDetails ExceptionDetails { get; } = exceptionDetails;
-}
+public record EvaluateResultException(ExceptionDetails ExceptionDetails) : EvaluateResult;
 
-public class ExceptionDetails(uint columnNumber, uint lineNumber, StackTrace stackTrace, string text)
-{
-    public uint ColumnNumber { get; } = columnNumber;
-
-    public uint LineNumber { get; } = lineNumber;
-
-    public StackTrace StackTrace { get; } = stackTrace;
-
-    public string Text { get; } = text;
-}
+public record ExceptionDetails(uint ColumnNumber, uint LineNumber, StackTrace StackTrace, string Text);

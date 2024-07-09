@@ -8,21 +8,13 @@ namespace OpenQA.Selenium.BiDi.Modules.Session;
 [JsonDerivedType(typeof(ManualProxyConfiguration), "manual")]
 [JsonDerivedType(typeof(PacProxyConfiguration), "pac")]
 [JsonDerivedType(typeof(SystemProxyConfiguration), "system")]
-public abstract class ProxyConfiguration
-{
-}
+public abstract record ProxyConfiguration;
 
-public class AutodetectProxyConfiguration : ProxyConfiguration
-{
+public record AutodetectProxyConfiguration : ProxyConfiguration;
 
-}
+public record DirectProxyConfiguration : ProxyConfiguration;
 
-public class DirectProxyConfiguration : ProxyConfiguration
-{
-
-}
-
-public class ManualProxyConfiguration : ProxyConfiguration
+public record ManualProxyConfiguration : ProxyConfiguration
 {
     public string? FtpProxy { get; set; }
 
@@ -35,12 +27,6 @@ public class ManualProxyConfiguration : ProxyConfiguration
     public uint? SocksVersion { get; set; }
 }
 
-public class PacProxyConfiguration(string proxyAutoconfigUrl) : ProxyConfiguration
-{
-    public string PproxyAutoconfigUrl { get; } = proxyAutoconfigUrl;
-}
+public record PacProxyConfiguration(string ProxyAutoconfigUrl) : ProxyConfiguration;
 
-public class SystemProxyConfiguration : ProxyConfiguration
-{
-
-}
+public record SystemProxyConfiguration : ProxyConfiguration;

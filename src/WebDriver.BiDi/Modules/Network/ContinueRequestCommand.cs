@@ -5,10 +5,8 @@ namespace OpenQA.Selenium.BiDi.Modules.Network;
 
 internal class ContinueRequestCommand(ContinueRequestCommandParameters @params) : Command<ContinueRequestCommandParameters>(@params);
 
-internal class ContinueRequestCommandParameters(Request request) : CommandParameters
+internal record ContinueRequestCommandParameters(Request Request) : CommandParameters
 {
-    public Request Request { get; } = request;
-
     public BytesValue? Body { get; set; }
 
     public IEnumerable<CookieHeader>? Cookies { get; set; }
@@ -20,7 +18,7 @@ internal class ContinueRequestCommandParameters(Request request) : CommandParame
     public string? Url { get; set; }
 }
 
-public class RequestOptions : CommandOptions
+public record RequestOptions : CommandOptions
 {
     public BytesValue? Body { get; set; }
 

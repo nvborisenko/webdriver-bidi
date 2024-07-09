@@ -5,14 +5,12 @@ namespace OpenQA.Selenium.BiDi.Modules.Session;
 
 internal class SubscribeCommand(SubscribeCommandParameters @params) : Command<SubscribeCommandParameters>(@params);
 
-internal class SubscribeCommandParameters(IEnumerable<string> events) : CommandParameters
+internal record SubscribeCommandParameters(IEnumerable<string> Events) : CommandParameters
 {
-    public IEnumerable<string> Events { get; } = events;
-
     public IEnumerable<BrowsingContext.BrowsingContext>? Contexts { get; set; }
 }
 
-public class SubscribeOptions : CommandOptions
+public record SubscribeOptions : CommandOptions
 {
     public IEnumerable<BrowsingContext.BrowsingContext>? Contexts { get; set; }
 }

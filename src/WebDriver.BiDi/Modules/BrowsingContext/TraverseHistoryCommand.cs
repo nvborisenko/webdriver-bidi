@@ -4,16 +4,8 @@ namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
 internal class TraverseHistoryCommand(TraverseHistoryCommandParameters @params) : Command<TraverseHistoryCommandParameters>(@params);
 
-internal class TraverseHistoryCommandParameters(BrowsingContext context, int delta) : CommandParameters
-{
-    public BrowsingContext Context { get; } = context;
+internal record TraverseHistoryCommandParameters(BrowsingContext Context, int Delta) : CommandParameters;
 
-    public int Delta { get; } = delta;
-}
+public record TraverseHistoryOptions : CommandOptions;
 
-public class TraverseHistoryOptions : CommandOptions;
-
-public class TraverseHistoryResult
-{
-
-}
+public record TraverseHistoryResult;

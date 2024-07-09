@@ -2,12 +2,9 @@
 
 namespace OpenQA.Selenium.BiDi;
 
-public abstract class EventArgs : System.EventArgs
+public abstract record EventArgs
 {
     public Session Session { get; internal set; }
 }
 
-public abstract class BrowsingContextEventArgs(BrowsingContext context) : EventArgs
-{
-    public BrowsingContext Context { get; } = context;
-}
+public abstract record BrowsingContextEventArgs(BrowsingContext Context) : EventArgs;

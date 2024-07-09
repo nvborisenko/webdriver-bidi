@@ -4,9 +4,6 @@ namespace OpenQA.Selenium.BiDi.Modules.Input;
 
 internal class ReleaseActionsCommand(ReleaseActionsCommandParameters @params) : Command<ReleaseActionsCommandParameters>(@params);
 
-internal class ReleaseActionsCommandParameters(BrowsingContext.BrowsingContext context) : CommandParameters
-{
-    public BrowsingContext.BrowsingContext Context { get; } = context;
-}
+internal record ReleaseActionsCommandParameters(BrowsingContext.BrowsingContext Context) : CommandParameters;
 
-public class ReleaseActionsOptions : CommandOptions;
+public record ReleaseActionsOptions : CommandOptions;

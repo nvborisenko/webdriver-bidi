@@ -5,21 +5,18 @@ namespace OpenQA.Selenium.BiDi.Modules.Script;
 
 internal class GetRealmsCommand(GetRealmsCommandParameters @params) : Command<GetRealmsCommandParameters>(@params);
 
-internal class GetRealmsCommandParameters : CommandParameters
+internal record GetRealmsCommandParameters : CommandParameters
 {
     public BrowsingContext.BrowsingContext? Context { get; set; }
 
     public RealmType? Type { get; set; }
 }
 
-public class GetRealmsOptions : CommandOptions
+public record GetRealmsOptions : CommandOptions
 {
     public BrowsingContext.BrowsingContext? Context { get; set; }
 
     public RealmType? Type { get; set; }
 }
 
-internal class GetRealmsResult(IReadOnlyList<RealmInfo> realms)
-{
-    public IReadOnlyList<RealmInfo> Realms { get; } = realms;
-}
+internal record GetRealmsResult(IReadOnlyList<RealmInfo> Realms);

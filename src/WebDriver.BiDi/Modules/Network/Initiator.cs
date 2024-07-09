@@ -1,9 +1,7 @@
 ﻿namespace OpenQA.Selenium.BiDi.Modules.Network;
 
-public class Initiator(InitiatorType type)
+public record Initiator(InitiatorType Type)
 {
-    public InitiatorType Type { get; } = type;
-
     public uint? ColumnNumber { get; set; }
 
     public uint? LineNumber { get; set; }

@@ -6,7 +6,7 @@ namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 [JsonDerivedType(typeof(CssLocator), "css")]
 [JsonDerivedType(typeof(InnerTextLocator), "innerText")]
 [JsonDerivedType(typeof(XPathLocator), "xpath")]
-public abstract class Locator
+public abstract record Locator
 {
     public static CssLocator Css(string value)
         => new(value);
@@ -18,15 +18,10 @@ public abstract class Locator
         => new(value);
 }
 
-public class CssLocator(string value) : Locator
-{
-    public string Value { get; } = value;
-}
+public record CssLocator(string Value) : Locator;
 
-public class InnerTextLocator(string value) : Locator
+public record InnerTextLocator(string Value) : Locator
 {
-    public string Value { get; } = value;
-
     public bool? IgnoreCase { get; set; }
 
     public MatchType? MatchType { get; set; }
@@ -40,7 +35,4 @@ public enum MatchType
     Partial
 }
 
-public class XPathLocator(string value) : Locator
-{
-    public string Value { get; } = value;
-}
+public record XPathLocator(string Value) : Locator;

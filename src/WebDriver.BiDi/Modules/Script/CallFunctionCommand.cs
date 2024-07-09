@@ -5,14 +5,8 @@ namespace OpenQA.Selenium.BiDi.Modules.Script;
 
 internal class CallFunctionCommand(CallFunctionCommandParameters @params) : Command<CallFunctionCommandParameters>(@params);
 
-internal class CallFunctionCommandParameters(string functionDeclaration, bool awaitPromise, Target target) : CommandParameters
+internal record CallFunctionCommandParameters(string FunctionDeclaration, bool AwaitPromise, Target Target) : CommandParameters
 {
-    public string FunctionDeclaration { get; } = functionDeclaration;
-
-    public bool AwaitPromise { get; } = awaitPromise;
-
-    public Target Target { get; } = target;
-
     public IEnumerable<LocalValue>? Arguments { get; set; }
 
     public ResultOwnership? ResultOwnership { get; set; }
@@ -24,7 +18,7 @@ internal class CallFunctionCommandParameters(string functionDeclaration, bool aw
     public bool? UserActivation { get; set; }
 }
 
-public class CallFunctionOptions : CommandOptions
+public record CallFunctionOptions : CommandOptions
 {
     public IEnumerable<LocalValue>? Arguments { get; set; }
 

@@ -5,10 +5,8 @@ namespace OpenQA.Selenium.BiDi.Modules.Network;
 
 internal class ContinueResponseCommand(ContinueResponseCommandParameters @params) : Command<ContinueResponseCommandParameters>(@params);
 
-internal class ContinueResponseCommandParameters(Request request) : CommandParameters
+internal record ContinueResponseCommandParameters(Request Request) : CommandParameters
 {
-    public Request Request { get; } = request;
-
     public IEnumerable<SetCookieHeader>? Cookies { get; set; }
 
     public IEnumerable<AuthCredentials>? Credentials { get; set; }
@@ -20,7 +18,7 @@ internal class ContinueResponseCommandParameters(Request request) : CommandParam
     public uint? StatusCode { get; set; }
 }
 
-public class ContinueResponseOptions : CommandOptions
+public record ContinueResponseOptions : CommandOptions
 {
     public IEnumerable<SetCookieHeader>? Cookies { get; set; }
 

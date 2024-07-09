@@ -4,4 +4,4 @@ namespace OpenQA.Selenium.BiDi.Modules.Session;
 
 internal class EndCommand() : Command<CommandParameters>(CommandParameters.Empty);
 
-public class EndOptions : CommandOptions;
+public record EndOptions : CommandOptions;

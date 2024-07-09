@@ -4,9 +4,6 @@ namespace OpenQA.Selenium.BiDi.Modules.Network;
 
 internal class FailRequestCommand(FailRequestCommandParameters @params) : Command<FailRequestCommandParameters>(@params);
 
-internal class FailRequestCommandParameters(Request request) : CommandParameters
-{
-    public Request Request { get; } = request;
-}
+internal record FailRequestCommandParameters(Request Request) : CommandParameters;
 
-public class FailRequestOptions : CommandOptions;
+public record FailRequestOptions : CommandOptions;

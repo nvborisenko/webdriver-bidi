@@ -28,44 +28,26 @@ namespace OpenQA.Selenium.BiDi.Modules.Script;
 //[JsonDerivedType(typeof(HtmlCollectionRemoteValue), "htmlcollection")]
 //[JsonDerivedType(typeof(NodeRemoteValue), "node")]
 //[JsonDerivedType(typeof(WindowProxyRemoteValue), "window")]
-public abstract class RemoteValue
-{
+public abstract record RemoteValue;
 
-}
+public abstract record PrimitiveProtocolRemoteValue : RemoteValue;
 
-public abstract class PrimitiveProtocolRemoteValue : RemoteValue
-{
+public record NumberRemoteValue(long Value) : PrimitiveProtocolRemoteValue;
 
-}
+public record StringRemoteValue(string Value) : PrimitiveProtocolRemoteValue;
 
-public class NumberRemoteValue : PrimitiveProtocolRemoteValue
-{
-    public long Value { get; set; }
-}
+public record NullRemoteValue : PrimitiveProtocolRemoteValue;
 
-public class StringRemoteValue(string value) : PrimitiveProtocolRemoteValue
-{
-    public string Value { get; } = value;
-}
+public record UndefinedRemoteValue : PrimitiveProtocolRemoteValue;
 
-public class NullRemoteValue : PrimitiveProtocolRemoteValue
-{
-
-}
-
-public class UndefinedRemoteValue : PrimitiveProtocolRemoteValue
-{
-
-}
-
-public class SymbolRemoteValue : RemoteValue
+public record SymbolRemoteValue : RemoteValue
 {
     public Handle? Handle { get; set; }
 
     public InternalId? InternalId { get; set; }
 }
 
-public class ArrayRemoteValue : RemoteValue
+public record ArrayRemoteValue : RemoteValue
 {
     public Handle? Handle { get; set; }
 
@@ -74,7 +56,7 @@ public class ArrayRemoteValue : RemoteValue
     public IReadOnlyList<RemoteValue>? Value { get; set; }
 }
 
-public class ObjectRemoteValue : RemoteValue
+public record ObjectRemoteValue : RemoteValue
 {
     public Handle? Handle { get; set; }
 
@@ -83,32 +65,28 @@ public class ObjectRemoteValue : RemoteValue
     public IDictionary<string, RemoteValue>? Value { get; set; }
 }
 
-public class FunctionRemoteValue : RemoteValue
+public record FunctionRemoteValue : RemoteValue
 {
     public Handle? Handle { get; set; }
 
     public InternalId? InternalId { get; set; }
 }
 
-public class RegExpRemoteValue(RegExpValue value) : RemoteValue
+public record RegExpRemoteValue(RegExpValue Value) : RemoteValue
 {
-    public RegExpValue Value { get; } = value;
-
     public Handle? Handle { get; set; }
 
     public InternalId? InternalId { get; set; }
 }
 
-public class DateRemoteValue(string value) : RemoteValue
+public record DateRemoteValue(string Value) : RemoteValue
 {
-    public string Value { get; } = value;
-
     public Handle? Handle { get; set; }
 
     public InternalId? InternalId { get; set; }
 }
 
-public class MapRemoteValue : RemoteValue
+public record MapRemoteValue : RemoteValue
 {
     public Handle? Handle { get; set; }
 
@@ -117,7 +95,7 @@ public class MapRemoteValue : RemoteValue
     public IDictionary<string, RemoteValue>? Value { get; set; }
 }
 
-public class SetRemoteValue : RemoteValue
+public record SetRemoteValue : RemoteValue
 {
     public Handle? Handle { get; set; }
 
@@ -126,72 +104,63 @@ public class SetRemoteValue : RemoteValue
     public IReadOnlyList<RemoteValue>? Value { get; set; }
 }
 
-public class WeakMapRemoteValue : RemoteValue
+public record WeakMapRemoteValue : RemoteValue
 {
     public Handle? Handle { get; set; }
 
     public InternalId? InternalId { get; set; }
 }
 
-public class WeakSetRemoteValue : RemoteValue
+public record WeakSetRemoteValue : RemoteValue
 {
     public Handle? Handle { get; set; }
 
     public InternalId? InternalId { get; set; }
 }
 
-public class GeneratorRemoteValue : RemoteValue
+public record GeneratorRemoteValue : RemoteValue
 {
     public Handle? Handle { get; set; }
 
     public InternalId? InternalId { get; set; }
 }
 
-public class ErrorRemoteValue : RemoteValue
+public record ErrorRemoteValue : RemoteValue
 {
     public Handle? Handle { get; set; }
 
     public InternalId? InternalId { get; set; }
 }
 
-public class ProxyRemoteValue : RemoteValue
+public record ProxyRemoteValue : RemoteValue
 {
     public Handle? Handle { get; set; }
 
     public InternalId? InternalId { get; set; }
 }
 
-public class PromiseRemoteValue : RemoteValue
+public record PromiseRemoteValue : RemoteValue
 {
     public Handle? Handle { get; set; }
 
     public InternalId? InternalId { get; set; }
 }
 
-public class TypedArrayRemoteValue : RemoteValue
+public record TypedArrayRemoteValue : RemoteValue
 {
     public Handle? Handle { get; set; }
 
     public InternalId? InternalId { get; set; }
 }
 
-public class ArrayBufferRemoteValue : RemoteValue
+public record ArrayBufferRemoteValue : RemoteValue
 {
     public Handle? Handle { get; set; }
 
     public InternalId? InternalId { get; set; }
 }
 
-public class NodeListRemoteValue : RemoteValue
-{
-    public Handle? Handle { get; set; }
-
-    public InternalId? InternalId { get; set; }
-
-    public IReadOnlyList<RemoteValue>? Value { get; set; }
-}
-
-public class HtmlCollectionRemoteValue : RemoteValue
+public record NodeListRemoteValue : RemoteValue
 {
     public Handle? Handle { get; set; }
 
@@ -200,7 +169,16 @@ public class HtmlCollectionRemoteValue : RemoteValue
     public IReadOnlyList<RemoteValue>? Value { get; set; }
 }
 
-public class NodeRemoteValue : RemoteValue
+public record HtmlCollectionRemoteValue : RemoteValue
+{
+    public Handle? Handle { get; set; }
+
+    public InternalId? InternalId { get; set; }
+
+    public IReadOnlyList<RemoteValue>? Value { get; set; }
+}
+
+public record NodeRemoteValue : RemoteValue
 {
     [JsonInclude]
     public string? SharedId { get; internal set; }
@@ -213,49 +191,14 @@ public class NodeRemoteValue : RemoteValue
     public NodeProperties? Value { get; internal set; }
 }
 
-public class NodeProperties
+public record WindowProxyRemoteValue(WindowProxyProperties Value) : RemoteValue
 {
-    [JsonInclude]
-    public uint NodeType { get; internal set; }
-
-    [JsonInclude]
-    public uint ChildNodeCount { get; internal set; }
-
-    [JsonInclude]
-    public IReadOnlyDictionary<string, string>? Attributes { get; internal set; }
-
-    [JsonInclude]
-    public IReadOnlyList<NodeRemoteValue>? Children { get; internal set; }
-
-    [JsonInclude]
-    public string? LocalName { get; internal set; }
-
-    [JsonInclude]
-    public Mode? Mode { get; internal set; }
-
-    [JsonInclude]
-    public string? NamespaceUri { get; internal set; }
-
-    [JsonInclude]
-    public string? NodeValue { get; internal set; }
-
-    [JsonInclude]
-    public NodeRemoteValue? ShadowRoot { get; internal set; }
-}
-
-public class WindowProxyRemoteValue(WindowProxyProperties value) : RemoteValue
-{
-    public WindowProxyProperties Value { get; } = value;
-
     public Handle? Handle { get; set; }
 
     public InternalId? InternalId { get; set; }
 }
 
-public class WindowProxyProperties(BrowsingContext.BrowsingContext context)
-{
-    public BrowsingContext.BrowsingContext Context { get; } = context;
-}
+public record WindowProxyProperties(BrowsingContext.BrowsingContext Context);
 
 public enum Mode
 {
