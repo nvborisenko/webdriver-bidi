@@ -101,9 +101,9 @@ public class Session : IAsyncDisposable
         return NetworkModule.OnBeforeRequestSentAsync(callback);
     }
 
-    public async Task<Modules.Network.Intercept> OnBeforeRequestSentAsync(Modules.Network.InterceptOptions? options, Func<Modules.Network.BeforeRequestSentEventArgs, Task> callback)
+    public async Task<Modules.Network.Intercept> OnBeforeRequestSentAsync(Modules.Network.InterceptOptions? interceptOptions, Func<Modules.Network.BeforeRequestSentEventArgs, Task> callback)
     {
-        var interceptResult = await NetworkModule.AddInterceptAsync([Modules.Network.InterceptPhase.BeforeRequestSent], options).ConfigureAwait(false);
+        var interceptResult = await NetworkModule.AddInterceptAsync([Modules.Network.InterceptPhase.BeforeRequestSent], interceptOptions).ConfigureAwait(false);
 
         await interceptResult.Intercept.OnBeforeRequestSentAsync(callback).ConfigureAwait(false);
 
@@ -120,9 +120,9 @@ public class Session : IAsyncDisposable
         return NetworkModule.OnResponseStartedAsync(callback);
     }
 
-    public async Task<Modules.Network.Intercept> OnResponseStartedAsync(Modules.Network.InterceptOptions? options, Func<Modules.Network.ResponseStartedEventArgs, Task> callback)
+    public async Task<Modules.Network.Intercept> OnResponseStartedAsync(Modules.Network.InterceptOptions? interceptOptions, Func<Modules.Network.ResponseStartedEventArgs, Task> callback)
     {
-        var interceptResult = await NetworkModule.AddInterceptAsync([Modules.Network.InterceptPhase.ResponseStarted], options).ConfigureAwait(false);
+        var interceptResult = await NetworkModule.AddInterceptAsync([Modules.Network.InterceptPhase.ResponseStarted], interceptOptions).ConfigureAwait(false);
 
         await interceptResult.Intercept.OnResponseStartedAsync(callback).ConfigureAwait(false);
 

@@ -493,7 +493,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         {
             var context = await session.CreateBrowsingContextAsync(BrowsingContextType.Tab);
 
-            await using var intercept = await context.OnBeforeRequestSentAsync(new(), async args =>
+            await using var intercept = await context.OnBeforeRequestSentAsync(interceptOptions: default, async args =>
             {
                 await args.Request.Request.ContinueAsync(new() { Method = "POST" });
             });

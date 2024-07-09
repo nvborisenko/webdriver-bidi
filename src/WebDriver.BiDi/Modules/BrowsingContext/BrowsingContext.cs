@@ -239,13 +239,13 @@ public class BrowsingContext
         return Session.NetworkModule.OnBeforeRequestSentAsync(callback, this);
     }
 
-    public async Task<Network.Intercept> OnBeforeRequestSentAsync(Network.InterceptOptions? options, Func<Network.BeforeRequestSentEventArgs, Task> callback)
+    public async Task<Network.Intercept> OnBeforeRequestSentAsync(Network.InterceptOptions? interceptOptions, Func<Network.BeforeRequestSentEventArgs, Task> callback)
     {
-        options ??= new();
+        interceptOptions ??= new();
 
-        options.Contexts = [this];
+        interceptOptions.Contexts = [this];
 
-        var interceptResult = await Session.NetworkModule.AddInterceptAsync([Network.InterceptPhase.BeforeRequestSent], options).ConfigureAwait(false);
+        var interceptResult = await Session.NetworkModule.AddInterceptAsync([Network.InterceptPhase.BeforeRequestSent], interceptOptions).ConfigureAwait(false);
 
         await interceptResult.Intercept.OnBeforeRequestSentAsync(this, callback).ConfigureAwait(false);
 
@@ -262,13 +262,13 @@ public class BrowsingContext
         return Session.NetworkModule.OnResponseStartedAsync(callback, this);
     }
 
-    public async Task<Network.Intercept> OnResponseStartedAsync(Network.InterceptOptions? options, Func<Network.ResponseStartedEventArgs, Task> callback)
+    public async Task<Network.Intercept> OnResponseStartedAsync(Network.InterceptOptions? interceptOptions, Func<Network.ResponseStartedEventArgs, Task> callback)
     {
-        options ??= new();
+        interceptOptions ??= new();
 
-        options.Contexts = [this];
+        interceptOptions.Contexts = [this];
 
-        var interceptResult = await Session.NetworkModule.AddInterceptAsync([Network.InterceptPhase.ResponseStarted], options).ConfigureAwait(false);
+        var interceptResult = await Session.NetworkModule.AddInterceptAsync([Network.InterceptPhase.ResponseStarted], interceptOptions).ConfigureAwait(false);
 
         await interceptResult.Intercept.OnResponseStartedAsync(this, callback).ConfigureAwait(false);
 
