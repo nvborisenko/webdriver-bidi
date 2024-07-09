@@ -42,9 +42,9 @@ public class EvaluateResultSuccess(RemoteValue result) : EvaluateResult
 {
     public RemoteValue Result { get; } = result;
 
-    public static implicit operator int(EvaluateResultSuccess r) => (int)(r.Result as NumberRemoteValue).Value;
-    public static implicit operator long(EvaluateResultSuccess r) => (r.Result as NumberRemoteValue).Value;
-    public static implicit operator NodeRemoteValue(EvaluateResultSuccess r) => r.Result as NodeRemoteValue;
+    public static implicit operator int(EvaluateResultSuccess r) => (int)((NumberRemoteValue)r.Result).Value;
+    public static implicit operator long(EvaluateResultSuccess r) => ((NumberRemoteValue)r.Result).Value;
+    public static implicit operator NodeRemoteValue(EvaluateResultSuccess r) => (NodeRemoteValue)r.Result;
     public static implicit operator string(EvaluateResultSuccess r)
     {
         return r.Result switch
