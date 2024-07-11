@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace OpenQA.Selenium.BiDi.Modules.Input;
 
-internal sealed class InputModule(Broker broker) : Module(broker)
+public sealed class InputModule(Broker broker) : Module(broker)
 {
     public async Task PerformActionsAsync(BrowsingContext.BrowsingContext context, PerformActionsOptions? options = default)
     {

@@ -8,23 +8,24 @@ public class BrowsingContext
 {
     internal BrowsingContext(BiDi.Session session, string id)
     {
-        Session = session;
+        _session = session;
         Id = id;
 
-        _logModule = new Lazy<BrowsingContextLogModule>(() => new BrowsingContextLogModule(this, Session.Log));
-        _networkModule = new Lazy<BrowsingContextNetworkModule>(() => new BrowsingContextNetworkModule(this, Session.Network));
-        _scriptModule = new Lazy<BrowsingContextScriptModule>(() => new BrowsingContextScriptModule(this, Session.ScriptModule));
-        _storageModule = new Lazy<BrowsingContextStorageModule>(() => new BrowsingContextStorageModule(this, Session.Storage));
+        _logModule = new Lazy<BrowsingContextLogModule>(() => new BrowsingContextLogModule(this, _session.Log));
+        _networkModule = new Lazy<BrowsingContextNetworkModule>(() => new BrowsingContextNetworkModule(this, _session.Network));
+        _scriptModule = new Lazy<BrowsingContextScriptModule>(() => new BrowsingContextScriptModule(this, _session.ScriptModule));
+        _storageModule = new Lazy<BrowsingContextStorageModule>(() => new BrowsingContextStorageModule(this, _session.Storage));
     }
 
-    internal BiDi.Session Session { get; }
-
-    internal string Id { get; }
+    private readonly BiDi.Session _session;
 
     private readonly Lazy<BrowsingContextLogModule> _logModule;
     private readonly Lazy<BrowsingContextNetworkModule> _networkModule;
     private readonly Lazy<BrowsingContextScriptModule> _scriptModule;
     private readonly Lazy<BrowsingContextStorageModule> _storageModule;
+    private readonly Lazy<BrowsingContextInputModule> _inputModule;
+
+    internal string Id { get; }
 
     public BrowsingContextLogModule Log => _logModule.Value;
 
@@ -34,48 +35,41 @@ public class BrowsingContext
 
     public BrowsingContextStorageModule Storage => _storageModule.Value;
 
+    public BrowsingContextInputModule Input => _inputModule.Value;
+
     public Task<NavigateResult> NavigateAsync(string url, NavigateOptions? options = default)
     {
-        return Session.BrowsingContext.NavigateAsync(this, url, options);
+        return _session.BrowsingContext.NavigateAsync(this, url, options);
     }
 
     public Task<NavigateResult> ReloadAsync(ReloadOptions? options = default)
     {
-        return Session.BrowsingContext.ReloadAsync(this, options);
+        return _session.BrowsingContext.ReloadAsync(this, options);
     }
 
     public Task ActivateAsync(ActivateOptions? options = default)
     {
-        return Session.BrowsingContext.ActivateAsync(this, options);
+        return _session.BrowsingContext.ActivateAsync(this, options);
     }
 
     public Task<IReadOnlyList<Script.NodeRemoteValue>> LocateNodesAsync(Locator locator, NodesOptions? options = default)
     {
-        return Session.BrowsingContext.LocateNodesAsync(this, locator, options);
-    }
-
-    public Task PerformActionsAsync(IEnumerable<Input.SourceActions> actions, Input.PerformActionsOptions? options = default)
-    {
-        options ??= new();
-
-        options.Actions = actions;
-
-        return Session.InputModule.PerformActionsAsync(this, options);
+        return _session.BrowsingContext.LocateNodesAsync(this, locator, options);
     }
 
     public Task<CaptureScreenshotResult> CaptureScreenshotAsync(CaptureScreenshotOptions? options = default)
     {
-        return Session.BrowsingContext.CaptureScreenshotAsync(this, options);
+        return _session.BrowsingContext.CaptureScreenshotAsync(this, options);
     }
 
     public Task CloseAsync(CloseOptions? options = default)
     {
-        return Session.BrowsingContext.CloseAsync(this, options);
+        return _session.BrowsingContext.CloseAsync(this, options);
     }
 
     public Task TraverseHistoryAsync(int delta, TraverseHistoryOptions? options = default)
     {
-        return Session.BrowsingContext.TraverseHistoryAsync(this, delta, options);
+        return _session.BrowsingContext.TraverseHistoryAsync(this, delta, options);
     }
 
     public Task NavigateBackAsync(TraverseHistoryOptions? options = default)
@@ -90,89 +84,89 @@ public class BrowsingContext
 
     public Task SetViewportAsync(ViewportOptions? options = default)
     {
-        return Session.BrowsingContext.SetViewportAsync(this, options);
+        return _session.BrowsingContext.SetViewportAsync(this, options);
     }
 
     public async Task<string> PrintAsync(PrintOptions? options = default)
     {
-        var result = await Session.BrowsingContext.PrintAsync(this, options).ConfigureAwait(false);
+        var result = await _session.BrowsingContext.PrintAsync(this, options).ConfigureAwait(false);
 
         return result.Data;
     }
 
     public Task HandleUserPromptAsync(UserPromptOptions? options = default)
     {
-        return Session.BrowsingContext.HandleUserPrompAsync(this, options);
+        return _session.BrowsingContext.HandleUserPrompAsync(this, options);
     }
 
     public Task<Subscription> OnNavigationStartedAsync(Func<NavigationInfo, Task> callback)
     {
-        return Session.BrowsingContext.OnNavigationStartedAsync(callback, this);
+        return _session.BrowsingContext.OnNavigationStartedAsync(callback, this);
     }
 
     public Task<Subscription> OnNavigationStartedAsync(Action<NavigationInfo> callback)
     {
-        return Session.BrowsingContext.OnNavigationStartedAsync(callback, this);
+        return _session.BrowsingContext.OnNavigationStartedAsync(callback, this);
     }
 
     public Task<Subscription> OnFragmentNavigatedAsync(Func<NavigationInfo, Task> callback)
     {
-        return Session.BrowsingContext.OnFragmentNavigatedAsync(callback, this);
+        return _session.BrowsingContext.OnFragmentNavigatedAsync(callback, this);
     }
 
     public Task<Subscription> OnFragmentNavigatedAsync(Action<NavigationInfo> callback)
     {
-        return Session.BrowsingContext.OnFragmentNavigatedAsync(callback, this);
+        return _session.BrowsingContext.OnFragmentNavigatedAsync(callback, this);
     }
 
     public Task<Subscription> OnDomContentLoadedAsync(Func<NavigationInfo, Task> callback)
     {
-        return Session.BrowsingContext.OnDomContentLoadedAsync(callback, this);
+        return _session.BrowsingContext.OnDomContentLoadedAsync(callback, this);
     }
 
     public Task<Subscription> OnLoadAsync(Action<NavigationInfo> callback)
     {
-        return Session.BrowsingContext.OnLoadAsync(callback, this);
+        return _session.BrowsingContext.OnLoadAsync(callback, this);
     }
 
     public Task<Subscription> OnLoadAsync(Func<NavigationInfo, Task> callback)
     {
-        return Session.BrowsingContext.OnLoadAsync(callback, this);
+        return _session.BrowsingContext.OnLoadAsync(callback, this);
     }
 
     public Task<Subscription> OnDownloadWillBeginAsync(Action<NavigationInfo> callback)
     {
-        return Session.BrowsingContext.OnDownloadWillBeginAsync(callback, this);
+        return _session.BrowsingContext.OnDownloadWillBeginAsync(callback, this);
     }
 
     public Task<Subscription> OnDownloadWillBeginAsync(Func<NavigationInfo, Task> callback)
     {
-        return Session.BrowsingContext.OnDownloadWillBeginAsync(callback, this);
+        return _session.BrowsingContext.OnDownloadWillBeginAsync(callback, this);
     }
 
     public Task<Subscription> OnNavigationAbortedAsync(Action<NavigationInfo> callback)
     {
-        return Session.BrowsingContext.OnNavigationAbortedAsync(callback, this);
+        return _session.BrowsingContext.OnNavigationAbortedAsync(callback, this);
     }
 
     public Task<Subscription> OnNavigationAbortedAsync(Func<NavigationInfo, Task> callback)
     {
-        return Session.BrowsingContext.OnNavigationAbortedAsync(callback, this);
+        return _session.BrowsingContext.OnNavigationAbortedAsync(callback, this);
     }
 
     public Task<Subscription> OnNavigationFailedAsync(Action<NavigationInfo> callback)
     {
-        return Session.BrowsingContext.OnNavigationFailedAsync(callback, this);
+        return _session.BrowsingContext.OnNavigationFailedAsync(callback, this);
     }
 
     public Task<Subscription> OnNavigationFailedAsync(Func<NavigationInfo, Task> callback)
     {
-        return Session.BrowsingContext.OnNavigationFailedAsync(callback, this);
+        return _session.BrowsingContext.OnNavigationFailedAsync(callback, this);
     }
 
     public Task<Subscription> OnDomContentLoadedAsync(Action<NavigationInfo> callback)
     {
-        return Session.BrowsingContext.OnDomContentLoadedAsync(callback, this);
+        return _session.BrowsingContext.OnDomContentLoadedAsync(callback, this);
     }
 
     public override bool Equals(object? obj)
