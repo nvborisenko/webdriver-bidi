@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace OpenQA.Selenium.BiDi.Communication;
 
-internal class Broker : IAsyncDisposable
+public class Broker : IAsyncDisposable
 {
     private readonly Session _session;
     private readonly Transport _transport;

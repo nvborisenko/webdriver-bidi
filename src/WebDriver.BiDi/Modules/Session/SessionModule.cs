@@ -41,4 +41,9 @@ internal sealed class SessionModule(Broker broker) : Module(broker)
 
         return await Broker.ExecuteCommandAsync<NewResult>(new NewCommand(@params), options).ConfigureAwait(false);
     }
+
+    public async Task EndAsync(EndOptions? options = default)
+    {
+        await Broker.ExecuteCommandAsync(new EndCommand(), options).ConfigureAwait(false);
+    }
 }

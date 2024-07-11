@@ -1,9 +1,10 @@
 ﻿using OpenQA.Selenium.BiDi.Communication;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace OpenQA.Selenium.BiDi.Modules.Script;
 
-internal sealed class ScriptModule(Broker broker) : Module(broker)
+public sealed class ScriptModule(Broker broker) : Module(broker)
 {
     public async Task<EvaluateResultSuccess> EvaluateAsync(string expression, bool awaitPromise, Target target, EvaluateOptions? options = default)
     {
@@ -49,7 +50,7 @@ internal sealed class ScriptModule(Broker broker) : Module(broker)
         return (EvaluateResultSuccess)result;
     }
 
-    public async Task<GetRealmsResult> GetRealmsAsync(GetRealmsOptions? options = default)
+    public async Task<IReadOnlyList<RealmInfo>> GetRealmsAsync(GetRealmsOptions? options = default)
     {
         var @params = new GetRealmsCommandParameters();
 
@@ -59,10 +60,12 @@ internal sealed class ScriptModule(Broker broker) : Module(broker)
             @params.Type = options.Type;
         }
 
-        return await Broker.ExecuteCommandAsync<GetRealmsResult>(new GetRealmsCommand(@params), options).ConfigureAwait(false);
+        var result = await Broker.ExecuteCommandAsync<GetRealmsResult>(new GetRealmsCommand(@params), options).ConfigureAwait(false);
+
+        return result.Realms;
     }
 
-    public async Task<AddPreloadScriptResult> AddPreloadScriptAsync(string functionDeclaration, PreloadScriptOptions? options = default)
+    public async Task<PreloadScript> AddPreloadScriptAsync(string functionDeclaration, PreloadScriptOptions? options = default)
     {
         var @params = new AddPreloadScriptCommandParameters(functionDeclaration);
 
@@ -73,7 +76,9 @@ internal sealed class ScriptModule(Broker broker) : Module(broker)
             @params.Sandbox = options.Sandbox;
         }
 
-        return await Broker.ExecuteCommandAsync<AddPreloadScriptResult>(new AddPreloadScriptCommand(@params), options).ConfigureAwait(false);
+        var result = await Broker.ExecuteCommandAsync<AddPreloadScriptResult>(new AddPreloadScriptCommand(@params), options).ConfigureAwait(false);
+
+        return result.Script;
     }
 
     public async Task RemovePreloadScriptAsync(PreloadScript script, RemovePreloadScriptOptions? options = default)

@@ -5,7 +5,7 @@ using OpenQA.Selenium.BiDi.Communication;
 
 namespace OpenQA.Selenium.BiDi.Modules.Network;
 
-internal sealed class NetworkModule(Broker broker) : Module(broker)
+public sealed class NetworkModule(Broker broker) : Module(broker)
 {
     public async Task<AddInterceptResult> AddInterceptAsync(IEnumerable<InterceptPhase> phases, InterceptOptions? options = default)
     {
@@ -92,6 +92,15 @@ internal sealed class NetworkModule(Broker broker) : Module(broker)
         return await Broker.SubscribeAsync("network.beforeRequestSent", callback, context).ConfigureAwait(false);
     }
 
+    public async Task<Intercept> OnBeforeRequestSentAsync(InterceptOptions? interceptOptions, Func<BeforeRequestSentEventArgs, Task> callback)
+    {
+        var interceptResult = await AddInterceptAsync([InterceptPhase.BeforeRequestSent], interceptOptions).ConfigureAwait(false);
+
+        await interceptResult.Intercept.OnBeforeRequestSentAsync(callback).ConfigureAwait(false);
+
+        return interceptResult.Intercept;
+    }
+
     public async Task<Subscription> OnResponseStartedAsync(Func<ResponseStartedEventArgs, Task> callback, BrowsingContext.BrowsingContext? context = default)
     {
         return await Broker.SubscribeAsync("network.responseStarted", callback, context).ConfigureAwait(false);
@@ -100,6 +109,15 @@ internal sealed class NetworkModule(Broker broker) : Module(broker)
     public async Task<Subscription> OnResponseStartedAsync(Action<ResponseStartedEventArgs> callback, BrowsingContext.BrowsingContext? context = default)
     {
         return await Broker.SubscribeAsync("network.responseStarted", callback, context).ConfigureAwait(false);
+    }
+
+    public async Task<Intercept> OnResponseStartedAsync(InterceptOptions? interceptOptions, Func<ResponseStartedEventArgs, Task> callback)
+    {
+        var interceptResult = await AddInterceptAsync([InterceptPhase.ResponseStarted], interceptOptions).ConfigureAwait(false);
+
+        await interceptResult.Intercept.OnResponseStartedAsync(callback).ConfigureAwait(false);
+
+        return interceptResult.Intercept;
     }
 
     public async Task<Subscription> OnResponseCompletedAsync(Func<ResponseCompletedEventArgs, Task> callback, BrowsingContext.BrowsingContext? context = default)

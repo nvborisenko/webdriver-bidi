@@ -17,7 +17,7 @@ public class UserContext : IAsyncDisposable
 
     public Task RemoveAsync()
     {
-        return _session.BrowserModule.RemoveUserContextAsync(this);
+        return _session.Browser.RemoveUserContextAsync(this);
     }
 
     public async ValueTask DisposeAsync()

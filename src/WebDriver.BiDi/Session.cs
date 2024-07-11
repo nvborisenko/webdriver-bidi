@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using OpenQA.Selenium.BiDi.Communication;
 
@@ -37,131 +36,17 @@ public class Session : IAsyncDisposable
     }
 
     internal Modules.Session.SessionModule SessionModule => _sessionModule.Value;
-    internal Modules.BrowsingContext.BrowsingContextModule BrowsingContextModule => _browsingContextModule.Value;
-    internal Modules.Browser.BrowserModule BrowserModule => _browserModule.Value;
-    internal Modules.Network.NetworkModule NetworkModule => _networkModule.Value;
+    public Modules.BrowsingContext.BrowsingContextModule BrowsingContext => _browsingContextModule.Value;
+    public Modules.Browser.BrowserModule Browser => _browserModule.Value;
+    public Modules.Network.NetworkModule Network => _networkModule.Value;
     internal Modules.Input.InputModule InputModule => _inputModule.Value;
     internal Modules.Script.ScriptModule ScriptModule => _scriptModule.Value;
-    internal Modules.Log.LogModule LogModule => _logModule.Value;
-    internal Modules.Storage.StorageModule StorageModule => _storageModule.Value;
+    public Modules.Log.LogModule Log => _logModule.Value;
+    public Modules.Storage.StorageModule Storage => _storageModule.Value;
 
     public Task<Modules.Session.StatusResult> StatusAsync()
     {
         return SessionModule.StatusAsync();
-    }
-
-    public async Task<Modules.BrowsingContext.BrowsingContext> CreateBrowsingContextAsync(Modules.BrowsingContext.BrowsingContextType type, Modules.BrowsingContext.BrowsingContextOptions? options = default)
-    {
-        var createResult = await BrowsingContextModule.CreateAsync(type, options).ConfigureAwait(false);
-
-        return createResult.Context;
-    }
-
-    public Task<Modules.Browser.UserContextInfo> CreateBrowserUserContextAsync(Modules.Browser.CreateUserContextOptions? options = default)
-    {
-        return BrowserModule.CreateUserContextAsync(options);
-    }
-
-    public async Task<IReadOnlyList<Modules.Browser.UserContextInfo>> GetBrowserUserContextsAsync(Modules.Browser.GetUserContextsOptions? options = default)
-    {
-        var result = await BrowserModule.GetUserContextsAsync(options).ConfigureAwait(false);
-
-        return result.UserContexts;
-    }
-
-    public async Task<IReadOnlyList<Modules.BrowsingContext.BrowsingContextInfo>> GetTreeAsync(Modules.BrowsingContext.TreeOptions? options = default)
-    {
-        var result = await BrowsingContextModule.GetTreeAsync(options).ConfigureAwait(false);
-
-        return result.Contexts;
-    }
-
-    public Task<Subscription> OnBrowsingContextCreatedAsync(Action<Modules.BrowsingContext.BrowsingContextInfo> callback)
-    {
-        return BrowsingContextModule.OnContextCreatedAsync(callback);
-    }
-
-    public Task<Subscription> OnBrowsingContextCreatedAsync(Func<Modules.BrowsingContext.BrowsingContextInfo, Task> callback)
-    {
-        return BrowsingContextModule.OnContextCreatedAsync(callback);
-    }
-
-    public Task<Subscription> OnBrowsingContextDestroyedAsync(Action<Modules.BrowsingContext.BrowsingContextInfo> callback)
-    {
-        return BrowsingContextModule.OnContextDestroyedAsync(callback);
-    }
-
-    public Task<Subscription> OnBrowsingContextDestroyedAsync(Func<Modules.BrowsingContext.BrowsingContextInfo, Task> callback)
-    {
-        return BrowsingContextModule.OnContextDestroyedAsync(callback);
-    }
-
-    public Task<Subscription> OnBeforeRequestSentAsync(Func<Modules.Network.BeforeRequestSentEventArgs, Task> callback)
-    {
-        return NetworkModule.OnBeforeRequestSentAsync(callback);
-    }
-
-    public async Task<Modules.Network.Intercept> OnBeforeRequestSentAsync(Modules.Network.InterceptOptions? interceptOptions, Func<Modules.Network.BeforeRequestSentEventArgs, Task> callback)
-    {
-        var interceptResult = await NetworkModule.AddInterceptAsync([Modules.Network.InterceptPhase.BeforeRequestSent], interceptOptions).ConfigureAwait(false);
-
-        await interceptResult.Intercept.OnBeforeRequestSentAsync(callback).ConfigureAwait(false);
-
-        return interceptResult.Intercept;
-    }
-
-    public Task<Subscription> OnBeforeRequestSentAsync(Action<Modules.Network.BeforeRequestSentEventArgs> callback)
-    {
-        return NetworkModule.OnBeforeRequestSentAsync(callback);
-    }
-
-    public Task<Subscription> OnResponseStartedAsync(Func<Modules.Network.ResponseStartedEventArgs, Task> callback)
-    {
-        return NetworkModule.OnResponseStartedAsync(callback);
-    }
-
-    public async Task<Modules.Network.Intercept> OnResponseStartedAsync(Modules.Network.InterceptOptions? interceptOptions, Func<Modules.Network.ResponseStartedEventArgs, Task> callback)
-    {
-        var interceptResult = await NetworkModule.AddInterceptAsync([Modules.Network.InterceptPhase.ResponseStarted], interceptOptions).ConfigureAwait(false);
-
-        await interceptResult.Intercept.OnResponseStartedAsync(callback).ConfigureAwait(false);
-
-        return interceptResult.Intercept;
-    }
-
-    public Task<Subscription> OnResponseStartedAsync(Action<Modules.Network.ResponseStartedEventArgs> callback)
-    {
-        return NetworkModule.OnResponseStartedAsync(callback);
-    }
-
-    public Task<Subscription> OnUserPromptOpenedAsync(Func<Modules.BrowsingContext.UserPromptOpenedEventArgs, Task> callback)
-    {
-        return BrowsingContextModule.OnUserPromptOpenedAsync(callback);
-    }
-
-    public Task<Subscription> OnUserPromptOpenedAsync(Action<Modules.BrowsingContext.UserPromptOpenedEventArgs> callback)
-    {
-        return BrowsingContextModule.OnUserPromptOpenedAsync(callback);
-    }
-
-    public Task<Subscription> OnUserPromptClosedAsync(Func<Modules.BrowsingContext.UserPromptClosedEventArgs, Task> callback)
-    {
-        return BrowsingContextModule.OnUserPromptClosedAsync(callback);
-    }
-
-    public Task<Subscription> OnUserPromptClosedAsync(Action<Modules.BrowsingContext.UserPromptClosedEventArgs> callback)
-    {
-        return BrowsingContextModule.OnUserPromptClosedAsync(callback);
-    }
-
-    public Task<Subscription> OnLogEntryAddedAsync(Func<Modules.Log.BaseLogEntry, Task> callback)
-    {
-        return LogModule.OnEntryAddedAsync(callback);
-    }
-
-    public Task<Subscription> OnLogEntryAddedAsync(Action<Modules.Log.BaseLogEntry> callback)
-    {
-        return LogModule.OnEntryAddedAsync(callback);
     }
 
     public static async Task<Session> ConnectAsync(string url)
@@ -173,14 +58,9 @@ public class Session : IAsyncDisposable
         return session;
     }
 
-    private async Task ConnectAsync()
-    {
-        await _broker.ConnectAsync(default).ConfigureAwait(false);
-    }
-
     public async Task EndAsync(Modules.Session.EndOptions? options = default)
     {
-        await _broker.ExecuteCommandAsync(new Modules.Session.EndCommand(), options).ConfigureAwait(false);
+        await SessionModule.EndAsync(options).ConfigureAwait(false);
 
         await _broker.DisposeAsync().ConfigureAwait(false);
 
@@ -190,5 +70,10 @@ public class Session : IAsyncDisposable
     public async ValueTask DisposeAsync()
     {
         await EndAsync().ConfigureAwait(false);
+    }
+
+    private async Task ConnectAsync()
+    {
+        await _broker.ConnectAsync(default).ConfigureAwait(false);
     }
 }

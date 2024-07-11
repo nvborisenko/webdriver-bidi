@@ -16,21 +16,21 @@ public class Request
 
     public Task ContinueAsync(RequestOptions? options = default)
     {
-        return _session.NetworkModule.ContinueRequestAsync(this, options);
+        return _session.Network.ContinueRequestAsync(this, options);
     }
 
     public Task FailAsync()
     {
-        return _session.NetworkModule.FailRequestAsync(this);
+        return _session.Network.FailRequestAsync(this);
     }
 
     public Task ProvideResponseAsync(ProvideResponseOptions? options = default)
     {
-        return _session.NetworkModule.ProvideResponseAsync(this, options);
+        return _session.Network.ProvideResponseAsync(this, options);
     }
 
     public Task ContinueResponseAsync(ContinueResponseOptions? options = default)
     {
-        return _session.NetworkModule.ContinueResponseAsync(this, options);
+        return _session.Network.ContinueResponseAsync(this, options);
     }
 }

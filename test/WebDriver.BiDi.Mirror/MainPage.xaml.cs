@@ -35,11 +35,11 @@ namespace WebDriver.BiDi.Mirror
 
             for (int i = 0; i < 5; i++)
             {
-                var context = await session.CreateBrowsingContextAsync(OpenQA.Selenium.BiDi.Modules.BrowsingContext.BrowsingContextType.Tab);
+                var context = await session.BrowsingContext.CreateAsync(OpenQA.Selenium.BiDi.Modules.BrowsingContext.BrowsingContextType.Tab);
 
                 CounterBtn.Text = "Started";
 
-                await session.OnBeforeRequestSentAsync(async arg =>
+                await session.Network.OnBeforeRequestSentAsync(async arg =>
                 {
                     await Task.Delay(10);
                     MainThread.BeginInvokeOnMainThread(() => { CounterBtn.Text = arg.Request.Url; });

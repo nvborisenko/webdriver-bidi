@@ -49,7 +49,7 @@ namespace OpenQA.Selenium.BiDi.Communication;
 [JsonDerivedType(typeof(Modules.Storage.DeleteCookiesCommand), "storage.deleteCookies")]
 [JsonDerivedType(typeof(Modules.Storage.SetCookieCommand), "storage.setCookie")]
 
-internal abstract class Command
+public abstract class Command
 {
     public int Id { get; internal set; }
 }

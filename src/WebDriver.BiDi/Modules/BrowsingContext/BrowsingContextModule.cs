@@ -1,12 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using OpenQA.Selenium.BiDi.Communication;
 
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
-sealed class BrowsingContextModule(Broker broker) : Module(broker)
+public class BrowsingContextModule(Broker broker) : Module(broker)
 {
-    public async Task<CreateResult> CreateAsync(BrowsingContextType type, BrowsingContextOptions? options = default)
+    public async Task<BrowsingContext> CreateAsync(BrowsingContextType type, BrowsingContextOptions? options = default)
     {
         var @params = new CreateCommandParameters(type);
 
@@ -17,7 +18,9 @@ sealed class BrowsingContextModule(Broker broker) : Module(broker)
             @params.UserContext = options.UserContext;
         }
 
-        return await Broker.ExecuteCommandAsync<CreateResult>(new CreateCommand(@params), options).ConfigureAwait(false);
+        var createResult = await Broker.ExecuteCommandAsync<CreateResult>(new CreateCommand(@params), options).ConfigureAwait(false);
+
+        return createResult.Context;
     }
 
     public async Task<NavigateResult> NavigateAsync(BrowsingContext context, string url, NavigateOptions? options = default)
@@ -39,7 +42,7 @@ sealed class BrowsingContextModule(Broker broker) : Module(broker)
         await Broker.ExecuteCommandAsync(new ActivateCommand(@params), options).ConfigureAwait(false);
     }
 
-    public async Task<LocateNodesResult> LocateNodesAsync(BrowsingContext context, Locator locator, NodesOptions? options = default)
+    public async Task<IReadOnlyList<Script.NodeRemoteValue>> LocateNodesAsync(BrowsingContext context, Locator locator, NodesOptions? options = default)
     {
         var @params = new LocateNodesCommandParameters(context, locator);
 
@@ -50,7 +53,9 @@ sealed class BrowsingContextModule(Broker broker) : Module(broker)
             @params.StartNodes = options.StartNodes;
         }
 
-        return await Broker.ExecuteCommandAsync<LocateNodesResult>(new LocateNodesCommand(@params), options).ConfigureAwait(false);
+        var result = await Broker.ExecuteCommandAsync<LocateNodesResult>(new LocateNodesCommand(@params), options).ConfigureAwait(false);
+
+        return result.Nodes;
     }
 
     public async Task<CaptureScreenshotResult> CaptureScreenshotAsync(BrowsingContext context, CaptureScreenshotOptions? options = default)
@@ -107,7 +112,7 @@ sealed class BrowsingContextModule(Broker broker) : Module(broker)
         await Broker.ExecuteCommandAsync(new SetViewportCommand(@params), options).ConfigureAwait(false);
     }
 
-    public async Task<GetTreeResult> GetTreeAsync(TreeOptions? options = default)
+    public async Task<IReadOnlyList<BrowsingContextInfo>> GetTreeAsync(TreeOptions? options = default)
     {
         var @params = new GetTreeCommandParameters();
 
@@ -117,7 +122,9 @@ sealed class BrowsingContextModule(Broker broker) : Module(broker)
             @params.Root = options.Root;
         }
 
-        return await Broker.ExecuteCommandAsync<GetTreeResult>(new GetTreeCommand(@params), options).ConfigureAwait(false);
+        var getTreeResult = await Broker.ExecuteCommandAsync<GetTreeResult>(new GetTreeCommand(@params), options).ConfigureAwait(false);
+
+        return getTreeResult.Contexts;
     }
 
     public async Task<PrintResult> PrintAsync(BrowsingContext context, PrintOptions? options = default)

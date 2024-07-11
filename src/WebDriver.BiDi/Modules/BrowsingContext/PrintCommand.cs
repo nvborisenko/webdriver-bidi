@@ -65,4 +65,4 @@ public struct Page
     public double? Width { get; set; }
 }
 
-internal record PrintResult(string Data);
+public record PrintResult(string Data);

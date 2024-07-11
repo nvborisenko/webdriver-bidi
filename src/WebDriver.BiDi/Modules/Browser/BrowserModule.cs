@@ -1,9 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using OpenQA.Selenium.BiDi.Communication;
 
 namespace OpenQA.Selenium.BiDi.Modules.Browser;
 
-internal sealed class BrowserModule(Broker broker) : Module(broker)
+public sealed class BrowserModule(Broker broker) : Module(broker)
 {
     public async Task CloseAsync(CloseOptions? options = default)
     {
@@ -15,9 +16,11 @@ internal sealed class BrowserModule(Broker broker) : Module(broker)
         return await Broker.ExecuteCommandAsync<UserContextInfo>(new CreateUserContextCommand(), options).ConfigureAwait(false);
     }
 
-    public async Task<GetUserContextsResult> GetUserContextsAsync(GetUserContextsOptions? options = default)
+    public async Task<IReadOnlyList<UserContextInfo>> GetUserContextsAsync(GetUserContextsOptions? options = default)
     {
-        return await Broker.ExecuteCommandAsync<GetUserContextsResult>(new GetUserContextsCommand(), options).ConfigureAwait(false);
+        var result = await Broker.ExecuteCommandAsync<GetUserContextsResult>(new GetUserContextsCommand(), options).ConfigureAwait(false);
+
+        return result.UserContexts;
     }
 
     public async Task RemoveUserContextAsync(UserContext userContext, RemoveUserContextOptions? options = default)

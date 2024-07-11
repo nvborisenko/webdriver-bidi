@@ -4,7 +4,7 @@ using OpenQA.Selenium.BiDi.Communication;
 
 namespace OpenQA.Selenium.BiDi.Modules.Log;
 
-internal sealed class LogModule(Broker broker) : Module(broker)
+public sealed class LogModule(Broker broker) : Module(broker)
 {
     public async Task<Subscription> OnEntryAddedAsync(Func<BaseLogEntry, Task> callback, BrowsingContext.BrowsingContext? context = default)
     {

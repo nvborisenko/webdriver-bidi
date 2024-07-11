@@ -2,7 +2,7 @@
 
 namespace OpenQA.Selenium.BiDi.Modules;
 
-internal abstract class Module(Broker broker)
+public abstract class Module(Broker broker)
 {
     protected Broker Broker { get; } = broker;
 }

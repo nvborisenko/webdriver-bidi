@@ -10,7 +10,7 @@ using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Communication;
 
-internal class Transport : IDisposable
+public class Transport : IDisposable
 {
     private readonly ClientWebSocket _webSocket;
     private readonly Uri _uri;

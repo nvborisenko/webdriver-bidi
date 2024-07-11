@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace OpenQA.Selenium.BiDi.Modules.Storage;
 
-internal class StorageModule(Broker broker) : Module(broker)
+public class StorageModule(Broker broker) : Module(broker)
 {
     public async Task<GetCookiesResult> GetCookiesAsync(GetCookiesOptions? options = default)
     {
