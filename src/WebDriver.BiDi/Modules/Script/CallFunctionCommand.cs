@@ -26,7 +26,7 @@ public record CallFunctionOptions : CommandOptions
 
     public SerializationOptions? SerializationOptions { get; set; }
 
-    public LocalValue? This { get; set; }
+    public object? This { get; set; }
 
     public bool? UserActivation { get; set; }
 }

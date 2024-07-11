@@ -37,7 +37,7 @@ public sealed class ScriptModule(Broker broker) : Module(broker)
             @params.Arguments = options.Arguments?.Select(LocalValue.ConvertFrom);
             @params.ResultOwnership = options.ResultOwnership;
             @params.SerializationOptions = options.SerializationOptions;
-            @params.This = options.This;
+            @params.This = LocalValue.ConvertFrom(options.This);
             @params.UserActivation = options.UserActivation;
         }
 
