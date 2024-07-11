@@ -18,6 +18,35 @@ public abstract record LocalValue
 {
     public static implicit operator LocalValue(int value) { return new NumberLocalValue(value); }
     public static implicit operator LocalValue(string value) { return new StringLocalValue(value); }
+
+    // TODO: Extend converting from types
+    public static LocalValue ConvertFrom(object? value)
+    {
+        switch (value)
+        {
+            case null:
+                return new NullLocalValue();
+            case int:
+                return (int)value;
+            case string:
+                return (string)value;
+            case object:
+                {
+                    var type = value.GetType();
+
+                    var properties = type.GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+
+                    List<List<LocalValue>> values = [];
+
+                    foreach (var property in properties)
+                    {
+                        values.Add([property.Name, ConvertFrom(property.GetValue(value))]);
+                    }
+
+                    return new ObjectLocalValue(values);
+                }
+        }
+    }
 }
 
 public abstract record PrimitiveProtocolLocalValue : LocalValue
@@ -42,7 +71,7 @@ public record DateLocalValue(string Value) : LocalValue;
 
 public record MapLocalValue(IDictionary<string, LocalValue> Value) : LocalValue; // seems to implement IDictionary
 
-public record ObjectLocalValue(IDictionary<string, LocalValue> Value) : LocalValue;
+public record ObjectLocalValue(IEnumerable<IEnumerable<LocalValue>> Value) : LocalValue;
 
 public record RegExpLocalValue(RegExpValue Value) : LocalValue;
 

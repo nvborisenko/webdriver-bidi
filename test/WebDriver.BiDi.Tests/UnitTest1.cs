@@ -305,7 +305,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         public async Task AddPreloadScript()
         {
             var context = await session.BrowsingContext.CreateAsync(BrowsingContextType.Tab);
-            
+
             await using var script = await context.Script.AddPreloadScriptAsync("prompt()");
 
             await context.NavigateAsync("https://selenium.dev", new() { Wait = ReadinessState.None });
@@ -729,6 +729,18 @@ namespace OpenQA.Selenium.BiDi.Tests
 
             NodeRemoteValue el = await context.Script.CallFunctionAsync("() => document.querySelector('div')", true);
             Console.WriteLine(el.Value.LocalName);
+        }
+
+        [Test]
+        public async Task CallFunctionObject()
+        {
+            var context = await session.BrowsingContext.CreateAsync(BrowsingContextType.Tab);
+
+            await context.NavigateAsync("https://selenium.dev", new() { Wait = ReadinessState.Interactive });
+
+            string result = await context.Script.CallFunctionAsync("obj => obj.foo + obj.bar", true, new() { Arguments = [new { foo = "Hi", bar = 666 }] });
+
+            result.Should().Be("Hi666");
         }
     }
 }

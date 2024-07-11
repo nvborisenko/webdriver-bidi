@@ -1,5 +1,6 @@
 ﻿using OpenQA.Selenium.BiDi.Communication;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace OpenQA.Selenium.BiDi.Modules.Script;
@@ -33,7 +34,7 @@ public sealed class ScriptModule(Broker broker) : Module(broker)
 
         if (options is not null)
         {
-            @params.Arguments = options.Arguments;
+            @params.Arguments = options.Arguments?.Select(LocalValue.ConvertFrom);
             @params.ResultOwnership = options.ResultOwnership;
             @params.SerializationOptions = options.SerializationOptions;
             @params.This = options.This;
