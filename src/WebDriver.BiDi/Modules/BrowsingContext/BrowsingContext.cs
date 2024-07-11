@@ -15,6 +15,7 @@ public class BrowsingContext
         _networkModule = new Lazy<BrowsingContextNetworkModule>(() => new BrowsingContextNetworkModule(this, _session.Network));
         _scriptModule = new Lazy<BrowsingContextScriptModule>(() => new BrowsingContextScriptModule(this, _session.ScriptModule));
         _storageModule = new Lazy<BrowsingContextStorageModule>(() => new BrowsingContextStorageModule(this, _session.Storage));
+        _inputModule = new Lazy<BrowsingContextInputModule>(() => new BrowsingContextInputModule(this, _session.InputModule));
     }
 
     private readonly BiDi.Session _session;
