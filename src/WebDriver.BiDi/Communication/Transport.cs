@@ -10,17 +10,9 @@ using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Communication;
 
-public class Transport : IDisposable
+public class Transport(Uri _uri) : IDisposable
 {
-    private readonly ClientWebSocket _webSocket;
-    private readonly Uri _uri;
-
-    public Transport(Uri uri)
-    {
-        _webSocket = new ClientWebSocket();
-        _uri = uri;
-    }
-
+    private readonly ClientWebSocket _webSocket = new();
     private readonly ArraySegment<byte> _receiveBuffer = new(new byte[1024 * 8]);
 
     public async Task ConnectAsync(CancellationToken cancellationToken)
@@ -39,7 +31,7 @@ public class Transport : IDisposable
         {
             result = await _webSocket.ReceiveAsync(_receiveBuffer, cancellationToken).ConfigureAwait(false);
 
-            ms.Write(_receiveBuffer.Array!, _receiveBuffer.Offset, result.Count);
+            await ms.WriteAsync(_receiveBuffer.Array!, _receiveBuffer.Offset, result.Count).ConfigureAwait(false);
         } while (!result.EndOfMessage);
 
         ms.Seek(0, SeekOrigin.Begin);
@@ -48,7 +40,9 @@ public class Transport : IDisposable
         Debug.WriteLine($"RCV << {Encoding.UTF8.GetString(ms.ToArray())}");
 #endif
 
-        return (T)JsonSerializer.Deserialize(ms, typeof(T), jsonSerializerContext)!;
+        var res = await JsonSerializer.DeserializeAsync(ms, typeof(T), jsonSerializerContext, cancellationToken).ConfigureAwait(false);
+
+        return (T)res!;
     }
 
     public async Task SendAsJsonAsync(Command command, JsonSerializerContext jsonSerializerContext, CancellationToken cancellationToken)
