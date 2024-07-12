@@ -6,11 +6,10 @@ using System.Threading;
 using System.Text.Json;
 using System.Diagnostics;
 using System.Text;
-using System.Text.Json.Serialization;
 
-namespace OpenQA.Selenium.BiDi.Communication;
+namespace OpenQA.Selenium.BiDi.Communication.Transport;
 
-public class Transport(Uri _uri) : IDisposable
+public class WebSocketTransport(Uri _uri) : ITransport, IDisposable
 {
     private readonly ClientWebSocket _webSocket = new();
     private readonly ArraySegment<byte> _receiveBuffer = new(new byte[1024 * 8]);
@@ -21,7 +20,7 @@ public class Transport(Uri _uri) : IDisposable
         await _webSocket.ConnectAsync(_uri, cancellationToken).ConfigureAwait(false);
     }
 
-    public async Task<T> ReceiveAsJsonAsync<T>(JsonSerializerContext jsonSerializerContext, CancellationToken cancellationToken)
+    public async Task<T> ReceiveAsJsonAsync<T>(JsonSerializerOptions jsonSerializerOptions, CancellationToken cancellationToken)
     {
         using var ms = new MemoryStream();
 
@@ -40,14 +39,14 @@ public class Transport(Uri _uri) : IDisposable
         Debug.WriteLine($"RCV << {Encoding.UTF8.GetString(ms.ToArray())}");
 #endif
 
-        var res = await JsonSerializer.DeserializeAsync(ms, typeof(T), jsonSerializerContext, cancellationToken).ConfigureAwait(false);
+        var res = await JsonSerializer.DeserializeAsync(ms, typeof(T), jsonSerializerOptions, cancellationToken).ConfigureAwait(false);
 
         return (T)res!;
     }
 
-    public async Task SendAsJsonAsync(Command command, JsonSerializerContext jsonSerializerContext, CancellationToken cancellationToken)
+    public async Task SendAsJsonAsync(Command command, JsonSerializerOptions jsonSerializerOptions, CancellationToken cancellationToken)
     {
-        var buffer = JsonSerializer.SerializeToUtf8Bytes(command, typeof(Command), jsonSerializerContext);
+        var buffer = JsonSerializer.SerializeToUtf8Bytes(command, typeof(Command), jsonSerializerOptions);
 
 #if DEBUG
         Debug.WriteLine($"SND >> {buffer.Length} > {Encoding.UTF8.GetString(buffer)}");

@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
 using OpenQA.Selenium.BiDi.Communication;
+using OpenQA.Selenium.BiDi.Communication.Transport;
 
 namespace OpenQA.Selenium.BiDi;
 
 public class Session : IAsyncDisposable
 {
-    private readonly Transport _transport;
+    private readonly ITransport _transport;
     private readonly Broker _broker;
 
     private readonly Lazy<Modules.Session.SessionModule> _sessionModule;
@@ -22,7 +23,7 @@ public class Session : IAsyncDisposable
     {
         var uri = new Uri(url);
 
-        _transport = new Transport(new Uri(url));
+        _transport = new WebSocketTransport(new Uri(url));
         _broker = new Broker(this, _transport);
 
         _sessionModule = new Lazy<Modules.Session.SessionModule>(() => new Modules.Session.SessionModule(_broker));
@@ -53,7 +54,7 @@ public class Session : IAsyncDisposable
     {
         var session = new Session(url);
 
-        await session.ConnectAsync().ConfigureAwait(false);
+        await session._broker.ConnectAsync(default).ConfigureAwait(false);
 
         return session;
     }
@@ -70,10 +71,5 @@ public class Session : IAsyncDisposable
     public async ValueTask DisposeAsync()
     {
         await EndAsync().ConfigureAwait(false);
-    }
-
-    private async Task ConnectAsync()
-    {
-        await _broker.ConnectAsync(default).ConfigureAwait(false);
     }
 }

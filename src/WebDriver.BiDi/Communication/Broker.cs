@@ -1,5 +1,5 @@
-using OpenQA.Selenium.BiDi.Communication.Json;
 using OpenQA.Selenium.BiDi.Communication.Json.Converters;
+using OpenQA.Selenium.BiDi.Communication.Transport;
 using OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 using System;
 using System.Collections.Concurrent;
@@ -16,7 +16,7 @@ namespace OpenQA.Selenium.BiDi.Communication;
 public class Broker : IAsyncDisposable
 {
     private readonly Session _session;
-    private readonly Transport _transport;
+    private readonly ITransport _transport;
 
     private readonly ConcurrentDictionary<int, TaskCompletionSource<object>> _pendingCommands = new();
     private readonly BlockingCollection<MessageEvent> _pendingEvents = [];
@@ -34,14 +34,14 @@ public class Broker : IAsyncDisposable
     private Task? _eventEmitterTask;
     private CancellationTokenSource? _receiveMessagesCancellationTokenSource;
 
-    private readonly SourceGenerationContext _jsonSourceGenerationContext;
+    private readonly JsonSerializerOptions _jsonSerializerOptions;
 
-    public Broker(Session session, Transport transport)
+    public Broker(Session session, ITransport transport)
     {
         _session = session;
         _transport = transport;
 
-        var jsonSerializerOptions = new JsonSerializerOptions
+        _jsonSerializerOptions = new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true,
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
@@ -71,8 +71,6 @@ public class Broker : IAsyncDisposable
                 //
             }
         };
-
-        _jsonSourceGenerationContext = new SourceGenerationContext(jsonSerializerOptions);
     }
 
     public async Task ConnectAsync(CancellationToken cancellationToken)
@@ -88,7 +86,7 @@ public class Broker : IAsyncDisposable
     {
         while (!cancellationToken.IsCancellationRequested)
         {
-            var message = await _transport.ReceiveAsJsonAsync<Message>(_jsonSourceGenerationContext, cancellationToken);
+            var message = await _transport.ReceiveAsJsonAsync<Message>(_jsonSerializerOptions, cancellationToken);
 
             switch (message)
             {
@@ -119,7 +117,7 @@ public class Broker : IAsyncDisposable
                     {
                         foreach (var handler in eventHandlers)
                         {
-                            var args = (EventArgs)result.Params.Deserialize(handler.EventArgsType, _jsonSourceGenerationContext)!;
+                            var args = (EventArgs)result.Params.Deserialize(handler.EventArgsType, _jsonSerializerOptions)!;
 
                             args.Session = _session;
 
@@ -149,7 +147,7 @@ public class Broker : IAsyncDisposable
     {
         var result = await ExecuteCommandCoreAsync(command, options).ConfigureAwait(false);
 
-        return (TResult)((JsonElement)result).Deserialize(typeof(TResult), _jsonSourceGenerationContext)!;
+        return (TResult)((JsonElement)result).Deserialize(typeof(TResult), _jsonSerializerOptions)!;
     }
 
     public async Task ExecuteCommandAsync(Command command, CommandOptions? options)
@@ -171,7 +169,7 @@ public class Broker : IAsyncDisposable
 
         _pendingCommands[command.Id] = tcs;
 
-        await _transport.SendAsJsonAsync(command, _jsonSourceGenerationContext, cts.Token).ConfigureAwait(false);
+        await _transport.SendAsJsonAsync(command, _jsonSerializerOptions, cts.Token).ConfigureAwait(false);
 
         return await tcs.Task.ConfigureAwait(false);
     }
