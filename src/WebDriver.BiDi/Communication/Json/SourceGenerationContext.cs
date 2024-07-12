@@ -1,4 +1,6 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Metadata;
 
 namespace OpenQA.Selenium.BiDi.Communication.Json;
 
@@ -53,7 +55,7 @@ namespace OpenQA.Selenium.BiDi.Communication.Json;
 [JsonSerializable(typeof(Modules.Session.StatusResult))]
 [JsonSerializable(typeof(Modules.Session.NewResult))]
 
-[JsonSerializable(typeof(Modules.Browser.CloseCommand),TypeInfoPropertyName = "Browser_CloseCommand")]
+[JsonSerializable(typeof(Modules.Browser.CloseCommand), TypeInfoPropertyName = "Browser_CloseCommand")]
 [JsonSerializable(typeof(Modules.Browser.UserContextInfo))]
 [JsonSerializable(typeof(Modules.Browser.GetUserContextsResult))]
 
@@ -85,7 +87,4 @@ namespace OpenQA.Selenium.BiDi.Communication.Json;
 [JsonSerializable(typeof(Modules.Storage.GetCookiesResult))]
 [JsonSerializable(typeof(Modules.Storage.DeleteCookiesResult))]
 [JsonSerializable(typeof(Modules.Storage.SetCookieResult))]
-internal partial class SourceGenerationContext : JsonSerializerContext
-{
-
-}
+internal partial class SourceGenerationContext : JsonSerializerContext;

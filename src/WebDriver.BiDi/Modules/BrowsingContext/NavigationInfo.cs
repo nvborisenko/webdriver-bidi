@@ -2,5 +2,5 @@
 
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
-public record NavigationInfo(BrowsingContext Context, Navigation Navigation, DateTime Timestamp, string Url)
-    : BrowsingContextEventArgs(Context);
+public record NavigationInfo(BiDi.Session Session, BrowsingContext Context, Navigation Navigation, DateTime Timestamp, string Url)
+    : BrowsingContextEventArgs(Session, Context);

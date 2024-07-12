@@ -1,10 +1,13 @@
 ﻿using OpenQA.Selenium.BiDi.Modules.BrowsingContext;
+using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi;
 
-public abstract record EventArgs
+public abstract record EventArgs(Session Session)
 {
-    public Session Session { get; internal set; }
+    [JsonIgnore]
+    public Session Session { get; internal set; } = Session;
 }
 
-public abstract record BrowsingContextEventArgs(BrowsingContext Context) : EventArgs;
+public abstract record BrowsingContextEventArgs(Session Session, BrowsingContext Context)
+    : EventArgs(Session);

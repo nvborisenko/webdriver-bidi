@@ -2,8 +2,8 @@
 
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
-public record UserPromptOpenedEventArgs(BrowsingContext Context, UserPromptType Type, string Message)
-    : BrowsingContextEventArgs(Context)
+public record UserPromptOpenedEventArgs(BiDi.Session Session, BrowsingContext Context, UserPromptType Type, string Message)
+    : BrowsingContextEventArgs(Session, Context)
 {
     [JsonInclude]
     public string? DefaultValue { get; internal set; }

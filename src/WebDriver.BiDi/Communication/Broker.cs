@@ -20,7 +20,7 @@ public class Broker : IAsyncDisposable
     private readonly ConcurrentDictionary<int, TaskCompletionSource<object>> _pendingCommands = new();
     private readonly BlockingCollection<MessageEvent> _pendingEvents = [];
 
-    
+
 
     private readonly ConcurrentDictionary<string, List<EventHandler>> _eventHandlers = new();
 
@@ -68,7 +68,7 @@ public class Broker : IAsyncDisposable
                 new Json.Polymorphic.RealmInfoConverter(),
                 new Json.Polymorphic.LogEntryConverter(),
                 //
-            },
+            }
         };
 
         _jsonSourceGenerationContext = new SourceGenerationContext(jsonSerializerOptions);
