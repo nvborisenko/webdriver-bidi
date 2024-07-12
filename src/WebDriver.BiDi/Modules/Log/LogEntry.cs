@@ -13,8 +13,8 @@ public abstract record BaseLogEntry(BiDi.Session Session, Level Level, Script.So
 public record ConsoleLogEntry(BiDi.Session Session, Level Level, Script.Source Source, string Text, DateTime Timestamp, string Method, IReadOnlyList<Script.RemoteValue> Args)
     : BaseLogEntry(Session, Level, Source, Text, Timestamp);
 
-public record JavascriptLogEntry(BiDi.Session Session, Level level, Script.Source source, string text, DateTime timestamp)
-    : BaseLogEntry(Session, level, source, text, timestamp);
+public record JavascriptLogEntry(BiDi.Session Session, Level Level, Script.Source Source, string Text, DateTime Timestamp)
+    : BaseLogEntry(Session, Level, Source, Text, Timestamp);
 
 public enum Level
 {
