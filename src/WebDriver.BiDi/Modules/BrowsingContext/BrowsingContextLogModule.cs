@@ -4,22 +4,13 @@ using System;
 
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
-public class BrowsingContextLogModule
+public class BrowsingContextLogModule(BrowsingContext context, LogModule logModule)
 {
-    private readonly BrowsingContext _context;
-    private readonly LogModule _logModule;
-
-    public BrowsingContextLogModule(BrowsingContext context, LogModule logModule)
-    {
-        _context = context;
-        _logModule = logModule;
-    }
-
     public Task<Subscription> OnEntryAddedAsync(Func<BaseLogEntry, Task> callback)
     {
-        return _logModule.OnEntryAddedAsync(async args =>
+        return logModule.OnEntryAddedAsync(async args =>
         {
-            if (args.Source.Context is not null && Equals(args.Source.Context))
+            if (args.Source.Context?.Equals(context) is true)
             {
                 await callback(args).ConfigureAwait(false);
             }
@@ -28,9 +19,9 @@ public class BrowsingContextLogModule
 
     public Task<Subscription> OnEntryAddedAsync(Action<BaseLogEntry> callback)
     {
-        return _logModule.OnEntryAddedAsync(args =>
+        return logModule.OnEntryAddedAsync(args =>
         {
-            if (args.Source.Context?.Equals(_context) is true)
+            if (args.Source.Context?.Equals(context) is true)
             {
                 callback(args);
             }
