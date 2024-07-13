@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
+// TODO: Split it to separate class with just info and event args
 public record BrowsingContextInfo(BiDi.Session Session, IReadOnlyList<BrowsingContextInfo> Children, BrowsingContext Context, string Url, Browser.UserContext UserContext)
     : BrowsingContextEventArgs(Session, Context)
 {
