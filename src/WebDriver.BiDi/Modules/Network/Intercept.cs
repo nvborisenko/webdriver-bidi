@@ -30,16 +30,9 @@ public class Intercept : IAsyncDisposable
         }
     }
 
-    public async Task OnBeforeRequestSentAsync(Func<BeforeRequestSentEventArgs, Task> callback)
+    public async Task OnBeforeRequestSentAsync(Func<BeforeRequestSentEventArgs, Task> callback, SubscriptionOptions? options = default)
     {
-        var subscription = await _session.Network.OnBeforeRequestSentAsync(async args => await Filter(args, callback)).ConfigureAwait(false);
-
-        _onBeforeRequestSentSubscriptions.Add(subscription);
-    }
-
-    public async Task OnBeforeRequestSentAsync(BrowsingContext.BrowsingContext context, Func<BeforeRequestSentEventArgs, Task> callback)
-    {
-        var subscription = await context.Network.OnBeforeRequestSentAsync(async args => await Filter(args, callback)).ConfigureAwait(false);
+        var subscription = await _session.Network.OnBeforeRequestSentAsync(async args => await Filter(args, callback), options).ConfigureAwait(false);
 
         _onBeforeRequestSentSubscriptions.Add(subscription);
     }
@@ -60,16 +53,9 @@ public class Intercept : IAsyncDisposable
         }
     }
 
-    public async Task OnResponseStartedAsync(Func<ResponseStartedEventArgs, Task> callback)
+    public async Task OnResponseStartedAsync(Func<ResponseStartedEventArgs, Task> callback, SubscriptionOptions? options = default)
     {
-        var subscription = await _session.Network.OnResponseStartedAsync(async args => await Filter(args, callback)).ConfigureAwait(false);
-
-        _onResponseStartedSubscriptions.Add(subscription);
-    }
-
-    public async Task OnResponseStartedAsync(BrowsingContext.BrowsingContext context, Func<ResponseStartedEventArgs, Task> callback)
-    {
-        var subscription = await context.Network.OnResponseStartedAsync(async args => await Filter(args, callback)).ConfigureAwait(false);
+        var subscription = await _session.Network.OnResponseStartedAsync(async args => await Filter(args, callback), options).ConfigureAwait(false);
 
         _onResponseStartedSubscriptions.Add(subscription);
     }

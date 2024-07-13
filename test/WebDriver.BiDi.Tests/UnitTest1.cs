@@ -268,7 +268,7 @@ namespace OpenQA.Selenium.BiDi.Tests
                 info = args;
             });
 
-            await context.NavigateAsync("https://selenium.dev");
+            await context.NavigateAsync("https://selenium.dev", new() { Wait = ReadinessState.Complete });
 
             info.Context.Should().NotBeNull();
             info.Timestamp.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(30));

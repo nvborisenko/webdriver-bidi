@@ -100,74 +100,74 @@ public class BrowsingContext
         return _session.BrowsingContext.HandleUserPromptAsync(this, options);
     }
 
-    public Task<Subscription> OnNavigationStartedAsync(Func<NavigationInfo, Task> callback)
+    public Task<Subscription> OnNavigationStartedAsync(Func<NavigationInfo, Task> callback, SubscriptionOptions? options = default)
     {
-        return _session.BrowsingContext.OnNavigationStartedAsync(callback, this);
+        return _session.BrowsingContext.OnNavigationStartedAsync(callback, new BrowsingContextsSubscriptionOptions(options) { Contexts = [this] });
     }
 
-    public Task<Subscription> OnNavigationStartedAsync(Action<NavigationInfo> callback)
+    public Task<Subscription> OnNavigationStartedAsync(Action<NavigationInfo> callback, SubscriptionOptions? options = default)
     {
-        return _session.BrowsingContext.OnNavigationStartedAsync(callback, this);
+        return _session.BrowsingContext.OnNavigationStartedAsync(callback, new BrowsingContextsSubscriptionOptions(options) { Contexts = [this] });
     }
 
-    public Task<Subscription> OnFragmentNavigatedAsync(Func<NavigationInfo, Task> callback)
+    public Task<Subscription> OnFragmentNavigatedAsync(Func<NavigationInfo, Task> callback, SubscriptionOptions? options = default)
     {
-        return _session.BrowsingContext.OnFragmentNavigatedAsync(callback, this);
+        return _session.BrowsingContext.OnFragmentNavigatedAsync(callback, new BrowsingContextsSubscriptionOptions(options) { Contexts = [this] });
     }
 
-    public Task<Subscription> OnFragmentNavigatedAsync(Action<NavigationInfo> callback)
+    public Task<Subscription> OnFragmentNavigatedAsync(Action<NavigationInfo> callback, SubscriptionOptions? options = default)
     {
-        return _session.BrowsingContext.OnFragmentNavigatedAsync(callback, this);
+        return _session.BrowsingContext.OnFragmentNavigatedAsync(callback, new BrowsingContextsSubscriptionOptions(options) { Contexts = [this] });
     }
 
-    public Task<Subscription> OnDomContentLoadedAsync(Func<NavigationInfo, Task> callback)
+    public Task<Subscription> OnDomContentLoadedAsync(Func<NavigationInfo, Task> callback, SubscriptionOptions? options = default)
     {
-        return _session.BrowsingContext.OnDomContentLoadedAsync(callback, this);
+        return _session.BrowsingContext.OnDomContentLoadedAsync(callback, new BrowsingContextsSubscriptionOptions(options) { Contexts = [this] });
     }
 
-    public Task<Subscription> OnLoadAsync(Action<NavigationInfo> callback)
+    public Task<Subscription> OnLoadAsync(Action<NavigationInfo> callback, SubscriptionOptions? options = default)
     {
-        return _session.BrowsingContext.OnLoadAsync(callback, this);
+        return _session.BrowsingContext.OnLoadAsync(callback, new BrowsingContextsSubscriptionOptions(options) { Contexts = [this] });
     }
 
-    public Task<Subscription> OnLoadAsync(Func<NavigationInfo, Task> callback)
+    public Task<Subscription> OnLoadAsync(Func<NavigationInfo, Task> callback, SubscriptionOptions? options = default)
     {
-        return _session.BrowsingContext.OnLoadAsync(callback, this);
+        return _session.BrowsingContext.OnLoadAsync(callback, new BrowsingContextsSubscriptionOptions(options) { Contexts = [this] });
     }
 
-    public Task<Subscription> OnDownloadWillBeginAsync(Action<NavigationInfo> callback)
+    public Task<Subscription> OnDownloadWillBeginAsync(Action<NavigationInfo> callback, SubscriptionOptions? options = default)
     {
-        return _session.BrowsingContext.OnDownloadWillBeginAsync(callback, this);
+        return _session.BrowsingContext.OnDownloadWillBeginAsync(callback, new BrowsingContextsSubscriptionOptions(options) { Contexts = [this] });
     }
 
-    public Task<Subscription> OnDownloadWillBeginAsync(Func<NavigationInfo, Task> callback)
+    public Task<Subscription> OnDownloadWillBeginAsync(Func<NavigationInfo, Task> callback, SubscriptionOptions? options = default)
     {
-        return _session.BrowsingContext.OnDownloadWillBeginAsync(callback, this);
+        return _session.BrowsingContext.OnDownloadWillBeginAsync(callback, new BrowsingContextsSubscriptionOptions(options) { Contexts = [this] });
     }
 
-    public Task<Subscription> OnNavigationAbortedAsync(Action<NavigationInfo> callback)
+    public Task<Subscription> OnNavigationAbortedAsync(Action<NavigationInfo> callback, SubscriptionOptions? options = default)
     {
-        return _session.BrowsingContext.OnNavigationAbortedAsync(callback, this);
+        return _session.BrowsingContext.OnNavigationAbortedAsync(callback, new BrowsingContextsSubscriptionOptions(options) { Contexts = [this] });
     }
 
-    public Task<Subscription> OnNavigationAbortedAsync(Func<NavigationInfo, Task> callback)
+    public Task<Subscription> OnNavigationAbortedAsync(Func<NavigationInfo, Task> callback, SubscriptionOptions? options = default)
     {
-        return _session.BrowsingContext.OnNavigationAbortedAsync(callback, this);
+        return _session.BrowsingContext.OnNavigationAbortedAsync(callback, new BrowsingContextsSubscriptionOptions(options) { Contexts = [this] });
     }
 
-    public Task<Subscription> OnNavigationFailedAsync(Action<NavigationInfo> callback)
+    public Task<Subscription> OnNavigationFailedAsync(Action<NavigationInfo> callback, SubscriptionOptions? options = default)
     {
-        return _session.BrowsingContext.OnNavigationFailedAsync(callback, this);
+        return _session.BrowsingContext.OnNavigationFailedAsync(callback, new BrowsingContextsSubscriptionOptions(options) { Contexts = [this] });
     }
 
-    public Task<Subscription> OnNavigationFailedAsync(Func<NavigationInfo, Task> callback)
+    public Task<Subscription> OnNavigationFailedAsync(Func<NavigationInfo, Task> callback, SubscriptionOptions? options = default)
     {
-        return _session.BrowsingContext.OnNavigationFailedAsync(callback, this);
+        return _session.BrowsingContext.OnNavigationFailedAsync(callback, new BrowsingContextsSubscriptionOptions(options) { Contexts = [this] });
     }
 
-    public Task<Subscription> OnDomContentLoadedAsync(Action<NavigationInfo> callback)
+    public Task<Subscription> OnDomContentLoadedAsync(Action<NavigationInfo> callback, SubscriptionOptions? options = default)
     {
-        return _session.BrowsingContext.OnDomContentLoadedAsync(callback, this);
+        return _session.BrowsingContext.OnDomContentLoadedAsync(callback, new BrowsingContextsSubscriptionOptions(options) { Contexts = [this] });
     }
 
     public override bool Equals(object? obj)

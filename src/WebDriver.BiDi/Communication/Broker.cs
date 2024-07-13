@@ -1,6 +1,5 @@
 using OpenQA.Selenium.BiDi.Communication.Json.Converters;
 using OpenQA.Selenium.BiDi.Communication.Transport;
-using OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -115,19 +114,19 @@ public class Broker : IAsyncDisposable
                 {
                     if (eventHandlers is not null)
                     {
-                        foreach (var handler in eventHandlers)
+                        foreach (var handler in eventHandlers.ToArray()) // copy handlers avoiding modified collection while iterating
                         {
                             var args = (EventArgs)result.Params.Deserialize(handler.EventArgsType, _jsonSerializerOptions)!;
 
                             args.Session = _session;
 
                             // handle browsing context subscriber
-                            if (handler.Context is not null && args is BrowsingContextEventArgs browsingContextEventArgs && browsingContextEventArgs.Context.Equals(handler.Context))
+                            if (handler.Contexts is not null && args is BrowsingContextEventArgs browsingContextEventArgs && handler.Contexts.Contains(browsingContextEventArgs.Context))
                             {
                                 await handler.InvokeAsync(args).ConfigureAwait(false);
                             }
                             // handle only session subscriber
-                            else if (handler.Context is null)
+                            else if (handler.Contexts is null)
                             {
                                 await handler.InvokeAsync(args).ConfigureAwait(false);
                             }
@@ -174,46 +173,58 @@ public class Broker : IAsyncDisposable
         return await tcs.Task.ConfigureAwait(false);
     }
 
-    public async Task<Subscription> SubscribeAsync<TEventArgs>(string eventName, Action<TEventArgs> action, BrowsingContext? context = default)
+    public async Task<Subscription> SubscribeAsync<TEventArgs>(string eventName, Action<TEventArgs> action, SubscriptionOptions? options = default)
         where TEventArgs : EventArgs
     {
         var handlers = _eventHandlers.GetOrAdd(eventName, (a) => []);
 
-        if (context is not null)
+        if (options is BrowsingContextsSubscriptionOptions browsingContextsOptions)
         {
-            await _session.SessionModule.SubscribeAsync([eventName], new() { Contexts = [context] }).ConfigureAwait(false);
+            await _session.SessionModule.SubscribeAsync([eventName], new() { Contexts = browsingContextsOptions.Contexts }).ConfigureAwait(false);
+
+            var eventHandler = new SyncEventHandler<TEventArgs>(eventName, action, browsingContextsOptions?.Contexts);
+
+            handlers.Add(eventHandler);
+
+            return new Subscription(this, eventHandler);
         }
         else
         {
             await _session.SessionModule.SubscribeAsync([eventName]).ConfigureAwait(false);
+
+            var eventHandler = new SyncEventHandler<TEventArgs>(eventName, action);
+
+            handlers.Add(eventHandler);
+
+            return new Subscription(this, eventHandler);
         }
-
-        var eventHandler = new SyncEventHandler<TEventArgs>(eventName, action, context);
-
-        handlers.Add(eventHandler);
-
-        return new Subscription(this, eventHandler);
     }
 
-    public async Task<Subscription> SubscribeAsync<TEventArgs>(string eventName, Func<TEventArgs, Task> func, BrowsingContext? context = default)
+    public async Task<Subscription> SubscribeAsync<TEventArgs>(string eventName, Func<TEventArgs, Task> func, SubscriptionOptions? options = default)
         where TEventArgs : EventArgs
     {
         var handlers = _eventHandlers.GetOrAdd(eventName, (a) => []);
 
-        if (context is not null)
+        if (options is BrowsingContextsSubscriptionOptions browsingContextsOptions)
         {
-            await _session.SessionModule.SubscribeAsync([eventName], new() { Contexts = [context] }).ConfigureAwait(false);
+            await _session.SessionModule.SubscribeAsync([eventName], new() { Contexts = browsingContextsOptions.Contexts }).ConfigureAwait(false);
+
+            var eventHandler = new AsyncEventHandler<TEventArgs>(eventName, func, browsingContextsOptions.Contexts);
+
+            handlers.Add(eventHandler);
+
+            return new Subscription(this, eventHandler);
         }
         else
         {
             await _session.SessionModule.SubscribeAsync([eventName]).ConfigureAwait(false);
+
+            var eventHandler = new AsyncEventHandler<TEventArgs>(eventName, func);
+
+            handlers.Add(eventHandler);
+
+            return new Subscription(this, eventHandler);
         }
-
-        var eventHandler = new AsyncEventHandler<TEventArgs>(eventName, func, context);
-
-        handlers.Add(eventHandler);
-
-        return new Subscription(this, eventHandler);
     }
 
     public async Task UnsubscribeAsync(EventHandler eventHandler)
@@ -222,16 +233,16 @@ public class Broker : IAsyncDisposable
 
         eventHandlers.Remove(eventHandler);
 
-        if (eventHandler.Context is not null)
+        if (eventHandler.Contexts is not null)
         {
-            if (!eventHandlers.Any(h => eventHandler.Context.Equals(h.Context)) && !eventHandlers.Any(h => h.Context is null))
+            if (!eventHandlers.Any(h => eventHandler.Contexts.Equals(h.Contexts)) && !eventHandlers.Any(h => h.Contexts is null))
             {
-                await _session.SessionModule.UnsubscribeAsync([eventHandler.EventName], new() { Contexts = [eventHandler.Context] }).ConfigureAwait(false);
+                await _session.SessionModule.UnsubscribeAsync([eventHandler.EventName], new() { Contexts = eventHandler.Contexts }).ConfigureAwait(false);
             }
         }
         else
         {
-            if (!eventHandlers.Any(h => h.Context is not null) && !eventHandlers.Any(h => h.Context is null))
+            if (!eventHandlers.Any(h => h.Contexts is not null) && !eventHandlers.Any(h => h.Contexts is null))
             {
                 await _session.SessionModule.UnsubscribeAsync([eventHandler.EventName]).ConfigureAwait(false);
             }

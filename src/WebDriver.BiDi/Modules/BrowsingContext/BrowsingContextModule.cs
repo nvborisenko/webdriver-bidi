@@ -158,113 +158,113 @@ public class BrowsingContextModule(Broker broker) : Module(broker)
         await Broker.ExecuteCommandAsync(new HandleUserPromptCommand(@params), options).ConfigureAwait(false);
     }
 
-    public async Task<Subscription> OnNavigationStartedAsync(Func<NavigationInfo, Task> callback, BrowsingContext? context = default)
+    public async Task<Subscription> OnNavigationStartedAsync(Func<NavigationInfo, Task> callback, BrowsingContextsSubscriptionOptions? options = default)
     {
-        return await Broker.SubscribeAsync("browsingContext.navigationStarted", callback, context).ConfigureAwait(false);
+        return await Broker.SubscribeAsync("browsingContext.navigationStarted", callback, options).ConfigureAwait(false);
     }
 
-    public async Task<Subscription> OnNavigationStartedAsync(Action<NavigationInfo> callback, BrowsingContext? context = default)
+    public async Task<Subscription> OnNavigationStartedAsync(Action<NavigationInfo> callback, BrowsingContextsSubscriptionOptions? options = default)
     {
-        return await Broker.SubscribeAsync("browsingContext.navigationStarted", callback, context).ConfigureAwait(false);
+        return await Broker.SubscribeAsync("browsingContext.navigationStarted", callback, options).ConfigureAwait(false);
     }
 
-    public async Task<Subscription> OnFragmentNavigatedAsync(Func<NavigationInfo, Task> callback, BrowsingContext? context = default)
+    public async Task<Subscription> OnFragmentNavigatedAsync(Func<NavigationInfo, Task> callback, BrowsingContextsSubscriptionOptions? options = default)
     {
-        return await Broker.SubscribeAsync("browsingContext.fragmentNavigated", callback, context).ConfigureAwait(false);
+        return await Broker.SubscribeAsync("browsingContext.fragmentNavigated", callback, options).ConfigureAwait(false);
     }
 
-    public async Task<Subscription> OnFragmentNavigatedAsync(Action<NavigationInfo> callback, BrowsingContext? context = default)
+    public async Task<Subscription> OnFragmentNavigatedAsync(Action<NavigationInfo> callback, BrowsingContextsSubscriptionOptions? options = default)
     {
-        return await Broker.SubscribeAsync("browsingContext.fragmentNavigated", callback, context).ConfigureAwait(false);
+        return await Broker.SubscribeAsync("browsingContext.fragmentNavigated", callback, options).ConfigureAwait(false);
     }
 
-    public async Task<Subscription> OnDomContentLoadedAsync(Func<NavigationInfo, Task> callback, BrowsingContext? context = default)
+    public async Task<Subscription> OnDomContentLoadedAsync(Func<NavigationInfo, Task> callback, BrowsingContextsSubscriptionOptions? options = default)
     {
-        return await Broker.SubscribeAsync("browsingContext.domContentLoaded", callback, context).ConfigureAwait(false);
+        return await Broker.SubscribeAsync("browsingContext.domContentLoaded", callback, options).ConfigureAwait(false);
     }
 
-    public async Task<Subscription> OnDomContentLoadedAsync(Action<NavigationInfo> callback, BrowsingContext? context = default)
+    public async Task<Subscription> OnDomContentLoadedAsync(Action<NavigationInfo> callback, BrowsingContextsSubscriptionOptions? options = default)
     {
-        return await Broker.SubscribeAsync("browsingContext.domContentLoaded", callback, context).ConfigureAwait(false);
+        return await Broker.SubscribeAsync("browsingContext.domContentLoaded", callback, options).ConfigureAwait(false);
     }
 
-    public async Task<Subscription> OnLoadAsync(Func<NavigationInfo, Task> callback, BrowsingContext? context = default)
+    public async Task<Subscription> OnLoadAsync(Func<NavigationInfo, Task> callback, BrowsingContextsSubscriptionOptions? options = default)
     {
-        return await Broker.SubscribeAsync("browsingContext.load", callback, context).ConfigureAwait(false);
+        return await Broker.SubscribeAsync("browsingContext.load", callback, options).ConfigureAwait(false);
     }
 
-    public async Task<Subscription> OnLoadAsync(Action<NavigationInfo> callback, BrowsingContext? context = default)
+    public async Task<Subscription> OnLoadAsync(Action<NavigationInfo> callback, BrowsingContextsSubscriptionOptions? options = default)
     {
-        return await Broker.SubscribeAsync("browsingContext.load", callback, context).ConfigureAwait(false);
+        return await Broker.SubscribeAsync("browsingContext.load", callback, options).ConfigureAwait(false);
     }
 
-    public async Task<Subscription> OnDownloadWillBeginAsync(Func<NavigationInfo, Task> callback, BrowsingContext? context = default)
+    public async Task<Subscription> OnDownloadWillBeginAsync(Func<NavigationInfo, Task> callback, BrowsingContextsSubscriptionOptions? options = default)
     {
-        return await Broker.SubscribeAsync("browsingContext.downloadWillBegin", callback, context).ConfigureAwait(false);
+        return await Broker.SubscribeAsync("browsingContext.downloadWillBegin", callback, options).ConfigureAwait(false);
     }
 
-    public async Task<Subscription> OnDownloadWillBeginAsync(Action<NavigationInfo> callback, BrowsingContext? context = default)
+    public async Task<Subscription> OnDownloadWillBeginAsync(Action<NavigationInfo> callback, BrowsingContextsSubscriptionOptions? options = default)
     {
-        return await Broker.SubscribeAsync("browsingContext.downloadWillBegin", callback, context).ConfigureAwait(false);
+        return await Broker.SubscribeAsync("browsingContext.downloadWillBegin", callback, options).ConfigureAwait(false);
     }
 
-    public async Task<Subscription> OnNavigationAbortedAsync(Func<NavigationInfo, Task> callback, BrowsingContext? context = default)
+    public async Task<Subscription> OnNavigationAbortedAsync(Func<NavigationInfo, Task> callback, BrowsingContextsSubscriptionOptions? options = default)
     {
-        return await Broker.SubscribeAsync("browsingContext.navigationAborted", callback, context).ConfigureAwait(false);
+        return await Broker.SubscribeAsync("browsingContext.navigationAborted", callback, options).ConfigureAwait(false);
     }
 
-    public async Task<Subscription> OnNavigationAbortedAsync(Action<NavigationInfo> callback, BrowsingContext? context = default)
+    public async Task<Subscription> OnNavigationAbortedAsync(Action<NavigationInfo> callback, BrowsingContextsSubscriptionOptions? options = default)
     {
-        return await Broker.SubscribeAsync("browsingContext.navigationAborted", callback, context).ConfigureAwait(false);
+        return await Broker.SubscribeAsync("browsingContext.navigationAborted", callback, options).ConfigureAwait(false);
     }
 
-    public async Task<Subscription> OnNavigationFailedAsync(Func<NavigationInfo, Task> callback, BrowsingContext? context = default)
+    public async Task<Subscription> OnNavigationFailedAsync(Func<NavigationInfo, Task> callback, BrowsingContextsSubscriptionOptions? options = default)
     {
-        return await Broker.SubscribeAsync("browsingContext.navigationFailed", callback, context).ConfigureAwait(false);
+        return await Broker.SubscribeAsync("browsingContext.navigationFailed", callback, options).ConfigureAwait(false);
     }
 
-    public async Task<Subscription> OnNavigationFailedAsync(Action<NavigationInfo> callback, BrowsingContext? context = default)
+    public async Task<Subscription> OnNavigationFailedAsync(Action<NavigationInfo> callback, BrowsingContextsSubscriptionOptions? options = default)
     {
-        return await Broker.SubscribeAsync("browsingContext.navigationFailed", callback, context).ConfigureAwait(false);
+        return await Broker.SubscribeAsync("browsingContext.navigationFailed", callback, options).ConfigureAwait(false);
     }
 
-    public async Task<Subscription> OnContextCreatedAsync(Func<BrowsingContextInfo, Task> callback, BrowsingContext? context = default)
+    public async Task<Subscription> OnContextCreatedAsync(Func<BrowsingContextInfo, Task> callback, BrowsingContextsSubscriptionOptions? options = default)
     {
-        return await Broker.SubscribeAsync("browsingContext.contextCreated", callback, context).ConfigureAwait(false);
+        return await Broker.SubscribeAsync("browsingContext.contextCreated", callback, options).ConfigureAwait(false);
     }
 
-    public async Task<Subscription> OnContextCreatedAsync(Action<BrowsingContextInfo> callback, BrowsingContext? context = default)
+    public async Task<Subscription> OnContextCreatedAsync(Action<BrowsingContextInfo> callback, BrowsingContextsSubscriptionOptions? options = default)
     {
-        return await Broker.SubscribeAsync("browsingContext.contextCreated", callback, context).ConfigureAwait(false);
+        return await Broker.SubscribeAsync("browsingContext.contextCreated", callback, options).ConfigureAwait(false);
     }
 
-    public async Task<Subscription> OnContextDestroyedAsync(Func<BrowsingContextInfo, Task> callback, BrowsingContext? context = default)
+    public async Task<Subscription> OnContextDestroyedAsync(Func<BrowsingContextInfo, Task> callback, BrowsingContextsSubscriptionOptions? options = default)
     {
-        return await Broker.SubscribeAsync("browsingContext.contextDestroyed", callback, context).ConfigureAwait(false);
+        return await Broker.SubscribeAsync("browsingContext.contextDestroyed", callback, options).ConfigureAwait(false);
     }
 
-    public async Task<Subscription> OnContextDestroyedAsync(Action<BrowsingContextInfo> callback, BrowsingContext? context = default)
+    public async Task<Subscription> OnContextDestroyedAsync(Action<BrowsingContextInfo> callback, BrowsingContextsSubscriptionOptions? options = default)
     {
-        return await Broker.SubscribeAsync("browsingContext.contextDestroyed", callback, context).ConfigureAwait(false);
+        return await Broker.SubscribeAsync("browsingContext.contextDestroyed", callback, options).ConfigureAwait(false);
     }
 
-    public async Task<Subscription> OnUserPromptOpenedAsync(Func<UserPromptOpenedEventArgs, Task> callback, BrowsingContext? context = default)
+    public async Task<Subscription> OnUserPromptOpenedAsync(Func<UserPromptOpenedEventArgs, Task> callback, BrowsingContextsSubscriptionOptions? options = default)
     {
-        return await Broker.SubscribeAsync("browsingContext.userPromptOpened", callback, context).ConfigureAwait(false);
+        return await Broker.SubscribeAsync("browsingContext.userPromptOpened", callback, options).ConfigureAwait(false);
     }
 
-    public async Task<Subscription> OnUserPromptOpenedAsync(Action<UserPromptOpenedEventArgs> callback, BrowsingContext? context = default)
+    public async Task<Subscription> OnUserPromptOpenedAsync(Action<UserPromptOpenedEventArgs> callback, BrowsingContextsSubscriptionOptions? options = default)
     {
-        return await Broker.SubscribeAsync("browsingContext.userPromptOpened", callback, context).ConfigureAwait(false);
+        return await Broker.SubscribeAsync("browsingContext.userPromptOpened", callback, options).ConfigureAwait(false);
     }
 
-    public async Task<Subscription> OnUserPromptClosedAsync(Func<UserPromptClosedEventArgs, Task> callback, BrowsingContext? context = default)
+    public async Task<Subscription> OnUserPromptClosedAsync(Func<UserPromptClosedEventArgs, Task> callback, BrowsingContextsSubscriptionOptions? options = default)
     {
-        return await Broker.SubscribeAsync("browsingContext.userPromptClosed", callback, context).ConfigureAwait(false);
+        return await Broker.SubscribeAsync("browsingContext.userPromptClosed", callback, options).ConfigureAwait(false);
     }
 
-    public async Task<Subscription> OnUserPromptClosedAsync(Action<UserPromptClosedEventArgs> callback, BrowsingContext? context = default)
+    public async Task<Subscription> OnUserPromptClosedAsync(Action<UserPromptClosedEventArgs> callback, BrowsingContextsSubscriptionOptions? options = default)
     {
-        return await Broker.SubscribeAsync("browsingContext.userPromptClosed", callback, context).ConfigureAwait(false);
+        return await Broker.SubscribeAsync("browsingContext.userPromptClosed", callback, options).ConfigureAwait(false);
     }
 }

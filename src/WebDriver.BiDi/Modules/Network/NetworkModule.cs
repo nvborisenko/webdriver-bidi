@@ -82,61 +82,61 @@ public sealed class NetworkModule(Broker broker) : Module(broker)
         await Broker.ExecuteCommandAsync(new ProvideResponseCommand(@params), options).ConfigureAwait(false);
     }
 
-    public async Task<Subscription> OnBeforeRequestSentAsync(Func<BeforeRequestSentEventArgs, Task> callback, BrowsingContext.BrowsingContext? context = default)
+    public async Task<Subscription> OnBeforeRequestSentAsync(Func<BeforeRequestSentEventArgs, Task> callback, SubscriptionOptions? options = default)
     {
-        return await Broker.SubscribeAsync("network.beforeRequestSent", callback, context).ConfigureAwait(false);
+        return await Broker.SubscribeAsync("network.beforeRequestSent", callback, options).ConfigureAwait(false);
     }
 
-    public async Task<Subscription> OnBeforeRequestSentAsync(Action<BeforeRequestSentEventArgs> callback, BrowsingContext.BrowsingContext? context = default)
+    public async Task<Subscription> OnBeforeRequestSentAsync(Action<BeforeRequestSentEventArgs> callback, SubscriptionOptions? options = default)
     {
-        return await Broker.SubscribeAsync("network.beforeRequestSent", callback, context).ConfigureAwait(false);
+        return await Broker.SubscribeAsync("network.beforeRequestSent", callback, options).ConfigureAwait(false);
     }
 
-    public async Task<Intercept> OnBeforeRequestSentAsync(InterceptOptions? interceptOptions, Func<BeforeRequestSentEventArgs, Task> callback)
+    public async Task<Intercept> OnBeforeRequestSentAsync(InterceptOptions? interceptOptions, Func<BeforeRequestSentEventArgs, Task> callback, SubscriptionOptions? options = default)
     {
         var interceptResult = await AddInterceptAsync([InterceptPhase.BeforeRequestSent], interceptOptions).ConfigureAwait(false);
 
-        await interceptResult.Intercept.OnBeforeRequestSentAsync(callback).ConfigureAwait(false);
+        await interceptResult.Intercept.OnBeforeRequestSentAsync(callback, options).ConfigureAwait(false);
 
         return interceptResult.Intercept;
     }
 
-    public async Task<Subscription> OnResponseStartedAsync(Func<ResponseStartedEventArgs, Task> callback, BrowsingContext.BrowsingContext? context = default)
+    public async Task<Subscription> OnResponseStartedAsync(Func<ResponseStartedEventArgs, Task> callback, SubscriptionOptions? options = default)
     {
-        return await Broker.SubscribeAsync("network.responseStarted", callback, context).ConfigureAwait(false);
+        return await Broker.SubscribeAsync("network.responseStarted", callback, options).ConfigureAwait(false);
     }
 
-    public async Task<Subscription> OnResponseStartedAsync(Action<ResponseStartedEventArgs> callback, BrowsingContext.BrowsingContext? context = default)
+    public async Task<Subscription> OnResponseStartedAsync(Action<ResponseStartedEventArgs> callback, SubscriptionOptions? options = default)
     {
-        return await Broker.SubscribeAsync("network.responseStarted", callback, context).ConfigureAwait(false);
+        return await Broker.SubscribeAsync("network.responseStarted", callback, options).ConfigureAwait(false);
     }
 
-    public async Task<Intercept> OnResponseStartedAsync(InterceptOptions? interceptOptions, Func<ResponseStartedEventArgs, Task> callback)
+    public async Task<Intercept> OnResponseStartedAsync(InterceptOptions? interceptOptions, Func<ResponseStartedEventArgs, Task> callback, SubscriptionOptions? options = default)
     {
         var interceptResult = await AddInterceptAsync([InterceptPhase.ResponseStarted], interceptOptions).ConfigureAwait(false);
 
-        await interceptResult.Intercept.OnResponseStartedAsync(callback).ConfigureAwait(false);
+        await interceptResult.Intercept.OnResponseStartedAsync(callback, options).ConfigureAwait(false);
 
         return interceptResult.Intercept;
     }
 
-    public async Task<Subscription> OnResponseCompletedAsync(Func<ResponseCompletedEventArgs, Task> callback, BrowsingContext.BrowsingContext? context = default)
+    public async Task<Subscription> OnResponseCompletedAsync(Func<ResponseCompletedEventArgs, Task> callback, SubscriptionOptions? options = default)
     {
-        return await Broker.SubscribeAsync("network.responseCompleted", callback, context).ConfigureAwait(false);
+        return await Broker.SubscribeAsync("network.responseCompleted", callback, options).ConfigureAwait(false);
     }
 
-    public async Task<Subscription> OnResponseCompletedAsync(Action<ResponseCompletedEventArgs> callback, BrowsingContext.BrowsingContext? context = default)
+    public async Task<Subscription> OnResponseCompletedAsync(Action<ResponseCompletedEventArgs> callback, SubscriptionOptions? options = default)
     {
-        return await Broker.SubscribeAsync("network.responseCompleted", callback, context).ConfigureAwait(false);
+        return await Broker.SubscribeAsync("network.responseCompleted", callback, options).ConfigureAwait(false);
     }
 
-    public async Task<Subscription> OnFetchErrorAsync(Func<FetchErrorEventArgs, Task> callback, BrowsingContext.BrowsingContext? context = default)
+    public async Task<Subscription> OnFetchErrorAsync(Func<FetchErrorEventArgs, Task> callback, SubscriptionOptions? options = default)
     {
-        return await Broker.SubscribeAsync("network.fetchError", callback, context).ConfigureAwait(false);
+        return await Broker.SubscribeAsync("network.fetchError", callback, options).ConfigureAwait(false);
     }
 
-    public async Task<Subscription> OnFetchErrorAsync(Action<FetchErrorEventArgs> callback, BrowsingContext.BrowsingContext? context = default)
+    public async Task<Subscription> OnFetchErrorAsync(Action<FetchErrorEventArgs> callback, SubscriptionOptions? options = default)
     {
-        return await Broker.SubscribeAsync("network.fetchError", callback, context).ConfigureAwait(false);
+        return await Broker.SubscribeAsync("network.fetchError", callback, options).ConfigureAwait(false);
     }
 }
