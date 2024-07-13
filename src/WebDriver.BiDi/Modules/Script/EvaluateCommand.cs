@@ -38,7 +38,7 @@ public record EvaluateResultSuccess(RemoteValue Result) : EvaluateResult
         return r.Result switch
         {
             StringRemoteValue stringValue => stringValue.Value,
-            NullRemoteValue => null,
+            NullRemoteValue => null!,
             _ => throw new System.Exception($"Cannot convert {r.Result} to string")
         };
     }
