@@ -28,7 +28,6 @@ public class Broker : IAsyncDisposable
 
     private static readonly TaskFactory _myTaskFactory = new(CancellationToken.None, TaskCreationOptions.DenyChildAttach, TaskContinuationOptions.None, TaskScheduler.Default);
 
-    private readonly Task? _commandQueueTask;
     private Task? _receivingMessageTask;
     private Task? _eventEmitterTask;
     private CancellationTokenSource? _receiveMessagesCancellationTokenSource;

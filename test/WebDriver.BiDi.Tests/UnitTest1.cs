@@ -87,7 +87,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         {
             var context = await driver.AsBidirectionalBrowsingContextAsync();
 
-            var res = await context.PrintAsync(new() { Background = true });
+            var res = await context.PrintAsync(new() { Background = true, Timeout = TimeSpan.FromSeconds(5) });
 
             res.Should().NotBeNull();
         }
