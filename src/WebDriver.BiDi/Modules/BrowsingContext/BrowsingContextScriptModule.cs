@@ -24,12 +24,19 @@ public class BrowsingContextScriptModule(BrowsingContext context, ScriptModule s
         return await scriptModule.GetRealmsAsync(options).ConfigureAwait(false);
     }
 
-    public Task<EvaluateResultSuccess> EvaluateAsync(string expression, bool awaitPromise, EvaluateOptions? options = default)
+    public Task<RemoteValue> EvaluateAsync(string expression, bool awaitPromise, EvaluateOptions? options = default)
     {
         return scriptModule.EvaluateAsync(expression, awaitPromise, new ContextTarget(context), options);
     }
 
-    public Task<EvaluateResultSuccess> CallFunctionAsync(string functionDeclaration, bool awaitPromise, CallFunctionOptions? options = default)
+    public async Task<TResult?> EvaluateAsync<TResult>(string expression, bool awaitPromise, EvaluateOptions? options = default)
+    {
+        var remoteValue = await EvaluateAsync(expression, awaitPromise, options).ConfigureAwait(false);
+
+        return remoteValue.ConvertTo<TResult>();
+    }
+
+    public Task<RemoteValue> CallFunctionAsync(string functionDeclaration, bool awaitPromise, CallFunctionOptions? options = default)
     {
         return scriptModule.CallFunctionAsync(functionDeclaration, awaitPromise, new ContextTarget(context), options);
     }

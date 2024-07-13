@@ -647,7 +647,7 @@ namespace OpenQA.Selenium.BiDi.Tests
 
             foreach (var node in nodes)
             {
-                Console.WriteLine(node);
+                Console.WriteLine(node.ToString());
             }
         }
 
@@ -694,9 +694,9 @@ namespace OpenQA.Selenium.BiDi.Tests
         {
             var context = await session.BrowsingContext.CreateAsync(BrowsingContextType.Tab);
 
-            var evaluateResult = await context.Script.EvaluateAsync("2 + 2", true);
+            var remoteValue = await context.Script.EvaluateAsync("2 + 2", true);
 
-            var numberValue = evaluateResult.Result as NumberRemoteValue;
+            var numberValue = remoteValue as NumberRemoteValue;
             numberValue.Value.Should().Be(4);
 
             int nmb = await context.Script.EvaluateAsync("2 + 3", true);
@@ -709,7 +709,13 @@ namespace OpenQA.Selenium.BiDi.Tests
             nullStr.Should().BeNull();
 
             var invalidStr = async () => (string)await context.Script.EvaluateAsync("function A() { return 'a' }", true);
-            await invalidStr.Should().ThrowExactlyAsync<Exception>().WithMessage("Cannot convert*");
+            await invalidStr.Should().ThrowExactlyAsync<BiDiException>().WithMessage("Cannot convert*");
+
+            var intValue2 = await context.Script.EvaluateAsync<int>("2 + 2", true);
+            intValue2.Should().Be(4);
+
+            var obj = await context.Script.EvaluateAsync<object>("Object.create({foo: 1, bar: 2})", true);
+            obj.Should().NotBeNull();
         }
 
         [Test]
@@ -727,7 +733,7 @@ namespace OpenQA.Selenium.BiDi.Tests
 
             concat.Should().Be("Hello, World");
 
-            NodeRemoteValue el = await context.Script.CallFunctionAsync("() => document.querySelector('div')", true);
+            var el = (NodeRemoteValue)await context.Script.CallFunctionAsync("() => document.querySelector('div')", true);
             Console.WriteLine(el.Value.LocalName);
         }
 

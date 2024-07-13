@@ -28,21 +28,7 @@ public record EvaluateOptions : CommandOptions
 //[JsonDerivedType(typeof(EvaluateResultException), "exception")]
 public abstract record EvaluateResult;
 
-public record EvaluateResultSuccess(RemoteValue Result) : EvaluateResult
-{
-    public static implicit operator int(EvaluateResultSuccess r) => (int)((NumberRemoteValue)r.Result).Value;
-    public static implicit operator long(EvaluateResultSuccess r) => ((NumberRemoteValue)r.Result).Value;
-    public static implicit operator NodeRemoteValue(EvaluateResultSuccess r) => (NodeRemoteValue)r.Result;
-    public static implicit operator string(EvaluateResultSuccess r)
-    {
-        return r.Result switch
-        {
-            StringRemoteValue stringValue => stringValue.Value,
-            NullRemoteValue => null!,
-            _ => throw new System.Exception($"Cannot convert {r.Result} to string")
-        };
-    }
-}
+public record EvaluateResultSuccess(RemoteValue Result) : EvaluateResult;
 
 public record EvaluateResultException(ExceptionDetails ExceptionDetails) : EvaluateResult;
 

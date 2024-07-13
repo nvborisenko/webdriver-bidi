@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace OpenQA.Selenium.BiDi.Modules.Script;
@@ -28,7 +29,42 @@ namespace OpenQA.Selenium.BiDi.Modules.Script;
 //[JsonDerivedType(typeof(HtmlCollectionRemoteValue), "htmlcollection")]
 //[JsonDerivedType(typeof(NodeRemoteValue), "node")]
 //[JsonDerivedType(typeof(WindowProxyRemoteValue), "window")]
-public abstract record RemoteValue;
+public abstract record RemoteValue
+{
+    public static implicit operator int(RemoteValue remoteValue) => (int)((NumberRemoteValue)remoteValue).Value;
+    public static implicit operator long(RemoteValue remoteValue) => ((NumberRemoteValue)remoteValue).Value;
+    public static implicit operator string(RemoteValue remoteValue)
+    {
+        return remoteValue switch
+        {
+            StringRemoteValue stringValue => stringValue.Value,
+            NullRemoteValue => null!,
+            _ => throw new BiDiException($"Cannot convert {remoteValue} to string")
+        };
+    }
+
+    // TODO: extend types
+    public TResult? ConvertTo<TResult>()
+    {
+        var type = typeof(TResult);
+
+        if (type == typeof(int))
+        {
+            return (TResult)(Convert.ToInt32(((NumberRemoteValue)this).Value) as object);
+        }
+        else if (type == typeof(string))
+        {
+            return (TResult)(((StringRemoteValue)this).Value as object);
+        }
+        else if (type is object)
+        {
+            // :)
+            return (TResult)new object();
+        }
+
+        throw new BiDiException("Cannot convert .....");
+    }
+}
 
 public abstract record PrimitiveProtocolRemoteValue : RemoteValue;
 
@@ -62,7 +98,7 @@ public record ObjectRemoteValue : RemoteValue
 
     public InternalId? InternalId { get; set; }
 
-    public IDictionary<string, RemoteValue>? Value { get; set; }
+    public IReadOnlyList<IReadOnlyList<RemoteValue>>? Value { get; set; }
 }
 
 public record FunctionRemoteValue : RemoteValue

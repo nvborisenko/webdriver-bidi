@@ -7,7 +7,7 @@ namespace OpenQA.Selenium.BiDi.Modules.Script;
 
 public sealed class ScriptModule(Broker broker) : Module(broker)
 {
-    public async Task<EvaluateResultSuccess> EvaluateAsync(string expression, bool awaitPromise, Target target, EvaluateOptions? options = default)
+    public async Task<RemoteValue> EvaluateAsync(string expression, bool awaitPromise, Target target, EvaluateOptions? options = default)
     {
         var @params = new EvaluateCommandParameters(expression, target, awaitPromise);
 
@@ -25,10 +25,10 @@ public sealed class ScriptModule(Broker broker) : Module(broker)
             throw new ScriptEvaluateException(exp);
         }
 
-        return (EvaluateResultSuccess)result;
+        return ((EvaluateResultSuccess)result).Result;
     }
 
-    public async Task<EvaluateResultSuccess> CallFunctionAsync(string functionDeclaration, bool awaitPromise, Target target, CallFunctionOptions? options = default)
+    public async Task<RemoteValue> CallFunctionAsync(string functionDeclaration, bool awaitPromise, Target target, CallFunctionOptions? options = default)
     {
         var @params = new CallFunctionCommandParameters(functionDeclaration, awaitPromise, target);
 
@@ -48,7 +48,7 @@ public sealed class ScriptModule(Broker broker) : Module(broker)
             throw new ScriptEvaluateException(exp);
         }
 
-        return (EvaluateResultSuccess)result;
+        return ((EvaluateResultSuccess)result).Result;
     }
 
     public async Task<IReadOnlyList<RealmInfo>> GetRealmsAsync(GetRealmsOptions? options = default)
