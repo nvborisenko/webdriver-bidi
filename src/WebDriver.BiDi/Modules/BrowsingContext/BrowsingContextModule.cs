@@ -145,7 +145,7 @@ public class BrowsingContextModule(Broker broker) : Module(broker)
         return await Broker.ExecuteCommandAsync<PrintResult>(new PrintCommand(@params), options).ConfigureAwait(false);
     }
 
-    public async Task HandleUserPrompAsync(BrowsingContext context, UserPromptOptions? options = default)
+    public async Task HandleUserPromptAsync(BrowsingContext context, UserPromptOptions? options = default)
     {
         var @params = new HandleUserPromptCommandParameters(context);
 

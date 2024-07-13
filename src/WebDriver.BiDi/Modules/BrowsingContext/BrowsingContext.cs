@@ -97,7 +97,7 @@ public class BrowsingContext
 
     public Task HandleUserPromptAsync(UserPromptOptions? options = default)
     {
-        return _session.BrowsingContext.HandleUserPrompAsync(this, options);
+        return _session.BrowsingContext.HandleUserPromptAsync(this, options);
     }
 
     public Task<Subscription> OnNavigationStartedAsync(Func<NavigationInfo, Task> callback)
