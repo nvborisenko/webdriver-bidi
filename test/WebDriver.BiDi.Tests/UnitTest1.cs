@@ -518,7 +518,8 @@ namespace OpenQA.Selenium.BiDi.Tests
         {
             var context = await session.BrowsingContext.CreateAsync(BrowsingContextType.Tab);
 
-            await context.Network.OnAuthRequiredAsync(default, async args => await args.Request.Request.ContinueWithAuthAsync(new BasicAuthCredentials("admin", "admin")));
+            await context.Network.OnAuthRequiredAsync(default, async args =>
+                await args.Request.Request.ContinueWithAuthAsync(AuthCredentials.Basic("admin", "admin")));
 
             await context.NavigateAsync("https://the-internet.herokuapp.com/basic_auth");
         }
