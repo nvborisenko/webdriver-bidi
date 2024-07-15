@@ -18,12 +18,7 @@ internal record ContinueWithDefaultAuth(Request Request) : ContinueWithAuthParam
 
 internal record ContinueWithCancelledAuth(Request Request) : ContinueWithAuthParameters(Request);
 
-public record ContinueWithAuthOptions : CommandOptions
-{
-    public static ContinueWithDefaultAuthOptions Default() => new();
-
-    public static ContinueWithCancelledAuthOptions Cancel() => new();
-}
+public record ContinueWithAuthOptions : CommandOptions;
 
 public record ContinueWithDefaultAuthOptions : CommandOptions;
 
