@@ -514,6 +514,16 @@ namespace OpenQA.Selenium.BiDi.Tests
         }
 
         [Test]
+        public async Task OnAuthRequired()
+        {
+            var context = await session.BrowsingContext.CreateAsync(BrowsingContextType.Tab);
+
+            await context.Network.OnAuthRequiredAsync(default, async args => await args.Request.Request.ContinueWithAuthAsync(new BasicAuthCredentials("admin", "admin")));
+
+            await context.NavigateAsync("https://the-internet.herokuapp.com/basic_auth");
+        }
+
+        [Test]
         public async Task InterceptTestContinueRequest()
         {
             var context = await session.BrowsingContext.CreateAsync(BrowsingContextType.Tab);

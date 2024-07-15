@@ -33,4 +33,19 @@ public class Request
     {
         return _session.Network.ContinueResponseAsync(this, options);
     }
+
+    public Task ContinueWithAuthAsync(AuthCredentials credentials, ContinueWithAuthOptions? options = default)
+    {
+        return _session.Network.ContinueWithAuthAsync(this, credentials, options);
+    }
+
+    public Task ContinueWithAuthAsync(ContinueWithDefaultAuthOptions? options = default)
+    {
+        return _session.Network.ContinueWithAuthAsync(this, options);
+    }
+
+    public Task ContinueWithAuthAsync(ContinueWithCancelledAuthOptions? options = default)
+    {
+        return _session.Network.ContinueWithAuthAsync(this, options);
+    }
 }

@@ -33,6 +33,7 @@ namespace OpenQA.Selenium.BiDi.Communication;
 [JsonDerivedType(typeof(Modules.Network.ContinueResponseCommand), "network.continueResponse")]
 [JsonDerivedType(typeof(Modules.Network.FailRequestCommand), "network.failRequest")]
 [JsonDerivedType(typeof(Modules.Network.ProvideResponseCommand), "network.provideResponse")]
+[JsonDerivedType(typeof(Modules.Network.ContinueWithAuthCommand), "network.continueWithAuth")]
 [JsonDerivedType(typeof(Modules.Network.RemoveInterceptCommand), "network.removeIntercept")]
 
 [JsonDerivedType(typeof(Modules.Script.AddPreloadScriptCommand), "script.addPreloadScript")]

@@ -11,6 +11,7 @@ public class Intercept : IAsyncDisposable
 
     protected readonly IList<Subscription> _onBeforeRequestSentSubscriptions = [];
     protected readonly IList<Subscription> _onResponseStartedSubscriptions = [];
+    protected readonly IList<Subscription> _onAuthRequiredSubscriptions = [];
 
     internal Intercept(BiDi.Session session, string id)
     {
@@ -28,6 +29,16 @@ public class Intercept : IAsyncDisposable
         {
             await subscription.UnsubscribeAsync().ConfigureAwait(false);
         }
+
+        foreach (var subscription in _onResponseStartedSubscriptions)
+        {
+            await subscription.UnsubscribeAsync().ConfigureAwait(false);
+        }
+
+        foreach (var subscription in _onAuthRequiredSubscriptions)
+        {
+            await subscription.UnsubscribeAsync().ConfigureAwait(false);
+        }
     }
 
     public async Task OnBeforeRequestSentAsync(Func<BeforeRequestSentEventArgs, Task> callback, SubscriptionOptions? options = default)
@@ -35,6 +46,20 @@ public class Intercept : IAsyncDisposable
         var subscription = await _session.Network.OnBeforeRequestSentAsync(async args => await Filter(args, callback), options).ConfigureAwait(false);
 
         _onBeforeRequestSentSubscriptions.Add(subscription);
+    }
+
+    public async Task OnResponseStartedAsync(Func<ResponseStartedEventArgs, Task> callback, SubscriptionOptions? options = default)
+    {
+        var subscription = await _session.Network.OnResponseStartedAsync(async args => await Filter(args, callback), options).ConfigureAwait(false);
+
+        _onResponseStartedSubscriptions.Add(subscription);
+    }
+
+    public async Task OnAuthRequiredAsync(Func<AuthRequiredEventArgs, Task> callback, SubscriptionOptions? options = default)
+    {
+        var subscription = await _session.Network.OnAuthRequiredAsync(async args => await Filter(args, callback), options).ConfigureAwait(false);
+
+        _onAuthRequiredSubscriptions.Add(subscription);
     }
 
     private async Task Filter(BeforeRequestSentEventArgs args, Func<BeforeRequestSentEventArgs, Task> callback)
@@ -53,11 +78,12 @@ public class Intercept : IAsyncDisposable
         }
     }
 
-    public async Task OnResponseStartedAsync(Func<ResponseStartedEventArgs, Task> callback, SubscriptionOptions? options = default)
+    private async Task Filter(AuthRequiredEventArgs args, Func<AuthRequiredEventArgs, Task> callback)
     {
-        var subscription = await _session.Network.OnResponseStartedAsync(async args => await Filter(args, callback), options).ConfigureAwait(false);
-
-        _onResponseStartedSubscriptions.Add(subscription);
+        if (args.Intercepts?.Contains(this) is true && args.IsBlocked)
+        {
+            await callback(args).ConfigureAwait(false);
+        }
     }
 
     public async ValueTask DisposeAsync()

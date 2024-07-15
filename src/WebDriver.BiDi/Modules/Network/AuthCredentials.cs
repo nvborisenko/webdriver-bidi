@@ -1,6 +1,9 @@
-﻿namespace OpenQA.Selenium.BiDi.Modules.Network;
+﻿using System.Text.Json.Serialization;
 
-public record AuthCredentials(string Username, string Password)
-{
-    public string Type => "password";
-}
+namespace OpenQA.Selenium.BiDi.Modules.Network;
+
+[JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]
+[JsonDerivedType(typeof(BasicAuthCredentials), "password")]
+public abstract record AuthCredentials;
+
+public record BasicAuthCredentials(string Username, string Password) : AuthCredentials;

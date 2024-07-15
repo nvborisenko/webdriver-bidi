@@ -32,6 +32,19 @@ public class BrowsingContextNetworkModule(BrowsingContext context, NetworkModule
         return interceptResult.Intercept;
     }
 
+    public async Task<Intercept> OnAuthRequiredAsync(InterceptOptions? interceptOptions, Func<AuthRequiredEventArgs, Task> callback, SubscriptionOptions? options = default)
+    {
+        interceptOptions ??= new();
+
+        interceptOptions.Contexts = [context];
+
+        var interceptResult = await networkModule.AddInterceptAsync([InterceptPhase.AuthRequired], interceptOptions).ConfigureAwait(false);
+
+        await interceptResult.Intercept.OnAuthRequiredAsync(callback, new BrowsingContextsSubscriptionOptions(options) { Contexts = [context] }).ConfigureAwait(false);
+
+        return interceptResult.Intercept;
+    }
+
     public Task<Subscription> OnBeforeRequestSentAsync(Func<BeforeRequestSentEventArgs, Task> callback, SubscriptionOptions? options = default)
     {
         return networkModule.OnBeforeRequestSentAsync(callback, new BrowsingContextsSubscriptionOptions(options) { Contexts = [context] });
@@ -70,5 +83,15 @@ public class BrowsingContextNetworkModule(BrowsingContext context, NetworkModule
     public Task<Subscription> OnFetchErrorAsync(Action<FetchErrorEventArgs> callback, SubscriptionOptions? options = default)
     {
         return networkModule.OnFetchErrorAsync(callback, new BrowsingContextsSubscriptionOptions(options) { Contexts = [context] });
+    }
+
+    public Task<Subscription> OnAuthRequiredAsync(Func<AuthRequiredEventArgs, Task> callback, SubscriptionOptions? options = default)
+    {
+        return networkModule.OnAuthRequiredAsync(callback, new BrowsingContextsSubscriptionOptions(options) { Contexts = [context] });
+    }
+
+    public Task<Subscription> OnAuthRequiredAsync(Action<AuthRequiredEventArgs> callback, SubscriptionOptions? options = default)
+    {
+        return networkModule.OnAuthRequiredAsync(callback, new BrowsingContextsSubscriptionOptions(options) { Contexts = [context] });
     }
 }

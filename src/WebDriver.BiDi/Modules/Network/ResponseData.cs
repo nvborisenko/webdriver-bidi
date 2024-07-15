@@ -5,7 +5,7 @@ namespace OpenQA.Selenium.BiDi.Modules.Network;
 
 public record ResponseData(string Url,
                           string Protocol,
-                          uint Status,
+                          int Status, // TODO: should be unit
                           string StatusText,
                           bool FromCache,
                           IReadOnlyList<Header> Headers,

@@ -82,6 +82,21 @@ public sealed class NetworkModule(Broker broker) : Module(broker)
         await Broker.ExecuteCommandAsync(new ProvideResponseCommand(@params), options).ConfigureAwait(false);
     }
 
+    public async Task ContinueWithAuthAsync(Request request, AuthCredentials credentials, ContinueWithAuthOptions? options = default)
+    {
+        await Broker.ExecuteCommandAsync(new ContinueWithAuthCommand(new ContinueWithAuthCredentials(request, credentials)), options).ConfigureAwait(false);
+    }
+
+    public async Task ContinueWithAuthAsync(Request request, ContinueWithDefaultAuthOptions? options = default)
+    {
+        await Broker.ExecuteCommandAsync(new ContinueWithAuthCommand(new ContinueWithDefaultAuth(request)), options).ConfigureAwait(false);
+    }
+
+    public async Task ContinueWithAuthAsync(Request request, ContinueWithCancelledAuthOptions? options = default)
+    {
+        await Broker.ExecuteCommandAsync(new ContinueWithAuthCommand(new ContinueWithCancelledAuth(request)), options).ConfigureAwait(false);
+    }
+
     public async Task<Subscription> OnBeforeRequestSentAsync(Func<BeforeRequestSentEventArgs, Task> callback, SubscriptionOptions? options = default)
     {
         return await Broker.SubscribeAsync("network.beforeRequestSent", callback, options).ConfigureAwait(false);
@@ -138,5 +153,24 @@ public sealed class NetworkModule(Broker broker) : Module(broker)
     public async Task<Subscription> OnFetchErrorAsync(Action<FetchErrorEventArgs> callback, SubscriptionOptions? options = default)
     {
         return await Broker.SubscribeAsync("network.fetchError", callback, options).ConfigureAwait(false);
+    }
+
+    public async Task<Subscription> OnAuthRequiredAsync(Func<AuthRequiredEventArgs, Task> callback, SubscriptionOptions? options = default)
+    {
+        return await Broker.SubscribeAsync("network.authRequired", callback, options).ConfigureAwait(false);
+    }
+
+    public async Task<Subscription> OnAuthRequiredAsync(Action<AuthRequiredEventArgs> callback, SubscriptionOptions? options = default)
+    {
+        return await Broker.SubscribeAsync("network.authRequired", callback, options).ConfigureAwait(false);
+    }
+
+    public async Task<Intercept> OnAuthRequiredAsync(InterceptOptions? interceptOptions, Func<AuthRequiredEventArgs, Task> callback, SubscriptionOptions? options = default)
+    {
+        var interceptResult = await AddInterceptAsync([InterceptPhase.AuthRequired], interceptOptions).ConfigureAwait(false);
+
+        await interceptResult.Intercept.OnAuthRequiredAsync(callback, options).ConfigureAwait(false);
+
+        return interceptResult.Intercept;
     }
 }
