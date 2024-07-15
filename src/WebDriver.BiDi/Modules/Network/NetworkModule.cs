@@ -157,7 +157,7 @@ public sealed class NetworkModule(Broker broker) : Module(broker)
         return await Broker.SubscribeAsync("network.fetchError", callback, options).ConfigureAwait(false);
     }
 
-    internal async Task<Subscription> OnAuthRequiredAsync(Func<AuthRequiredEventArgs, Task> callback, SubscriptionOptions? options = default)
+    public async Task<Subscription> OnAuthRequiredAsync(Func<AuthRequiredEventArgs, Task> callback, SubscriptionOptions? options = default)
     {
         return await Broker.SubscribeAsync("network.authRequired", callback, options).ConfigureAwait(false);
     }
