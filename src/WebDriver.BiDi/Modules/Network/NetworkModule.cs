@@ -27,7 +27,7 @@ public sealed class NetworkModule(Broker broker) : Module(broker)
         await Broker.ExecuteCommandAsync(new RemoveInterceptCommand(@params), options).ConfigureAwait(!false);
     }
 
-    public async Task ContinueRequestAsync(Request request, RequestOptions? options = default)
+    internal async Task ContinueRequestAsync(Request request, RequestOptions? options = default)
     {
         var @params = new ContinueRequestCommandParameters(request);
 
@@ -43,7 +43,7 @@ public sealed class NetworkModule(Broker broker) : Module(broker)
         await Broker.ExecuteCommandAsync(new ContinueRequestCommand(@params), options).ConfigureAwait(false);
     }
 
-    public async Task ContinueResponseAsync(Request request, ContinueResponseOptions? options = default)
+    internal async Task ContinueResponseAsync(Request request, ContinueResponseOptions? options = default)
     {
         var @params = new ContinueResponseCommandParameters(request);
 
@@ -59,14 +59,14 @@ public sealed class NetworkModule(Broker broker) : Module(broker)
         await Broker.ExecuteCommandAsync(new ContinueResponseCommand(@params), options).ConfigureAwait(false);
     }
 
-    public async Task FailRequestAsync(Request request, FailRequestOptions? options = default)
+    internal async Task FailRequestAsync(Request request, FailRequestOptions? options = default)
     {
         var @params = new FailRequestCommandParameters(request);
 
         await Broker.ExecuteCommandAsync(new FailRequestCommand(@params), options).ConfigureAwait(false);
     }
 
-    public async Task ProvideResponseAsync(Request request, ProvideResponseOptions? options = default)
+    internal async Task ProvideResponseAsync(Request request, ProvideResponseOptions? options = default)
     {
         var @params = new ProvideResponseCommandParameters(request);
 
@@ -82,17 +82,17 @@ public sealed class NetworkModule(Broker broker) : Module(broker)
         await Broker.ExecuteCommandAsync(new ProvideResponseCommand(@params), options).ConfigureAwait(false);
     }
 
-    public async Task ContinueWithAuthAsync(Request request, AuthCredentials credentials, ContinueWithAuthOptions? options = default)
+    internal async Task ContinueWithAuthAsync(Request request, AuthCredentials credentials, ContinueWithAuthOptions? options = default)
     {
         await Broker.ExecuteCommandAsync(new ContinueWithAuthCommand(new ContinueWithAuthCredentials(request, credentials)), options).ConfigureAwait(false);
     }
 
-    public async Task ContinueWithAuthAsync(Request request, ContinueWithDefaultAuthOptions? options = default)
+    internal async Task ContinueWithAuthAsync(Request request, ContinueWithDefaultAuthOptions? options = default)
     {
         await Broker.ExecuteCommandAsync(new ContinueWithAuthCommand(new ContinueWithDefaultAuth(request)), options).ConfigureAwait(false);
     }
 
-    public async Task ContinueWithAuthAsync(Request request, ContinueWithCancelledAuthOptions? options = default)
+    internal async Task ContinueWithAuthAsync(Request request, ContinueWithCancelledAuthOptions? options = default)
     {
         await Broker.ExecuteCommandAsync(new ContinueWithAuthCommand(new ContinueWithCancelledAuth(request)), options).ConfigureAwait(false);
     }
@@ -155,12 +155,7 @@ public sealed class NetworkModule(Broker broker) : Module(broker)
         return await Broker.SubscribeAsync("network.fetchError", callback, options).ConfigureAwait(false);
     }
 
-    public async Task<Subscription> OnAuthRequiredAsync(Func<AuthRequiredEventArgs, Task> callback, SubscriptionOptions? options = default)
-    {
-        return await Broker.SubscribeAsync("network.authRequired", callback, options).ConfigureAwait(false);
-    }
-
-    public async Task<Subscription> OnAuthRequiredAsync(Action<AuthRequiredEventArgs> callback, SubscriptionOptions? options = default)
+    internal async Task<Subscription> OnAuthRequiredAsync(Func<AuthRequiredEventArgs, Task> callback, SubscriptionOptions? options = default)
     {
         return await Broker.SubscribeAsync("network.authRequired", callback, options).ConfigureAwait(false);
     }
