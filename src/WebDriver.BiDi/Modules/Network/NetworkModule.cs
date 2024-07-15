@@ -7,7 +7,7 @@ namespace OpenQA.Selenium.BiDi.Modules.Network;
 
 public sealed class NetworkModule(Broker broker) : Module(broker)
 {
-    public async Task<AddInterceptResult> AddInterceptAsync(IEnumerable<InterceptPhase> phases, InterceptOptions? options = default)
+    public async Task<Intercept> AddInterceptAsync(IEnumerable<InterceptPhase> phases, InterceptOptions? options = default)
     {
         var @params = new AddInterceptCommandParameters(phases);
 
@@ -17,7 +17,9 @@ public sealed class NetworkModule(Broker broker) : Module(broker)
             @params.UrlPatterns = options.UrlPatterns;
         }
 
-        return await Broker.ExecuteCommandAsync<AddInterceptResult>(new AddInterceptCommand(@params), options).ConfigureAwait(false);
+        var result = await Broker.ExecuteCommandAsync<AddInterceptResult>(new AddInterceptCommand(@params), options).ConfigureAwait(false);
+
+        return result.Intercept;
     }
 
     public async Task RemoveInterceptAsync(Intercept intercept, RemoveInterceptOptions? options = default)
@@ -109,11 +111,11 @@ public sealed class NetworkModule(Broker broker) : Module(broker)
 
     public async Task<Intercept> OnBeforeRequestSentAsync(InterceptOptions? interceptOptions, Func<BeforeRequestSentEventArgs, Task> callback, SubscriptionOptions? options = default)
     {
-        var interceptResult = await AddInterceptAsync([InterceptPhase.BeforeRequestSent], interceptOptions).ConfigureAwait(false);
+        var intercept = await AddInterceptAsync([InterceptPhase.BeforeRequestSent], interceptOptions).ConfigureAwait(false);
 
-        await interceptResult.Intercept.OnBeforeRequestSentAsync(callback, options).ConfigureAwait(false);
+        await intercept.OnBeforeRequestSentAsync(callback, options).ConfigureAwait(false);
 
-        return interceptResult.Intercept;
+        return intercept;
     }
 
     public async Task<Subscription> OnResponseStartedAsync(Func<ResponseStartedEventArgs, Task> callback, SubscriptionOptions? options = default)
@@ -128,11 +130,11 @@ public sealed class NetworkModule(Broker broker) : Module(broker)
 
     public async Task<Intercept> OnResponseStartedAsync(InterceptOptions? interceptOptions, Func<ResponseStartedEventArgs, Task> callback, SubscriptionOptions? options = default)
     {
-        var interceptResult = await AddInterceptAsync([InterceptPhase.ResponseStarted], interceptOptions).ConfigureAwait(false);
+        var intercept = await AddInterceptAsync([InterceptPhase.ResponseStarted], interceptOptions).ConfigureAwait(false);
 
-        await interceptResult.Intercept.OnResponseStartedAsync(callback, options).ConfigureAwait(false);
+        await intercept.OnResponseStartedAsync(callback, options).ConfigureAwait(false);
 
-        return interceptResult.Intercept;
+        return intercept;
     }
 
     public async Task<Subscription> OnResponseCompletedAsync(Func<ResponseCompletedEventArgs, Task> callback, SubscriptionOptions? options = default)
@@ -162,10 +164,10 @@ public sealed class NetworkModule(Broker broker) : Module(broker)
 
     public async Task<Intercept> OnAuthRequiredAsync(InterceptOptions? interceptOptions, Func<AuthRequiredEventArgs, Task> callback, SubscriptionOptions? options = default)
     {
-        var interceptResult = await AddInterceptAsync([InterceptPhase.AuthRequired], interceptOptions).ConfigureAwait(false);
+        var intercept = await AddInterceptAsync([InterceptPhase.AuthRequired], interceptOptions).ConfigureAwait(false);
 
-        await interceptResult.Intercept.OnAuthRequiredAsync(callback, options).ConfigureAwait(false);
+        await intercept.OnAuthRequiredAsync(callback, options).ConfigureAwait(false);
 
-        return interceptResult.Intercept;
+        return intercept;
     }
 }
