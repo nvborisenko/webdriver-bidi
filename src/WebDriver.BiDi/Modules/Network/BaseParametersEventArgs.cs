@@ -4,7 +4,7 @@ using System;
 
 namespace OpenQA.Selenium.BiDi.Modules.Network;
 
-public abstract record BaseParametersEventArgs(BiDi.Session Session, BrowsingContext.BrowsingContext Context, bool IsBlocked, BrowsingContext.Navigation Navigation, uint RedirectCount, RequestData Request, DateTimeOffset Timestamp)
+public abstract record BaseParametersEventArgs(BiDi.Session Session, BrowsingContext.BrowsingContext Context, bool IsBlocked, BrowsingContext.Navigation Navigation, ulong RedirectCount, RequestData Request, DateTimeOffset Timestamp)
     : BrowsingContextEventArgs(Session, Context)
 {
     [JsonInclude]

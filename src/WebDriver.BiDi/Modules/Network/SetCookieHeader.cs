@@ -8,7 +8,7 @@ public record SetCookieHeader(string Name, BytesValue Value)
 
     public string? Expiry { get; set; }
 
-    public int? MaxAge { get; set; }
+    public long? MaxAge { get; set; }
 
     public string? Path { get; set; }
 

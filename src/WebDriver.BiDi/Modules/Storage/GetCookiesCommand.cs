@@ -33,7 +33,7 @@ public class CookieFilter
 
     public string? Path { get; set; }
 
-    public uint? Size { get; set; }
+    public ulong? Size { get; set; }
 
     public bool? HttpOnly { get; set; }
 

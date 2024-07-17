@@ -2,9 +2,9 @@
 
 public record Initiator(InitiatorType Type)
 {
-    public uint? ColumnNumber { get; set; }
+    public ulong? ColumnNumber { get; set; }
 
-    public uint? LineNumber { get; set; }
+    public ulong? LineNumber { get; set; }
 
     public Script.StackTrace? StackTrace { get; set; }
 

@@ -2,9 +2,9 @@
 
 public class SerializationOptions
 {
-    public uint? MaxDomDepth { get; set; }
+    public ulong? MaxDomDepth { get; set; }
 
-    public uint? MaxObjectDepth { get; set; }
+    public ulong? MaxObjectDepth { get; set; }
 
     public ShadowTree? IncludeShadowTree { get; set; }
 }

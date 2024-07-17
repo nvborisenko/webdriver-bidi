@@ -18,4 +18,4 @@ public record ViewportOptions : CommandOptions
     public double? DevicePixelRatio { get; set; }
 }
 
-public readonly record struct Viewport(uint Width, uint Height);
+public readonly record struct Viewport(ulong Width, ulong Height);

@@ -1,3 +1,3 @@
 ﻿namespace OpenQA.Selenium.BiDi.Modules.Network;
 
-public record ResponseContent(uint Size);
+public record ResponseContent(ulong Size);

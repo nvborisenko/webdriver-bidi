@@ -32,4 +32,4 @@ public record EvaluateResultSuccess(RemoteValue Result) : EvaluateResult;
 
 public record EvaluateResultException(ExceptionDetails ExceptionDetails) : EvaluateResult;
 
-public record ExceptionDetails(uint ColumnNumber, uint LineNumber, StackTrace StackTrace, string Text);
+public record ExceptionDetails(ulong ColumnNumber, ulong LineNumber, StackTrace StackTrace, string Text);
