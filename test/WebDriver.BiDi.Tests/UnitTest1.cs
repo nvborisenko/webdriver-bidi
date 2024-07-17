@@ -271,7 +271,7 @@ namespace OpenQA.Selenium.BiDi.Tests
             await context.NavigateAsync("https://selenium.dev", new() { Wait = ReadinessState.Complete });
 
             info.Context.Should().NotBeNull();
-            info.Timestamp.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(30));
+            info.Timestamp.Should().BeCloseTo(DateTimeOffset.UtcNow, TimeSpan.FromSeconds(30));
             // info.Navigation.Should().NotBeNull();
             // info.Url.Should().Contain("selenium.dev");
         }
@@ -338,7 +338,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         {
             var context = await session.BrowsingContext.CreateAsync(BrowsingContextType.Tab);
 
-            var tomorrow = DateTime.Now.AddDays(1);
+            var tomorrow = DateTimeOffset.Now.AddDays(1);
 
             var partitionKey = await context.Storage.SetCookieAsync(new("test", "value", "domain") { Expiry = tomorrow });
 

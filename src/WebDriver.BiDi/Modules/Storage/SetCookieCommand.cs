@@ -20,7 +20,7 @@ public record PartialCookie(string Name, Network.BytesValue Value, string Domain
 
     public Network.SameSite? SameSite { get; set; }
 
-    public DateTime? Expiry { get; set; }
+    public DateTimeOffset? Expiry { get; set; }
 }
 
 public record SetCookieOptions : CommandOptions

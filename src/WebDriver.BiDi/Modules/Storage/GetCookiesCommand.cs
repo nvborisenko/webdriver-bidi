@@ -41,7 +41,7 @@ public class CookieFilter
 
     public Network.SameSite? SameSite { get; set; }
 
-    public DateTime? Expiry { get; set; }
+    public DateTimeOffset? Expiry { get; set; }
 }
 
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "type")]

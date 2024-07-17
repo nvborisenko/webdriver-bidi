@@ -57,7 +57,7 @@ public class Broker : IAsyncDisposable
                 new PreloadScriptConverter(_session),
                 new RealmConverter(_session),
                 new RealmTypeConverter(),
-                new DateTimeConverter(),
+                new DateTimeOffsetConverter(),
                 new JsonStringEnumConverter(JsonNamingPolicy.CamelCase),
                 
                 // https://github.com/dotnet/runtime/issues/72604
