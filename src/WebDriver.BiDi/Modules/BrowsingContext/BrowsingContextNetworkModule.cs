@@ -6,7 +6,7 @@ namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
 public class BrowsingContextNetworkModule(BrowsingContext context, NetworkModule networkModule)
 {
-    public async Task<Intercept> OnBeforeRequestSentAsync(InterceptOptions? interceptOptions, Func<BeforeRequestSentEventArgs, Task> callback, SubscriptionOptions? options = default)
+    public async Task<Intercept> OnBeforeRequestSentAsync(InterceptOptions? interceptOptions, Func<BeforeRequestSentEventArgs, Task> handler, SubscriptionOptions? options = default)
     {
         interceptOptions ??= new();
 
@@ -14,12 +14,12 @@ public class BrowsingContextNetworkModule(BrowsingContext context, NetworkModule
 
         var intercept = await networkModule.AddInterceptAsync([InterceptPhase.BeforeRequestSent], interceptOptions).ConfigureAwait(false);
 
-        await intercept.OnBeforeRequestSentAsync(callback, new BrowsingContextsSubscriptionOptions(options) { Contexts = [context] }).ConfigureAwait(false);
+        await intercept.OnBeforeRequestSentAsync(handler, new BrowsingContextsSubscriptionOptions(options) { Contexts = [context] }).ConfigureAwait(false);
 
         return intercept;
     }
 
-    public async Task<Intercept> OnResponseStartedAsync(InterceptOptions? interceptOptions, Func<ResponseStartedEventArgs, Task> callback, SubscriptionOptions? options = default)
+    public async Task<Intercept> OnResponseStartedAsync(InterceptOptions? interceptOptions, Func<ResponseStartedEventArgs, Task> handler, SubscriptionOptions? options = default)
     {
         interceptOptions ??= new();
 
@@ -27,12 +27,12 @@ public class BrowsingContextNetworkModule(BrowsingContext context, NetworkModule
 
         var intercept = await networkModule.AddInterceptAsync([InterceptPhase.ResponseStarted], interceptOptions).ConfigureAwait(false);
 
-        await intercept.OnResponseStartedAsync(callback, new BrowsingContextsSubscriptionOptions(options) { Contexts = [context] }).ConfigureAwait(false);
+        await intercept.OnResponseStartedAsync(handler, new BrowsingContextsSubscriptionOptions(options) { Contexts = [context] }).ConfigureAwait(false);
 
         return intercept;
     }
 
-    public async Task<Intercept> OnAuthRequiredAsync(InterceptOptions? interceptOptions, Func<AuthRequiredEventArgs, Task> callback, SubscriptionOptions? options = default)
+    public async Task<Intercept> OnAuthRequiredAsync(InterceptOptions? interceptOptions, Func<AuthRequiredEventArgs, Task> handler, SubscriptionOptions? options = default)
     {
         interceptOptions ??= new();
 
@@ -40,53 +40,53 @@ public class BrowsingContextNetworkModule(BrowsingContext context, NetworkModule
 
         var intercept = await networkModule.AddInterceptAsync([InterceptPhase.AuthRequired], interceptOptions).ConfigureAwait(false);
 
-        await intercept.OnAuthRequiredAsync(callback, new BrowsingContextsSubscriptionOptions(options) { Contexts = [context] }).ConfigureAwait(false);
+        await intercept.OnAuthRequiredAsync(handler, new BrowsingContextsSubscriptionOptions(options) { Contexts = [context] }).ConfigureAwait(false);
 
         return intercept;
     }
 
-    public Task<Subscription> OnBeforeRequestSentAsync(Func<BeforeRequestSentEventArgs, Task> callback, SubscriptionOptions? options = default)
+    public Task<Subscription> OnBeforeRequestSentAsync(Func<BeforeRequestSentEventArgs, Task> handler, SubscriptionOptions? options = default)
     {
-        return networkModule.OnBeforeRequestSentAsync(callback, new BrowsingContextsSubscriptionOptions(options) { Contexts = [context] });
+        return networkModule.OnBeforeRequestSentAsync(handler, new BrowsingContextsSubscriptionOptions(options) { Contexts = [context] });
     }
 
-    public Task<Subscription> OnBeforeRequestSentAsync(Action<BeforeRequestSentEventArgs> callback, SubscriptionOptions? options = default)
+    public Task<Subscription> OnBeforeRequestSentAsync(Action<BeforeRequestSentEventArgs> handler, SubscriptionOptions? options = default)
     {
-        return networkModule.OnBeforeRequestSentAsync(callback, new BrowsingContextsSubscriptionOptions(options) { Contexts = [context] });
+        return networkModule.OnBeforeRequestSentAsync(handler, new BrowsingContextsSubscriptionOptions(options) { Contexts = [context] });
     }
 
-    public Task<Subscription> OnResponseStartedAsync(Func<ResponseStartedEventArgs, Task> callback, SubscriptionOptions? options = default)
+    public Task<Subscription> OnResponseStartedAsync(Func<ResponseStartedEventArgs, Task> handler, SubscriptionOptions? options = default)
     {
-        return networkModule.OnResponseStartedAsync(callback, new BrowsingContextsSubscriptionOptions(options) { Contexts = [context] });
+        return networkModule.OnResponseStartedAsync(handler, new BrowsingContextsSubscriptionOptions(options) { Contexts = [context] });
     }
 
-    public Task<Subscription> OnResponseStartedAsync(Action<ResponseStartedEventArgs> callback, SubscriptionOptions? options = default)
+    public Task<Subscription> OnResponseStartedAsync(Action<ResponseStartedEventArgs> handler, SubscriptionOptions? options = default)
     {
-        return networkModule.OnResponseStartedAsync(callback, new BrowsingContextsSubscriptionOptions(options) { Contexts = [context] });
+        return networkModule.OnResponseStartedAsync(handler, new BrowsingContextsSubscriptionOptions(options) { Contexts = [context] });
     }
 
-    public Task<Subscription> OnResponseCompletedAsync(Func<ResponseCompletedEventArgs, Task> callback, SubscriptionOptions? options = default)
+    public Task<Subscription> OnResponseCompletedAsync(Func<ResponseCompletedEventArgs, Task> handler, SubscriptionOptions? options = default)
     {
-        return networkModule.OnResponseCompletedAsync(callback, new BrowsingContextsSubscriptionOptions(options) { Contexts = [context] });
+        return networkModule.OnResponseCompletedAsync(handler, new BrowsingContextsSubscriptionOptions(options) { Contexts = [context] });
     }
 
-    public Task<Subscription> OnResponseCompletedAsync(Action<ResponseCompletedEventArgs> callback, SubscriptionOptions? options = default)
+    public Task<Subscription> OnResponseCompletedAsync(Action<ResponseCompletedEventArgs> handler, SubscriptionOptions? options = default)
     {
-        return networkModule.OnResponseCompletedAsync(callback, new BrowsingContextsSubscriptionOptions(options) { Contexts = [context] });
+        return networkModule.OnResponseCompletedAsync(handler, new BrowsingContextsSubscriptionOptions(options) { Contexts = [context] });
     }
 
-    public Task<Subscription> OnFetchErrorAsync(Func<FetchErrorEventArgs, Task> callback, SubscriptionOptions? options = default)
+    public Task<Subscription> OnFetchErrorAsync(Func<FetchErrorEventArgs, Task> handler, SubscriptionOptions? options = default)
     {
-        return networkModule.OnFetchErrorAsync(callback, new BrowsingContextsSubscriptionOptions(options) { Contexts = [context] });
+        return networkModule.OnFetchErrorAsync(handler, new BrowsingContextsSubscriptionOptions(options) { Contexts = [context] });
     }
 
-    public Task<Subscription> OnFetchErrorAsync(Action<FetchErrorEventArgs> callback, SubscriptionOptions? options = default)
+    public Task<Subscription> OnFetchErrorAsync(Action<FetchErrorEventArgs> handler, SubscriptionOptions? options = default)
     {
-        return networkModule.OnFetchErrorAsync(callback, new BrowsingContextsSubscriptionOptions(options) { Contexts = [context] });
+        return networkModule.OnFetchErrorAsync(handler, new BrowsingContextsSubscriptionOptions(options) { Contexts = [context] });
     }
 
-    internal Task<Subscription> OnAuthRequiredAsync(Func<AuthRequiredEventArgs, Task> callback, SubscriptionOptions? options = default)
+    internal Task<Subscription> OnAuthRequiredAsync(Func<AuthRequiredEventArgs, Task> handler, SubscriptionOptions? options = default)
     {
-        return networkModule.OnAuthRequiredAsync(callback, new BrowsingContextsSubscriptionOptions(options) { Contexts = [context] });
+        return networkModule.OnAuthRequiredAsync(handler, new BrowsingContextsSubscriptionOptions(options) { Contexts = [context] });
     }
 }
