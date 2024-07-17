@@ -24,9 +24,16 @@ public class BrowsingContextScriptModule(BrowsingContext context, ScriptModule s
         return await scriptModule.GetRealmsAsync(options).ConfigureAwait(false);
     }
 
-    public Task<RemoteValue> EvaluateAsync(string expression, bool awaitPromise, EvaluateOptions? options = default)
+    public Task<RemoteValue> EvaluateAsync(string expression, bool awaitPromise, EvaluateOptions? options = default, ContextTargetOptions? targetOptions = default)
     {
-        return scriptModule.EvaluateAsync(expression, awaitPromise, new ContextTarget(context), options);
+        var contextTarget = new ContextTarget(context);
+
+        if (targetOptions is not null)
+        {
+            contextTarget.Sandbox = targetOptions.Sandbox;
+        }
+
+        return scriptModule.EvaluateAsync(expression, awaitPromise, contextTarget, options);
     }
 
     public async Task<TResult?> EvaluateAsync<TResult>(string expression, bool awaitPromise, EvaluateOptions? options = default)
@@ -36,8 +43,15 @@ public class BrowsingContextScriptModule(BrowsingContext context, ScriptModule s
         return remoteValue.ConvertTo<TResult>();
     }
 
-    public Task<RemoteValue> CallFunctionAsync(string functionDeclaration, bool awaitPromise, CallFunctionOptions? options = default)
+    public Task<RemoteValue> CallFunctionAsync(string functionDeclaration, bool awaitPromise, CallFunctionOptions? options = default, ContextTargetOptions? targetOptions = default)
     {
-        return scriptModule.CallFunctionAsync(functionDeclaration, awaitPromise, new ContextTarget(context), options);
+        var contextTarget = new ContextTarget(context);
+
+        if (targetOptions is not null)
+        {
+            contextTarget.Sandbox = targetOptions.Sandbox;
+        }
+
+        return scriptModule.CallFunctionAsync(functionDeclaration, awaitPromise, contextTarget, options);
     }
 }
