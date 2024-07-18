@@ -14,7 +14,7 @@ internal record AddPreloadScriptCommandParameters(string FunctionDeclaration) : 
     public string? Sandbox { get; set; }
 }
 
-public record PreloadScriptOptions : CommandOptions
+public record AddPreloadScriptOptions : CommandOptions
 {
     public IEnumerable<ChannelValue>? Arguments { get; set; }
 

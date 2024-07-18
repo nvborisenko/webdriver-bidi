@@ -12,7 +12,7 @@ internal record GetTreeCommandParameters : CommandParameters
     public BrowsingContext? Root { get; set; }
 }
 
-public record TreeOptions : CommandOptions
+public record GetTreeOptions : CommandOptions
 {
     public ulong? MaxDepth { get; set; }
 

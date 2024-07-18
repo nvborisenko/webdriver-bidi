@@ -14,7 +14,7 @@ public class BrowsingContextStorageModule(BrowsingContext context, StorageModule
         return storageModule.GetCookiesAsync(options);
     }
 
-    public async Task<PartitionKey> DeleteCookiesAsync(GetCookiesOptions? options = default)
+    public async Task<PartitionKey> DeleteCookiesAsync(DeleteCookiesOptions? options = default)
     {
         options ??= new();
 

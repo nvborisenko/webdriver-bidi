@@ -14,7 +14,7 @@ public class Request
 
     public string Id { get; private set; }
 
-    public Task ContinueAsync(RequestOptions? options = default)
+    public Task ContinueAsync(ContinueRequestOptions? options = default)
     {
         return _session.Network.ContinueRequestAsync(this, options);
     }

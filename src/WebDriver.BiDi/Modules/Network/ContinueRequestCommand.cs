@@ -18,7 +18,7 @@ internal record ContinueRequestCommandParameters(Request Request) : CommandParam
     public string? Url { get; set; }
 }
 
-public record RequestOptions : CommandOptions
+public record ContinueRequestOptions : CommandOptions
 {
     public BytesValue? Body { get; set; }
 

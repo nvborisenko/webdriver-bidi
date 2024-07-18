@@ -611,7 +611,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         [Test]
         public async Task InterceptTestAll()
         {
-            await session.Network.OnBeforeRequestSentAsync(new InterceptOptions(), async args =>
+            await session.Network.OnBeforeRequestSentAsync(new AddInterceptOptions(), async args =>
             {
                 await args.Request.Request.ContinueAsync(new() { Method = "POST" });
             });

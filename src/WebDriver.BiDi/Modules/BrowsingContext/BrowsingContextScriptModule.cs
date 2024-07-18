@@ -6,7 +6,7 @@ namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
 public class BrowsingContextScriptModule(BrowsingContext context, ScriptModule scriptModule)
 {
-    public async Task<PreloadScript> AddPreloadScriptAsync(string functionDeclaration, PreloadScriptOptions? options = default)
+    public async Task<PreloadScript> AddPreloadScriptAsync(string functionDeclaration, AddPreloadScriptOptions? options = default)
     {
         options ??= new();
 

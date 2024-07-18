@@ -11,7 +11,7 @@ internal record HandleUserPromptCommandParameters(BrowsingContext Context) : Com
     public string? UserText { get; set; }
 }
 
-public record UserPromptOptions : CommandOptions
+public record HandleUserPromptOptions : CommandOptions
 {
     public bool? Accept { get; set; }
 

@@ -11,7 +11,7 @@ internal record SetViewportCommandParameters(BrowsingContext Context) : CommandP
     public double? DevicePixelRatio { get; set; }
 }
 
-public record ViewportOptions : CommandOptions
+public record SetViewportOptions : CommandOptions
 {
     public Viewport? Viewport { get; set; }
 

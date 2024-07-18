@@ -7,7 +7,7 @@ namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
 public class BrowsingContextModule(Broker broker) : Module(broker)
 {
-    public async Task<BrowsingContext> CreateAsync(BrowsingContextType type, BrowsingContextOptions? options = default)
+    public async Task<BrowsingContext> CreateAsync(BrowsingContextType type, CreateOptions? options = default)
     {
         var @params = new CreateCommandParameters(type);
 
@@ -42,7 +42,7 @@ public class BrowsingContextModule(Broker broker) : Module(broker)
         await Broker.ExecuteCommandAsync(new ActivateCommand(@params), options).ConfigureAwait(false);
     }
 
-    public async Task<IReadOnlyList<Script.NodeRemoteValue>> LocateNodesAsync(BrowsingContext context, Locator locator, NodesOptions? options = default)
+    public async Task<IReadOnlyList<Script.NodeRemoteValue>> LocateNodesAsync(BrowsingContext context, Locator locator, LocateNodesOptions? options = default)
     {
         var @params = new LocateNodesCommandParameters(context, locator);
 
@@ -99,7 +99,7 @@ public class BrowsingContextModule(Broker broker) : Module(broker)
         return await Broker.ExecuteCommandAsync<NavigateResult>(new ReloadCommand(@params), options).ConfigureAwait(false);
     }
 
-    public async Task SetViewportAsync(BrowsingContext context, ViewportOptions? options = default)
+    public async Task SetViewportAsync(BrowsingContext context, SetViewportOptions? options = default)
     {
         var @params = new SetViewportCommandParameters(context);
 
@@ -112,7 +112,7 @@ public class BrowsingContextModule(Broker broker) : Module(broker)
         await Broker.ExecuteCommandAsync(new SetViewportCommand(@params), options).ConfigureAwait(false);
     }
 
-    public async Task<IReadOnlyList<BrowsingContextInfo>> GetTreeAsync(TreeOptions? options = default)
+    public async Task<IReadOnlyList<BrowsingContextInfo>> GetTreeAsync(GetTreeOptions? options = default)
     {
         var @params = new GetTreeCommandParameters();
 
@@ -145,7 +145,7 @@ public class BrowsingContextModule(Broker broker) : Module(broker)
         return await Broker.ExecuteCommandAsync<PrintResult>(new PrintCommand(@params), options).ConfigureAwait(false);
     }
 
-    public async Task HandleUserPromptAsync(BrowsingContext context, UserPromptOptions? options = default)
+    public async Task HandleUserPromptAsync(BrowsingContext context, HandleUserPromptOptions? options = default)
     {
         var @params = new HandleUserPromptCommandParameters(context);
 

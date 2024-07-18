@@ -18,7 +18,7 @@ public class StorageModule(Broker broker) : Module(broker)
         return await Broker.ExecuteCommandAsync<GetCookiesResult>(new GetCookiesCommand(@params), options).ConfigureAwait(false);
     }
 
-    public async Task<DeleteCookiesResult> DeleteCookiesAsync(GetCookiesOptions? options = default)
+    public async Task<DeleteCookiesResult> DeleteCookiesAsync(DeleteCookiesOptions? options = default)
     {
         var @params = new DeleteCookiesCommandParameters();
 

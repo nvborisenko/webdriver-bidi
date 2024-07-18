@@ -53,7 +53,7 @@ public class BrowsingContext
         return _session.BrowsingContext.ActivateAsync(this, options);
     }
 
-    public Task<IReadOnlyList<Script.NodeRemoteValue>> LocateNodesAsync(Locator locator, NodesOptions? options = default)
+    public Task<IReadOnlyList<Script.NodeRemoteValue>> LocateNodesAsync(Locator locator, LocateNodesOptions? options = default)
     {
         return _session.BrowsingContext.LocateNodesAsync(this, locator, options);
     }
@@ -83,7 +83,7 @@ public class BrowsingContext
         return TraverseHistoryAsync(1, options);
     }
 
-    public Task SetViewportAsync(ViewportOptions? options = default)
+    public Task SetViewportAsync(SetViewportOptions? options = default)
     {
         return _session.BrowsingContext.SetViewportAsync(this, options);
     }
@@ -95,7 +95,7 @@ public class BrowsingContext
         return result.Data;
     }
 
-    public Task HandleUserPromptAsync(UserPromptOptions? options = default)
+    public Task HandleUserPromptAsync(HandleUserPromptOptions? options = default)
     {
         return _session.BrowsingContext.HandleUserPromptAsync(this, options);
     }

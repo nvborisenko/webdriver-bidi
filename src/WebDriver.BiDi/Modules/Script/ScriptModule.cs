@@ -66,7 +66,7 @@ public sealed class ScriptModule(Broker broker) : Module(broker)
         return result.Realms;
     }
 
-    public async Task<PreloadScript> AddPreloadScriptAsync(string functionDeclaration, PreloadScriptOptions? options = default)
+    public async Task<PreloadScript> AddPreloadScriptAsync(string functionDeclaration, AddPreloadScriptOptions? options = default)
     {
         var @params = new AddPreloadScriptCommandParameters(functionDeclaration);
 

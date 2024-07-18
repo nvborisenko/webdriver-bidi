@@ -6,7 +6,7 @@ namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
 public class BrowsingContextNetworkModule(BrowsingContext context, NetworkModule networkModule)
 {
-    public async Task<Intercept> OnBeforeRequestSentAsync(InterceptOptions? interceptOptions, Func<BeforeRequestSentEventArgs, Task> handler, SubscriptionOptions? options = default)
+    public async Task<Intercept> OnBeforeRequestSentAsync(AddInterceptOptions? interceptOptions, Func<BeforeRequestSentEventArgs, Task> handler, SubscriptionOptions? options = default)
     {
         interceptOptions ??= new();
 
@@ -19,7 +19,7 @@ public class BrowsingContextNetworkModule(BrowsingContext context, NetworkModule
         return intercept;
     }
 
-    public async Task<Intercept> OnResponseStartedAsync(InterceptOptions? interceptOptions, Func<ResponseStartedEventArgs, Task> handler, SubscriptionOptions? options = default)
+    public async Task<Intercept> OnResponseStartedAsync(AddInterceptOptions? interceptOptions, Func<ResponseStartedEventArgs, Task> handler, SubscriptionOptions? options = default)
     {
         interceptOptions ??= new();
 
@@ -32,7 +32,7 @@ public class BrowsingContextNetworkModule(BrowsingContext context, NetworkModule
         return intercept;
     }
 
-    public async Task<Intercept> OnAuthRequiredAsync(InterceptOptions? interceptOptions, Func<AuthRequiredEventArgs, Task> handler, SubscriptionOptions? options = default)
+    public async Task<Intercept> OnAuthRequiredAsync(AddInterceptOptions? interceptOptions, Func<AuthRequiredEventArgs, Task> handler, SubscriptionOptions? options = default)
     {
         interceptOptions ??= new();
 

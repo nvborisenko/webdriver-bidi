@@ -13,7 +13,7 @@ internal record CreateCommandParameters(BrowsingContextType Type) : CommandParam
     public Browser.UserContext? UserContext { get; set; }
 }
 
-public record BrowsingContextOptions : CommandOptions
+public record CreateOptions : CommandOptions
 {
     public BrowsingContext? ReferenceContext { get; set; }
 

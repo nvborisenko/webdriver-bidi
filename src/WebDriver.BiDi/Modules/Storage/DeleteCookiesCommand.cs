@@ -11,4 +11,6 @@ internal record DeleteCookiesCommandParameters : CommandParameters
     public PartitionDescriptor? Partition { get; set; }
 }
 
+public record DeleteCookiesOptions : GetCookiesOptions;
+
 public record DeleteCookiesResult(PartitionKey PartitionKey);

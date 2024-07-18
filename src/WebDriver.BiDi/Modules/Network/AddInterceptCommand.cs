@@ -12,7 +12,7 @@ internal record AddInterceptCommandParameters(IEnumerable<InterceptPhase> Phases
     public IEnumerable<UrlPattern>? UrlPatterns { get; set; }
 }
 
-public record InterceptOptions : CommandOptions
+public record AddInterceptOptions : CommandOptions
 {
     public IEnumerable<BrowsingContext.BrowsingContext>? Contexts { get; set; }
 

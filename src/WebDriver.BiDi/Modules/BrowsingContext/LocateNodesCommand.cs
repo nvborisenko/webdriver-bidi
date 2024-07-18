@@ -14,7 +14,7 @@ internal record LocateNodesCommandParameters(BrowsingContext Context, Locator Lo
     public IEnumerable<Script.SharedReference>? StartNodes { get; set; }
 }
 
-public record NodesOptions : CommandOptions
+public record LocateNodesOptions : CommandOptions
 {
     public ulong? MaxNodeCount { get; set; }
 
