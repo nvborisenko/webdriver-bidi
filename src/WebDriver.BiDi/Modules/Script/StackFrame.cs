@@ -1,3 +1,3 @@
 ﻿namespace OpenQA.Selenium.BiDi.Modules.Script;
 
-public record StackFrame(ulong LineNumber, ulong ColumnNumber, string Url, string FunctionName);
+public record StackFrame(long LineNumber, long ColumnNumber, string Url, string FunctionName);
