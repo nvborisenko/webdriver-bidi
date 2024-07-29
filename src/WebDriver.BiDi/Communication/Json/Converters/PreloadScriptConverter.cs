@@ -7,18 +7,18 @@ namespace OpenQA.Selenium.BiDi.Communication.Json.Converters;
 
 internal class PreloadScriptConverter : JsonConverter<PreloadScript>
 {
-    private readonly Session _session;
+    private readonly BiDi _bidi;
 
-    public PreloadScriptConverter(Session session)
+    public PreloadScriptConverter(BiDi bidi)
     {
-        _session = session;
+        _bidi = bidi;
     }
 
     public override PreloadScript? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         var id = reader.GetString();
 
-        return new PreloadScript(_session, id!);
+        return new PreloadScript(_bidi, id!);
     }
 
     public override void Write(Utf8JsonWriter writer, PreloadScript value, JsonSerializerOptions options)

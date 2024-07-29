@@ -7,18 +7,18 @@ namespace OpenQA.Selenium.BiDi.Communication.Json.Converters;
 
 internal class RealmConverter : JsonConverter<Realm>
 {
-    private readonly Session _session;
+    private readonly BiDi _bidi;
 
-    public RealmConverter(Session session)
+    public RealmConverter(BiDi bidi)
     {
-        _session = session;
+        _bidi = bidi;
     }
 
     public override Realm? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         var id = reader.GetString();
 
-        return new Realm(_session, id!);
+        return new Realm(_bidi, id!);
     }
 
     public override void Write(Utf8JsonWriter writer, Realm value, JsonSerializerOptions options)

@@ -7,18 +7,18 @@ namespace OpenQA.Selenium.BiDi.Communication.Json.Converters;
 
 internal class RequestConverter : JsonConverter<Request>
 {
-    private readonly Session _session;
+    private readonly BiDi _bidi;
 
-    public RequestConverter(Session session)
+    public RequestConverter(BiDi bidi)
     {
-        _session = session;
+        _bidi = bidi;
     }
 
     public override Request? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         var id = reader.GetString();
 
-        return new Request(_session, id!);
+        return new Request(_bidi, id!);
     }
 
     public override void Write(Utf8JsonWriter writer, Request value, JsonSerializerOptions options)

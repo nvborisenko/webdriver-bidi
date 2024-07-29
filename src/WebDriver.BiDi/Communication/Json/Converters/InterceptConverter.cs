@@ -7,18 +7,18 @@ namespace OpenQA.Selenium.BiDi.Communication.Json.Converters;
 
 internal class InterceptConverter : JsonConverter<Intercept>
 {
-    private readonly Session _session;
+    private readonly BiDi _bidi;
 
-    public InterceptConverter(Session session)
+    public InterceptConverter(BiDi bidi)
     {
-        _session = session;
+        _bidi = bidi;
     }
 
     public override Intercept? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         var id = reader.GetString();
 
-        return new Intercept(_session, id!);
+        return new Intercept(_bidi, id!);
     }
 
     public override void Write(Utf8JsonWriter writer, Intercept value, JsonSerializerOptions options)

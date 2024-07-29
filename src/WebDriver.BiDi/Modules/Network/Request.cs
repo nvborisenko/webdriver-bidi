@@ -4,11 +4,11 @@ namespace OpenQA.Selenium.BiDi.Modules.Network;
 
 public class Request
 {
-    private readonly BiDi.Session _session;
+    private readonly BiDi _bidi;
 
-    internal Request(BiDi.Session session, string id)
+    internal Request(BiDi bidi, string id)
     {
-        _session = session;
+        _bidi = bidi;
         Id = id;
     }
 
@@ -16,36 +16,36 @@ public class Request
 
     public Task ContinueAsync(ContinueRequestOptions? options = default)
     {
-        return _session.Network.ContinueRequestAsync(this, options);
+        return _bidi.Network.ContinueRequestAsync(this, options);
     }
 
     public Task FailAsync()
     {
-        return _session.Network.FailRequestAsync(this);
+        return _bidi.Network.FailRequestAsync(this);
     }
 
     public Task ProvideResponseAsync(ProvideResponseOptions? options = default)
     {
-        return _session.Network.ProvideResponseAsync(this, options);
+        return _bidi.Network.ProvideResponseAsync(this, options);
     }
 
     public Task ContinueResponseAsync(ContinueResponseOptions? options = default)
     {
-        return _session.Network.ContinueResponseAsync(this, options);
+        return _bidi.Network.ContinueResponseAsync(this, options);
     }
 
     public Task ContinueWithAuthAsync(AuthCredentials credentials, ContinueWithAuthOptions? options = default)
     {
-        return _session.Network.ContinueWithAuthAsync(this, credentials, options);
+        return _bidi.Network.ContinueWithAuthAsync(this, credentials, options);
     }
 
     public Task ContinueWithAuthAsync(ContinueWithDefaultAuthOptions? options = default)
     {
-        return _session.Network.ContinueWithAuthAsync(this, options);
+        return _bidi.Network.ContinueWithAuthAsync(this, options);
     }
 
     public Task ContinueWithAuthAsync(ContinueWithCancelledAuthOptions? options = default)
     {
-        return _session.Network.ContinueWithAuthAsync(this, options);
+        return _bidi.Network.ContinueWithAuthAsync(this, options);
     }
 }

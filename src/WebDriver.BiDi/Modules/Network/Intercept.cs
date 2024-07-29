@@ -7,15 +7,15 @@ namespace OpenQA.Selenium.BiDi.Modules.Network;
 
 public class Intercept : IAsyncDisposable
 {
-    private readonly BiDi.Session _session;
+    private readonly BiDi _bidi;
 
     protected readonly IList<Subscription> _onBeforeRequestSentSubscriptions = [];
     protected readonly IList<Subscription> _onResponseStartedSubscriptions = [];
     protected readonly IList<Subscription> _onAuthRequiredSubscriptions = [];
 
-    internal Intercept(BiDi.Session session, string id)
+    internal Intercept(BiDi bidi, string id)
     {
-        _session = session;
+        _bidi = bidi;
         Id = id;
     }
 
@@ -23,7 +23,7 @@ public class Intercept : IAsyncDisposable
 
     public async Task RemoveAsync()
     {
-        await _session.Network.RemoveInterceptAsync(this).ConfigureAwait(false);
+        await _bidi.Network.RemoveInterceptAsync(this).ConfigureAwait(false);
 
         foreach (var subscription in _onBeforeRequestSentSubscriptions)
         {
@@ -43,21 +43,21 @@ public class Intercept : IAsyncDisposable
 
     public async Task OnBeforeRequestSentAsync(Func<BeforeRequestSentEventArgs, Task> handler, SubscriptionOptions? options = default)
     {
-        var subscription = await _session.Network.OnBeforeRequestSentAsync(async args => await Filter(args, handler), options).ConfigureAwait(false);
+        var subscription = await _bidi.Network.OnBeforeRequestSentAsync(async args => await Filter(args, handler), options).ConfigureAwait(false);
 
         _onBeforeRequestSentSubscriptions.Add(subscription);
     }
 
     public async Task OnResponseStartedAsync(Func<ResponseStartedEventArgs, Task> handler, SubscriptionOptions? options = default)
     {
-        var subscription = await _session.Network.OnResponseStartedAsync(async args => await Filter(args, handler), options).ConfigureAwait(false);
+        var subscription = await _bidi.Network.OnResponseStartedAsync(async args => await Filter(args, handler), options).ConfigureAwait(false);
 
         _onResponseStartedSubscriptions.Add(subscription);
     }
 
     public async Task OnAuthRequiredAsync(Func<AuthRequiredEventArgs, Task> handler, SubscriptionOptions? options = default)
     {
-        var subscription = await _session.Network.OnAuthRequiredAsync(async args => await Filter(args, handler), options).ConfigureAwait(false);
+        var subscription = await _bidi.Network.OnAuthRequiredAsync(async args => await Filter(args, handler), options).ConfigureAwait(false);
 
         _onAuthRequiredSubscriptions.Add(subscription);
     }

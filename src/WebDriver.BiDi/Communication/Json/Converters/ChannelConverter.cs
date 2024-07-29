@@ -7,18 +7,18 @@ namespace OpenQA.Selenium.BiDi.Communication.Json.Converters;
 
 internal class ChannelConverter : JsonConverter<Channel>
 {
-    private readonly Session _session;
+    private readonly BiDi _bidi;
 
-    public ChannelConverter(Session session)
+    public ChannelConverter(BiDi bidi)
     {
-        _session = session;
+        _bidi = bidi;
     }
 
     public override Channel? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         var id = reader.GetString();
 
-        return new Channel(_session, id!);
+        return new Channel(_bidi, id!);
     }
 
     public override void Write(Utf8JsonWriter writer, Channel value, JsonSerializerOptions options)

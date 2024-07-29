@@ -2,11 +2,11 @@
 
 public class InternalId
 {
-    readonly BiDi.Session _session;
+    readonly BiDi _bidi;
 
-    public InternalId(BiDi.Session session, string id)
+    public InternalId(BiDi bidi, string id)
     {
-        _session = session;
+        _bidi = bidi;
         Id = id;
     }
 

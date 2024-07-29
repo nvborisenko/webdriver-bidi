@@ -2,11 +2,11 @@
 
 public class Realm
 {
-    readonly BiDi.Session _session;
+    private readonly BiDi _bidi;
 
-    public Realm(BiDi.Session session, string id)
+    public Realm(BiDi bidi, string id)
     {
-        _session = session;
+        _bidi = bidi;
         Id = id;
     }
 

@@ -14,7 +14,7 @@ namespace OpenQA.Selenium.BiDi.Communication;
 
 public class Broker : IAsyncDisposable
 {
-    private readonly Session _session;
+    private readonly BiDi _bidi;
     private readonly ITransport _transport;
 
     private readonly ConcurrentDictionary<int, TaskCompletionSource<object>> _pendingCommands = new();
@@ -34,9 +34,9 @@ public class Broker : IAsyncDisposable
 
     private readonly JsonSerializerOptions _jsonSerializerOptions;
 
-    public Broker(Session session, ITransport transport)
+    public Broker(BiDi bidi, ITransport transport)
     {
-        _session = session;
+        _bidi = bidi;
         _transport = transport;
 
         _jsonSerializerOptions = new JsonSerializerOptions
@@ -46,16 +46,16 @@ public class Broker : IAsyncDisposable
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
             Converters =
             {
-                new BrowsingContextConverter(_session),
-                new BrowserUserContextConverter(session),
+                new BrowsingContextConverter(_bidi),
+                new BrowserUserContextConverter(bidi),
                 new NavigationConverter(),
-                new InterceptConverter(_session),
-                new RequestConverter(_session),
-                new ChannelConverter(_session),
-                new HandleConverter(_session),
-                new InternalIdConverter(_session),
-                new PreloadScriptConverter(_session),
-                new RealmConverter(_session),
+                new InterceptConverter(_bidi),
+                new RequestConverter(_bidi),
+                new ChannelConverter(_bidi),
+                new HandleConverter(_bidi),
+                new InternalIdConverter(_bidi),
+                new PreloadScriptConverter(_bidi),
+                new RealmConverter(_bidi),
                 new RealmTypeConverter(),
                 new DateTimeOffsetConverter(),
                 new JsonStringEnumConverter(JsonNamingPolicy.CamelCase),
@@ -117,7 +117,7 @@ public class Broker : IAsyncDisposable
                         {
                             var args = (EventArgs)result.Params.Deserialize(handler.EventArgsType, _jsonSerializerOptions)!;
 
-                            args.Session = _session;
+                            args.BiDi = _bidi;
 
                             // handle browsing context subscriber
                             if (handler.Contexts is not null && args is BrowsingContextEventArgs browsingContextEventArgs && handler.Contexts.Contains(browsingContextEventArgs.Context))
@@ -179,7 +179,7 @@ public class Broker : IAsyncDisposable
 
         if (options is BrowsingContextsSubscriptionOptions browsingContextsOptions)
         {
-            await _session.SessionModule.SubscribeAsync([eventName], new() { Contexts = browsingContextsOptions.Contexts }).ConfigureAwait(false);
+            await _bidi.SessionModule.SubscribeAsync([eventName], new() { Contexts = browsingContextsOptions.Contexts }).ConfigureAwait(false);
 
             var eventHandler = new SyncEventHandler<TEventArgs>(eventName, action, browsingContextsOptions?.Contexts);
 
@@ -189,7 +189,7 @@ public class Broker : IAsyncDisposable
         }
         else
         {
-            await _session.SessionModule.SubscribeAsync([eventName]).ConfigureAwait(false);
+            await _bidi.SessionModule.SubscribeAsync([eventName]).ConfigureAwait(false);
 
             var eventHandler = new SyncEventHandler<TEventArgs>(eventName, action);
 
@@ -206,7 +206,7 @@ public class Broker : IAsyncDisposable
 
         if (options is BrowsingContextsSubscriptionOptions browsingContextsOptions)
         {
-            await _session.SessionModule.SubscribeAsync([eventName], new() { Contexts = browsingContextsOptions.Contexts }).ConfigureAwait(false);
+            await _bidi.SessionModule.SubscribeAsync([eventName], new() { Contexts = browsingContextsOptions.Contexts }).ConfigureAwait(false);
 
             var eventHandler = new AsyncEventHandler<TEventArgs>(eventName, func, browsingContextsOptions.Contexts);
 
@@ -216,7 +216,7 @@ public class Broker : IAsyncDisposable
         }
         else
         {
-            await _session.SessionModule.SubscribeAsync([eventName]).ConfigureAwait(false);
+            await _bidi.SessionModule.SubscribeAsync([eventName]).ConfigureAwait(false);
 
             var eventHandler = new AsyncEventHandler<TEventArgs>(eventName, func);
 
@@ -236,14 +236,14 @@ public class Broker : IAsyncDisposable
         {
             if (!eventHandlers.Any(h => eventHandler.Contexts.Equals(h.Contexts)) && !eventHandlers.Any(h => h.Contexts is null))
             {
-                await _session.SessionModule.UnsubscribeAsync([eventHandler.EventName], new() { Contexts = eventHandler.Contexts }).ConfigureAwait(false);
+                await _bidi.SessionModule.UnsubscribeAsync([eventHandler.EventName], new() { Contexts = eventHandler.Contexts }).ConfigureAwait(false);
             }
         }
         else
         {
             if (!eventHandlers.Any(h => h.Contexts is not null) && !eventHandlers.Any(h => h.Contexts is null))
             {
-                await _session.SessionModule.UnsubscribeAsync([eventHandler.EventName]).ConfigureAwait(false);
+                await _bidi.SessionModule.UnsubscribeAsync([eventHandler.EventName]).ConfigureAwait(false);
             }
         }
     }

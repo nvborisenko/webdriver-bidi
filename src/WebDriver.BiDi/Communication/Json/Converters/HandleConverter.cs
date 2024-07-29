@@ -7,18 +7,18 @@ namespace OpenQA.Selenium.BiDi.Communication.Json.Converters;
 
 internal class HandleConverter : JsonConverter<Handle>
 {
-    private readonly Session _session;
+    private readonly BiDi _bidi;
 
-    public HandleConverter(Session session)
+    public HandleConverter(BiDi bidi)
     {
-        _session = session;
+        _bidi = bidi;
     }
 
     public override Handle? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         var id = reader.GetString();
 
-        return new Handle(_session, id!);
+        return new Handle(_bidi, id!);
     }
 
     public override void Write(Utf8JsonWriter writer, Handle value, JsonSerializerOptions options)

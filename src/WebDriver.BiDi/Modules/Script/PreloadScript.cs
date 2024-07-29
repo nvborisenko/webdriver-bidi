@@ -5,11 +5,11 @@ namespace OpenQA.Selenium.BiDi.Modules.Script;
 
 public class PreloadScript : IAsyncDisposable
 {
-    readonly BiDi.Session _session;
+    private readonly BiDi _bidi;
 
-    public PreloadScript(BiDi.Session session, string id)
+    public PreloadScript(BiDi bidi, string id)
     {
-        _session = session;
+        _bidi = bidi;
         Id = id;
     }
 
@@ -17,7 +17,7 @@ public class PreloadScript : IAsyncDisposable
 
     public Task RemoveAsync()
     {
-        return _session.ScriptModule.RemovePreloadScriptAsync(this);
+        return _bidi.ScriptModule.RemovePreloadScriptAsync(this);
     }
 
     public async ValueTask DisposeAsync()

@@ -12,25 +12,25 @@ namespace OpenQA.Selenium.BiDi.Modules.Script;
 //[JsonDerivedType(typeof(PaintWorkletRealmInfo), "paint-worklet")]
 //[JsonDerivedType(typeof(AudioWorkletRealmInfo), "audio-worklet")]
 //[JsonDerivedType(typeof(WorkletRealmInfo), "worklet")]
-public abstract record RealmInfo(BiDi.Session Session) : EventArgs(Session);
+public abstract record RealmInfo(BiDi BiDi) : EventArgs(BiDi);
 
-public abstract record BaseRealmInfo(BiDi.Session Session, Realm Realm, string Origin) : RealmInfo(Session);
+public abstract record BaseRealmInfo(BiDi BiDi, Realm Realm, string Origin) : RealmInfo(BiDi);
 
-public record WindowRealmInfo(BiDi.Session Session, Realm Realm, string Origin, BrowsingContext.BrowsingContext Context) : BaseRealmInfo(Session, Realm, Origin)
+public record WindowRealmInfo(BiDi BiDi, Realm Realm, string Origin, BrowsingContext.BrowsingContext Context) : BaseRealmInfo(BiDi, Realm, Origin)
 {
     public string? Sandbox { get; set; }
 }
 
-public record DedicatedWorkerRealmInfo(BiDi.Session Session, Realm Realm, string Origin, IReadOnlyList<Realm> Owners) : BaseRealmInfo(Session, Realm, Origin);
+public record DedicatedWorkerRealmInfo(BiDi BiDi, Realm Realm, string Origin, IReadOnlyList<Realm> Owners) : BaseRealmInfo(BiDi, Realm, Origin);
 
-public record SharedWorkerRealmInfo(BiDi.Session Session, Realm Realm, string Origin) : BaseRealmInfo(Session, Realm, Origin);
+public record SharedWorkerRealmInfo(BiDi BiDi, Realm Realm, string Origin) : BaseRealmInfo(BiDi, Realm, Origin);
 
-public record ServiceWorkerRealmInfo(BiDi.Session Session, Realm Realm, string Origin) : BaseRealmInfo(Session, Realm, Origin);
+public record ServiceWorkerRealmInfo(BiDi BiDi, Realm Realm, string Origin) : BaseRealmInfo(BiDi, Realm, Origin);
 
-public record WorkerRealmInfo(BiDi.Session Session, Realm Realm, string Origin) : BaseRealmInfo(Session, Realm, Origin);
+public record WorkerRealmInfo(BiDi BiDi, Realm Realm, string Origin) : BaseRealmInfo(BiDi, Realm, Origin);
 
-public record PaintWorkletRealmInfo(BiDi.Session Session, Realm Realm, string Origin) : BaseRealmInfo(Session, Realm, Origin);
+public record PaintWorkletRealmInfo(BiDi BiDi, Realm Realm, string Origin) : BaseRealmInfo(BiDi, Realm, Origin);
 
-public record AudioWorkletRealmInfo(BiDi.Session Session, Realm Realm, string Origin) : BaseRealmInfo(Session, Realm, Origin);
+public record AudioWorkletRealmInfo(BiDi BiDi, Realm Realm, string Origin) : BaseRealmInfo(BiDi, Realm, Origin);
 
-public record WorkletRealmInfo(BiDi.Session Session, Realm Realm, string Origin) : BaseRealmInfo(Session, Realm, Origin);
+public record WorkletRealmInfo(BiDi BiDi, Realm Realm, string Origin) : BaseRealmInfo(BiDi, Realm, Origin);

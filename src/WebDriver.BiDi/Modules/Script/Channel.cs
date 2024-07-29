@@ -2,11 +2,11 @@
 
 public class Channel
 {
-    readonly BiDi.Session _session;
+    readonly BiDi _bidi;
 
-    internal Channel(BiDi.Session session, string id)
+    internal Channel(BiDi bidi, string id)
     {
-        _session = session;
+        _bidi = bidi;
         Id = id;
     }
 

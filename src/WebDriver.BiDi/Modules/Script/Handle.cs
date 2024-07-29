@@ -2,11 +2,11 @@
 
 public class Handle
 {
-    readonly BiDi.Session _session;
+    private readonly BiDi _bidi;
 
-    public Handle(BiDi.Session session, string id)
+    public Handle(BiDi bidi, string id)
     {
-        _session = session;
+        _bidi = bidi;
         Id = id;
     }
 

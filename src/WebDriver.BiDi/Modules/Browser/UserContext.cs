@@ -5,11 +5,11 @@ namespace OpenQA.Selenium.BiDi.Modules.Browser;
 
 public class UserContext : IAsyncDisposable
 {
-    private readonly BiDi.Session _session;
+    private readonly BiDi _bidi;
 
-    internal UserContext(BiDi.Session session, string id)
+    internal UserContext(BiDi bidi, string id)
     {
-        _session = session;
+        _bidi = bidi;
         Id = id;
     }
 
@@ -17,7 +17,7 @@ public class UserContext : IAsyncDisposable
 
     public Task RemoveAsync()
     {
-        return _session.Browser.RemoveUserContextAsync(this);
+        return _bidi.Browser.RemoveUserContextAsync(this);
     }
 
     public async ValueTask DisposeAsync()

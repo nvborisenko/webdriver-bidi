@@ -5,7 +5,7 @@ using OpenQA.Selenium.BiDi.Communication.Transport;
 
 namespace OpenQA.Selenium.BiDi;
 
-public class Session : IAsyncDisposable
+public class BiDi : IAsyncDisposable
 {
     private readonly ITransport _transport;
     private readonly Broker _broker;
@@ -19,7 +19,7 @@ public class Session : IAsyncDisposable
     private readonly Lazy<Modules.Log.LogModule> _logModule;
     private readonly Lazy<Modules.Storage.StorageModule> _storageModule;
 
-    internal Session(string url)
+    internal BiDi(string url)
     {
         var uri = new Uri(url);
 
@@ -50,13 +50,13 @@ public class Session : IAsyncDisposable
         return SessionModule.StatusAsync();
     }
 
-    public static async Task<Session> ConnectAsync(string url)
+    public static async Task<BiDi> ConnectAsync(string url)
     {
-        var session = new Session(url);
+        var bidi = new BiDi(url);
 
-        await session._broker.ConnectAsync(default).ConfigureAwait(false);
+        await bidi._broker.ConnectAsync(default).ConfigureAwait(false);
 
-        return session;
+        return bidi;
     }
 
     public async Task EndAsync(Modules.Session.EndOptions? options = default)
