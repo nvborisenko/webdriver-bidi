@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using OpenQA.Selenium.BiDi.Communication;
 using OpenQA.Selenium.BiDi.Communication.Transport;
@@ -37,7 +38,7 @@ public class BiDi : IAsyncDisposable
     }
 
     internal Modules.Session.SessionModule SessionModule => _sessionModule.Value;
-    public Modules.BrowsingContext.BrowsingContextModule BrowsingContext => _browsingContextModule.Value;
+    internal Modules.BrowsingContext.BrowsingContextModule BrowsingContext => _browsingContextModule.Value;
     public Modules.Browser.BrowserModule Browser => _browserModule.Value;
     public Modules.Network.NetworkModule Network => _networkModule.Value;
     internal Modules.Input.InputModule InputModule => _inputModule.Value;
@@ -59,6 +60,16 @@ public class BiDi : IAsyncDisposable
         return bidi;
     }
 
+    public Task<Modules.BrowsingContext.BrowsingContext> CreateBrowsingContextAsync(Modules.BrowsingContext.BrowsingContextType type, Modules.BrowsingContext.CreateOptions? options = default)
+    {
+        return BrowsingContext.CreateAsync(type, options);
+    }
+
+    public Task<IReadOnlyList<Modules.BrowsingContext.BrowsingContextInfo>> GetBrowsingContextTreeAsync(Modules.BrowsingContext.GetTreeOptions? options = default)
+    {
+        return BrowsingContext.GetTreeAsync(options);
+    }
+
     public async Task EndAsync(Modules.Session.EndOptions? options = default)
     {
         await SessionModule.EndAsync(options).ConfigureAwait(false);
@@ -71,5 +82,45 @@ public class BiDi : IAsyncDisposable
     public async ValueTask DisposeAsync()
     {
         await EndAsync().ConfigureAwait(false);
+    }
+
+    public Task<Subscription> OnBrowsingContextCreatedAsync(Func<Modules.BrowsingContext.BrowsingContextInfo, Task> handler, BrowsingContextsSubscriptionOptions? options = default)
+    {
+        return BrowsingContext.OnContextCreatedAsync(handler, options);
+    }
+
+    public Task<Subscription> OnBrowsingContextCreatedAsync(Action<Modules.BrowsingContext.BrowsingContextInfo> handler, BrowsingContextsSubscriptionOptions? options = default)
+    {
+        return BrowsingContext.OnContextCreatedAsync(handler, options);
+    }
+
+    public Task<Subscription> OnBrowsingContextDestroyedAsync(Func<Modules.BrowsingContext.BrowsingContextInfo, Task> handler, BrowsingContextsSubscriptionOptions? options = default)
+    {
+        return BrowsingContext.OnContextDestroyedAsync(handler, options);
+    }
+
+    public Task<Subscription> OnBrowsingContextDestroyedAsync(Action<Modules.BrowsingContext.BrowsingContextInfo> handler, BrowsingContextsSubscriptionOptions? options = default)
+    {
+        return BrowsingContext.OnContextDestroyedAsync(handler, options);
+    }
+
+    public Task<Subscription> OnUserPromptOpenedAsync(Func<Modules.BrowsingContext.UserPromptOpenedEventArgs, Task> handler, BrowsingContextsSubscriptionOptions? options = default)
+    {
+        return BrowsingContext.OnUserPromptOpenedAsync(handler, options);
+    }
+
+    public Task<Subscription> OnUserPromptOpenedAsync(Action<Modules.BrowsingContext.UserPromptOpenedEventArgs> handler, BrowsingContextsSubscriptionOptions? options = default)
+    {
+        return BrowsingContext.OnUserPromptOpenedAsync(handler, options);
+    }
+
+    public Task<Subscription> OnUserPromptClosedAsync(Func<Modules.BrowsingContext.UserPromptClosedEventArgs, Task> handler, BrowsingContextsSubscriptionOptions? options = default)
+    {
+        return BrowsingContext.OnUserPromptClosedAsync(handler, options);
+    }
+
+    public Task<Subscription> OnUserPromptClosedAsync(Action<Modules.BrowsingContext.UserPromptClosedEventArgs> handler, BrowsingContextsSubscriptionOptions? options = default)
+    {
+        return BrowsingContext.OnUserPromptClosedAsync(handler, options);
     }
 }
