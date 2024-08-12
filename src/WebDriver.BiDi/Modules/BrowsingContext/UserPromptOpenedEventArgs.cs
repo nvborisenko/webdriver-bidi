@@ -6,7 +6,7 @@ public record UserPromptOpenedEventArgs(BiDi BiDi, BrowsingContext Context, User
     : BrowsingContextEventArgs(BiDi, Context)
 {
     [JsonInclude]
-    public string? DefaultValue { get; internal set; }
+    public string? nullValue { get; internal set; }
 }
 
 public enum UserPromptType
