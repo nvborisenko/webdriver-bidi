@@ -16,7 +16,7 @@ public static class WebDriverExtensions
         return bidi;
     }
 
-    public static async Task<BrowsingContext> AsBidirectionalBrowsingContextAsync(this IWebDriver webDriver)
+    public static async Task<BrowsingContext> AsBidirectionalContextAsync(this IWebDriver webDriver)
     {
         var bidi = await webDriver.AsBidirectionalAsync();
 

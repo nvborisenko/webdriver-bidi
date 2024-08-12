@@ -64,7 +64,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         [Test]
         public async Task CurrentBrowsingContext()
         {
-            var context = await driver.AsBidirectionalBrowsingContextAsync();
+            var context = await driver.AsBidirectionalContextAsync();
 
             var navigateResult = await context.NavigateAsync("https://google.com");
 
@@ -83,7 +83,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         [Test]
         public async Task Print()
         {
-            var context = await driver.AsBidirectionalBrowsingContextAsync();
+            var context = await driver.AsBidirectionalContextAsync();
 
             var res = await context.PrintAsync(new() { Background = true, Timeout = TimeSpan.FromSeconds(5) });
 
@@ -154,7 +154,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         [Test]
         public async Task SetViewport()
         {
-            var context = await driver.AsBidirectionalBrowsingContextAsync();
+            var context = await driver.AsBidirectionalContextAsync();
 
             await context.NavigateAsync("https://google.com");
 
