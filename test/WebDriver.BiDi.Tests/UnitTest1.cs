@@ -508,8 +508,10 @@ namespace OpenQA.Selenium.BiDi.Tests
         {
             var context = await bidi.CreateBrowsingContextAsync(BrowsingContextType.Tab);
 
-            await context.Network.OnAuthRequiredAsync(default, async args =>
-                await args.Request.Request.ContinueWithAuthAsync(AuthCredentials.Basic("admin", "admin")));
+            await context.Network.AddInterceptedAuthenticationAsync(async args =>
+            {
+                await args.Request.Request.ContinueWithAuthAsync(AuthCredentials.Basic("admin", "admin"));
+            });
 
             await context.NavigateAsync("https://the-internet.herokuapp.com/basic_auth");
         }
@@ -519,7 +521,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         {
             var context = await bidi.CreateBrowsingContextAsync(BrowsingContextType.Tab);
 
-            await using var intercept = await context.Network.OnBeforeRequestSentAsync(interceptOptions: default, async args =>
+            await using var intercept = await context.Network.AddInterceptedRequestAsync(async args =>
             {
                 await args.Request.Request.ContinueAsync(new() { Method = "POST" });
             });
@@ -532,7 +534,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         {
             var context = await bidi.CreateBrowsingContextAsync(BrowsingContextType.Tab);
 
-            await using var intercept = await context.Network.OnResponseStartedAsync(new(), async args =>
+            await using var intercept = await context.Network.AddInterceptedResponseAsync(async args =>
             {
                 await args.Request.Request.ContinueAsync();
             });
@@ -545,10 +547,10 @@ namespace OpenQA.Selenium.BiDi.Tests
         {
             var context = await bidi.CreateBrowsingContextAsync(BrowsingContextType.Tab);
 
-            await using var intercept = await context.Network.OnBeforeRequestSentAsync(new() { UrlPatterns = ["https://**"] }, async args =>
+            await using var intercept = await context.Network.AddInterceptedRequestAsync(async args =>
             {
                 await args.Request.Request.FailAsync();
-            });
+            }, new() { UrlPatterns = ["https://**"] });
 
             await context.NavigateAsync("https://selenium.dev");
         }
@@ -558,7 +560,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         {
             var context = await bidi.CreateBrowsingContextAsync(BrowsingContextType.Tab);
 
-            await using var intercept = await context.Network.OnBeforeRequestSentAsync(null, async args =>
+            await using var intercept = await context.Network.AddInterceptedRequestAsync(async args =>
             {
                 await args.Request.Request.ProvideResponseAsync();
             });
@@ -571,7 +573,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         {
             var context = await bidi.CreateBrowsingContextAsync(BrowsingContextType.Tab);
 
-            await using var intercept = await context.Network.OnBeforeRequestSentAsync(null, async args =>
+            await using var intercept = await context.Network.AddInterceptedRequestAsync(async args =>
             {
                 await args.Request.Request.ProvideResponseAsync(new() { Body = $"""
                     <html>
@@ -590,7 +592,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         {
             var context = await bidi.CreateBrowsingContextAsync(BrowsingContextType.Tab);
 
-            await context.Network.OnResponseStartedAsync(new(), async args =>
+            await context.Network.AddInterceptedResponseAsync(async args =>
             {
                 await args.Request.Request.ProvideResponseAsync(new() { StatusCode = 200 });
             });
@@ -601,7 +603,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         [Test]
         public async Task InterceptTestAll()
         {
-            await bidi.Network.OnBeforeRequestSentAsync(new AddInterceptOptions(), async args =>
+            await bidi.Network.AddInterceptedRequestAsync(async args =>
             {
                 await args.Request.Request.ContinueAsync(new() { Method = "POST" });
             });
