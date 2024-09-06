@@ -508,7 +508,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         {
             var context = await bidi.CreateBrowsingContextAsync(BrowsingContextType.Tab);
 
-            await context.Network.AddInterceptedAuthenticationAsync(async args =>
+            await context.Network.InterceptAuthenticationAsync(async args =>
             {
                 await args.Request.Request.ContinueWithAuthAsync(AuthCredentials.Basic("admin", "admin"));
             });
@@ -521,7 +521,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         {
             var context = await bidi.CreateBrowsingContextAsync(BrowsingContextType.Tab);
 
-            await using var intercept = await context.Network.AddInterceptedRequestAsync(async args =>
+            await using var intercept = await context.Network.InterceptRequestAsync(async args =>
             {
                 await args.Request.Request.ContinueAsync(new() { Method = "POST" });
             });
@@ -534,7 +534,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         {
             var context = await bidi.CreateBrowsingContextAsync(BrowsingContextType.Tab);
 
-            await using var intercept = await context.Network.AddInterceptedResponseAsync(async args =>
+            await using var intercept = await context.Network.InterceptResponseAsync(async args =>
             {
                 await args.Request.Request.ContinueAsync();
             });
@@ -547,7 +547,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         {
             var context = await bidi.CreateBrowsingContextAsync(BrowsingContextType.Tab);
 
-            await using var intercept = await context.Network.AddInterceptedRequestAsync(async args =>
+            await using var intercept = await context.Network.InterceptRequestAsync(async args =>
             {
                 await args.Request.Request.FailAsync();
             }, new() { UrlPatterns = ["https://**"] });
@@ -560,7 +560,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         {
             var context = await bidi.CreateBrowsingContextAsync(BrowsingContextType.Tab);
 
-            await using var intercept = await context.Network.AddInterceptedRequestAsync(async args =>
+            await using var intercept = await context.Network.InterceptRequestAsync(async args =>
             {
                 await args.Request.Request.ProvideResponseAsync();
             });
@@ -573,7 +573,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         {
             var context = await bidi.CreateBrowsingContextAsync(BrowsingContextType.Tab);
 
-            await using var intercept = await context.Network.AddInterceptedRequestAsync(async args =>
+            await using var intercept = await context.Network.InterceptRequestAsync(async args =>
             {
                 await args.Request.Request.ProvideResponseAsync(new() { Body = $"""
                     <html>
@@ -592,7 +592,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         {
             var context = await bidi.CreateBrowsingContextAsync(BrowsingContextType.Tab);
 
-            await context.Network.AddInterceptedResponseAsync(async args =>
+            await context.Network.InterceptResponseAsync(async args =>
             {
                 await args.Request.Request.ProvideResponseAsync(new() { StatusCode = 200 });
             });
@@ -603,7 +603,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         [Test]
         public async Task InterceptTestAll()
         {
-            await bidi.Network.AddInterceptedRequestAsync(async args =>
+            await bidi.Network.InterceptRequestAsync(async args =>
             {
                 await args.Request.Request.ContinueAsync(new() { Method = "POST" });
             });
