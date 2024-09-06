@@ -275,7 +275,7 @@ namespace OpenQA.Selenium.BiDi.Tests
 
             var info = await context.ReloadAsync();
 
-            info.Navigation.Should().BeNull();
+            info.Navigation.Should().NotBeNull();
             info.Url.Should().Contain("selenium.dev");
         }
 
@@ -526,7 +526,7 @@ namespace OpenQA.Selenium.BiDi.Tests
                 await args.Request.Request.ContinueAsync(new() { Method = "POST" });
             });
 
-            await context.NavigateAsync("https://selenium.dev");
+            await context.NavigateAsync("https://selenium.dev", new() { Wait = ReadinessState.Complete });
         }
 
         [Test]
@@ -536,10 +536,10 @@ namespace OpenQA.Selenium.BiDi.Tests
 
             await using var intercept = await context.Network.InterceptResponseAsync(async args =>
             {
-                await args.Request.Request.ContinueAsync();
+                await args.Request.Request.ContinueResponseAsync();
             });
 
-            await context.NavigateAsync("https://selenium.dev");
+            await context.NavigateAsync("https://selenium.dev", new() { Wait = ReadinessState.Complete });
         }
 
         [Test]
@@ -552,7 +552,8 @@ namespace OpenQA.Selenium.BiDi.Tests
                 await args.Request.Request.FailAsync();
             }, new() { UrlPatterns = ["https://**"] });
 
-            await context.NavigateAsync("https://selenium.dev");
+            var navAction = async () => await context.NavigateAsync("https://selenium.dev");
+            await navAction.Should().ThrowExactlyAsync<BiDiException>().WithMessage("*net::ERR_FAILED*");
         }
 
         [Test]
@@ -629,10 +630,12 @@ namespace OpenQA.Selenium.BiDi.Tests
         {
             BrowsingContextInfo args = null;
 
-            //TODO: await event handler to be invoked
             await bidi.OnBrowsingContextCreatedAsync(e => args = e);
 
             var context = await bidi.CreateBrowsingContextAsync(BrowsingContextType.Tab);
+
+            //TODO: await event handler to be invoked
+            await Task.Delay(500);
 
             args.Should().NotBeNull();
             args.Url.Should().NotBeEmpty();
