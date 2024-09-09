@@ -45,10 +45,7 @@ namespace OpenQA.Selenium.BiDi.Tests
         [TearDown]
         public async Task TearDown()
         {
-            if (driver is not FirefoxDriver) // unsupported operation: Ending session which was started with Webdriver classic is not supported, use Webdriver classic delete command instead.
-            {
-                await bidi.EndAsync();
-            }
+            await bidi.DisposeAsync();
 
             driver?.Dispose();
         }
