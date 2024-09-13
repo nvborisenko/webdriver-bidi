@@ -1,7 +1,6 @@
 ﻿using OpenQA.Selenium.BiDi.Communication;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
@@ -70,7 +69,7 @@ public readonly record struct PrintPageRange(int? Start, int? End)
     public static implicit operator PrintPageRange(int index) { return new PrintPageRange(index, index); }
 
 #if NET8_0_OR_GREATER
-    public static implicit operator PrintPageRange(System.Range range)
+    public static implicit operator PrintPageRange(Range range)
     {
         int? start;
         int? end;
@@ -83,7 +82,7 @@ public readonly record struct PrintPageRange(int? Start, int? End)
         {
             if (range.Start.IsFromEnd)
             {
-                throw new System.Exception();
+                throw new NotSupportedException($"Page index from end ({range.Start}) is not supported in page range for printing.");
             }
 
             start = range.Start.Value;
@@ -97,7 +96,7 @@ public readonly record struct PrintPageRange(int? Start, int? End)
         {
             if (range.End.IsFromEnd)
             {
-                throw new System.Exception();
+                throw new NotSupportedException($"Page index from end ({range.End}) is not supported in page range for printing.");
             }
 
             end = range.End.Value;
