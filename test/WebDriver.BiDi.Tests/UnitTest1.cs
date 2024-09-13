@@ -89,15 +89,13 @@ namespace OpenQA.Selenium.BiDi.Tests
         {
             var context = await driver.AsBidirectionalContextAsync();
 
-            await context.NavigateAsync("https://selenium.dev", new() { Wait = ReadinessState.Complete });
-
             var res = await context.PrintAsync();
 
             res.Should().NotBeNull();
 
             var res2 = await context.PrintAsync(new() { PageRanges = [1, 1..2, 3.., 4..^0, new(3, 5)] });
 
-            File.WriteAllBytes("E:\\page.pdf", res2.ToByteArray());
+            //File.WriteAllBytes("E:\\page.pdf", res2.ToByteArray());
         }
 
         [Test]
