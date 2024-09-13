@@ -1,5 +1,7 @@
 ﻿using OpenQA.Selenium.BiDi.Communication;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace OpenQA.Selenium.BiDi.Modules.BrowsingContext;
 
@@ -9,14 +11,13 @@ internal record PrintCommandParameters(BrowsingContext Context) : CommandParamet
 {
     public bool? Background { get; set; }
 
-    public Margin? Margin { get; set; }
+    public PrintMargin? Margin { get; set; }
 
-    public Orientation? Orientation { get; set; }
+    public PrintOrientation? Orientation { get; set; }
 
-    public Page? Page { get; set; }
+    public PrintPage? Page { get; set; }
 
-    // TODO: It also supports strings
-    public IEnumerable<long>? PageRanges { get; set; }
+    public IEnumerable<PrintPageRange>? PageRanges { get; set; }
 
     public double? Scale { get; set; }
 
@@ -27,21 +28,20 @@ public record PrintOptions : CommandOptions
 {
     public bool? Background { get; set; }
 
-    public Margin? Margin { get; set; }
+    public PrintMargin? Margin { get; set; }
 
-    public Orientation? Orientation { get; set; }
+    public PrintOrientation? Orientation { get; set; }
 
-    public Page? Page { get; set; }
+    public PrintPage? Page { get; set; }
 
-    // TODO: It also supports strings
-    public IEnumerable<long>? PageRanges { get; set; }
+    public IEnumerable<PrintPageRange>? PageRanges { get; set; }
 
     public double? Scale { get; set; }
 
     public bool? ShrinkToFit { get; set; }
 }
 
-public struct Margin
+public struct PrintMargin
 {
     public double? Bottom { get; set; }
 
@@ -52,17 +52,63 @@ public struct Margin
     public double? Top { get; set; }
 }
 
-public enum Orientation
+public enum PrintOrientation
 {
     Portrait,
     Landscape
 }
 
-public struct Page
+public struct PrintPage
 {
     public double? Height { get; set; }
 
     public double? Width { get; set; }
 }
 
-public record PrintResult(string Data);
+public readonly record struct PrintPageRange(int? Start, int? End)
+{
+    public static implicit operator PrintPageRange(int index) { return new PrintPageRange(index, index); }
+
+#if NET8_0_OR_GREATER
+    public static implicit operator PrintPageRange(System.Range range)
+    {
+        int? start;
+        int? end;
+
+        if (range.Start.IsFromEnd && range.Start.Value == 0)
+        {
+            start = null;
+        }
+        else
+        {
+            if (range.Start.IsFromEnd)
+            {
+                throw new System.Exception();
+            }
+
+            start = range.Start.Value;
+        }
+
+        if (range.End.IsFromEnd && range.End.Value == 0)
+        {
+            end = null;
+        }
+        else
+        {
+            if (range.End.IsFromEnd)
+            {
+                throw new System.Exception();
+            }
+
+            end = range.End.Value;
+        }
+
+        return new PrintPageRange(start, end);
+    }
+#endif
+}
+
+public record PrintResult(string Data)
+{
+    public byte[] ToByteArray() => Convert.FromBase64String(Data);
+}

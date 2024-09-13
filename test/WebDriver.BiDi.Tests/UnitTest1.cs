@@ -7,7 +7,10 @@ using OpenQA.Selenium.BiDi.Modules.Script;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -29,6 +32,8 @@ namespace OpenQA.Selenium.BiDi.Tests
             //    BrowserVersion = "beta"
             //};
 
+            //firefoxOptions.AddArgument("--no-sandbox");
+
             //driver = new FirefoxDriver(firefoxOptions);
 
             var options = new ChromeOptions
@@ -36,6 +41,8 @@ namespace OpenQA.Selenium.BiDi.Tests
                 UseWebSocketUrl = true,
                 BrowserVersion = "beta",
             };
+
+            options.AddArgument("--no-sandbox");
 
             driver = new ChromeDriver(options);
 
@@ -82,9 +89,15 @@ namespace OpenQA.Selenium.BiDi.Tests
         {
             var context = await driver.AsBidirectionalContextAsync();
 
-            var res = await context.PrintAsync(new() { Background = true, Timeout = TimeSpan.FromSeconds(5) });
+            await context.NavigateAsync("https://selenium.dev", new() { Wait = ReadinessState.Complete });
+
+            var res = await context.PrintAsync();
 
             res.Should().NotBeNull();
+
+            var res2 = await context.PrintAsync(new() { PageRanges = [1, 1..2, 3.., 4..^0, new(3, 5)] });
+
+            File.WriteAllBytes("E:\\page.pdf", res2.ToByteArray());
         }
 
         [Test]
