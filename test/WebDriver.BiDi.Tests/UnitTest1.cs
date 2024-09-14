@@ -81,7 +81,11 @@ namespace OpenQA.Selenium.BiDi.Tests
         {
             var contexts = await bidi.GetBrowsingContextTreeAsync();
 
-            await bidi.GetBrowsingContextTreeAsync(new() { Root = contexts[0].Context });
+            await bidi.GetBrowsingContextTreeAsync(new() { Root = contexts[0].Context, MaxDepth = 2 });
+
+            var context = contexts[0].Context;
+
+            await context.GetTreeAsync(new BrowsingContextGetTreeOptions() { MaxDepth = 5 });
         }
 
         [Test]
